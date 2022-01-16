@@ -1,6 +1,4 @@
-﻿-- sa / saPwD@ed$f79j test test2
-
---delete foreign key constraints
+﻿--delete foreign key constraints
 alter table Logins drop constraint FK_Logins_Users_UserId;
 alter table RolePermits drop constraint FK_Roles_Permits_RoleId;
 alter table RolePermits drop constraint FK_Roles_Permits_PermitId;

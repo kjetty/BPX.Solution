@@ -1,4 +1,4 @@
-﻿-- sa / saPwD@ed$f79j test
+﻿-- sa / saPwD@ed$f79j test test2
 
 --delete foreign key constraints
 alter table Logins drop constraint FK_Logins_Users_UserId;

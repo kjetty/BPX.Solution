@@ -1,0 +1,126 @@
+using BPX.DAL.Context;
+using BPX.DAL.UOW;
+using BPX.Service;
+using BPX.Website.CustomCode.Cache;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
+namespace BPX.Website
+{
+	public class Startup
+	{
+		public Startup(IConfiguration configuration)
+		{
+			Configuration = configuration;
+		}
+
+		//public IConfiguration Configuration { get; }
+
+		// convert IConfiguration Configuration to static, to enable access aywhere using  Startup.Configuration.GetSection...
+		// ref https://stackoverflow.com/questions/39231951/how-do-i-access-configuration-in-any-class-in-asp-net-core
+		//public or internal static IConfiguration Configuration { get; private set; }
+
+		public static IConfiguration Configuration { get; private set; }
+
+		// This method gets called by the runtime. Use this method to add services to the container.
+		public void ConfigureServices(IServiceCollection services)
+		{
+            // inject database connection
+            services.AddDbContext<BPXDbContext>(options =>
+                options.UseSqlServer(
+                   Configuration.GetConnectionString("connStrDbBPX")));
+
+            // inject service layer objects
+            // SCOPED: By using this lifetime, the service will be created only once in the client request scope
+            // this is particularly used in ASP.NET Core 5 where the object instance is created once per HTTP request
+            // services such as Entity Framework Core's DbContext are registered with scoped lifetime
+
+            // inject unit of work (includles all repositories as well)
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            // inject services
+            services.AddScoped<ILoginService, LoginService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IUserRoleService, UserRoleService>();
+            services.AddScoped<IPermitService, PermitService>();
+			services.AddScoped<IRolePermitService, RolePermitService>();
+			services.AddScoped<IMemoryCacheKeyService, MemoryCacheKeyService>();
+			services.AddScoped<IMenuService, MenuService>();
+			services.AddScoped<IMenuRoleService, MenuRoleService>();
+
+			// authentication and cookie options
+			services
+			.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.AccessDeniedPath = "/Identity/Account/Denied";
+                options.LoginPath = "/Identity/Account/Login";
+            });
+
+			// password hash options
+			services.Configure<PasswordHasherOptions>(options =>
+			{
+				options.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV3;
+				options.IterationCount = 50000;
+			});
+
+			// the local in-memory version of IDistributedCache is part of Microsoft.Extensions.Caching.Memory so is already brought in by the MVC package.
+			// to use it, you need to manually add services.AddDistributedMemoryCache()
+			// distributed cache
+			services.AddDistributedMemoryCache(); 
+
+			// inject cache
+			services.AddScoped<IBPXCache, BPXCache>();
+
+			services.AddControllersWithViews();
+		}
+
+		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+		{
+			if (env.IsDevelopment())
+			{
+				app.UseDeveloperExceptionPage();
+			}
+			else
+			{
+				app.UseExceptionHandler("/Home/Error");
+				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+				app.UseHsts();
+			}
+
+			//app.UseHttpsRedirection();
+			app.UseStaticFiles();
+
+            app.UseRouting();
+            app.UseCookiePolicy();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            // as we are not using OAuth2, we can set the cookie same-site attribute to strict
+            app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Strict });
+
+			app.UseEndpoints(endpoints =>
+			{
+				endpoints.MapControllerRoute(
+                    name: "areas",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
+
+                endpoints.MapControllerRoute(
+					name: "default",
+					pattern: "{controller=Home}/{action=Index}/{id?}");
+			});
+		}
+	}
+}

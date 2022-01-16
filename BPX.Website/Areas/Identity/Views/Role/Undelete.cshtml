@@ -1,0 +1,84 @@
+﻿@model BPX.Domain.ViewModels.RoleViewModel;
+
+@using BPX.Utils;
+@using BPX.Website.CustomCode.Authorize;
+@using System.Reflection;
+
+@{
+    ViewData["Title"] = "Restore Role";
+
+    // fyi :: passed in objects
+    // ViewBag.modifiedByName
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h5>@ViewBag.Title</h5>
+    </div>
+</div>
+
+<h6>Are you sure you want to restore this?</h6>
+<p></p>
+<hr />
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RoleName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RoleName) &nbsp;
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RoleDescription)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RoleDescription) &nbsp;
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StatusFlag)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StatusFlag)
+
+            @{
+                var recordStatus = typeof(RecordStatus).GetFields(BindingFlags.Static | BindingFlags.Public);
+
+                foreach (var item in recordStatus)
+                {
+                    if (Model.StatusFlag == item.GetRawConstantValue().ToString())
+                    {
+                        @Html.Raw("&nbsp;(" + @item.Name + ")");
+
+                    }
+                }
+            }
+            &nbsp;
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ModifiedBy)
+        </dt>
+        <dd class="col-sm-10">
+            @ViewBag.modifiedByName &nbsp;
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ModifiedDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ModifiedDate) &nbsp;
+        </dd>
+    </dl>
+
+    <form asp-action="Undelete">
+        <input type="hidden" asp-for="RoleId" />
+        <input type="submit" value="   Restore   " class="btn btn-primary" /> &nbsp;&nbsp; | &nbsp;&nbsp;
+        @if (ViewBag.currUserPermits.Contains(Permits.Identity.Role.ListDeleted) || ViewBag.developerViewBagOverride.Equals("YES-ForcedSet"))
+        {
+            <a asp-area="Identity" asp-controller="Role" asp-action="ListDeleted" style="text-decoration:none;" title="Back to Deleted List">Back to Deleted List</a> @Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;")
+        }
+        @if (ViewBag.currUserPermits.Contains(Permits.Identity.Role.List) || ViewBag.developerViewBagOverride.Equals("YES-ForcedSet"))
+        {
+            <a asp-action="Index">Back to List</a>
+        }
+    </form>
+</div>

@@ -1,0 +1,47 @@
+﻿using BPX.DAL.Context;
+using BPX.DAL.Repositories;
+using BPX.Domain.DbModels;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Linq.Expressions;
+using X.PagedList;
+
+namespace BPX.DAL.Repository
+{
+    public class LoginRepository : BaseRepository, ILoginRepository
+    {
+        public LoginRepository(BPXDbContext context) : base(context)
+        {
+        }
+
+        public IPagedList<Login> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Login GetRecordByID(int id)
+        {
+            return _context.Logins.Where(c => c.UserId == id).SingleOrDefault();
+        }
+
+        public IQueryable<Login> GetRecordsByFilter(Expression<Func<Login, bool>> filter)
+        {
+            return _context.Logins.Where(filter);
+        }
+
+        public void InsertRecord(Login entity)
+        {
+            _context.Logins.Add(entity);
+        }
+
+        public void UpdateRecord(Login entity)
+        {
+            _context.Entry(entity).State = EntityState.Modified;
+        }
+    }
+
+    public interface ILoginRepository : IRepository<Login>
+    {
+    }
+}

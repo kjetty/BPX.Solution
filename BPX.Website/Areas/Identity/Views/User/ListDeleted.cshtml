@@ -1,0 +1,309 @@
+﻿@model X.PagedList.IPagedList<BPX.Domain.ViewModels.UserMiniViewModel>
+
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Web.Common;
+@using BPX.Website.CustomCode.Authorize;
+
+@{
+    ViewBag.Title = "List of deleted Users";
+
+    ViewBag.pageNumber = (ViewBag.pageNumber ?? 1);
+    ViewBag.pageSize = (ViewBag.pageSize ?? 10);
+    ViewBag.statusFlag = (ViewBag.statusFlag ?? string.Empty);
+    ViewBag.sortByColumn = (ViewBag.sortByColumn ?? string.Empty);
+    ViewBag.sortOrder = (ViewBag.sortOrder ?? string.Empty);
+    ViewBag.searchForString = (ViewBag.searchForString ?? string.Empty);
+
+    // local variables
+    var localSortOrder = "";
+    var localSortIcon = "";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h5>@ViewBag.Title</h5>
+    </div>
+</div>
+
+<p></p>
+<hr />
+
+<div class="row">
+    <div class="col-md-9">
+    </div>
+    <div class="col-md-3">
+        <div class="input-group">
+            <input id="searchInput" name="searchInput" type="text" class="form-control" placeholder="Search data" value="@ViewBag.searchForString">
+            <div class="input-group-append">
+                <button id="searchBtn" class="btn btn-primary" type="button">
+                    <i class="fa fa-search fa-sm"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p></p>
+
+<div class="row" style="min-height: 400px;">
+    <div class="col-12">
+        <table class="table table-sm table-striped table-hover border-bottom table-bordered">
+            <thead>
+                <tr>
+                    @{
+                        localSortOrder = "";
+                        localSortIcon = "fa-sort";
+
+                        if (ViewBag.sortByColumn == "UserId")
+                        {
+                            localSortOrder = ViewBag.sortOrder;
+
+                            if (localSortOrder == "asc")
+                                localSortIcon += "-" + "up";
+                            if (localSortOrder == "desc")
+                                localSortIcon += "-" + "down";
+                        }
+                    }
+                    <th class="text-center" style="width:75px;">ID <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="UserId" sortOrder="@localSortOrder"></span></th>
+                    @{
+                        localSortOrder = "";
+                        localSortIcon = "fa-sort";
+
+                        if (ViewBag.sortByColumn == "FirstName")
+                        {
+                            localSortOrder = ViewBag.sortOrder;
+
+                            if (localSortOrder == "asc")
+                                localSortIcon += "-" + "up";
+                            if (localSortOrder == "desc")
+                                localSortIcon += "-" + "down";
+                        }
+                    }
+                    <th style="width:175px;">First Name <span class="fa @localSortIcon sortBtn" style="float: right; margin-top:5px;" sortByColumn="FirstName" sortOrder="@localSortOrder"></span></th>
+                    @{
+                        localSortOrder = "";
+                        localSortIcon = "fa-sort";
+
+                        if (ViewBag.sortByColumn == "LastName")
+                        {
+                            localSortOrder = ViewBag.sortOrder;
+
+                            if (localSortOrder == "asc")
+                                localSortIcon += "-" + "up";
+                            if (localSortOrder == "desc")
+                                localSortIcon += "-" + "down";
+                        }
+                    }
+                    <th style="width:175px;">Last Name <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="LastName" sortOrder="@localSortOrder"></span></th>
+                    @{
+                        localSortOrder = "";
+                        localSortIcon = "fa-sort";
+
+                        if (ViewBag.sortByColumn == "Email")
+                        {
+                            localSortOrder = ViewBag.sortOrder;
+
+                            if (localSortOrder == "asc")
+                                localSortIcon += "-" + "up";
+                            if (localSortOrder == "desc")
+                                localSortIcon += "-" + "down";
+                        }
+                    }
+                    <th style="width:275px;">Email <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="Email" sortOrder="@localSortOrder"></span></th>
+                    <th>Roles</th>
+                    <th class="text-center" style="width:125px;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count == 0)
+                {
+                    <tr>
+                        <td colspan="6">
+                            No matching records found.
+                        </td>
+                    </tr>
+                }
+
+                @if (Model.Count > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="text-center">
+                                @Html.DisplayFor(modelItem => item.UserId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FirstName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LastName)
+                            </td>
+                            <td>
+                                @item.Email
+                            </td>
+                            <td>
+                                <div style="width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    @{ int counter = 0;
+
+                                        if (ViewBag.listUsersRoles != null && ViewBag.listRoles != null)
+                                        {
+                                            foreach (var itemUserRole in ViewBag.listUsersRoles)
+                                            {
+                                                if (itemUserRole.UserId == item.UserId)
+                                                {
+                                                    foreach (var itemRole in ViewBag.listRoles)
+                                                    {
+                                                        if (itemUserRole.RoleId == itemRole.RoleId)
+                                                        {
+                                                            counter++;
+                                                            if (counter > 1)
+                                                            {
+                                                                @Html.Raw(", ")
+                                                            }
+
+                                                            @itemRole.RoleName
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                @if (ViewBag.currUserPermits.Contains(Permits.Identity.User.Restore) || ViewBag.developerViewBagOverride.Equals("YES-ForcedSet"))
+                                {
+                                    <a asp-area="Identity" asp-controller="User" asp-action="Undelete" asp-route-id="@item.UserId" title="restore" class="fa fa-power-off fa-xs" style="text-decoration: none; color: darkslategray;"></a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <br />
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        &nbsp; | &nbsp;
+        Show
+        <select id="pageSizeInput">
+            <option value="10" selected="@(ViewBag.pageSize == 10)">10</option>
+            <option value="25" selected="@(ViewBag.pageSize == 25)">25</option>
+            <option value="50" selected="@(ViewBag.pageSize == 50)">50</option>
+            <option value="100" selected="@(ViewBag.pageSize == 100)">100</option>
+        </select>
+        Entries
+        <br />
+        @if (ViewBag.currUserPermits.Contains(Permits.Identity.User.List) || ViewBag.developerViewBagOverride.Equals("YES-ForcedSet"))
+        {
+            <a asp-area="Identity" asp-controller="User" asp-action="Index" style="text-decoration:none;" title="Back to List">Back to List</a>
+        }
+    </div>
+    <div class="col-md-8 text-right" style="vertical-align:top;">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+    </div>
+</div>
+
+<div>
+    <form id="formForPaging" action="/Identity/User/Listdeleted" method="post">
+        <input type="hidden" id="pageNumber" name="pageNumber" value="1" />
+        <input type="hidden" id="pageSize" name="pageSize" value="10" />
+        <input type="hidden" id="statusFlag" name="statusFlag" value="" />
+        <input type="hidden" id="sortByColumn" name="sortByColumn" value="" />
+        <input type="hidden" id="sortOrder" name="sortOrder" value="" />
+        <input type="hidden" id="searchForString" name="searchForString" value="" />
+    </form>
+</div>
+
+@section ScriptsAtBottom
+{
+    <script type="text/javascript">
+        var pageNumber = @ViewBag.pageNumber;
+		var pageSize = @ViewBag.pageSize;
+        var statusFlag = "@ViewBag.statusFlag";
+		var sortByColumn = "@ViewBag.sortByColumn";
+		var sortOrder = "@ViewBag.sortOrder";
+		var searchForString = "@ViewBag.searchForString";
+
+		$(document).ready(function () {
+			// on pagedList click. Intercept the default GET ?page=x action and instead perform POST
+            $(".pagination-container a").click(function (e) {
+                if (this.href.split("page=")[1] != undefined) {
+					e.preventDefault();
+                    pageNumber = this.href.split("page=")[1];
+
+					submitFormForPaging();
+				}
+			});
+
+			// on pageSize change
+			$("#pageSizeInput").change(function() {
+                pageNumber = 1;
+                pageSize = this.value;
+
+				submitFormForPaging();
+			});
+
+			// on enter in searchInput
+			$("#searchInput").keypress(function (e) {
+				if (e.which == 13) {
+					pageNumber = 1;
+					sortByColumn = "";
+					sortOrder = "";
+					searchForString = $("#searchInput").val();
+
+					submitFormForPaging();
+				}
+			});
+
+			// on search button click
+			$("#searchBtn").click(function () {
+				pageNumber = 1;
+				sortByColumn = "";
+				sortOrder = "";
+                searchForString = $("#searchInput").val();
+
+				submitFormForPaging();
+			});
+
+			// on sort button clicks in sortable columns
+			$(".sortBtn").click(function () {
+                sortByColumn = $(this).attr("sortByColumn");
+                var tempSortOrder = $(this).attr("sortOrder");
+
+				if ($(this).attr("sortOrder").length == 0) {
+					sortOrder = "asc";
+				}
+				else {
+					if ($(this).attr("sortOrder") == "desc") {
+						sortOrder = "asc";
+					}
+					else {
+						sortOrder = "desc";
+					}
+                }
+
+				$(this).attr("sortOrder", sortOrder)
+
+				submitFormForPaging();
+			});
+		});
+
+		// submit form for paging
+		function submitFormForPaging() {
+            $("#pageNumber").val(pageNumber);
+            $("#pageSize").val(pageSize);
+            $("#statusFlag").val(statusFlag);
+			$("#sortByColumn").val(sortByColumn);
+			$("#sortOrder").val(sortOrder);
+            $("#searchForString").val(searchForString);
+
+			$("#spanSpinner").show();
+			$("#formForPaging").submit();
+		}
+    </script>
+}

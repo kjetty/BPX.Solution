@@ -1,0 +1,103 @@
+﻿@model BPX.Domain.ViewModels.UserViewModel;
+
+@using BPX.Utils;
+@using BPX.Website.CustomCode.Authorize;
+@using System.Reflection;
+
+@{
+    ViewData["Title"] = "Restore User";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h5>@ViewBag.Title</h5>
+    </div>
+</div>
+
+<h6>Are you sure you want to restore this?</h6>
+<p></p>
+<hr />
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FirstName) &nbsp;
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LastName) &nbsp;
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Email) &nbsp;
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Mobile)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Mobile) &nbsp;
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.UserRoleIds)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.Raw("<pre>")@if (ViewBag.listRoles != null)
+            {
+                foreach (var itemRole in ViewBag.listRoles)
+                {
+                    string attrChecked = string.Empty; if (ViewBag.listUsersRoles != null) { foreach (var itemUserRole in ViewBag.listUsersRoles) { if (itemRole.RoleId == itemUserRole.RoleId) { attrChecked = "checked=\"checked\""; break; } } }<input type="checkbox" name="UserRoleIds" value="@itemRole.RoleId" @attrChecked />@Html.Raw("&nbsp;&nbsp;")@itemRole.RoleName@Html.Raw("<br />")}
+            }@Html.Raw("</pre>")
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StatusFlag)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StatusFlag)
+
+            @{
+                var recordStatus = typeof(RecordStatus).GetFields(BindingFlags.Static | BindingFlags.Public);
+
+                foreach (var item in recordStatus)
+                {
+                    if (Model.StatusFlag == item.GetRawConstantValue().ToString())
+                    {
+                        @Html.Raw("&nbsp;(" + @item.Name + ")");
+                    }
+                }
+            }
+            &nbsp;
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ModifiedBy)
+        </dt>
+        <dd class="col-sm-10">
+            @ViewBag.modifiedByName &nbsp;
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ModifiedDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ModifiedDate) &nbsp;
+        </dd>
+    </dl>
+
+    <form asp-action="Undelete">
+        <input type="hidden" asp-for="UserId" />
+        <input type="submit" value="   Restore   " class="btn btn-primary" /> &nbsp;&nbsp; | &nbsp;&nbsp;
+        @if (ViewBag.currUserPermits.Contains(Permits.Identity.User.ListDeleted) || ViewBag.developerViewBagOverride.Equals("YES-ForcedSet"))
+        {
+            <a asp-area="Identity" asp-controller="User" asp-action="ListDeleted" style="text-decoration:none;" title="Back to Deleted List">Back to Deleted List</a> @Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;")
+        }
+        @if (ViewBag.currUserPermits.Contains(Permits.Identity.User.List) || ViewBag.developerViewBagOverride.Equals("YES-ForcedSet"))
+        {
+            <a asp-action="Index">Back to List</a>
+        }
+    </form>
+</div>

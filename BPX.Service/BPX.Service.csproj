@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BPX.DAL\BPX.DAL.csproj" />
+    <ProjectReference Include="..\BPX.Domain\BPX.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,143 @@
+﻿@model BPX.Domain.ViewModels.UserMiniViewModel
+
+@using BPX.Website.CustomCode.Authorize;
+
+@{
+    ViewData["Title"] = "Edit User";
+
+    // fyi :: passed in objects
+    // ViewBag.currUserRoles;
+    // ViewBag.listRole;
+    // ViewBag.PermitVerifier
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h5>@ViewBag.Title</h5>
+    </div>
+</div>
+
+<p></p>
+<hr />
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Edit">
+            @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
+            <input type="hidden" asp-for="UserId" />
+            <div class="row form-group">
+                <div class="col-md-2">
+                    <label asp-for="FirstName" class="control-label"></label>
+                </div>
+                <div class="col-md-4 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-user fa-fw"></i></span>
+                    </div>
+                    <input asp-for="FirstName" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <i class="fa fa-asterisk fa-xs" style="color:red; margin-left:-22px; padding-right:5px; font-size: 0.5rem;" aria-hidden="true"></i>
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-2">
+                    <label asp-for="LastName" class="control-label"></label>
+                </div>
+                <div class="col-md-4 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-user fa-fw"></i></span>
+                    </div>
+                    <input asp-for="LastName" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <i class="fa fa-asterisk fa-xs" style="color:red; margin-left:-22px; padding-right:5px; font-size: 0.5rem;" aria-hidden="true"></i>
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-2">
+                    <label asp-for="Email" class="control-label"></label>
+                </div>
+                <div class="col-md-4 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-envelope fa-fw"></i></span>
+                    </div>
+                    <input asp-for="Email" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <i class="fa fa-asterisk fa-xs" style="color:red; margin-left:-22px; padding-right:5px; font-size: 0.5rem;" aria-hidden="true"></i>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-2">
+                    <label asp-for="Mobile" class="control-label"></label>
+                </div>
+                <div class="col-md-4 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-phone fa-fw"></i></span>
+                    </div>
+                    <input asp-for="Mobile" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <span asp-validation-for="Mobile" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <div class="col-md-2">
+                    <label asp-for="UserRoleIds" class="control-label"></label>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-mask fa-fw"></i></span>
+						<div class="col-md-10" style="border-top: 1px solid lightgrey; border-right: 1px solid lightgrey; border-bottom: 1px solid lightgrey; padding-top: 8px;">
+							@if (ViewBag.currUserPermits.Contains(Permits.Identity.RolePermit.CRUD) || ViewBag.developerViewBagOverride.Equals("YES-ForcedSet"))
+							{
+								@Html.Raw("<pre>")@if (ViewBag.listRoles != null)
+								{
+									foreach (var itemRole in ViewBag.listRoles)
+									{
+										string attrChecked = string.Empty; if (ViewBag.listUsersRoles != null) { foreach (var itemUserRole in ViewBag.listUsersRoles) { if (itemRole.RoleId == itemUserRole.RoleId) { attrChecked = "checked=\"checked\""; break; } } }@Html.Raw("&nbsp;&nbsp;")<input type="checkbox" name="UserRoleIds" value="@itemRole.RoleId" @attrChecked />@Html.Raw("&nbsp;&nbsp;")@itemRole.RoleName@Html.Raw("<br />")}
+								}@Html.Raw("</pre>")
+							}
+							else
+							{
+								@Html.Raw("-- not permitted --")
+							}
+						</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-2">
+                    &nbsp;
+                </div>
+                <div class="col-md-4 input-group">
+                    <input type="submit" value="   Save   " class="btn btn-primary" />
+                </div>
+                <div class="col-md-6">
+                    &nbsp;
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    @if (ViewBag.currUserPermits.Contains(Permits.Identity.User.List) || ViewBag.developerViewBagOverride.Equals("YES-ForcedSet"))
+    {
+        <a asp-action="Index">Back to List</a>
+    }
+</div>
+
+@*@section ScriptsAtBottom {
+        <partial name="_ValidationScriptsPartial" />
+    }*@
+
+@*
+    https://stackoverflow.com/questions/48146726/bootstrap-font-awesome-in-textbox-not-working-properly-with-label/48146878
+*@

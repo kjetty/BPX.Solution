@@ -1,0 +1,60 @@
+﻿@using BPX.Utils;
+@using Newtonsoft.Json;
+
+@{
+    if (TempData.ContainsKey("alertBox"))
+    {
+        BootstrapAlertBox bootstrapAlertBox = JsonConvert.DeserializeObject<BootstrapAlertBox>((string)TempData["alertBox"]);
+
+        if (bootstrapAlertBox != null)
+        {
+            if (bootstrapAlertBox.alertType == (int)AlertType.Success)
+            {
+                <div class="alert alert-success alert-white rounded" style="margin-top:20px;">
+                    <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
+                    <div class="icon">
+                        <i class="fa fa-check fa-lg"></i>
+                        &nbsp;&nbsp;&nbsp;<strong>Success!</strong>
+                        @bootstrapAlertBox.alertMessage
+                    </div>
+                </div>
+            }
+            else if (bootstrapAlertBox.alertType == (int)AlertType.Info)
+            {
+                <div class="alert alert-info alert-white rounded" style="margin-top:20px;">
+                    <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
+                    <div class="icon">
+                        <i class="fa fa-info-circle fa-lg"></i>
+                        &nbsp;&nbsp;&nbsp;<strong>Information!</strong>
+                        @bootstrapAlertBox.alertMessage
+                    </div>
+                </div>
+            }
+            else if (bootstrapAlertBox.alertType == (int)AlertType.Warning)
+            {
+                <div class="alert alert-warning alert-white rounded" style="margin-top:20px;">
+                    <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
+                    <div class="icon">
+                        <i class="fa fa-exclamation-triangle fa-lg"></i>
+                        &nbsp;&nbsp;&nbsp;<strong>Warning!</strong>
+                        @bootstrapAlertBox.alertMessage
+                    </div>
+                </div>
+            }
+            else if (bootstrapAlertBox.alertType == (int)AlertType.Error)
+            {
+                <div class="alert alert-danger alert-white rounded" style="margin-top:20px; width:100%">
+                    <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
+                    <div class="icon">
+                        <i class="fa fa-times-circle fa-lg"></i>
+                        &nbsp;&nbsp;&nbsp;<strong>Error!</strong>
+                        @bootstrapAlertBox.alertMessage
+                    </div>
+                </div>
+            }
+        }
+
+        //remove TempData["alertBox"]
+        TempData.Remove("alertBox");
+    }
+}

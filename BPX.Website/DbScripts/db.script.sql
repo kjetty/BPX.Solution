@@ -36,7 +36,7 @@ CREATE TABLE Menus (
     MenuName         	varchar (32)        NOT NULL,
     MenuDescription  	varchar (128)       NULL,
     MenuURL          	varchar (1024)      NULL,
-    ParentMenuId    	INT (32)            NOT NULL,
+    ParentMenuId    	INT		            NOT NULL,
     HLevel			    INT                 NOT NULL,
     OrderNumber  		INT                 NULL,
     StatusFlag          char(1)             NOT NULL,
@@ -335,9 +335,15 @@ insert into RolePermits (RoleId,PermitId,StatusFlag,ModifiedBy,ModifiedDate) val
 insert into UserRoles (UserId,RoleId,StatusFlag,ModifiedBy,ModifiedDate) values ('2','1','A',1,getDate());
 
 --menus
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,StatusFlag,ModifiedBy,ModifiedDate) values ('Home2',null,'/',0,0,1,'A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,StatusFlag,ModifiedBy,ModifiedDate) values ('Privacy2',null,'/Home/Privacy',0,0,2,'A',1,getDate());
+insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,StatusFlag,ModifiedBy,ModifiedDate) values ('Home',null,'/',0,0,1,'A',1,getDate());
+insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,StatusFlag,ModifiedBy,ModifiedDate) values ('Privacy',null,'/Home/Privacy',0,0,2,'A',1,getDate());
 insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,StatusFlag,ModifiedBy,ModifiedDate) values ('User',null,'/Identity/User',0,0,3,'A',1,getDate());
 insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,StatusFlag,ModifiedBy,ModifiedDate) values ('Role',null,'/Identity/Role',0,0,3,'A',1,getDate());
 insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,StatusFlag,ModifiedBy,ModifiedDate) values ('Permit',null,'/Identity/Permit',0,0,3,'A',1,getDate());
 insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,StatusFlag,ModifiedBy,ModifiedDate) values ('Account',null,'/Identity/Account',0,0,3,'A',1,getDate());
+
+--menuRoles
+insert into MenuRoles (MenuId,RoleId,StatusFlag,ModifiedBy,ModifiedDate) values ('2','1','A',1,getDate());
+insert into MenuRoles (MenuId,RoleId,StatusFlag,ModifiedBy,ModifiedDate) values ('3','1','A',1,getDate());
+insert into MenuRoles (MenuId,RoleId,StatusFlag,ModifiedBy,ModifiedDate) values ('5','1','A',1,getDate());
+

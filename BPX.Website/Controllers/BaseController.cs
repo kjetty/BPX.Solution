@@ -54,7 +54,7 @@ namespace BPX.Website.Controllers
 		private IBPXCache _bpxCache;
 		protected IBPXCache bpxCache => _bpxCache ??= HttpContext.RequestServices.GetService<IBPXCache>();
 
-		// cache
+		// cacheKey
 		private IMemoryCacheKeyService _memoryCacheKeyService;
 		protected IMemoryCacheKeyService memoryCacheKeyService => _memoryCacheKeyService ??= HttpContext.RequestServices.GetService<IMemoryCacheKeyService>();
 
@@ -226,11 +226,15 @@ namespace BPX.Website.Controllers
 
 			if (menuString == null)
 			{
+				var menuRoleList = menuRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals("A")).Select(c => c.MenuId).ToList();
 				var menuList = menuService.GetRecordsByFilter(c => c.StatusFlag.Equals("A")).ToList();
-
-				foreach(var itemMenu in menuList)
+				
+				foreach (var itemMenu in menuList)
 				{
-					menuString += $"<li class=\"nav-item\"><a class=\"nav-link text-dark\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName}</a></li>";
+					if (menuRoleList.Contains(itemMenu.MenuId))
+					{
+						menuString += $"<li class=\"nav-item\"><a class=\"nav-link text-dark\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName}</a></li>";
+					}
 				}
 
 				bpxCache.SetCache(menuString, cacheKey, memoryCacheKeyService);

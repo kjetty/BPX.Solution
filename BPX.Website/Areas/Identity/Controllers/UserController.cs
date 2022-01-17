@@ -512,6 +512,5 @@ namespace BPX.Website.Areas.Identity.Controllers
 
 			return RedirectToAction(nameof(Index));
 		}
-
 	}
 }

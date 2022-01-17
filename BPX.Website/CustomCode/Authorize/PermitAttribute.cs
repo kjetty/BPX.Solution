@@ -82,15 +82,15 @@ namespace BPX.Website.CustomCode.Authorize
 
                 if (account != null)
                 {
-                    int userID = account.UserId;
+                    int userId = account.UserId;
                     string cacheKey = string.Empty;
 
-                    cacheKey = $"user:{userID}:roles";
+                    cacheKey = $"user:{userId}:roles";
                     var listUserRoles = bpxCache.GetCache<List<int>>(cacheKey);
 
                     if (listUserRoles == null)
                     {
-                        listUserRoles = userRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.UserId == userID).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
+                        listUserRoles = userRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.UserId == userId).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
                         bpxCache.SetCache(listUserRoles, cacheKey, memoryCacheKeyService);
                     }
 

@@ -113,9 +113,9 @@
 								localSortIcon += "-" + "down";
 						}
 					}
-					<th style="width:275px;">Email <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="Email" sortOrder="@localSortOrder"></span></th>
+					<th style="width:250px;">Email <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="Email" sortOrder="@localSortOrder"></span></th>
 					<th>Roles</th>
-					<th class="text-center" style="width:125px;">Action</th>
+					<th class="text-center" style="width:175px;">Action</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -146,7 +146,7 @@
 								@item.Email
 							</td>
 							<td>
-								<div style="width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+								<div style="width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
 									@{ int counter = 0;
 
 										if (ViewBag.listUsersRoles != null && ViewBag.listRoles != null)
@@ -185,7 +185,11 @@
 								}
 								@if (ViewBag.currUserPermits.Contains(Permits.Identity.User.Delete) || ViewBag.developerViewBagOverride.Equals("YES-ForcedSet"))
 								{
-									<a asp-area="Identity" asp-controller="User" asp-action="Delete" asp-route-id="@item.UserId" title="delete" class="fa fa-trash fa-xs" style="text-decoration: none; color: darkslategray;"></a>
+									<a asp-area="Identity" asp-controller="User" asp-action="Delete" asp-route-id="@item.UserId" title="delete" class="fa fa-trash fa-xs" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+								}
+								@if (ViewBag.currUserPermits.Contains(Permits.Identity.UserRole.CRUD) || ViewBag.developerViewBagOverride.Equals("YES-ForcedSet"))
+								{
+									@Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;") <a asp-area="Identity" asp-controller="User" asp-action="Role" asp-route-id="@item.UserId" title="role" class="fa fa-mask fa-xs" style="text-decoration: none; color: darkslategray;"></a>
 								}
 							</td>
 						</tr>

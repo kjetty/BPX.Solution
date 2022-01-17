@@ -101,8 +101,8 @@
                                 localSortIcon += "-" + "down";
                         }
                     }
-                    <th style="width:175px;">Role Description <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="RoleDescription" sortOrder="@localSortOrder"></span></th>
-                    <th class="text-center" style="width:125px;">Action</th>
+                    <th>Role Description <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="RoleDescription" sortOrder="@localSortOrder"></span></th>
+                    <th class="text-center" style="width:175px;">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -129,24 +129,24 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.RoleDescription)
                             </td>
-                            <td class="text-center">
-                                @if (ViewBag.currUserPermits.Contains(Permits.Identity.Role.Update) || ViewBag.developerViewBagOverride.Equals("YES-ForcedSet"))
-                                {
-                                    <a asp-area="Identity" asp-controller="Role" asp-action="Edit" asp-route-id="@item.RoleId" title="edit" class="fa fa-pen fa-xs" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
-                                }
-                                @if (ViewBag.currUserPermits.Contains(Permits.Identity.Role.Read) || ViewBag.developerViewBagOverride.Equals("YES-ForcedSet"))
-                                {
-                                    <a asp-area="Identity" asp-controller="Role" asp-action="Details" asp-route-id="@item.RoleId" title="view" class="fa fa-search fa-xs" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
-                                }
-                                @if (ViewBag.currUserPermits.Contains(Permits.Identity.Role.Delete) || ViewBag.developerViewBagOverride.Equals("YES-ForcedSet"))
-                                {
-                                    <a asp-area="Identity" asp-controller="Role" asp-action="Delete" asp-route-id="@item.RoleId" title="delete" class="fa fa-trash fa-xs" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
-                                }
-                                @if (ViewBag.currUserPermits.Contains(Permits.Identity.RolePermit.CRUD) || ViewBag.developerViewBagOverride.Equals("YES-ForcedSet"))
-                                {
-                                    <a asp-area="Identity" asp-controller="Role" asp-action="Permit" asp-route-id="@item.RoleId" title="delete" class="fa fa-address-card fa-xs" style="text-decoration: none; color: darkslategray;"></a>
-                                }
-                            </td>
+							<td class="text-center">
+								@if (ViewBag.currUserPermits.Contains(Permits.Identity.Role.Update) || ViewBag.developerViewBagOverride.Equals("YES-ForcedSet"))
+								{
+									<a asp-area="Identity" asp-controller="Role" asp-action="Edit" asp-route-id="@item.RoleId" title="edit" class="fa fa-pen fa-xs" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+								}
+								@if (ViewBag.currUserPermits.Contains(Permits.Identity.Role.Read) || ViewBag.developerViewBagOverride.Equals("YES-ForcedSet"))
+								{
+									<a asp-area="Identity" asp-controller="Role" asp-action="Details" asp-route-id="@item.RoleId" title="view" class="fa fa-search fa-xs" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+								}
+								@if (ViewBag.currUserPermits.Contains(Permits.Identity.Role.Delete) || ViewBag.developerViewBagOverride.Equals("YES-ForcedSet"))
+								{
+									<a asp-area="Identity" asp-controller="Role" asp-action="Delete" asp-route-id="@item.RoleId" title="delete" class="fa fa-trash fa-xs" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+								}
+								@if (ViewBag.currUserPermits.Contains(Permits.Identity.RolePermit.CRUD) || ViewBag.developerViewBagOverride.Equals("YES-ForcedSet"))
+								{
+									@Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;") <a asp-area="Identity" asp-controller="Role" asp-action="Permit" asp-route-id="@item.RoleId" title="delete" class="fa fa-address-card fa-xs" style="text-decoration: none; color: darkslategray;"></a>
+								}
+							</td>
                         </tr>
                     }
                 }

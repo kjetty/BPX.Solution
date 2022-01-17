@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using X.PagedList;
 
@@ -419,5 +420,100 @@ namespace BPX.Website.Areas.Identity.Controllers
 				return RedirectToAction(nameof(Delete), new { id });
 			}
 		}
-    }
+
+		// GET: /Identity/User/Role/5
+		[Permit(Permits.Identity.UserRole.CRUD)]
+		public ActionResult Role(int id)
+		{
+			var user = userService.GetRecordByID(id);
+			string cacheKey = string.Empty;
+
+			// listRoles
+			cacheKey = "roles:all";
+			List<Role> listRoles = listRoles = bpxCache.GetCache<List<Role>>(cacheKey);
+
+			if (listRoles == null)
+			{
+				listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active)).OrderBy(c => c.RoleName).ToList();
+				bpxCache.SetCache(listRoles, cacheKey, memoryCacheKeyService);
+			}
+
+			// listUserRoleIds
+			cacheKey = $"user:{id}:roles";
+			List<int> listUserRoleIds = bpxCache.GetCache<List<int>>(cacheKey);
+
+			if (listUserRoleIds == null)
+			{
+				listUserRoleIds = userRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.UserId.Equals(id)).OrderBy(c => c.RoleId).Select(c => c.RoleId).ToList();
+				bpxCache.SetCache(listUserRoleIds, cacheKey, memoryCacheKeyService);
+			}
+			
+			// set ViewBag
+			ViewBag.user = user;
+			ViewBag.listRoles = listRoles;
+			ViewBag.listUserRoleIds = listUserRoleIds;
+
+			return View();
+		}
+
+		// GET: /Identity/User/Role/5
+		[HttpPost]
+		[Permit(Permits.Identity.UserRole.CRUD)]
+		public ActionResult Role(int id, List<int> roleIds)
+		{
+			var listUserRoles = userRoleService.GetRecordsByFilter(c => c.UserId == id).ToList();
+
+			foreach (var userRole in listUserRoles)
+			{
+				userRole.StatusFlag = RecordStatus.Inactive;
+				userRole.ModifiedBy = 1;
+				userRole.ModifiedDate = DateTime.Now;
+			}
+
+			userRoleService.SaveDBChanges();
+
+			foreach (var roleId in roleIds)
+			{
+				var existingUserRole = userRoleService.GetRecordsByFilter(c => c.UserId == id && c.RoleId == roleId).FirstOrDefault();
+
+				if (existingUserRole != null)
+				{
+					existingUserRole.StatusFlag = RecordStatus.Active;
+					existingUserRole.ModifiedBy = 1;
+					existingUserRole.ModifiedDate = DateTime.Now;
+
+					userRoleService.UpdateRecord(existingUserRole);
+				}
+				else
+				{
+					UserRole newUserRole = new()
+					{
+						UserId = id,
+						RoleId = roleId,
+						StatusFlag = RecordStatus.Active,
+						ModifiedBy = 1,
+						ModifiedDate = DateTime.Now
+					};
+
+					userRoleService.InsertRecord(newUserRole);
+				}
+			}
+
+			userRoleService.SaveDBChanges();
+
+			//// remove from cache
+			//// get ROLES associated with the USER (from DB)
+			//var userUsersList = userUserService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.UserId == currUserId).OrderBy(c => c.UserId).Select(c => c.UserId).Distinct().ToList();
+			//string cacheKey = $"urp{string.Join(string.Empty, userUsersList)}";
+
+			////memoryCache.Remove(cacheKey);
+
+			// set alert
+			ShowAlert(AlertType.Success, "User Roles are successfully updated.");
+
+			//return Role(id);
+			return RedirectToAction(nameof(Index));
+		}
+
+	}
 }

@@ -54,10 +54,10 @@ namespace BPX.Website.CustomCode.Authorize
                 var claimLoginId = context.User.Claims.FirstOrDefault(c => c.Type == "LoginId").Value;
                 var claimLoginToken = context.User.Claims.FirstOrDefault(c => c.Type == "LoginToken").Value;
                 var claimUserId = context.User.Claims.FirstOrDefault(c => c.Type == "UserId").Value;
-                int userID = Convert.ToInt32(claimUserId);
+                int userId = Convert.ToInt32(claimUserId);
 
                 // get user (from DB)
-                var login = loginService.GetRecordByID(userID);
+                var login = loginService.GetRecordByID(userId);
 
                 if (login != null)
                 {

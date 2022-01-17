@@ -501,17 +501,15 @@ namespace BPX.Website.Areas.Identity.Controllers
 
 			userRoleService.SaveDBChanges();
 
-			//// remove from cache
-			//// get ROLES associated with the USER (from DB)
-			//var userUsersList = userUserService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.UserId == currUserId).OrderBy(c => c.UserId).Select(c => c.UserId).Distinct().ToList();
-			//string cacheKey = $"urp{string.Join(string.Empty, userUsersList)}";
+			// remove from cache
+			string cacheKey = string.Empty;
 
-			////memoryCache.Remove(cacheKey);
+			cacheKey = $"user:{id}:roles";
+			bpxCache.RemoveCache(cacheKey);
 
 			// set alert
 			ShowAlert(AlertType.Success, "User Roles are successfully updated.");
 
-			//return Role(id);
 			return RedirectToAction(nameof(Index));
 		}
 

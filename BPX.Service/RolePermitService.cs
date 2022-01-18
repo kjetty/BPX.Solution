@@ -1,4 +1,4 @@
-﻿using BPX.DAL.UOW;
+﻿using BPX.DAL.Repository;
 using BPX.Domain.DbModels;
 using System;
 using System.Linq;
@@ -9,11 +9,11 @@ namespace BPX.Service
 {
     public class RolePermitService : IRolePermitService
     {
-        public IUnitOfWork _uow;
+        public RolePermitRepository rolePermitRepository;
 
-        public RolePermitService(IUnitOfWork uow)
+        public RolePermitService(IRolePermitRepository rolePermitRepository)
         {
-            _uow = uow;
+            this.rolePermitRepository = (RolePermitRepository)rolePermitRepository;
         }
 
         public IPagedList<RolePermit> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
@@ -23,12 +23,12 @@ namespace BPX.Service
 
         public RolePermit GetRecordByID(int id)
         {
-            return _uow.RolePermitRepository.GetRecordByID(id);
+            return rolePermitRepository.GetRecordByID(id);
         }
 
         public IQueryable<RolePermit> GetRecordsByFilter(Expression<Func<RolePermit, bool>> filter)
         {
-            return _uow.RolePermitRepository.GetRecordsByFilter(filter);
+            return rolePermitRepository.GetRecordsByFilter(filter);
         }
 
         public void InsertRecord(RolePermit entity)
@@ -37,7 +37,7 @@ namespace BPX.Service
             //business rules validation, if any
             //...
 
-            _uow.RolePermitRepository.InsertRecord(entity);
+            rolePermitRepository.InsertRecord(entity);
         }
 
         public void UpdateRecord(RolePermit entity)
@@ -46,12 +46,12 @@ namespace BPX.Service
             //business rules validation, if any
             //...
 
-            _uow.RolePermitRepository.UpdateRecord(entity);
+            rolePermitRepository.UpdateRecord(entity);
         }
 
         public void SaveDBChanges()
         {
-            _uow.SaveDBChanges();
+            rolePermitRepository.SaveDBChanges();
         }
     }
 

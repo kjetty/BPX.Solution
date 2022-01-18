@@ -1,4 +1,4 @@
-﻿using BPX.DAL.UOW;
+﻿using BPX.DAL.Repository;
 using BPX.Domain.DbModels;
 using System;
 using System.Linq;
@@ -9,26 +9,26 @@ namespace BPX.Service
 {
     public class RoleService : IRoleService
     {
-        public IUnitOfWork _uow;
+        public RoleRepository roleRepository;
 
-        public RoleService(IUnitOfWork uow)
+        public RoleService(IRoleRepository roleRepository)
         {
-            _uow = uow;
+            this.roleRepository = (RoleRepository)roleRepository;
         }
 
         public IPagedList<Role> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
         {
-            return _uow.RoleRepository.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString);
+            return roleRepository.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString);
         }
 
         public Role GetRecordByID(int id)
         {
-            return _uow.RoleRepository.GetRecordByID(id);
+            return roleRepository.GetRecordByID(id);
         }
 
         public IQueryable<Role> GetRecordsByFilter(Expression<Func<Role, bool>> filter)
         {
-            return _uow.RoleRepository.GetRecordsByFilter(filter);
+            return roleRepository.GetRecordsByFilter(filter);
         }
 
         public void InsertRecord(Role entity)
@@ -37,7 +37,7 @@ namespace BPX.Service
             //business rules validation, if any
             //...
 
-            _uow.RoleRepository.InsertRecord(entity);
+            roleRepository.InsertRecord(entity);
         }
 
         public void UpdateRecord(Role entity)
@@ -46,12 +46,12 @@ namespace BPX.Service
             //business rules validation, if any
             //...
 
-            _uow.RoleRepository.UpdateRecord(entity);
+            roleRepository.UpdateRecord(entity);
         }
 
         public void SaveDBChanges()
         {
-            _uow.SaveDBChanges();
+            roleRepository.SaveDBChanges();
         }
     }
 

@@ -1,4 +1,4 @@
-﻿using BPX.DAL.UOW;
+﻿using BPX.DAL.Repository;
 using BPX.Domain.DbModels;
 using System;
 using System.Linq;
@@ -7,55 +7,55 @@ using X.PagedList;
 
 namespace BPX.Service
 {
-    public class LoginService : ILoginService
-    {
-        public IUnitOfWork _uow;
+	public class LoginService : ILoginService
+	{
+		public LoginRepository loginRepository;
 
-        public LoginService(IUnitOfWork uow)
-        {
-            _uow = uow;
-        }
+		public LoginService(ILoginRepository loginRepository)
+		{
+			this.loginRepository = (LoginRepository)loginRepository;
+		}
 
-        public IPagedList<Login> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
-        {
-            throw new NotImplementedException();
-        }
+		public IPagedList<Login> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
+		{
+			throw new NotImplementedException();
+		}
 
-        public Login GetRecordByID(int id)
-        {
-            return _uow.LoginRepository.GetRecordByID(id);
-        }
+		public Login GetRecordByID(int id)
+		{
+			return loginRepository.GetRecordByID(id);
+		}
 
-        public IQueryable<Login> GetRecordsByFilter(Expression<Func<Login, bool>> filter)
-        {
-            return _uow.LoginRepository.GetRecordsByFilter(filter);
-        }
+		public IQueryable<Login> GetRecordsByFilter(Expression<Func<Login, bool>> filter)
+		{
+			return loginRepository.GetRecordsByFilter(filter);
+		}
 
-        public void InsertRecord(Login entity)
-        {
-            //...
-            //business rules validation, if any
-            //...
+		public void InsertRecord(Login entity)
+		{
+			//...
+			//business rules validation, if any
+			//...
 
-            _uow.LoginRepository.InsertRecord(entity);
-        }
+			loginRepository.InsertRecord(entity);
+		}
 
-        public void UpdateRecord(Login entity)
-        {
-            //...
-            //business rules validation, if any
-            //...
+		public void UpdateRecord(Login entity)
+		{
+			//...
+			//business rules validation, if any
+			//...
 
-            _uow.LoginRepository.UpdateRecord(entity);
-        }
+			loginRepository.UpdateRecord(entity);
+		}
 
-        public void SaveDBChanges()
-        {
-            _uow.SaveDBChanges();
-        }
-    }
+		public void SaveDBChanges()
+		{
+			loginRepository.SaveDBChanges();
+		}
+	}
 
-    public interface ILoginService : IGenericService<Login>
-    {
-    }
+	public interface ILoginService : IGenericService<Login>
+	{
+	}
 }

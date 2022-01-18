@@ -1,4 +1,4 @@
-﻿using BPX.DAL.UOW;
+﻿using BPX.DAL.Repository;
 using BPX.Domain.DbModels;
 using System;
 using System.Linq;
@@ -9,11 +9,11 @@ namespace BPX.Service
 {
     public class MenuRoleService : IMenuRoleService
     {
-        public IUnitOfWork _uow;
+        public MenuRoleRepository menuRoleRepository;
 
-        public MenuRoleService(IUnitOfWork uow)
+        public MenuRoleService(IMenuRoleRepository menuRoleRepository)
         {
-            _uow = uow;
+            this.menuRoleRepository = (MenuRoleRepository)menuRoleRepository;
         }
 
         public IPagedList<MenuRole> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
@@ -23,12 +23,12 @@ namespace BPX.Service
 
         public MenuRole GetRecordByID(int id)
         {
-            return _uow.MenuRoleRepository.GetRecordByID(id);
+            return menuRoleRepository.GetRecordByID(id);
         }
 
         public IQueryable<MenuRole> GetRecordsByFilter(Expression<Func<MenuRole, bool>> filter)
         {
-            return _uow.MenuRoleRepository.GetRecordsByFilter(filter);
+            return menuRoleRepository.GetRecordsByFilter(filter);
         }
 
         public void InsertRecord(MenuRole entity)
@@ -37,7 +37,7 @@ namespace BPX.Service
             //business rules validation, if any
             //...
 
-            _uow.MenuRoleRepository.InsertRecord(entity);
+            menuRoleRepository.InsertRecord(entity);
         }
 
         public void UpdateRecord(MenuRole entity)
@@ -46,12 +46,12 @@ namespace BPX.Service
             //business rules validation, if any
             //...
 
-            _uow.MenuRoleRepository.UpdateRecord(entity);
+            menuRoleRepository.UpdateRecord(entity);
         }
 
         public void SaveDBChanges()
         {
-            _uow.SaveDBChanges();
+            menuRoleRepository.SaveDBChanges();
         }
     }
 

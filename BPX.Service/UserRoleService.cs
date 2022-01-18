@@ -1,4 +1,4 @@
-﻿using BPX.DAL.UOW;
+﻿using BPX.DAL.Repository;
 using BPX.Domain.DbModels;
 using System;
 using System.Linq;
@@ -9,11 +9,11 @@ namespace BPX.Service
 {
     public class UserRoleService : IUserRoleService
     {
-        public IUnitOfWork _uow;
+        public UserRoleRepository userRoleRepository;
 
-        public UserRoleService(IUnitOfWork uow)
+        public UserRoleService(IUserRoleRepository userRoleRepository)
         {
-            _uow = uow;
+            this.userRoleRepository = (UserRoleRepository)userRoleRepository;
         }
 
         public IPagedList<UserRole> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
@@ -23,12 +23,12 @@ namespace BPX.Service
 
         public UserRole GetRecordByID(int id)
         {
-            return _uow.UserRoleRepository.GetRecordByID(id);
+            return userRoleRepository.GetRecordByID(id);
         }
 
         public IQueryable<UserRole> GetRecordsByFilter(Expression<Func<UserRole, bool>> filter)
         {
-            return _uow.UserRoleRepository.GetRecordsByFilter(filter);
+            return userRoleRepository.GetRecordsByFilter(filter);
         }
 
         public void InsertRecord(UserRole entity)
@@ -37,7 +37,7 @@ namespace BPX.Service
             //business rules validation, if any
             //...
 
-            _uow.UserRoleRepository.InsertRecord(entity);
+            userRoleRepository.InsertRecord(entity);
         }
 
         public void UpdateRecord(UserRole entity)
@@ -46,12 +46,12 @@ namespace BPX.Service
             //business rules validation, if any
             //...
 
-            _uow.UserRoleRepository.UpdateRecord(entity);
+            userRoleRepository.UpdateRecord(entity);
         }
 
         public void SaveDBChanges()
         {
-            _uow.SaveDBChanges();
+            userRoleRepository.SaveDBChanges();
         }
     }
 

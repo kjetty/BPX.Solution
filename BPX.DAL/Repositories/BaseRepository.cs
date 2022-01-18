@@ -6,9 +6,14 @@ namespace BPX.DAL.Repositories
     {
         protected readonly BPXDbContext _context;
 
-        protected BaseRepository(BPXDbContext context)
+        public BaseRepository(BPXDbContext context)
         {
             _context = context;
         }
-    }
+
+		public void SaveDBChanges()
+		{
+			_context.SaveChanges();
+		}
+	}
 }

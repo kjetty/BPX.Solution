@@ -1,4 +1,5 @@
-﻿using BPX.Domain.DbModels;
+﻿using BPX.DAL.Context;
+using BPX.Domain.DbModels;
 using BPX.Domain.ViewModels;
 using BPX.Service;
 using BPX.Utils;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 using X.PagedList;
 
 namespace BPX.Website.Areas.Identity.Controllers
@@ -192,9 +194,26 @@ namespace BPX.Website.Areas.Identity.Controllers
 					}
 				}
 
-				// commit changes to database
-				userService.SaveDBChanges();
-				userRoleService.SaveDBChanges();
+				try
+				{
+					using (TransactionScope scope = new TransactionScope())
+					{
+						// commit changes to database
+						userService.SaveDBChanges();
+						userRoleService.SaveDBChanges();
+
+						scope.Complete();
+					}
+				}
+				catch (Exception ex)
+				{
+					logger.LogError(ex, ex.Message);
+					throw;
+				}
+
+				//// commit changes to database
+				//userService.SaveDBChanges();
+				//userRoleService.SaveDBChanges();
 
 				// set alert
 				ShowAlert(AlertType.Success, "User is successfully updated.");

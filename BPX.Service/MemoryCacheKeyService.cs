@@ -1,4 +1,4 @@
-﻿using BPX.DAL.UOW;
+﻿using BPX.DAL.Repository;
 using BPX.Domain.DbModels;
 using System;
 using System.Linq;
@@ -9,11 +9,11 @@ namespace BPX.Service
 {
     public class MemoryCacheKeyService : IMemoryCacheKeyService
     {
-        public IUnitOfWork _uow;
+        public MemoryCacheKeyRepository memoryCacheKeyRepository;
 
-        public MemoryCacheKeyService(IUnitOfWork uow)
+        public MemoryCacheKeyService(IMemoryCacheKeyRepository memoryCacheKeyRepository)
         {
-            _uow = uow;
+            this.memoryCacheKeyRepository = (MemoryCacheKeyRepository)memoryCacheKeyRepository;
         }
 
         public IPagedList<MemoryCacheKey> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
@@ -28,7 +28,7 @@ namespace BPX.Service
 
         public IQueryable<MemoryCacheKey> GetRecordsByFilter(Expression<Func<MemoryCacheKey, bool>> filter)
         {
-            return _uow.MemoryCacheKeyRepository.GetRecordsByFilter(filter);
+            return memoryCacheKeyRepository.GetRecordsByFilter(filter);
         }
 
         public void InsertRecord(MemoryCacheKey entity)
@@ -37,7 +37,7 @@ namespace BPX.Service
             //business rules validation, if any
             //...
 
-            _uow.MemoryCacheKeyRepository.InsertRecord(entity);
+            memoryCacheKeyRepository.InsertRecord(entity);
         }
 
         public void UpdateRecord(MemoryCacheKey entity)
@@ -46,14 +46,14 @@ namespace BPX.Service
             //business rules validation, if any
             //...
 
-            _uow.MemoryCacheKeyRepository.UpdateRecord(entity);
+            memoryCacheKeyRepository.UpdateRecord(entity);
         }
 
-        public void SaveDBChanges()
-        {
-            _uow.SaveDBChanges();
+		public void SaveDBChanges()
+		{
+            memoryCacheKeyRepository.SaveDBChanges();
         }
-    }
+	}
 
     public interface IMemoryCacheKeyService : IGenericService<MemoryCacheKey>
     {

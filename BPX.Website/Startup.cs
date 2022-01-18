@@ -1,6 +1,5 @@
 using BPX.DAL.Context;
 using BPX.DAL.Repository;
-using BPX.DAL.UOW;
 using BPX.Service;
 using BPX.Website.CustomCode.Cache;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -53,9 +52,6 @@ namespace BPX.Website
 			services.AddScoped<IMemoryCacheKeyRepository, MemoryCacheKeyRepository>();
 			services.AddScoped<IMenuRepository, MenuRepository>();
 			services.AddScoped<IMenuRoleRepository, MenuRoleRepository>();
-
-			// inject unit of work
-			services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 			// inject services
 			services.AddScoped<ILoginService, LoginService>();

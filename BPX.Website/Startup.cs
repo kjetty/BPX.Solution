@@ -1,4 +1,5 @@
 using BPX.DAL.Context;
+using BPX.DAL.Repository;
 using BPX.DAL.UOW;
 using BPX.Service;
 using BPX.Website.CustomCode.Cache;
@@ -41,12 +42,23 @@ namespace BPX.Website
             // SCOPED: By using this lifetime, the service will be created only once in the client request scope
             // this is particularly used in ASP.NET Core 5 where the object instance is created once per HTTP request
             // services such as Entity Framework Core's DbContext are registered with scoped lifetime
+			
+			// inject repositories
+			services.AddScoped<ILoginRepository, LoginRepository>();
+			services.AddScoped<IUserRepository, UserRepository>();
+			services.AddScoped<IRoleRepository, RoleRepository>();
+			services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+			services.AddScoped<IPermitRepository, PermitRepository>();
+			services.AddScoped<IRolePermitRepository, RolePermitRepository>();
+			services.AddScoped<IMemoryCacheKeyRepository, MemoryCacheKeyRepository>();
+			services.AddScoped<IMenuRepository, MenuRepository>();
+			services.AddScoped<IMenuRoleRepository, MenuRoleRepository>();
 
-            // inject unit of work (includles all repositories as well)
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+			// inject unit of work
+			services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            // inject services
-            services.AddScoped<ILoginService, LoginService>();
+			// inject services
+			services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IUserRoleService, UserRoleService>();

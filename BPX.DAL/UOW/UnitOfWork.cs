@@ -22,6 +22,7 @@ namespace BPX.DAL.UOW
 		public UnitOfWork(BPXDbContext context,ILoginRepository loginRepository, IUserRepository userRepository, IRoleRepository roleRepository, IUserRoleRepository userRoleRepository, IPermitRepository permitRepository, IRolePermitRepository rolePermitRepository, IMemoryCacheKeyRepository memoryCacheKeyRepository, IMenuRepository menuRepository, IMenuRoleRepository menuRoleRepository)
 		{
 			_context = context;
+
 			this.LoginRepository = loginRepository;
 			this.UserRepository = userRepository;
 			this.RoleRepository = roleRepository;

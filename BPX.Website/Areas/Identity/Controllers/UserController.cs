@@ -19,12 +19,16 @@ namespace BPX.Website.Areas.Identity.Controllers
 	[Area("Identity")]
     public class UserController : BaseController<UserController>
     {
-        private readonly IRoleService roleService;
+		private readonly IUserService userService;
+		private readonly IUserRoleService userRoleService;
+		private readonly IRoleService roleService;
 
-        public UserController(IRoleService roleService)
+        public UserController(IUserService userService, IUserRoleService userRoleService, IRoleService roleService)
         {
-            this.roleService = roleService;
-        }
+			this.userService = userService;
+			this.userRoleService = userRoleService;
+			this.roleService = roleService;
+		}
 
         // GET: /Identity/User
         [Permit(Permits.Identity.User.List)]
@@ -223,7 +227,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 			catch (Exception ex)
 			{
 				// prepare data
-				string currControllerAction = "[" + currController + "." + currAction + "]";
+				string currControllerAction = "[" + currRequestMeta.controller + "." + currRequestMeta.action + "]";
 				string errorStackTrace = ex.StackTrace.ToString();
 				string errorMessage = GetGarneredErrorMessage(ex);
 
@@ -293,11 +297,11 @@ namespace BPX.Website.Areas.Identity.Controllers
 				userService.SaveDBChanges();
 
 				// handle cache :: remove from cache using keys from the database
-				var memoryCacheKeys = memoryCacheKeyService.GetRecordsByFilter(c => c.CacheKey.Contains($"user:{id}:") && c.ModifiedDate >= DateTime.Now.AddMinutes(-30)).OrderBy(c => c.CacheKey).ToList();
+				var CacheKeys = CacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.Contains($"user:{id}:") && c.ModifiedDate >= DateTime.Now.AddMinutes(-30)).OrderBy(c => c.CacheKeyName).ToList();
 
-				foreach(var memoryCacheKey in memoryCacheKeys)
+				foreach(var cacheKeyName in CacheKeys)
 				{
-					bpxCache.RemoveCache(memoryCacheKey.CacheKey);
+					bpxCache.RemoveCache(cacheKeyName.ToString());
 				}
 
 				// set alert
@@ -308,7 +312,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 			catch (Exception ex)
 			{
 				// prepare data
-				string currControllerAction = "[" + currController + "." + currAction + "]";
+				string currControllerAction = "[" + currRequestMeta.controller + "." + currRequestMeta.action + "]";
 				string errorStackTrace = ex.StackTrace.ToString();
 				string errorMessage = GetGarneredErrorMessage(ex);
 
@@ -426,7 +430,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 			catch (Exception ex)
 			{
 				// prepare data
-				string currControllerAction = "[" + currController + "." + currAction + "]";
+				string currControllerAction = "[" + currRequestMeta.controller + "." + currRequestMeta.action + "]";
 				string errorStackTrace = ex.StackTrace.ToString();
 				string errorMessage = GetGarneredErrorMessage(ex);
 
@@ -454,7 +458,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 			if (listRoles == null)
 			{
 				listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active)).OrderBy(c => c.RoleName).ToList();
-				bpxCache.SetCache(listRoles, cacheKey, memoryCacheKeyService);
+				bpxCache.SetCache(listRoles, cacheKey, CacheKeyService);
 			}
 
 			// listUserRoleIds
@@ -464,7 +468,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 			if (listUserRoleIds == null)
 			{
 				listUserRoleIds = userRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.UserId.Equals(id)).OrderBy(c => c.RoleId).Select(c => c.RoleId).ToList();
-				bpxCache.SetCache(listUserRoleIds, cacheKey, memoryCacheKeyService);
+				bpxCache.SetCache(listUserRoleIds, cacheKey, CacheKeyService);
 			}
 			
 			// set ViewBag

@@ -1,5 +1,7 @@
-﻿using BPX.Domain.DbModels;
+﻿using BPX.Domain.CustomModels;
+using BPX.Domain.DbModels;
 using BPX.Domain.ViewModels;
+using BPX.Service;
 using BPX.Utils;
 using BPX.Website.Controllers;
 using Microsoft.AspNetCore.Authentication;
@@ -18,9 +20,15 @@ namespace BPX.Website.Areas.Identity.Controllers
 	[Area("Identity")]
     public class AccountController : BaseController<AccountController>
     {
-       
-        public AccountController()
+        private readonly ILoginService loginService;
+        private readonly IUserService userService;
+        private readonly IUserRoleService userRoleService;
+
+        public AccountController(ILoginService loginService, IUserService userService, IUserRoleService userRoleService)
         {
+            this.loginService = loginService;
+            this.userService = userService;
+            this.userRoleService = userRoleService;
         }
 
         // GET: /Identity/Account/Login
@@ -71,21 +79,22 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
 
             //// Developer Override 
-            //// Development Override
-            //// OverrideOverrideOverride :: todo
-            //// comment out this code before publishing for PRODUCTION RELEASE
-            //if (currHost.Contains("localhost"))
-            //{
-            //    if (developerPasswordOverride.Equals("YES-ForcedSet"))
-            //    {
-            //        if (model.Password.Equals("password"))
-            //        {
-            //            passwordIsVerified = true;
-            //        }
-            //    }
-            //}		
+            //// OverrideOverrideOverride :: TODO
+            //// comment code line 86-95 before publishing for PRODUCTION RELEASE
+            //// developer overide - permits
+            // developer overide - password
+            if (currRequestMeta.host.Contains("localhost"))
+			{
+				if (currDeveloperMeta.PasswordOverride.Equals("YES-ForcedSet"))
+				{
+					if (model.Password.Equals("password"))
+					{
+						passwordIsVerified = true;
+					}
+				}
+			}
 
-            if (!passwordIsVerified)
+			if (!passwordIsVerified)
             {
                 // set alert
                 ShowAlert(AlertType.Warning, "Login failed. Try again.");
@@ -263,7 +272,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             catch (Exception ex)
             {
                 // prepare data
-                string currControllerAction = "[" + currController + "." + currAction + "]";
+                string currControllerAction = "[" + currRequestMeta.controller + "." + currRequestMeta.action + "]";
                 string errorStackTrace = ex.StackTrace.ToString();
                 string errorMessage = GetGarneredErrorMessage(ex);
 
@@ -322,7 +331,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     return View(collection);
                 }
 
-                if (currUserId != collection.UserId)
+                if (currUserMeta.UserId != collection.UserId)
 				{
                     string errorMessage = "Invalid user";
                     ModelState.AddModelError("", errorMessage);
@@ -336,7 +345,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // todo :: verify old password
 
                 // get user
-                var login = loginService.GetRecordByID(currUserId);
+                var login = loginService.GetRecordByID(currUserMeta.UserId);
 
 				// hash the password
 				var passwordHasher = new PasswordHasher<Login>();
@@ -355,7 +364,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             catch (Exception ex)
             {
                 // prepare data
-                string currControllerAction = "[" + currController + "." + currAction + "]";
+                string currControllerAction = "[" + currRequestMeta.controller + "." + currRequestMeta.action + "]";
                 string errorStackTrace = ex.StackTrace.ToString();
                 string errorMessage = GetGarneredErrorMessage(ex);
 
@@ -373,9 +382,9 @@ namespace BPX.Website.Areas.Identity.Controllers
         // POST: /Identity/Account/LogOff
         public ActionResult LogOff()
         {
-            if (currUserId > 0)
+            if (currUserMeta.UserId > 0)
             {
-                var login = loginService.GetRecordByID(currUserId);
+                var login = loginService.GetRecordByID(currUserMeta.UserId);
 
                 login.LoginToken = Guid.NewGuid().ToString();
                 login.LastLoginDate = DateTime.Now;
@@ -385,7 +394,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            if (currUserId > 0)
+            if (currUserMeta.UserId > 0)
             {
                 // set alert
                 ShowAlert(AlertType.Info, "User is successfully logged off.");

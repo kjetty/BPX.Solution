@@ -16,12 +16,14 @@ namespace BPX.Website.Areas.Identity.Controllers
 	[Area("Identity")]
     public class PermitController : BaseController<PermitController>
     {
+        private readonly IUserService userService;
         private readonly IPermitService permitService;
         private readonly IRoleService roleService;
 
 
-        public PermitController(IPermitService permitService, IRoleService roleService)
+        public PermitController(IUserService userService, IPermitService permitService, IRoleService roleService)
         {
+            this.userService = userService;
             this.permitService = permitService;
             this.roleService = roleService;
         }
@@ -128,7 +130,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             catch (Exception ex)
             {
                 // prepare data
-                string currControllerAction = "[" + currController + "." + currAction + "]";
+                string currControllerAction = "[" + currRequestMeta.controller + "." + currRequestMeta.action + "]";
                 string errorStackTrace = ex.StackTrace.ToString();
                 string errorMessage = GetGarneredErrorMessage(ex);
 
@@ -201,7 +203,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             catch (Exception ex)
             {
                 // prepare data
-                string currControllerAction = "[" + currController + "." + currAction + "]";
+                string currControllerAction = "[" + currRequestMeta.controller + "." + currRequestMeta.action + "]";
                 string errorStackTrace = ex.StackTrace.ToString();
                 string errorMessage = GetGarneredErrorMessage(ex);
 
@@ -273,7 +275,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             catch (Exception ex)
             {
                 // prepare data
-                string currControllerAction = "[" + currController + "." + currAction + "]";
+                string currControllerAction = "[" + currRequestMeta.controller + "." + currRequestMeta.action + "]";
                 string errorStackTrace = ex.StackTrace.ToString();
                 string errorMessage = GetGarneredErrorMessage(ex);
 
@@ -379,7 +381,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             catch (Exception ex)
             {
                 // prepare data
-                string currControllerAction = "[" + currController + "." + currAction + "]";
+                string currControllerAction = "[" + currRequestMeta.controller + "." + currRequestMeta.action + "]";
                 string errorStackTrace = ex.StackTrace.ToString();
                 string errorMessage = GetGarneredErrorMessage(ex);
 

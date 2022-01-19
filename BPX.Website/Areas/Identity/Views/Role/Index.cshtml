@@ -1,198 +1,199 @@
 ﻿@model X.PagedList.IPagedList<BPX.Domain.ViewModels.RoleMiniViewModel>
 
+@using BPX.Domain.CustomModels;
+@using BPX.Website.CustomCode.Authorize;
 @using X.PagedList.Mvc.Core;
 @using X.PagedList.Web.Common;
-@using BPX.Website.CustomCode.Authorize;
 
 @{
-    ViewBag.Title = "List of Roles";
+	ViewBag.Title = "List of Roles";
 
-    ViewBag.pageNumber = (ViewBag.pageNumber ?? 1);
-    ViewBag.pageSize = (ViewBag.pageSize ?? 10);
-    ViewBag.statusFlag = (ViewBag.statusFlag ?? string.Empty);
-    ViewBag.sortByColumn = (ViewBag.sortByColumn ?? string.Empty);
-    ViewBag.sortOrder = (ViewBag.sortOrder ?? string.Empty);
-    ViewBag.searchForString = (ViewBag.searchForString ?? string.Empty);
+	ViewBag.pageNumber = (ViewBag.pageNumber ?? 1);
+	ViewBag.pageSize = (ViewBag.pageSize ?? 10);
+	ViewBag.statusFlag = (ViewBag.statusFlag ?? string.Empty);
+	ViewBag.sortByColumn = (ViewBag.sortByColumn ?? string.Empty);
+	ViewBag.sortOrder = (ViewBag.sortOrder ?? string.Empty);
+	ViewBag.searchForString = (ViewBag.searchForString ?? string.Empty);
 
-    // fyi :: passed in objects
-    // none
+	// fyi :: passed in objects
+	// none
 
-    //local variables
-    var localSortOrder = "";
-    var localSortIcon = "";
+	//local variables
+	var localSortOrder = "";
+	var localSortIcon = "";
 }
 
 <div class="row">
-    <div class="col-md-12">
-        <h5>@ViewBag.Title</h5>
-    </div>
+	<div class="col-md-12">
+		<h5>@ViewBag.Title</h5>
+	</div>
 </div>
 
 <p></p>
 <hr />
 
 <div class="row">
-    <div class="col-md-9">
-        @if (ViewBag.currUserPermits.Contains(Permits.Identity.Role.Create) || ViewBag.developerViewBagOverride.Equals("YES-ForcedSet"))
-        {
-            <a asp-area="Identity" asp-controller="Role" asp-action="Create" class="btn btn-primary fa-sm" title="Add Role"><i class="fa fa-plus-circle"></i> &nbsp; Add Role</a>
-        }
-    </div>
-    <div class="col-md-3">
-        <div class="input-group">
-            <input id="searchInput" name="searchInput" type="text" class="form-control" placeholder="Search data" value="@ViewBag.searchForString">
-            <div class="input-group-append">
-                <button id="searchBtn" class="btn btn-primary" type="button">
-                    <i class="fa fa-search fa-sm"></i>
-                </button>
-            </div>
-        </div>
-    </div>
+	<div class="col-md-9">
+		@if (((UserMeta)ViewBag.currUserMeta).UserPermitIds.Contains(Permits.Identity.Role.Create) || ((DeveloperMeta)ViewBag.currDeveloperMeta.ViewBagOverride).Equals("YES-ForcedSet"))
+		{
+			<a asp-area="Identity" asp-controller="Role" asp-action="Create" class="btn btn-primary fa-sm" title="Add Role"><i class="fa fa-plus-circle"></i> &nbsp; Add Role</a>
+		}
+	</div>
+	<div class="col-md-3">
+		<div class="input-group">
+			<input id="searchInput" name="searchInput" type="text" class="form-control" placeholder="Search data" value="@ViewBag.searchForString">
+			<div class="input-group-append">
+				<button id="searchBtn" class="btn btn-primary" type="button">
+					<i class="fa fa-search fa-sm"></i>
+				</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 <p></p>
 
 <div class="row" style="min-height: 400px;">
-    <div class="col-12">
-        <table class="table table-sm table-striped table-hover border-bottom table-bordered">
-            <thead>
-                <tr>
-                    @{
-                        localSortOrder = "";
-                        localSortIcon = "fa-sort";
+	<div class="col-12">
+		<table class="table table-sm table-striped table-hover border-bottom table-bordered">
+			<thead>
+				<tr>
+					@{
+						localSortOrder = "";
+						localSortIcon = "fa-sort";
 
-                        if (ViewBag.sortByColumn == "RoleId")
-                        {
-                            localSortOrder = ViewBag.sortOrder;
+						if (ViewBag.sortByColumn == "RoleId")
+						{
+							localSortOrder = ViewBag.sortOrder;
 
-                            if (localSortOrder == "asc")
-                                localSortIcon += "-" + "up";
-                            if (localSortOrder == "desc")
-                                localSortIcon += "-" + "down";
-                        }
-                    }
-                    <th class="text-center" style="width:75px;">ID <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="RoleId" sortOrder="@localSortOrder"></span></th>
-                    @{
-                        localSortOrder = "";
-                        localSortIcon = "fa-sort";
+							if (localSortOrder == "asc")
+								localSortIcon += "-" + "up";
+							if (localSortOrder == "desc")
+								localSortIcon += "-" + "down";
+						}
+					}
+					<th class="text-center" style="width:75px;">ID <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="RoleId" sortOrder="@localSortOrder"></span></th>
+					@{
+						localSortOrder = "";
+						localSortIcon = "fa-sort";
 
-                        if (ViewBag.sortByColumn == "RoleName")
-                        {
-                            localSortOrder = ViewBag.sortOrder;
+						if (ViewBag.sortByColumn == "RoleName")
+						{
+							localSortOrder = ViewBag.sortOrder;
 
-                            if (localSortOrder == "asc")
-                                localSortIcon += "-" + "up";
-                            if (localSortOrder == "desc")
-                                localSortIcon += "-" + "down";
-                        }
-                    }
-                    <th style="width:175px;">Role Name <span class="fa @localSortIcon sortBtn" style="float: right; margin-top:5px;" sortByColumn="RoleName" sortOrder="@localSortOrder"></span></th>
-                    @{
-                        localSortOrder = "";
-                        localSortIcon = "fa-sort";
+							if (localSortOrder == "asc")
+								localSortIcon += "-" + "up";
+							if (localSortOrder == "desc")
+								localSortIcon += "-" + "down";
+						}
+					}
+					<th style="width:175px;">Role Name <span class="fa @localSortIcon sortBtn" style="float: right; margin-top:5px;" sortByColumn="RoleName" sortOrder="@localSortOrder"></span></th>
+					@{
+						localSortOrder = "";
+						localSortIcon = "fa-sort";
 
-                        if (ViewBag.sortByColumn == "RoleDescription")
-                        {
-                            localSortOrder = ViewBag.sortOrder;
+						if (ViewBag.sortByColumn == "RoleDescription")
+						{
+							localSortOrder = ViewBag.sortOrder;
 
-                            if (localSortOrder == "asc")
-                                localSortIcon += "-" + "up";
-                            if (localSortOrder == "desc")
-                                localSortIcon += "-" + "down";
-                        }
-                    }
-                    <th>Role Description <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="RoleDescription" sortOrder="@localSortOrder"></span></th>
-                    <th class="text-center" style="width:175px;">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model.Count == 0)
-                {
-                    <tr>
-                        <td colspan="4">
-                            No matching records found.
-                        </td>
-                    </tr>
-                }
+							if (localSortOrder == "asc")
+								localSortIcon += "-" + "up";
+							if (localSortOrder == "desc")
+								localSortIcon += "-" + "down";
+						}
+					}
+					<th>Role Description <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="RoleDescription" sortOrder="@localSortOrder"></span></th>
+					<th class="text-center" style="width:175px;">Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				@if (Model.Count == 0)
+				{
+					<tr>
+						<td colspan="4">
+							No matching records found.
+						</td>
+					</tr>
+				}
 
-                @if (Model.Count > 0)
-                {
-                    foreach (var item in Model)
-                    {
-                        <tr>
-                            <td class="text-center">
-                                @Html.DisplayFor(modelItem => item.RoleId)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.RoleName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.RoleDescription)
-                            </td>
+				@if (Model.Count > 0)
+				{
+					foreach (var item in Model)
+					{
+						<tr>
 							<td class="text-center">
-								@if (ViewBag.currUserPermits.Contains(Permits.Identity.Role.Update) || ViewBag.developerViewBagOverride.Equals("YES-ForcedSet"))
+								@Html.DisplayFor(modelItem => item.RoleId)
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.RoleName)
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.RoleDescription)
+							</td>
+							<td class="text-center">
+								@if (((UserMeta)ViewBag.currUserMeta).UserPermitIds.Contains(Permits.Identity.Role.Update) || ((DeveloperMeta)ViewBag.currDeveloperMeta.ViewBagOverride).Equals("YES-ForcedSet"))
 								{
 									<a asp-area="Identity" asp-controller="Role" asp-action="Edit" asp-route-id="@item.RoleId" title="edit" class="fa fa-pen fa-xs" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
 								}
-								@if (ViewBag.currUserPermits.Contains(Permits.Identity.Role.Read) || ViewBag.developerViewBagOverride.Equals("YES-ForcedSet"))
+								@if (((UserMeta)ViewBag.currUserMeta).UserPermitIds.Contains(Permits.Identity.Role.Read) || ((DeveloperMeta)ViewBag.currDeveloperMeta.ViewBagOverride).Equals("YES-ForcedSet"))
 								{
 									<a asp-area="Identity" asp-controller="Role" asp-action="Details" asp-route-id="@item.RoleId" title="view" class="fa fa-search fa-xs" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
 								}
-								@if (ViewBag.currUserPermits.Contains(Permits.Identity.Role.Delete) || ViewBag.developerViewBagOverride.Equals("YES-ForcedSet"))
+								@if (((UserMeta)ViewBag.currUserMeta).UserPermitIds.Contains(Permits.Identity.Role.Delete) || ((DeveloperMeta)ViewBag.currDeveloperMeta.ViewBagOverride).Equals("YES-ForcedSet"))
 								{
 									<a asp-area="Identity" asp-controller="Role" asp-action="Delete" asp-route-id="@item.RoleId" title="delete" class="fa fa-trash fa-xs" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
 								}
-								@if (ViewBag.currUserPermits.Contains(Permits.Identity.RolePermit.CRUD) || ViewBag.developerViewBagOverride.Equals("YES-ForcedSet"))
+								@if (((UserMeta)ViewBag.currUserMeta).UserPermitIds.Contains(Permits.Identity.RolePermit.CRUD) || ((DeveloperMeta)ViewBag.currDeveloperMeta.ViewBagOverride).Equals("YES-ForcedSet"))
 								{
 									@Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;") <a asp-area="Identity" asp-controller="Role" asp-action="Permit" asp-route-id="@item.RoleId" title="delete" class="fa fa-address-card fa-xs" style="text-decoration: none; color: darkslategray;"></a>
 								}
 							</td>
-                        </tr>
-                    }
-                }
-            </tbody>
-        </table>
-    </div>
+						</tr>
+					}
+				}
+			</tbody>
+		</table>
+	</div>
 </div>
 
 <div class="row">
-    <div class="col-md-4">
-        <br />
-        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-        &nbsp; | &nbsp;
-        Show
-        <select id="pageSizeInput">
-            <option value="10" selected="@(ViewBag.pageSize == 10)">10</option>
-            <option value="25" selected="@(ViewBag.pageSize == 25)">25</option>
-            <option value="50" selected="@(ViewBag.pageSize == 50)">50</option>
-            <option value="100" selected="@(ViewBag.pageSize == 100)">100</option>
-        </select>
-        Entries
-        <br />
-        @if (ViewBag.currUserPermits.Contains(Permits.Identity.Role.ListDeleted) || ViewBag.developerViewBagOverride.Equals("YES-ForcedSet"))
-        {
-            <a asp-area="Identity" asp-controller="Role" asp-action="ListDeleted" style="text-decoration:none;" title="View deleted records">View deleted records</a>
-        }
-    </div>
-    <div class="col-md-8 text-right" style="vertical-align:top;">
-        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }), PagedListRenderOptions.ClassicPlusFirstAndLast)
-    </div>
+	<div class="col-md-4">
+		<br />
+		Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+		&nbsp; | &nbsp;
+		Show
+		<select id="pageSizeInput">
+			<option value="10" selected="@(ViewBag.pageSize == 10)">10</option>
+			<option value="25" selected="@(ViewBag.pageSize == 25)">25</option>
+			<option value="50" selected="@(ViewBag.pageSize == 50)">50</option>
+			<option value="100" selected="@(ViewBag.pageSize == 100)">100</option>
+		</select>
+		Entries
+		<br />
+		@if (((UserMeta)ViewBag.currUserMeta).UserPermitIds.Contains(Permits.Identity.Role.ListDeleted) || ((DeveloperMeta)ViewBag.currDeveloperMeta.ViewBagOverride).Equals("YES-ForcedSet"))
+		{
+			<a asp-area="Identity" asp-controller="Role" asp-action="ListDeleted" style="text-decoration:none;" title="View deleted records">View deleted records</a>
+		}
+	</div>
+	<div class="col-md-8 text-right" style="vertical-align:top;">
+		@Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+	</div>
 </div>
 
 <div>
-    <form id="formForPaging" action="/Identity/Role" method="post">
-        <input type="hidden" id="pageNumber" name="pageNumber" value="1" />
-        <input type="hidden" id="pageSize" name="pageSize" value="10" />
-        <input type="hidden" id="statusFlag" name="statusFlag" value="" />
-        <input type="hidden" id="sortByColumn" name="sortByColumn" value="" />
-        <input type="hidden" id="sortOrder" name="sortOrder" value="" />
-        <input type="hidden" id="searchForString" name="searchForString" value="" />
-    </form>
+	<form id="formForPaging" action="/Identity/Role" method="post">
+		<input type="hidden" id="pageNumber" name="pageNumber" value="1" />
+		<input type="hidden" id="pageSize" name="pageSize" value="10" />
+		<input type="hidden" id="statusFlag" name="statusFlag" value="" />
+		<input type="hidden" id="sortByColumn" name="sortByColumn" value="" />
+		<input type="hidden" id="sortOrder" name="sortOrder" value="" />
+		<input type="hidden" id="searchForString" name="searchForString" value="" />
+	</form>
 </div>
 
 @section ScriptsAtBottom
 {
-    <script type="text/javascript">
+	<script type="text/javascript">
         var pageNumber = @ViewBag.pageNumber;
 		var pageSize = @ViewBag.pageSize;
         var statusFlag = "@ViewBag.statusFlag";
@@ -276,9 +277,9 @@
 			$("#spanSpinner").show();
 			$("#formForPaging").submit();
 		}
-    </script>
+	</script>
 }
 
 @*
-    https://webdesignerwall.com/wdw-snippet/bootstrap-4-text-input-with-search-icon
+	https://webdesignerwall.com/wdw-snippet/bootstrap-4-text-input-with-search-icon
 *@

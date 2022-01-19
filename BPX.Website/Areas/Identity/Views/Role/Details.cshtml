@@ -1,79 +1,80 @@
 ﻿@model BPX.Domain.ViewModels.RoleViewModel
 
+@using BPX.Domain.CustomModels;
 @using BPX.Utils;
 @using BPX.Website.CustomCode.Authorize;
 @using System.Reflection;
 
 @{
-    ViewData["Title"] = "Role Details";
+	ViewData["Title"] = "Role Details";
 
-    // fyi :: passed in objects
-    // ViewBag.modifiedByName
+	// fyi :: passed in objects
+	// ViewBag.modifiedByName
 }
 
 <div class="row">
-    <div class="col-md-12">
-        <h5>@ViewBag.Title</h5>
-    </div>
+	<div class="col-md-12">
+		<h5>@ViewBag.Title</h5>
+	</div>
 </div>
 
 <p></p>
 <hr />
 
 <div>
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.RoleName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.RoleName) &nbsp;
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.RoleDescription)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.RoleDescription) &nbsp;
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.StatusFlag)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.StatusFlag)
+	<dl class="row">
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.RoleName)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.RoleName) &nbsp;
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.RoleDescription)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.RoleDescription) &nbsp;
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.StatusFlag)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.StatusFlag)
 
-            @{
-                var recordStatus = typeof(RecordStatus).GetFields(BindingFlags.Static | BindingFlags.Public);
+			@{
+				var recordStatus = typeof(RecordStatus).GetFields(BindingFlags.Static | BindingFlags.Public);
 
-                foreach (var item in recordStatus)
-                {
-                    if (Model.StatusFlag == item.GetRawConstantValue().ToString())
-                    {
-                        @Html.Raw("&nbsp;(" + @item.Name + ")");
-                    }
-                }
-            }
-            &nbsp;
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ModifiedBy)
-        </dt>
-        <dd class="col-sm-10">
-            @ViewBag.modifiedByName &nbsp;
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ModifiedDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ModifiedDate) &nbsp;
-        </dd>
-    </dl>
+				foreach (var item in recordStatus)
+				{
+					if (Model.StatusFlag == item.GetRawConstantValue().ToString())
+					{
+						@Html.Raw("&nbsp;(" + @item.Name + ")");
+					}
+				}
+			}
+			&nbsp;
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.ModifiedBy)
+		</dt>
+		<dd class="col-sm-10">
+			@ViewBag.modifiedByName &nbsp;
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.ModifiedDate)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.ModifiedDate) &nbsp;
+		</dd>
+	</dl>
 </div>
 <div>
-    @if (ViewBag.currUserPermits.Contains(Permits.Identity.Role.Update) || ViewBag.developerViewBagOverride.Equals("YES-ForcedSet"))
-    {
-        <a asp-area="Identity" asp-action="Edit" asp-route-id="@Model.RoleId">Edit</a> @Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;")
-    }
-    @if (ViewBag.currUserPermits.Contains(Permits.Identity.Role.List) || ViewBag.developerViewBagOverride.Equals("YES-ForcedSet"))
-    {
-        <a asp-area="Identity" asp-action="Index">Back to List</a>
-    }
+	@if (((UserMeta)ViewBag.currUserMeta).UserPermitIds.Contains(Permits.Identity.Role.Update) || ((DeveloperMeta)ViewBag.currDeveloperMeta.ViewBagOverride).Equals("YES-ForcedSet"))
+	{
+		<a asp-area="Identity" asp-action="Edit" asp-route-id="@Model.RoleId">Edit</a> @Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;")
+	}
+	@if (((UserMeta)ViewBag.currUserMeta).UserPermitIds.Contains(Permits.Identity.Role.List) || ((DeveloperMeta)ViewBag.currDeveloperMeta.ViewBagOverride).Equals("YES-ForcedSet"))
+	{
+		<a asp-area="Identity" asp-action="Index">Back to List</a>
+	}
 </div>

@@ -22,13 +22,13 @@ DROP TABLE Roles;
 DROP TABLE Logins;
 DROP TABLE Users;
 DROP TABLE Menus;
-DROP TABLE MemoryCacheKeys;
+DROP TABLE CacheKeys;
 
 --create tables
-CREATE TABLE MemoryCacheKeys (
-    CacheKey         	varchar (48)        NOT NULL,
+CREATE TABLE CacheKeys (
+    CacheKeyName       	varchar (48)        NOT NULL,
     ModifiedDate        datetime            NOT NULL,
-    PRIMARY KEY CLUSTERED (CacheKey ASC)
+    PRIMARY KEY CLUSTERED (CacheKeyName ASC)
 );
 
 CREATE TABLE Menus (

@@ -17,13 +17,17 @@ namespace BPX.Website.Areas.Identity.Controllers
 	[Area("Identity")]
     public class RoleController : BaseController<RoleController>
     {
+        private readonly IUserService userService;
         private readonly IRoleService roleService;
         private readonly IPermitService permitService;
+        private readonly IRolePermitService rolePermitService;
 
-        public RoleController(IRoleService roleService, IPermitService permitService)
+        public RoleController(IUserService userService, IRoleService roleService, IPermitService permitService, IRolePermitService rolePermitService)
         {
+            this.userService = userService;
             this.roleService = roleService;
             this.permitService = permitService;
+            this.rolePermitService = rolePermitService;
         }
 
         // GET: /Identity/Role
@@ -126,7 +130,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             catch (Exception ex)
             {
                 // prepare data
-                string currControllerAction = "[" + currController + "." + currAction + "]";
+                string currControllerAction = "[" + currRequestMeta.controller + "." + currRequestMeta.action + "]";
                 string errorStackTrace = ex.StackTrace.ToString();
                 string errorMessage = GetGarneredErrorMessage(ex);
 
@@ -196,7 +200,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             catch (Exception ex)
             {
                 // prepare data
-                string currControllerAction = "[" + currController + "." + currAction + "]";
+                string currControllerAction = "[" + currRequestMeta.controller + "." + currRequestMeta.action + "]";
                 string errorStackTrace = ex.StackTrace.ToString();
                 string errorMessage = GetGarneredErrorMessage(ex);
 
@@ -268,7 +272,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             catch (Exception ex)
             {
                 // prepare data
-                string currControllerAction = "[" + currController + "." + currAction + "]";
+                string currControllerAction = "[" + currRequestMeta.controller + "." + currRequestMeta.action + "]";
                 string errorStackTrace = ex.StackTrace.ToString();
                 string errorMessage = GetGarneredErrorMessage(ex);
 
@@ -374,7 +378,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             catch (Exception ex)
             {
                 // prepare data
-                string currControllerAction = "[" + currController + "." + currAction + "]";
+                string currControllerAction = "[" + currRequestMeta.controller + "." + currRequestMeta.action + "]";
                 string errorStackTrace = ex.StackTrace.ToString();
                 string errorMessage = GetGarneredErrorMessage(ex);
 
@@ -402,7 +406,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             if (listPermits == null)
             {
                 listPermits = permitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active)).OrderBy(c => c.PermitArea).ThenBy(c => c.PermitController).ThenBy(c => c.PermitName).ToList();
-                bpxCache.SetCache(listPermits, cacheKey, memoryCacheKeyService);
+                bpxCache.SetCache(listPermits, cacheKey, CacheKeyService);
             }
 
             //listRolePermitIDs
@@ -412,7 +416,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             if (listRolePermitIDs == null)
             {
                 listRolePermitIDs = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.RoleId.Equals(id)).OrderBy(c => c.PermitID).Select(c => c.PermitID).ToList();
-                bpxCache.SetCache(listRolePermitIDs, cacheKey, memoryCacheKeyService);
+                bpxCache.SetCache(listRolePermitIDs, cacheKey, CacheKeyService);
             }
 
             //listPermitAreas
@@ -422,7 +426,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             if (listAreas == null)
             {
                 listAreas = listPermits.OrderBy(c => c.PermitArea).Select(c => c.PermitArea).Distinct().ToList();
-                bpxCache.SetCache(listAreas, cacheKey, memoryCacheKeyService);
+                bpxCache.SetCache(listAreas, cacheKey, CacheKeyService);
             }
 
             listPermits = permitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active)).OrderBy(c => c.PermitArea).ThenBy(c => c.PermitController).ThenBy(c => c.PermitName).ToList();

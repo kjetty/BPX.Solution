@@ -3,15 +3,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BPX.Domain.DbModels
 {
-    public partial class MemoryCacheKey
+    public partial class CacheKey
     {
-        public MemoryCacheKey()
+        public CacheKey()
         {
         }
 
         [Key]
         [StringLength(48)]
-        public string CacheKey { get; set; }
+        public string CacheKeyName { get; set; }
 
 
         [Required]

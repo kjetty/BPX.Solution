@@ -13,7 +13,7 @@ namespace BPX.Service
 
         public UserService(IUserRepository userRepository)
         {
-            userRepository = (UserRepository)userRepository;
+            this.userRepository = (UserRepository)userRepository;
         }
 
         public IPagedList<User> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)

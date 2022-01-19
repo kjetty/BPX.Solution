@@ -37,7 +37,7 @@ namespace BPX.Website.CustomCode.Cache
 		//	distributedCache.Set(key, JsonSerializer.SerializeToUtf8Bytes(values), cacheOptions);
 		//}
 
-		public void SetCache<T>(T values, string key, IMemoryCacheKeyService memoryCacheKeyService)
+		public void SetCache<T>(T values, string key, ICacheKeyService CacheKeyService)
 		{
 			DistributedCacheEntryOptions cacheOptions = new()
 			{
@@ -48,24 +48,24 @@ namespace BPX.Website.CustomCode.Cache
 			distributedCache.Set(key, JsonSerializer.SerializeToUtf8Bytes(values), cacheOptions);
 
 			// handle cache :: add to cache, add key to the database	
-			MemoryCacheKey memoryCacheKey = memoryCacheKeyService.GetRecordsByFilter(c => c.CacheKey.Equals(key)).SingleOrDefault();
+			CacheKey CacheKey = CacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.Equals(key)).SingleOrDefault();
 
-			if (memoryCacheKey != null)
+			if (CacheKey != null)
 			{
-				memoryCacheKey.ModifiedDate = DateTime.Now;
+				CacheKey.ModifiedDate = DateTime.Now;
 
-				memoryCacheKeyService.UpdateRecord(memoryCacheKey);
+				CacheKeyService.UpdateRecord(CacheKey);
 			}
 			else
 			{
-				memoryCacheKey = new MemoryCacheKey();
-				memoryCacheKey.CacheKey = key;
-				memoryCacheKey.ModifiedDate = DateTime.Now;
+				CacheKey = new CacheKey();
+				CacheKey.CacheKeyName = key;
+				CacheKey.ModifiedDate = DateTime.Now;
 
-				memoryCacheKeyService.InsertRecord(memoryCacheKey);
+				CacheKeyService.InsertRecord(CacheKey);
 			}
 
-			memoryCacheKeyService.SaveDBChanges();
+			CacheKeyService.SaveDBChanges();
 		}
 
 		public void RemoveCache(string key)
@@ -78,7 +78,7 @@ namespace BPX.Website.CustomCode.Cache
 	{
 		//void SetCache<T>(T values, string key);
 
-		void SetCache<T>(T values, string key, IMemoryCacheKeyService memoryCacheKeyService);
+		void SetCache<T>(T values, string key, ICacheKeyService CacheKeyService);
 
 		T GetCache<T>(string key) where T : class;
 

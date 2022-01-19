@@ -5,6 +5,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace BPX.Website.Controllers
@@ -21,6 +22,13 @@ namespace BPX.Website.Controllers
 
 		public IActionResult Index()
 		{
+			//var nums = new List<int> { 1, 2, 3, 54,21,678, 4,8,3,9};
+			//var result = string.Join(string.Empty, nums);
+
+
+
+
+
 			//logger.LogError("test error from BPX " + this.bpxUseCache + "|" + this.bpxPageSize);
 
 			//var abc = _userService.GetRecordByID(2);

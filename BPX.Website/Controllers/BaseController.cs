@@ -19,21 +19,17 @@ namespace BPX.Website.Controllers
 {
 	public class BaseController<T> : Controller where T : BaseController<T>
 	{
-		//// hosting environment
-		//private IHttpContextAccessor _httpContextAccessor;
-		//protected IHttpContextAccessor httpContextAccessor => _httpContextAccessor ??= HttpContext.RequestServices.GetService<IHttpContextAccessor>();
-
 		// logger
 		private ILogger<T> _logger;
 		protected ILogger<T> logger => _logger ??= HttpContext.RequestServices.GetService<ILogger<T>>();
 
-		// accountService
-		private IAccountService _accountService;
-		protected IAccountService accountService => _accountService ??= HttpContext.RequestServices.GetService<IAccountService>();
-
 		// cache
 		private IBPXCache _bpxCache;
 		protected IBPXCache bpxCache => _bpxCache ??= HttpContext.RequestServices.GetService<IBPXCache>();
+
+		// accountService
+		private IAccountService _accountService;
+		protected IAccountService accountService => _accountService ??= HttpContext.RequestServices.GetService<IAccountService>();
 
 		// cacheKey :: not required if using Redis
 		private ICacheKeyService _CacheKeyService;
@@ -41,13 +37,14 @@ namespace BPX.Website.Controllers
 
 		// bpx project variables
 		protected int bpxPageSize;
+		protected string currMenuString;
 		protected UserMeta currUserMeta;
 		protected RequestMeta currRequestMeta;
 		protected DeveloperMeta currDeveloperMeta;
 
 		public BaseController()
 		{
-			this.bpxPageSize = Convert.ToInt32(Startup.Configuration.GetSection("AppSettings").GetSection("PageSize").Value);
+			bpxPageSize = Convert.ToInt32(Startup.Configuration.GetSection("AppSettings").GetSection("PageSize").Value);
 			currUserMeta = new UserMeta();
 			currRequestMeta = new RequestMeta();
 			currDeveloperMeta = new DeveloperMeta();
@@ -86,11 +83,47 @@ namespace BPX.Website.Controllers
 
 					if (claimCurrLoginToken != null)
 					{
-						string currLoginToken = ctx.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "currLoginToken").Value;
-						currUserMeta = accountService.GetUserMeta(currLoginToken);
+						// get current loginToken value
+						string loginToken = claimCurrLoginToken.Value;
 
-						// populate ViewBag
-						ViewBag.currUserMeta = currUserMeta;
+						// get user data from the loginToken
+						// SECURITY - verify against the database for every request
+						int userId = accountService.GetUserId(loginToken);
+
+						if (userId > 0)
+						{
+							string cacheKey = string.Empty;
+
+							// get userMeta
+							cacheKey = $"user:{userId}:meta";
+							currUserMeta = bpxCache.GetCache<UserMeta>(cacheKey);
+
+							if (currUserMeta == null)
+							{
+								currUserMeta = accountService.GetUserMeta(userId);
+								bpxCache.SetCache(currUserMeta, cacheKey, CacheKeyService);
+							}
+
+							if (currUserMeta != null)
+							{
+								string menuString = string.Empty;
+								string userRoleIdsString = string.Join(string.Empty, currUserMeta.UserRoleIds);
+								
+								// get menuBar
+								cacheKey = $"roles:{userRoleIdsString}:menu";
+								currMenuString = bpxCache.GetCache<string>(cacheKey);
+
+								if (currMenuString == null)
+								{
+									currMenuString = accountService.GetUserMenuString(currUserMeta.UserRoleIds);
+									bpxCache.SetCache(currMenuString, cacheKey, CacheKeyService);
+								}								
+
+								// populate ViewBag
+								ViewBag.currUserMeta = currUserMeta;
+								ViewBag.currMenuString = currMenuString;
+							}
+						}
 					}
 				}
 			}

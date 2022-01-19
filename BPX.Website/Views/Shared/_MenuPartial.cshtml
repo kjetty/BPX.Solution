@@ -7,7 +7,7 @@
 	</li>
 </ul>*@
 
-<ul class="navbar-nav flex-grow-1">
+@*<ul class="navbar-nav flex-grow-1">
 	<li class="nav-item">
 		<a class="nav-link" href="/">Home</a>
 	</li>
@@ -27,4 +27,9 @@
 	<li class="nav-item">
 		<a class="nav-link" href="/Identity/Role">Role</a>
 	</li>
+</ul>*@
+
+<ul class="navbar-nav flex-grow-1">
+	@Html.Raw(ViewBag.currMenuString)
 </ul>
+

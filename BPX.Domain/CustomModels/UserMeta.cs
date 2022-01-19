@@ -15,7 +15,6 @@ namespace BPX.Domain.CustomModels
 		public int UserId { get; set; }
 		public List<int> UserRoleIds { get; set; }
 		public List<int> UserPermitIds { get; set; }
-		public string MenuBar { get; set; }
 
 		public UserMeta()
 		{
@@ -29,7 +28,6 @@ namespace BPX.Domain.CustomModels
 			UserId = 0;
 			UserRoleIds = new List<int>() { };
 			UserPermitIds = new List<int>() { };
-			MenuBar = string.Empty;
 		}
 	}
 }

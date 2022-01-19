@@ -1,6 +1,7 @@
 ﻿using BPX.Domain.CustomModels;
 using BPX.Utils;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace BPX.Service
@@ -24,83 +25,72 @@ namespace BPX.Service
 			this.menuRoleService = menuRoleService;
 		}
 
-		public UserMeta GetUserMeta(string loginToken)
+		public int GetUserId(string loginToken)
 		{
-			UserMeta userMeta = new UserMeta();
-
 			var login = loginService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.LoginToken.Equals(loginToken)).SingleOrDefault();
 
 			if (login != null)
 			{
-				//var watch = new System.Diagnostics.Stopwatch();
-				//watch.Start();
-
-				var user = userService.GetRecordByID(login.UserId);
-				var userRolesIds = userRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.UserId == login.UserId).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
-				var userPermitIds = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && userRolesIds.Contains(c.RoleId)).OrderBy(c => c.PermitID).Select(c => c.PermitID).Distinct().ToList();
-				var menuRoleList = menuRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals("A")).Select(c => c.MenuId).ToList();
-				var menuList = menuService.GetRecordsByFilter(c => c.StatusFlag.Equals("A")).ToList();
-				
-				string menuBar = string.Empty;
-
-				foreach (var itemMenu in menuList)
-				{
-					if (menuRoleList.Contains(itemMenu.MenuId))
-					{
-						menuBar += $"<li class=\"nav-item\"><a class=\"nav-link text-dark\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName}</a></li>";
-					}
-				}
-
-				userMeta.LoginToken = login.LoginToken;
-				userMeta.LastLoginDate = (DateTime)login.LastLoginDate;
-				userMeta.UserId = login.UserId;
-				userMeta.FirstName = user.FirstName;
-				userMeta.LastName = user.LastName;
-				userMeta.FullName = user.FirstName + " " + user.LastName;
-				userMeta.Email = user.Email;
-				userMeta.Mobile = user.Mobile;
-				userMeta.UserRoleIds = userRolesIds;
-				userMeta.UserPermitIds = userPermitIds;
-				userMeta.MenuBar = menuBar;
-
-				//watch.Stop();
-
-				//double elapsedTime = (double)watch.ElapsedTicks / (double)Stopwatch.Frequency;
-				//string executionTime = (elapsedTime * 1000000).ToString("F2") + " microseconds";
-
-				//ShowAlert(AlertType.Info, "Execution Time: " + executionTime);
+				return login.UserId;
 			}
+
+			return 0;
+		}
+
+		public UserMeta GetUserMeta(int userId)
+		{
+			UserMeta userMeta = new UserMeta();
+
+			//var watch = new System.Diagnostics.Stopwatch();
+			//watch.Start();
+
+			var login = loginService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.UserId.Equals(userId)).SingleOrDefault();
+			var user = userService.GetRecordByID(userId);
+			var userRolesIds = userRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.UserId == userId).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
+			var userPermitIds = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && userRolesIds.Contains(c.RoleId)).OrderBy(c => c.PermitID).Select(c => c.PermitID).Distinct().ToList();
+			
+			userMeta.LoginToken = login.LoginToken;
+			userMeta.LastLoginDate = (DateTime)login.LastLoginDate;
+			userMeta.UserId = login.UserId;
+			userMeta.FirstName = user.FirstName;
+			userMeta.LastName = user.LastName;
+			userMeta.FullName = user.FirstName + " " + user.LastName;
+			userMeta.Email = user.Email;
+			userMeta.Mobile = user.Mobile;
+			userMeta.UserRoleIds = userRolesIds;
+			userMeta.UserPermitIds = userPermitIds;
+
+			//watch.Stop();
+
+			//double elapsedTime = (double)watch.ElapsedTicks / (double)Stopwatch.Frequency;
+			//string executionTime = (elapsedTime * 1000000).ToString("F2") + " microseconds";
 
 			return userMeta;
 		}
 
-		//public string GetMenuBar(int userId, List<int> userRoleIds, IMenuService menuService, IMenuRoleService menuRoleService)
-		//{
-		//    string cacheKey = $"user:{userId}:menu";
-		//    string menuString = bpxCache.GetCache<string>(cacheKey);
+		public string GetUserMenuString(List<int> userRoleIds)
+		{
+			var menuRoleList = menuRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals("A") && userRoleIds.Contains(c.RoleId)).Select(c => c.MenuId).ToList();
+			var menuList = menuService.GetRecordsByFilter(c => c.StatusFlag.Equals("A")).ToList();
 
-		//    if (menuString == null)
-		//    {
-		//        var menuRoleList = menuRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals("A")).Select(c => c.MenuId).ToList();
-		//        var menuList = menuService.GetRecordsByFilter(c => c.StatusFlag.Equals("A")).ToList();
+			string menuString = string.Empty;
 
-		//        foreach (var itemMenu in menuList)
-		//        {
-		//            if (menuRoleList.Contains(itemMenu.MenuId))
-		//            {
-		//                menuString += $"<li class=\"nav-item\"><a class=\"nav-link text-dark\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName}</a></li>";
-		//            }
-		//        }
+			foreach (var itemMenu in menuList)
+			{
+				if (menuRoleList.Contains(itemMenu.MenuId))
+				{
+					menuString += $"<li class=\"nav-item\"><a class=\"nav-link text-dark\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName}</a></li>";
+				}
+			}
 
-		//        bpxCache.SetCache(menuString, cacheKey, CacheKeyService);
-		//    }
-
-		//    return menuString;
-		//}
+			return menuString;
+		}
 	}
 
 	public interface IAccountService
 	{
-		UserMeta GetUserMeta(string loginToken);
+		int GetUserId(string loginToken);
+		UserMeta GetUserMeta(int userId);
+		string GetUserMenuString(List<int> userRoleIds);
 	}
 }

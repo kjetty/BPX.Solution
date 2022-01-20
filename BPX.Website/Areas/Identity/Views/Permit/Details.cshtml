@@ -7,9 +7,6 @@
 
 @{
 	ViewData["Title"] = "Permit Details";
-
-	// fyi :: passed in objects
-	// ViewBag.modifiedByName
 }
 
 <div class="row">
@@ -81,7 +78,7 @@
 	</dl>
 </div>
 <div>
-	@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.Update) || (((string)ViewBag.currViewBagOverride)).Equals("YES-ForcedSet"))
+	@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.Update))
 	{
 		<a asp-area="Identity" asp-action="Edit" asp-route-id="@Model.PermitID">Edit</a> @Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;")
 	}

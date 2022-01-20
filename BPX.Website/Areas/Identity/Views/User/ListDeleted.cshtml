@@ -34,12 +34,15 @@
 	</div>
 	<div class="col-md-3">
 		<div class="input-group">
-			<input id="searchInput" name="searchInput" type="text" class="form-control" placeholder="Search data" value="@ViewBag.searchForString">
-			<div class="input-group-append">
-				<button id="searchBtn" class="btn btn-primary" type="button">
-					<i class="fa fa-search fa-sm"></i>
-				</button>
-			</div>
+			@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.User.Filter))
+			{
+				<input id="searchInput" name="searchInput" type="text" class="form-control" placeholder="Search data" value="@ViewBag.searchForString">
+				<div class="input-group-append">
+					<button id="searchBtn" class="btn btn-primary" type="button">
+						<i class="fa fa-search fa-sm"></i>
+					</button>
+				</div>
+			}
 		</div>
 	</div>
 </div>

@@ -448,6 +448,14 @@ namespace BPX.Website.Areas.Identity.Controllers
 		[Permit(Permits.Identity.UserRole.CRUD)]
 		public ActionResult Role(int id)
 		{
+			if(id <= 0)
+			{
+				// set alert
+				ShowAlert(AlertType.Error, "User Id is not valid.");
+
+				return RedirectToAction(nameof(Index));
+			}
+
 			var user = userService.GetRecordByID(id);
 			string cacheKey = string.Empty;
 

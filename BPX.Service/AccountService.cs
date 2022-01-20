@@ -85,6 +85,23 @@ namespace BPX.Service
 
 			return menuString;
 		}
+	
+		public bool IsUserPermitted(string logintoken, int permitId)
+		{
+			// this call for permit validation is not recommended, because these database calls cannot be cached (not here)
+			bool retVal = false;
+
+			int userId = GetUserId(logintoken);
+			var userRolesIds = userRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.UserId == userId).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
+			var permitRoleIds = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && userRolesIds.Contains(c.RoleId) && c.PermitID == permitId).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
+
+			if (permitRoleIds.Count > 0)
+			{
+				retVal = true;
+			}
+
+			return retVal;
+		}
 	}
 
 	public interface IAccountService
@@ -92,5 +109,7 @@ namespace BPX.Service
 		int GetUserId(string loginToken);
 		UserMeta GetUserMeta(int userId);
 		string GetUserMenuString(List<int> userRoleIds);
+
+		bool IsUserPermitted(string logintoken, int permitId);
 	}
 }

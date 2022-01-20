@@ -1,4 +1,5 @@
-﻿using BPX.Domain.CustomModels;
+﻿
+using BPX.Domain.CustomModels;
 using BPX.Domain.ViewModels;
 using BPX.Service;
 using BPX.Utils;
@@ -11,7 +12,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -75,7 +75,8 @@ namespace BPX.Website.Controllers
 				}
 
 				// populate DeveloperMeta - ViewBag
-				ViewBag.currDeveloperMeta = currDeveloperMeta;
+				//ViewBag.currDeveloperMeta = currDeveloperMeta;
+				ViewBag.currViewBagOverride = currDeveloperMeta.ViewBagOverride;
 
 				if (ctx.HttpContext.User != null)
 			    {
@@ -120,8 +121,9 @@ namespace BPX.Website.Controllers
 								}								
 
 								// populate ViewBag
-								ViewBag.currUserMeta = currUserMeta;
+								//ViewBag.currUserMeta = currUserMeta;
 								ViewBag.currMenuString = currMenuString;
+								ViewBag.currUserPermitIds = currUserMeta.UserPermitIds;
 							}
 						}
 					}

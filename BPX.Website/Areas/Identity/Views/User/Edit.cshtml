@@ -89,7 +89,7 @@
 					<div class="input-group-prepend">
 						<span class="input-group-text"><i class="fa fa-mask fa-fw"></i></span>
 						<div class="col-md-10" style="border-top: 1px solid lightgrey; border-right: 1px solid lightgrey; border-bottom: 1px solid lightgrey; padding-top: 8px;">
-							@if (((UserMeta)ViewBag.currUserMeta).UserPermitIds.Contains(Permits.Identity.RolePermit.CRUD) || ((DeveloperMeta)ViewBag.currDeveloperMeta.ViewBagOverride).Equals("YES-ForcedSet"))
+							@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.RolePermit.CRUD) || ((string)ViewBag.currViewBagOverride).Equals("YES-ForcedSet"))
 							{
 								@Html.Raw("<pre>")@if (ViewBag.listRoles != null)
 								{
@@ -124,7 +124,7 @@
 </div>
 
 <div>
-	@if (((UserMeta)ViewBag.currUserMeta).UserPermitIds.Contains(Permits.Identity.User.List) || ((DeveloperMeta)ViewBag.currDeveloperMeta.ViewBagOverride).Equals("YES-ForcedSet"))
+	@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.User.List) || ((string)ViewBag.currViewBagOverride).Equals("YES-ForcedSet"))
 	{
 		<a asp-action="Index">Back to List</a>
 	}

@@ -89,11 +89,11 @@
 	</dl>
 </div>
 <div>
-	@if (((UserMeta)ViewBag.currUserMeta).UserPermitIds.Contains(Permits.Identity.User.Update) || ((DeveloperMeta)ViewBag.currDeveloperMeta.ViewBagOverride).Equals("YES-ForcedSet"))
+	@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.User.Update) || ((string)ViewBag.currViewBagOverride).Equals("YES-ForcedSet"))
 	{
 		<a asp-area="Identity" asp-action="Edit" asp-route-id="@Model.UserId">Edit</a> @Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;")
 	}
-	@if (((UserMeta)ViewBag.currUserMeta).UserPermitIds.Contains(Permits.Identity.User.List) || ((DeveloperMeta)ViewBag.currDeveloperMeta.ViewBagOverride).Equals("YES-ForcedSet"))
+	@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.User.List) || ((string)ViewBag.currViewBagOverride).Equals("YES-ForcedSet"))
 	{
 		<a asp-area="Identity" asp-action="Index">Back to List</a>
 	}

@@ -16,11 +16,11 @@ namespace BPX.Website.CustomCode.Authorize
 						   , Inherited = true)]
 	public class PermitAttribute : AuthorizeAttribute, IAuthorizationFilter
 	{
-		private readonly int _permitID;
+		private readonly int permitId;
 
-		public PermitAttribute(int permitID = 0)
+		public PermitAttribute(int permitId = 0)
 		{
-			_permitID = permitID;
+			this.permitId = permitId;
 		}
 
 		public void OnAuthorization(AuthorizationFilterContext context)
@@ -33,7 +33,7 @@ namespace BPX.Website.CustomCode.Authorize
 			{
 				// any logged in user is allowed to access the resource
 				// for [Permit] attribute without the permit parameter
-				if (_permitID == 0)
+				if (permitId == 0)
 				{
 					success = true;
 				}
@@ -67,48 +67,63 @@ namespace BPX.Website.CustomCode.Authorize
 
 			if (!success)
 			{
-				// fetch services
-				var accountService = (ILoginService)context.HttpContext.RequestServices.GetService(typeof(ILoginService));
-				var rolePermitService = (IRolePermitService)context.HttpContext.RequestServices.GetService(typeof(IRolePermitService));
-				var userRoleService = (IUserRoleService)context.HttpContext.RequestServices.GetService(typeof(IUserRoleService));
-				var CacheKeyService = (ICacheKeyService)context.HttpContext.RequestServices.GetService(typeof(ICacheKeyService));
-				var bpxCache = (IBPXCache)context.HttpContext.RequestServices.GetService(typeof(IBPXCache));
+				var claimCurrLoginToken = user.Claims.FirstOrDefault(c => c.Type == "currLoginToken");
 
-				// get data from claims
-				var claimLogintoken = user.Claims.FirstOrDefault(c => c.Type == "currLoginToken").Value;
-
-				// get user (from DB)
-				var account = accountService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.LoginToken.Equals(claimLogintoken)).SingleOrDefault();
-
-				if (account != null)
+				if (claimCurrLoginToken != null)
 				{
-					int userId = account.UserId;
-					string cacheKey = string.Empty;
+					// get current loginToken value
+					string loginToken = claimCurrLoginToken.Value;
 
-					cacheKey = $"user:{userId}:roles";
-					var listUserRoles = bpxCache.GetCache<List<int>>(cacheKey);
+					// verify access
+					// avoid this call, as this function makes un-cached database calls and can be slow
+					//var accountService = (AccountService)context.HttpContext.RequestServices.GetService(typeof(IAccountService));
+					//success = accountService.IsUserPermitted(loginToken, permitId);
 
-					if (listUserRoles == null)
+					//OR
+
+					// verify access
+					var loginService = (ILoginService)context.HttpContext.RequestServices.GetService(typeof(ILoginService));
+					var userRoleService = (IUserRoleService)context.HttpContext.RequestServices.GetService(typeof(IUserRoleService));
+					var rolePermitService = (IRolePermitService)context.HttpContext.RequestServices.GetService(typeof(IRolePermitService));
+					var bpxCache = (IBPXCache)context.HttpContext.RequestServices.GetService(typeof(IBPXCache));
+					var CacheKeyService = (ICacheKeyService)context.HttpContext.RequestServices.GetService(typeof(ICacheKeyService));
+
+					var login = loginService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.LoginToken.Equals(loginToken)).SingleOrDefault();
+
+					if (login != null)
 					{
-						listUserRoles = userRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.UserId == userId).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
-						bpxCache.SetCache(listUserRoles, cacheKey, CacheKeyService);
-					}
+						int userId = login.UserId;
 
-					//listUserRolesPermits
-					cacheKey = $"permit:{_permitID}:roles";
-					var listPermitRoles = bpxCache.GetCache<List<int>>(cacheKey);
+						if (userId > 0)
+						{
+							string cacheKey = string.Empty;
 
-					if (listPermitRoles == null)
-					{
-						listPermitRoles = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.PermitID == _permitID).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
+							// userRoleIds
+							cacheKey = $"user:{userId}:roles";
+							var userRoleIds = bpxCache.GetCache<List<int>>(cacheKey);
 
-						bpxCache.SetCache(listPermitRoles, cacheKey, CacheKeyService);
-					}
+							if (userRoleIds == null)
+							{
+								userRoleIds = userRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.UserId == userId).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
+								bpxCache.SetCache(userRoleIds, cacheKey, CacheKeyService);
+							}
 
-					// intersect to check for any matching ROLES
-					if (listUserRoles.Any(x => listPermitRoles.Any(y => y == x)))
-					{
-						success = true;
+							// permitRoleIds
+							cacheKey = $"permit:{permitId}:roles";
+							var permitRoleIds = bpxCache.GetCache<List<int>>(cacheKey);
+
+							if (permitRoleIds == null)
+							{
+								permitRoleIds = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.PermitID == permitId).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
+								bpxCache.SetCache(permitRoleIds, cacheKey, CacheKeyService);
+							}
+
+							// intersect to check for any matching ROLES
+							if (userRoleIds.Any(x => permitRoleIds.Any(y => y == x)))
+							{
+								success = true;
+							}
+						}
 					}
 				}
 			}

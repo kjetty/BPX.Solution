@@ -345,7 +345,7 @@ insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNum
 insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,StatusFlag,ModifiedBy,ModifiedDate) values ('Account',null,'/Identity/Account',0,0,3,'A',1,getDate());
 
 --menuRoles
-insert into MenuRoles (MenuId,RoleId,StatusFlag,ModifiedBy,ModifiedDate) values ('2','1','A',1,getDate());
 insert into MenuRoles (MenuId,RoleId,StatusFlag,ModifiedBy,ModifiedDate) values ('3','1','A',1,getDate());
+insert into MenuRoles (MenuId,RoleId,StatusFlag,ModifiedBy,ModifiedDate) values ('4','1','A',1,getDate());
 insert into MenuRoles (MenuId,RoleId,StatusFlag,ModifiedBy,ModifiedDate) values ('5','1','A',1,getDate());
 

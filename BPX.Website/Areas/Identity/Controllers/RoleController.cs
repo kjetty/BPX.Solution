@@ -396,6 +396,14 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.RolePermit.CRUD)]
         public ActionResult Permit(int id)
         {
+            if (id <= 0)
+            {
+                // set alert
+                ShowAlert(AlertType.Error, "Role Id is not valid.");
+
+                return RedirectToAction(nameof(Index));
+            }
+
             var role = roleService.GetRecordByID(id);
             string cacheKey = string.Empty;
 

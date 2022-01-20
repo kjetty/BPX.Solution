@@ -50,20 +50,16 @@ namespace BPX.Website.CustomCode.Authorize
 			//{
 			//}
 
-			//// Developer Override 
-			//// OverrideOverrideOverride :: TODO
-			//// comment code line 57-66 before publishing for PRODUCTION RELEASE
-			//// developer overide - permits
+			////// Developer Override for Permits - BaseController (Part A) + PermitAttribute (PartB)
+			////// OverrideOverrideOverride 
+			////// use for testing only
+			////// comment befor publishing
+			////// START
 			//if (host.Contains("localhost"))
 			//{
-			//	string developerPermitAttributeOverride = Startup.Configuration.GetSection("DeveloperMeta").GetSection("PermitAttributeOverride").Value.ToString().Trim();
-
-			//	if (developerPermitAttributeOverride.Equals("YES-ForcedSet"))
-			//	{
-			//		// developer overide - permits - use for developing and testing only
-			//		success = true;
-			//	}
+			//	success = true;
 			//}
+			////// END
 
 			if (!success)
 			{

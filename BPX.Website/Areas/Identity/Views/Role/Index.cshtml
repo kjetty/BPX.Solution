@@ -34,7 +34,7 @@
 
 <div class="row">
 	<div class="col-md-9">
-		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.Create) || ((string)ViewBag.currViewBagOverride).Equals("YES-ForcedSet"))
+		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.Create))
 		{
 			<a asp-area="Identity" asp-controller="Role" asp-action="Create" class="btn btn-primary fa-sm" title="Add Role"><i class="fa fa-plus-circle"></i> &nbsp; Add Role</a>
 		}
@@ -131,19 +131,19 @@
 								@Html.DisplayFor(modelItem => item.RoleDescription)
 							</td>
 							<td class="text-center">
-								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.Update) || ((string)ViewBag.currViewBagOverride).Equals("YES-ForcedSet"))
+								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.Update))
 								{
 									<a asp-area="Identity" asp-controller="Role" asp-action="Edit" asp-route-id="@item.RoleId" title="edit" class="fa fa-pen fa-xs" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
 								}
-								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.Read) || ((string)ViewBag.currViewBagOverride).Equals("YES-ForcedSet"))
+								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.Read))
 								{
 									<a asp-area="Identity" asp-controller="Role" asp-action="Details" asp-route-id="@item.RoleId" title="view" class="fa fa-search fa-xs" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
 								}
-								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.Delete) || ((string)ViewBag.currViewBagOverride).Equals("YES-ForcedSet"))
+								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.Delete))
 								{
 									<a asp-area="Identity" asp-controller="Role" asp-action="Delete" asp-route-id="@item.RoleId" title="delete" class="fa fa-trash fa-xs" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
 								}
-								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.RolePermit.CRUD) || ((string)ViewBag.currViewBagOverride).Equals("YES-ForcedSet"))
+								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.RolePermit.CRUD))
 								{
 									@Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;") <a asp-area="Identity" asp-controller="Role" asp-action="Permit" asp-route-id="@item.RoleId" title="delete" class="fa fa-address-card fa-xs" style="text-decoration: none; color: darkslategray;"></a>
 								}
@@ -170,7 +170,7 @@
 		</select>
 		Entries
 		<br />
-		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.ListDeleted) || ((string)ViewBag.currViewBagOverride).Equals("YES-ForcedSet"))
+		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.ListDeleted))
 		{
 			<a asp-area="Identity" asp-controller="Role" asp-action="ListDeleted" style="text-decoration:none;" title="View deleted records">View deleted records</a>
 		}

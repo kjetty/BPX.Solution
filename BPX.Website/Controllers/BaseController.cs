@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -40,14 +41,12 @@ namespace BPX.Website.Controllers
 		protected string currMenuString;
 		protected UserMeta currUserMeta;
 		protected RequestMeta currRequestMeta;
-		protected DeveloperMeta currDeveloperMeta;
 
 		public BaseController()
 		{
 			bpxPageSize = Convert.ToInt32(Startup.Configuration.GetSection("AppSettings").GetSection("PageSize").Value);
 			currUserMeta = new UserMeta();
 			currRequestMeta = new RequestMeta();
-			currDeveloperMeta = new DeveloperMeta();
 		}
 
         public override void OnActionExecuting(ActionExecutingContext ctx)
@@ -62,21 +61,6 @@ namespace BPX.Website.Controllers
 				currRequestMeta.controller = (ctx.RouteData.Values["controller"] as string)?.ToLower();
 				currRequestMeta.action = (ctx.RouteData.Values["action"] as string)?.ToLower();
 				currRequestMeta.id = (ctx.RouteData.Values["id"] as string)?.ToLower();
-
-				//// Developer Override 
-				//// OverrideOverrideOverride :: TODO
-				//// comment code line 73-78 before publishing for PRODUCTION RELEASE
-				// get DeveloperMeta
-				if (currRequestMeta.host.Contains("localhost"))
-				{
-					currDeveloperMeta.ViewBagOverride = Startup.Configuration.GetSection("DeveloperMeta").GetSection("ViewBagOverride").Value.ToString().Trim();
-					currDeveloperMeta.PermitAttributeOverride = Startup.Configuration.GetSection("DeveloperMeta").GetSection("PermitAttributeOverride").Value.ToString().Trim();
-					currDeveloperMeta.PasswordOverride = Startup.Configuration.GetSection("DeveloperMeta").GetSection("PasswordOverride").Value.ToString().Trim();
-				}
-
-				// populate DeveloperMeta - ViewBag
-				//ViewBag.currDeveloperMeta = currDeveloperMeta;
-				ViewBag.currViewBagOverride = currDeveloperMeta.ViewBagOverride;
 
 				if (ctx.HttpContext.User != null)
 			    {
@@ -124,29 +108,25 @@ namespace BPX.Website.Controllers
 								//ViewBag.currUserMeta = currUserMeta;
 								ViewBag.currMenuString = currMenuString;
 								ViewBag.currUserPermitIds = currUserMeta.UserPermitIds;
+
+								////// Developer Override for Permits - BaseController (Part A) + PermitAttribute (PartB)
+								////// OverrideOverrideOverride 
+								////// use for testing only
+								////// comment befor publishing
+								////// START
+								//if (currRequestMeta.host.Contains("localhost"))
+								//{
+								//	List<int> tempUserPermitIds = new List<int>();
+								//	for (int i = 0; i < 10000; i++)
+								//	{
+								//		tempUserPermitIds.Add(i);
+								//	}
+								//	ViewBag.currUserPermitIds = tempUserPermitIds;
+								//}
+								////// END
 							}
 						}
 					}
-				}
-			}
-
-			// show alert for developer override(s)
-			if (currRequestMeta.host.Contains("localhost"))
-			{
-				if (currDeveloperMeta.ViewBagOverride.Equals("YES-ForcedSet") || currDeveloperMeta.PermitAttributeOverride.Equals("YES-ForcedSet") || currDeveloperMeta.PasswordOverride.Equals("YES-ForcedSet"))
-				{
-					string tempMessage = "CAUTION :: CAUTION :: CAUTION :: Developer Override is set.";
-
-					if (currDeveloperMeta.ViewBagOverride.Equals("YES-ForcedSet"))
-						tempMessage += " :: In [BaseController].[OnActionExecuting()] for --ViewBagOverride--.";
-					
-					if (currDeveloperMeta.PermitAttributeOverride.Equals("YES-ForcedSet"))
-						tempMessage += " :: In [PermitAttribute].[OnAuthorization()] for --PermitAttributeOverride--.";
-
-					if (currDeveloperMeta.PasswordOverride.Equals("YES-ForcedSet"))
-						tempMessage += " :: In [AccountController].[Login()] for --PasswordOverride--.";
-
-					ShowAlert(AlertType.Warning, tempMessage);
 				}
 			}
 		}

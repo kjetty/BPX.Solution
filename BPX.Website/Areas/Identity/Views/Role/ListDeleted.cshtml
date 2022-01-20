@@ -123,7 +123,7 @@
 								@Html.DisplayFor(modelItem => item.RoleDescription)
 							</td>
 							<td class="text-center">
-								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.Restore) || ((string)ViewBag.currViewBagOverride).Equals("YES-ForcedSet"))
+								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.Restore))
 								{
 									<a asp-area="Identity" asp-controller="Role" asp-action="Undelete" asp-route-id="@item.RoleId" title="restore" class="fa fa-power-off fa-xs" style="text-decoration: none; color: darkslategray;"></a>
 								}
@@ -150,7 +150,7 @@
 		</select>
 		Entries
 		<br />
-		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.List) || ((string)ViewBag.currViewBagOverride).Equals("YES-ForcedSet"))
+		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.List))
 		{
 			<a asp-area="Identity" asp-controller="Role" asp-action="Index" style="text-decoration:none;" title="Back to List">Back to List</a>
 		}

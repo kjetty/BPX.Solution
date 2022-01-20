@@ -58,7 +58,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
 
             if (login.UserId <= 0)
-			{
+            {
                 // set alert
                 ShowAlert(AlertType.Warning, "Login failed. Try again.");
 
@@ -78,21 +78,19 @@ namespace BPX.Website.Areas.Identity.Controllers
                 logger.LogError(ex.Message + ", " + ex.StackTrace);
             }
 
-            //// Developer Override 
-            //// OverrideOverrideOverride :: TODO
-            //// comment code line 86-95 before publishing for PRODUCTION RELEASE
-            //// developer overide - permits
-            // developer overide - password
-            if (currRequestMeta.host.Contains("localhost"))
-			{
-				if (currDeveloperMeta.PasswordOverride.Equals("YES-ForcedSet"))
-				{
-					if (model.Password.Equals("password"))
-					{
-						passwordIsVerified = true;
-					}
-				}
-			}
+            ////// Developer Override for Password
+            ////// OverrideOverrideOverride 
+            ////// use for testing only
+            ////// comment befor publishing
+            ////// START
+            //if (currRequestMeta.host.Contains("localhost"))
+            //{
+            //    if (model.Password.Equals("password"))
+            //    {
+            //        passwordIsVerified = true;
+            //    }
+            //}
+            ////// END
 
 			if (!passwordIsVerified)
             {
@@ -151,7 +149,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // IssuedUtc = <DateTimeOffset>,
                 // RedirectUri = <string>,
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30),
-                IsPersistent = true
+                IsPersistent = false
             };
 
             HttpContext.SignInAsync(

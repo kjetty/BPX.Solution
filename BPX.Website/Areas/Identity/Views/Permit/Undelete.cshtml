@@ -85,11 +85,11 @@
 	<form asp-action="Undelete">
 		<input type="hidden" asp-for="PermitID" />
 		<input type="submit" value="   Restore   " class="btn btn-primary" /> &nbsp;&nbsp; | &nbsp;&nbsp;
-		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.ListDeleted) || ((string)ViewBag.currViewBagOverride).Equals("YES-ForcedSet"))
+		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.ListDeleted))
 		{
 			<a asp-area="Identity" asp-controller="Permit" asp-action="ListDeleted" style="text-decoration:none;" title="Back to Deleted List">Back to Deleted List</a> @Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;")
 		}
-		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.List) || ((string)ViewBag.currViewBagOverride).Equals("YES-ForcedSet"))
+		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.List))
 		{
 			<a asp-action="Index">Back to List</a>
 		}

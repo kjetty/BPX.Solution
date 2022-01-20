@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -102,10 +103,10 @@ namespace BPX.Website.Controllers
 									bpxCache.SetCache(currMenuString, cacheKey, CacheKeyService);
 								}								
 
-								// populate ViewBag
-								//ViewBag.currUserMeta = currUserMeta;
-								ViewBag.currMenuString = currMenuString;
-								ViewBag.currUserPermitIds = currUserMeta.UserPermitIds;
+								//// populate ViewBag
+								////ViewBag.currUserMeta = currUserMeta;
+								//ViewBag.currMenuString = currMenuString;
+								//ViewBag.currUserPermitIds = currUserMeta.UserPermitIds;
 
 								////// Developer Override for Permits - BaseController (Part A) + PermitAttribute (PartB)
 								////// OverrideOverrideOverride 

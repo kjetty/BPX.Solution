@@ -31,7 +31,7 @@ namespace BPX.Domain.ViewModels
 		public string Mobile { get; set; }
 
 		[Display(Name = "User Roles")]
-        public int[] UserRoleIds { get; set; }
+        //public int[] UserRoleIds { get; set; }
 
 
         public static explicit operator UserMiniViewModel(User dm)
@@ -46,8 +46,8 @@ namespace BPX.Domain.ViewModels
                 FirstName = dm.FirstName,
                 LastName = dm.LastName,
                 Email = dm.Email,
-                Mobile = dm.Mobile,
-                UserRoleIds = { }
+                Mobile = dm.Mobile
+                //UserRoleIds = { }
             };
         }
 
@@ -96,7 +96,7 @@ namespace BPX.Domain.ViewModels
                 LastName = dm.LastName,
                 Email = dm.Email,
                 Mobile = dm.Mobile,
-                UserRoleIds = { },
+                //UserRoleIds = { },
                 // set generic data
                 StatusFlag = dm.StatusFlag,
                 ModifiedBy = dm.ModifiedBy,

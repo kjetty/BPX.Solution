@@ -457,6 +457,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         {
             var listRolePermits = rolePermitService.GetRecordsByFilter(c => c.RoleId == id).ToList();
 
+            // delete all permits for the role
             foreach (var rolePermit in listRolePermits)
             {
                 rolePermit.StatusFlag = RecordStatus.Inactive;
@@ -466,6 +467,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
             rolePermitService.SaveDBChanges();
 
+            // add or activate received permits for the role
             foreach (var permitID in permitIDs)
             {
                 var existingRolePermit = rolePermitService.GetRecordsByFilter(c => c.RoleId == id && c.PermitID == permitID).FirstOrDefault();
@@ -495,12 +497,16 @@ namespace BPX.Website.Areas.Identity.Controllers
 
             rolePermitService.SaveDBChanges();
 
-            //// remove from cache
-            //// get ROLES associated with the USER (from DB)
-            //var userRolesList = userRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.UserId == currUserId).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
-            //string cacheKey = $"urp{string.Join(string.Empty, userRolesList)}";
+            // remove from cache
+            string cacheKey = string.Empty;
 
-            ////memoryCache.Remove(cacheKey);
+            // user:{id}:roles
+            cacheKey = $"role:{id}:permits";
+            bpxCache.RemoveCache(cacheKey);
+
+            // remove all :meta :: todo
+            //cacheKey = $"user:{id}:meta";
+            //bpxCache.RemoveCache(cacheKey);
 
             // set alert
             ShowAlert(AlertType.Success, "Role Permits are successfully updated.");

@@ -80,34 +80,6 @@
 					<span asp-validation-for="Mobile" class="text-danger"></span>
 				</div>
 			</div>
-
-			<div class="row form-group">
-				<div class="col-md-2">
-					<label asp-for="UserRoleIds" class="control-label"></label>
-				</div>
-				<div class="col-md-4">
-					<div class="input-group-prepend">
-						<span class="input-group-text"><i class="fa fa-mask fa-fw"></i></span>
-						<div class="col-md-10" style="border-top: 1px solid lightgrey; border-right: 1px solid lightgrey; border-bottom: 1px solid lightgrey; padding-top: 8px;">
-							@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.RolePermit.CRUD) || ((string)ViewBag.currViewBagOverride).Equals("YES-ForcedSet"))
-							{
-								@Html.Raw("<pre>")@if (ViewBag.listRoles != null)
-								{
-									foreach (var itemRole in ViewBag.listRoles)
-									{
-										string attrChecked = string.Empty; if (ViewBag.listUsersRoles != null) { foreach (var itemUserRole in ViewBag.listUsersRoles) { if (itemRole.RoleId == itemUserRole.RoleId) { attrChecked = "checked=\"checked\""; break; } } }@Html.Raw("&nbsp;&nbsp;")<input type="checkbox" name="UserRoleIds" value="@itemRole.RoleId" @attrChecked />@Html.Raw("&nbsp;&nbsp;")@itemRole.RoleName@Html.Raw("<br />")}
-								}@Html.Raw("</pre>")
-							}
-							else
-							{
-								@Html.Raw("-- not permitted --")
-							}
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6">
-				</div>
-			</div>
 			<div class="row form-group">
 				<div class="col-md-2">
 					&nbsp;

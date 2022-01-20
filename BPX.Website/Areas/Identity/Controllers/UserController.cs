@@ -129,7 +129,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
 				// get existing data
 				var recordUser = userService.GetRecordByID(id);
-				var listUserRoles = userRoleService.GetRecordsByFilter(c => id.Equals(c.UserId) && c.StatusFlag.Equals(RecordStatus.Active));
+				//var listUserRoles = userRoleService.GetRecordsByFilter(c => id.Equals(c.UserId) && c.StatusFlag.Equals(RecordStatus.Active));
 
 				if (recordUser.StatusFlag == RecordStatus.Active)
 				{
@@ -147,77 +147,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 					userService.UpdateRecord(recordUser);
 				}
 
-				// delete (deactivate) all roles currently associated with the user
-				foreach (var itemUserRole in listUserRoles)
-				{
-					// set generic data
-					itemUserRole.StatusFlag = RecordStatus.Inactive;
-					itemUserRole.ModifiedBy = 1;
-					itemUserRole.ModifiedDate = DateTime.Now;
-
-					// edit record
-					userRoleService.UpdateRecord(itemUserRole);
-				}
-
-				// activate the received roles for the user
-				if (collection.UserRoleIds != null)
-				{
-					foreach (var itemRoleId in collection.UserRoleIds)
-					{
-						int tempRoleId = Convert.ToInt32(itemRoleId);
-						var rowUserRole = userRoleService.GetRecordsByFilter(c => c.UserId == id && c.RoleId == tempRoleId).SingleOrDefault();
-
-						if (rowUserRole != null)
-						{
-							// update (reactivate) existing userRole data
-							// set generic data
-							rowUserRole.StatusFlag = RecordStatus.Active;
-							rowUserRole.ModifiedBy = 1;
-							rowUserRole.ModifiedDate = DateTime.Now;
-
-							// edit record
-							userRoleService.UpdateRecord(rowUserRole);
-						}
-						else
-						{
-							//add new userRole data
-							UserRole userRole = new()
-							{
-								// set core data
-								UserId = id,
-								RoleId = tempRoleId,
-								// set generic data
-								StatusFlag = RecordStatus.Active,
-								ModifiedBy = 1,
-								ModifiedDate = DateTime.Now
-							};
-
-							// add record
-							userRoleService.InsertRecord(userRole);
-						}
-					}
-				}
-
-				try
-				{
-					using (TransactionScope scope = new TransactionScope())
-					{
-						// commit changes to database
-						userService.SaveDBChanges();
-						userRoleService.SaveDBChanges();
-
-						scope.Complete();
-					}
-				}
-				catch (Exception ex)
-				{
-					logger.LogError(ex, ex.Message);
-					throw;
-				}
-
-				//// commit changes to database
-				//userService.SaveDBChanges();
-				//userRoleService.SaveDBChanges();
+				// commit changes to database
+				userService.SaveDBChanges();
 
 				// set alert
 				ShowAlert(AlertType.Success, "User is successfully updated.");
@@ -448,7 +379,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 		[Permit(Permits.Identity.UserRole.CRUD)]
 		public ActionResult Role(int id)
 		{
-			if(id <= 0)
+			if (id <= 0)
 			{
 				// set alert
 				ShowAlert(AlertType.Error, "User Id is not valid.");
@@ -494,6 +425,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 		{
 			var listUserRoles = userRoleService.GetRecordsByFilter(c => c.UserId == id).ToList();
 
+			// delete all roles for the user
 			foreach (var userRole in listUserRoles)
 			{
 				userRole.StatusFlag = RecordStatus.Inactive;
@@ -503,6 +435,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
 			userRoleService.SaveDBChanges();
 
+			// add or activate received roles for the user
 			foreach (var roleId in roleIds)
 			{
 				var existingUserRole = userRoleService.GetRecordsByFilter(c => c.UserId == id && c.RoleId == roleId).FirstOrDefault();
@@ -535,7 +468,12 @@ namespace BPX.Website.Areas.Identity.Controllers
 			// remove from cache
 			string cacheKey = string.Empty;
 
+			// user:{id}:roles
 			cacheKey = $"user:{id}:roles";
+			bpxCache.RemoveCache(cacheKey);
+
+			// user:{id}:meta
+			cacheKey = $"user:{id}:meta";
 			bpxCache.RemoveCache(cacheKey);
 
 			// set alert

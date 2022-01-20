@@ -70,14 +70,14 @@ namespace BPX.Website.CustomCode.Authorize
 					// get current loginToken value
 					string loginToken = claimCurrLoginToken.Value;
 
-					// verify access
+					// verify access (process A - using optinmed database calls)
 					// avoid this call, as this function makes un-cached database calls and can be slow
 					//var accountService = (AccountService)context.HttpContext.RequestServices.GetService(typeof(IAccountService));
 					//success = accountService.IsUserPermitted(loginToken, permitId);
 
 					//OR
 
-					// verify access
+					// verify access (process B - using cache and intersect function)
 					var loginService = (ILoginService)context.HttpContext.RequestServices.GetService(typeof(ILoginService));
 					var userRoleService = (IUserRoleService)context.HttpContext.RequestServices.GetService(typeof(IUserRoleService));
 					var rolePermitService = (IRolePermitService)context.HttpContext.RequestServices.GetService(typeof(IRolePermitService));

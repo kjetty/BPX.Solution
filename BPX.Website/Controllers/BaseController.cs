@@ -1,5 +1,4 @@
-﻿
-using BPX.Domain.CustomModels;
+﻿using BPX.Domain.CustomModels;
 using BPX.Domain.ViewModels;
 using BPX.Service;
 using BPX.Utils;
@@ -12,7 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 

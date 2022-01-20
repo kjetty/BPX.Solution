@@ -112,10 +112,14 @@ namespace BPX.Website.CustomCode.Authorize
 							{
 								permitRoleIds = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.PermitID == permitId).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
 								bpxCache.SetCache(permitRoleIds, cacheKey, CacheKeyService);
+
+								//note
+								//permitRoleIds can be further refined to filter using userRoleIds, but then caching cannot be applied
+								//we are resorting to get all roles per permit [permitRoleIds] so that we can use cache for performance
 							}
 
 							// intersect to check for any matching ROLES
-							if (userRoleIds.Any(x => permitRoleIds.Any(y => y == x)))
+							if (permitRoleIds.Any(x => userRoleIds.Any(y => y == x)))
 							{
 								success = true;
 							}

@@ -21,13 +21,15 @@ namespace BPX.Website.Areas.Identity.Controllers
         private readonly IRoleService roleService;
         private readonly IPermitService permitService;
         private readonly IRolePermitService rolePermitService;
+        private readonly ICacheKeyService cacheKeyService;
 
-        public RoleController(IUserService userService, IRoleService roleService, IPermitService permitService, IRolePermitService rolePermitService)
+        public RoleController(IUserService userService, IRoleService roleService, IPermitService permitService, IRolePermitService rolePermitService, ICacheKeyService cacheKeyService)
         {
             this.userService = userService;
             this.roleService = roleService;
             this.permitService = permitService;
             this.rolePermitService = rolePermitService;
+            this.cacheKeyService = cacheKeyService;
         }
 
         // GET: /Identity/Role
@@ -504,9 +506,17 @@ namespace BPX.Website.Areas.Identity.Controllers
             cacheKey = $"role:{id}:permits";
             bpxCache.RemoveCache(cacheKey);
 
-            // remove all :meta :: todo
+            // user:{id}:meta
             //cacheKey = $"user:{id}:meta";
             //bpxCache.RemoveCache(cacheKey);
+
+            // permit:{id}:roles
+            var cacheKeys = cacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.StartsWith("permit:")).OrderBy(c => c.CacheKeyName).ToList();
+            foreach (var itemCacheKey in cacheKeys)
+			{ 
+                bpxCache.RemoveCache(itemCacheKey.CacheKeyName);
+            }
+
 
             // set alert
             ShowAlert(AlertType.Success, "Role Permits are successfully updated.");

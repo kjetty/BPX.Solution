@@ -17,9 +17,9 @@ namespace BPX.Website.CustomCode.Authorize
         private IUserService userService;
         private IRolePermitService rolePermitService;
 
-        public PermitTwoAuthorizationHandler(BPXDbContext identityTenantDbContext, ILoginService loginService, IUserService userService, IRolePermitService rolePermitService)
+        public PermitTwoAuthorizationHandler(BPXDbContext dbContext, ILoginService loginService, IUserService userService, IRolePermitService rolePermitService)
         {
-            this.dbContext = identityTenantDbContext;
+            this.dbContext = dbContext;
             this.loginService = loginService;
             this.userService = userService;
             this.rolePermitService = rolePermitService;

@@ -2,6 +2,7 @@ using BPX.DAL.Context;
 using BPX.DAL.Repository;
 using BPX.Service;
 using BPX.Website.CustomCode.Cache;
+using BPX.Website.MiddleWare;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -118,6 +119,8 @@ namespace BPX.Website
 
             // as we are not using OAuth2, we can set the cookie same-site attribute to strict
             app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Strict });
+
+			app.UseMiddleware<ResponseTimeMiddleware>();
 
 			app.UseEndpoints(endpoints =>
 			{

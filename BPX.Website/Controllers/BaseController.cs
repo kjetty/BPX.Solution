@@ -21,8 +21,6 @@ namespace BPX.Website.Controllers
 	{
 		protected readonly ILogger<T> logger;
 		protected readonly ICoreService coreService;
-		
-		// bpx project variables
 		protected int bpxPageSize;
 		protected UserMeta currUserMeta;
 		protected string currMenuString;
@@ -31,12 +29,13 @@ namespace BPX.Website.Controllers
 
 		public BaseController(ILogger<T> logger, ICoreService coreService)
 		{
-			this.coreService = coreService;
 			this.logger = logger;
-			this.cacheService = coreService.GetCacheService();
-			this.cacheKeyService = coreService.GetCacheKeyService();
+			this.coreService = coreService;
 			this.bpxPageSize = Convert.ToInt32(coreService.GetConfiguration().GetSection("AppSettings").GetSection("PageSize").Value);
 			this.currUserMeta = new UserMeta();
+			this.currMenuString = string.Empty;
+			this.cacheService = coreService.GetCacheService();
+			this.cacheKeyService = coreService.GetCacheKeyService();
 		}
 
         public override void OnActionExecuting(ActionExecutingContext ctx)
@@ -62,7 +61,7 @@ namespace BPX.Website.Controllers
 						{
 							//var watch = new System.Diagnostics.Stopwatch();
 							//watch.Start();
-							
+
 							string cacheKey = string.Empty;
 
 							// get userMeta

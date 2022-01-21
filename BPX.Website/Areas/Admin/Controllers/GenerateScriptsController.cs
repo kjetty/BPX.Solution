@@ -3,6 +3,7 @@ using BPX.Utils;
 using BPX.Website.Controllers;
 using BPX.Website.CustomCode.Authorize;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace BPX.Website.Areas.Admin.Controllers
         private readonly IPermitService permitService;
         private readonly IRoleService roleService;
 
-        public GenerateScriptsController(IPermitService permitService, IRoleService roleService)
+        public GenerateScriptsController(ICoreService coreService, ILogger<GenerateScriptsController> logger, IAccountService accountService, IPermitService permitService, IRoleService roleService) : base(coreService, logger, accountService)
         {
             this.permitService = permitService;
             this.roleService = roleService;

@@ -23,7 +23,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         private readonly IRolePermitService rolePermitService;
         private readonly ICacheKeyService cacheKeyService;
 
-        public RoleController(IUserService userService, IRoleService roleService, IPermitService permitService, IRolePermitService rolePermitService, ICacheKeyService cacheKeyService)
+        public RoleController(ICoreService coreService, ILogger<RoleController> logger, IAccountService accountService, IUserService userService, IRoleService roleService, IPermitService permitService, IRolePermitService rolePermitService, ICacheKeyService cacheKeyService) : base(coreService, logger, accountService)
         {
             this.userService = userService;
             this.roleService = roleService;
@@ -411,32 +411,32 @@ namespace BPX.Website.Areas.Identity.Controllers
 
             //listPermits
             cacheKey = "permits:all";
-            List<Permit> listPermits = listPermits = bpxCache.GetCache<List<Permit>>(cacheKey);
+            List<Permit> listPermits = listPermits = coreService.GetCacheService().GetCache<List<Permit>>(cacheKey);
 
             if (listPermits == null)
             {
                 listPermits = permitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active)).OrderBy(c => c.PermitArea).ThenBy(c => c.PermitController).ThenBy(c => c.PermitName).ToList();
-                bpxCache.SetCache(listPermits, cacheKey, CacheKeyService);
+                coreService.GetCacheService().SetCache(listPermits, cacheKey, coreService.GetCacheKeyService());
             }
 
             //listRolePermitIDs
             cacheKey = $"role:{id}:permits";
-            List<int> listRolePermitIDs = bpxCache.GetCache<List<int>>(cacheKey);
+            List<int> listRolePermitIDs = coreService.GetCacheService().GetCache<List<int>>(cacheKey);
 
             if (listRolePermitIDs == null)
             {
                 listRolePermitIDs = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.RoleId.Equals(id)).OrderBy(c => c.PermitID).Select(c => c.PermitID).ToList();
-                bpxCache.SetCache(listRolePermitIDs, cacheKey, CacheKeyService);
+                coreService.GetCacheService().SetCache(listRolePermitIDs, cacheKey, coreService.GetCacheKeyService());
             }
 
             //listPermitAreas
             cacheKey = $"permitareas:all";
-            List<string> listAreas = bpxCache.GetCache<List<string>>(cacheKey);
+            List<string> listAreas = coreService.GetCacheService().GetCache<List<string>>(cacheKey);
 
             if (listAreas == null)
             {
                 listAreas = listPermits.OrderBy(c => c.PermitArea).Select(c => c.PermitArea).Distinct().ToList();
-                bpxCache.SetCache(listAreas, cacheKey, CacheKeyService);
+                coreService.GetCacheService().SetCache(listAreas, cacheKey, coreService.GetCacheKeyService());
             }
 
             listPermits = permitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active)).OrderBy(c => c.PermitArea).ThenBy(c => c.PermitController).ThenBy(c => c.PermitName).ToList();
@@ -504,17 +504,17 @@ namespace BPX.Website.Areas.Identity.Controllers
 
             // user:{id}:roles
             cacheKey = $"role:{id}:permits";
-            bpxCache.RemoveCache(cacheKey);
+            coreService.GetCacheService().RemoveCache(cacheKey);
 
             // user:{id}:meta
             //cacheKey = $"user:{id}:meta";
-            //bpxCache.RemoveCache(cacheKey);
+            //coreService.GetCacheService().RemoveCache(cacheKey);
 
             // permit:{id}:roles
             var cacheKeys = cacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.StartsWith("permit:")).OrderBy(c => c.CacheKeyName).ToList();
             foreach (var itemCacheKey in cacheKeys)
 			{ 
-                bpxCache.RemoveCache(itemCacheKey.CacheKeyName);
+                coreService.GetCacheService().RemoveCache(itemCacheKey.CacheKeyName);
             }
 
 

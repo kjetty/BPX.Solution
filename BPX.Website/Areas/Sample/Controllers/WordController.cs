@@ -1,8 +1,10 @@
-﻿using BPX.Website.Controllers;
+﻿using BPX.Service;
+using BPX.Website.Controllers;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using DocRun = DocumentFormat.OpenXml.Wordprocessing.Run;
@@ -13,6 +15,11 @@ namespace BPX.Website.Areas.Sample.Controllers
 {
 	public class WordController : BaseController<WordController>
     {
+		public WordController(ICoreService coreService, ILogger<WordController> logger, IAccountService accountService) : base(coreService, logger, accountService)
+		{
+
+		}
+
 		public IActionResult Index()
 		{
 			return View();

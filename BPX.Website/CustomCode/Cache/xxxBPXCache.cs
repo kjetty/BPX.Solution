@@ -7,11 +7,11 @@ using System.Text.Json;
 
 namespace BPX.Website.CustomCode.Cache
 {
-	public class BPXCache : IBPXCache
+	public class xxxBPXCache : xxxIBPXCache
 	{
 		public IDistributedCache distributedCache;
 
-		public BPXCache(IDistributedCache distributedCache)
+		public xxxBPXCache(IDistributedCache distributedCache)
 		{
 			this.distributedCache = distributedCache;
 		}
@@ -74,7 +74,7 @@ namespace BPX.Website.CustomCode.Cache
 		}
 	}
 
-	public interface IBPXCache
+	public interface xxxIBPXCache
 	{
 		//void SetCache<T>(T values, string key);
 

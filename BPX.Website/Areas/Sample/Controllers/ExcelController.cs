@@ -1,14 +1,21 @@
-﻿using BPX.Website.Controllers;
+﻿using BPX.Service;
+using BPX.Website.Controllers;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.IO;
 
 namespace BPX.Website.Areas.Sample.Controllers
 {
 	public class ExcelController : BaseController<ExcelController>
 	{
+		public ExcelController(ICoreService coreService, ILogger<ExcelController> logger, IAccountService accountService) : base(coreService, logger, accountService)
+        {
+
+		}
+
 		public IActionResult Index()
 		{
 			return View();

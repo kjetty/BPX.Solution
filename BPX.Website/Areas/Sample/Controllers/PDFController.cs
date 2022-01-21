@@ -1,8 +1,10 @@
-﻿using BPX.Website.Controllers;
+﻿using BPX.Service;
+using BPX.Website.Controllers;
 using iText.Kernel.Pdf;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Reflection.Metadata;
@@ -14,6 +16,11 @@ namespace BPX.Website.Areas.Sample.Controllers
     [Area("Sample")]
     public class PDFController : BaseController<PDFController>
 	{
+		public PDFController(ICoreService coreService, ILogger<PDFController> logger, IAccountService accountService) : base(coreService, logger, accountService)
+        {
+
+		}
+
 		public IActionResult Index()
 		{
             GeneratePDFLocal();

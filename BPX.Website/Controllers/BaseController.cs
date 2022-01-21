@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -17,32 +18,24 @@ using System.Linq;
 
 namespace BPX.Website.Controllers
 {
-	public class BaseController<T> : Controller where T : BaseController<T>
+	public class BaseController<T> : Controller where T : class
 	{
-		// logger
-		private ILogger<T> _logger;
-		protected ILogger<T> logger => _logger ??= HttpContext.RequestServices.GetService<ILogger<T>>();
-
-		// cache
-		private IBPXCache _bpxCache;
-		protected IBPXCache bpxCache => _bpxCache ??= HttpContext.RequestServices.GetService<IBPXCache>();
-
-		// accountService
-		private IAccountService _accountService;
-		protected IAccountService accountService => _accountService ??= HttpContext.RequestServices.GetService<IAccountService>();
-
-		// cacheKey :: not required if using Redis
-		private ICacheKeyService _CacheKeyService;
-		protected ICacheKeyService CacheKeyService => _CacheKeyService ??= HttpContext.RequestServices.GetService<ICacheKeyService>();
+		// configuration
+		protected readonly ICoreService coreService;
+		protected readonly ILogger<T> logger;
+		protected readonly IAccountService accountService;
 
 		// bpx project variables
 		protected int bpxPageSize;
 		protected UserMeta currUserMeta;
 		protected string currMenuString;
 		
-		public BaseController()
+		public BaseController(ICoreService coreService, ILogger<T> logger, IAccountService accountService)
 		{
-			bpxPageSize = Convert.ToInt32(Startup.Configuration.GetSection("AppSettings").GetSection("PageSize").Value);
+			this.coreService = coreService;
+			this.logger = logger;
+			this.accountService = accountService;
+			bpxPageSize = Convert.ToInt32(coreService.GetConfiguration().GetSection("AppSettings").GetSection("PageSize").Value);
 			currUserMeta = new UserMeta();
 		}
 
@@ -74,12 +67,12 @@ namespace BPX.Website.Controllers
 
 							// get userMeta
 							cacheKey = $"user:{userId}:meta";
-							currUserMeta = bpxCache.GetCache<UserMeta>(cacheKey);
+							currUserMeta = coreService.GetCacheService().GetCache<UserMeta>(cacheKey);
 							
 							if (currUserMeta == null)
 							{
 								currUserMeta = accountService.GetUserMeta(userId);
-								bpxCache.SetCache(currUserMeta, cacheKey, CacheKeyService);
+								coreService.GetCacheService().SetCache(currUserMeta, cacheKey, coreService.GetCacheKeyService());
 							}
 
 							if (currUserMeta != null)
@@ -88,32 +81,32 @@ namespace BPX.Website.Controllers
 
 								// get userRoleIds
 								cacheKey = $"user:{userId}:roles";
-								currUserMeta.UserRoleIds = bpxCache.GetCache<List<int>>(cacheKey);
+								currUserMeta.UserRoleIds = coreService.GetCacheService().GetCache<List<int>>(cacheKey);
 
 								if (currUserMeta.UserRoleIds == null)
 								{
 									currUserMeta.UserRoleIds = accountService.GetUserRoleIds(userId);
-									bpxCache.SetCache(currUserMeta.UserRoleIds, cacheKey, CacheKeyService);
+									coreService.GetCacheService().SetCache(currUserMeta.UserRoleIds, cacheKey, coreService.GetCacheKeyService());
 								}
 
 								// get userPermitIds
 								cacheKey = $"user:{userId}:permits";
-								currUserMeta.UserPermitIds = bpxCache.GetCache<List<int>>(cacheKey);
+								currUserMeta.UserPermitIds = coreService.GetCacheService().GetCache<List<int>>(cacheKey);
 
 								if (currUserMeta.UserPermitIds == null)
 								{
 									currUserMeta.UserPermitIds = accountService.GetUserPermitIds(currUserMeta.UserRoleIds);
-									bpxCache.SetCache(currUserMeta.UserPermitIds, cacheKey, CacheKeyService);
+									coreService.GetCacheService().SetCache(currUserMeta.UserPermitIds, cacheKey, coreService.GetCacheKeyService());
 								}
 																
 								// get menuBar
 								cacheKey = $"roles:{string.Join(string.Empty, currUserMeta.UserRoleIds)}:menu";
-								currMenuString = bpxCache.GetCache<string>(cacheKey);
+								currMenuString = coreService.GetCacheService().GetCache<string>(cacheKey);
 
 								if (currMenuString == null)
 								{
 									currMenuString = accountService.GetUserMenuString(currUserMeta.UserRoleIds);
-									bpxCache.SetCache(currMenuString, cacheKey, CacheKeyService);
+									coreService.GetCacheService().SetCache(currMenuString, cacheKey, coreService.GetCacheKeyService());
 								}								
 
 								//// populate ViewBag

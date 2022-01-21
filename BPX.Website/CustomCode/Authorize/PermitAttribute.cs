@@ -78,11 +78,12 @@ namespace BPX.Website.CustomCode.Authorize
 					//OR
 
 					// verify access (process B - using cache and intersect function)
+					var coreService = (ICoreService)context.HttpContext.RequestServices.GetService(typeof(ICoreService));
 					var loginService = (ILoginService)context.HttpContext.RequestServices.GetService(typeof(ILoginService));
 					var userRoleService = (IUserRoleService)context.HttpContext.RequestServices.GetService(typeof(IUserRoleService));
 					var rolePermitService = (IRolePermitService)context.HttpContext.RequestServices.GetService(typeof(IRolePermitService));
-					var bpxCache = (IBPXCache)context.HttpContext.RequestServices.GetService(typeof(IBPXCache));
-					var CacheKeyService = (ICacheKeyService)context.HttpContext.RequestServices.GetService(typeof(ICacheKeyService));
+					//var bpxCache = (IBPXCache)context.HttpContext.RequestServices.GetService(typeof(IBPXCache));
+					//var CacheKeyService = (ICacheKeyService)context.HttpContext.RequestServices.GetService(typeof(ICacheKeyService));
 
 					var login = loginService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.LoginToken.Equals(loginToken)).SingleOrDefault();
 
@@ -96,22 +97,22 @@ namespace BPX.Website.CustomCode.Authorize
 
 							// userRoleIds
 							cacheKey = $"user:{userId}:roles";
-							var userRoleIds = bpxCache.GetCache<List<int>>(cacheKey);
+							var userRoleIds = coreService.GetCacheService().GetCache<List<int>>(cacheKey);
 
 							if (userRoleIds == null)
 							{
 								userRoleIds = userRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.UserId == userId).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
-								bpxCache.SetCache(userRoleIds, cacheKey, CacheKeyService);
+								coreService.GetCacheService().SetCache(userRoleIds, cacheKey, coreService.GetCacheKeyService());
 							}
 
 							// permitRoleIds
 							cacheKey = $"permit:{permitId}:roles";
-							var permitRoleIds = bpxCache.GetCache<List<int>>(cacheKey);
+							var permitRoleIds = coreService.GetCacheService().GetCache<List<int>>(cacheKey);
 
 							if (permitRoleIds == null)
 							{
 								permitRoleIds = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.PermitID == permitId).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
-								bpxCache.SetCache(permitRoleIds, cacheKey, CacheKeyService);
+								coreService.GetCacheService().SetCache(permitRoleIds, cacheKey, coreService.GetCacheKeyService());
 
 								//note
 								//permitRoleIds can be further refined to filter using userRoleIds, but then caching cannot be applied

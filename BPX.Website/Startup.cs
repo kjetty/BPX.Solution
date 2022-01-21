@@ -22,13 +22,13 @@ namespace BPX.Website
 			Configuration = configuration;
 		}
 
-		//public IConfiguration Configuration { get; }
+		public IConfiguration Configuration { get; }
 
 		// convert IConfiguration Configuration to static, to enable access aywhere using  Startup.Configuration.GetSection...
 		// ref https://stackoverflow.com/questions/39231951/how-do-i-access-configuration-in-any-class-in-asp-net-core
 		//public or internal static IConfiguration Configuration { get; private set; }
 
-		public static IConfiguration Configuration { get; private set; }
+		//public static IConfiguration Configuration { get; private set; }
 
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
@@ -55,7 +55,10 @@ namespace BPX.Website
 			services.AddScoped<IMenuRoleRepository, MenuRoleRepository>();
 
 			// inject services
+			services.AddScoped<ICoreService, CoreService>();
+			services.AddScoped<CacheKeyService, CacheKeyService>();
 			services.AddScoped<IAccountService, AccountService>();
+
 			services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
@@ -86,10 +89,11 @@ namespace BPX.Website
 			// the local in-memory version of IDistributedCache is part of Microsoft.Extensions.Caching.Memory so is already brought in by the MVC package.
 			// to use it, you need to manually add services.AddDistributedMemoryCache()
 			// distributed cache
-			services.AddDistributedMemoryCache(); 
+			services.AddDistributedMemoryCache();
 
-			// inject cache
-			services.AddScoped<IBPXCache, BPXCache>();
+			//// inject cache
+			//services.AddScoped<IBPXCache, BPXCache>();
+			services.AddScoped<ICacheService, CacheService>();
 
 			services.AddControllersWithViews();
 		}

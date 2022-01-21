@@ -6,6 +6,7 @@ using BPX.Website.Controllers;
 using BPX.Website.CustomCode.Authorize;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 		private readonly IUserRoleService userRoleService;
 		private readonly IRoleService roleService;
 
-        public UserController(IUserService userService, IUserRoleService userRoleService, IRoleService roleService)
+        public UserController(ICoreService coreService, ILogger<UserController> logger, IAccountService accountService, IUserService userService, IUserRoleService userRoleService, IRoleService roleService) : base(coreService, logger, accountService)
         {
 			this.userService = userService;
 			this.userRoleService = userRoleService;
@@ -227,11 +228,11 @@ namespace BPX.Website.Areas.Identity.Controllers
 				userService.SaveDBChanges();
 
 				// handle cache :: remove from cache using keys from the database
-				var CacheKeys = CacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.Contains($"user:{id}:") && c.ModifiedDate >= DateTime.Now.AddMinutes(-30)).OrderBy(c => c.CacheKeyName).ToList();
+				var CacheKeys = coreService.GetCacheKeyService().GetRecordsByFilter(c => c.CacheKeyName.Contains($"user:{id}:") && c.ModifiedDate >= DateTime.Now.AddMinutes(-30)).OrderBy(c => c.CacheKeyName).ToList();
 
 				foreach(var cacheKeyName in CacheKeys)
 				{
-					bpxCache.RemoveCache(cacheKeyName.ToString());
+					coreService.GetCacheService().RemoveCache(cacheKeyName.ToString());
 				}
 
 				// set alert
@@ -391,22 +392,22 @@ namespace BPX.Website.Areas.Identity.Controllers
 
 			// listRoles
 			cacheKey = "roles:all";
-			List<Role> listRoles = listRoles = bpxCache.GetCache<List<Role>>(cacheKey);
+			List<Role> listRoles = listRoles = coreService.GetCacheService().GetCache<List<Role>>(cacheKey);
 
 			if (listRoles == null)
 			{
 				listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active)).OrderBy(c => c.RoleName).ToList();
-				bpxCache.SetCache(listRoles, cacheKey, CacheKeyService);
+				coreService.GetCacheService().SetCache(listRoles, cacheKey, coreService.GetCacheKeyService());
 			}
 
 			// listUserRoleIds
 			cacheKey = $"user:{id}:roles";
-			List<int> listUserRoleIds = bpxCache.GetCache<List<int>>(cacheKey);
+			List<int> listUserRoleIds = coreService.GetCacheService().GetCache<List<int>>(cacheKey);
 
 			if (listUserRoleIds == null)
 			{
 				listUserRoleIds = userRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.UserId.Equals(id)).OrderBy(c => c.RoleId).Select(c => c.RoleId).ToList();
-				bpxCache.SetCache(listUserRoleIds, cacheKey, CacheKeyService);
+				coreService.GetCacheService().SetCache(listUserRoleIds, cacheKey, coreService.GetCacheKeyService());
 			}
 			
 			// set ViewBag
@@ -469,11 +470,11 @@ namespace BPX.Website.Areas.Identity.Controllers
 
 			// user:{id}:roles
 			cacheKey = $"user:{id}:roles";
-			bpxCache.RemoveCache(cacheKey);
+			coreService.GetCacheService().RemoveCache(cacheKey);
 
 			// user:{id}:meta
 			cacheKey = $"user:{id}:meta";
-			bpxCache.RemoveCache(cacheKey);
+			coreService.GetCacheService().RemoveCache(cacheKey);
 
 			// set alert
 			ShowAlert(AlertType.Success, "User Roles are successfully updated.");

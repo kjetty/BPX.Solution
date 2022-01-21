@@ -3,6 +3,7 @@ using BPX.Website.CustomCode.Cache;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace BPX.Website.Controllers
 
 		private UserService _userService;
 
-		public HomeController(IUserService userService)
+		public HomeController(ICoreService coreService, ILogger<HomeController> logger, IAccountService accountService, IUserService userService) : base(coreService, logger, accountService)
 		{
 			_userService = (UserService)userService;
 		}

@@ -20,7 +20,6 @@ namespace BPX.Utils
     {
         // Variables for the record status
         public const string Active = "A";
-
         public const string Inactive = "I";
     }
 
@@ -28,7 +27,6 @@ namespace BPX.Utils
     {
         // Variables for the record status
         public const string Ascending = "asc";
-
         public const string Descending = "desc";
     }
 }

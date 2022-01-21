@@ -1,6 +1,5 @@
 ﻿using BPX.Domain.CustomModels;
 using BPX.Utils;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -41,7 +40,6 @@ namespace BPX.Service
 		{
 			UserMeta userMeta = new UserMeta();
 
-
 			var user = userService.GetRecordByID(userId);
 			
 			userMeta.UserId = userId;
@@ -50,8 +48,6 @@ namespace BPX.Service
 			userMeta.FullName = user.FirstName + " " + user.LastName;
 			userMeta.Email = user.Email;
 			userMeta.Mobile = user.Mobile;
-
-
 
 			return userMeta;
 		}
@@ -100,7 +96,6 @@ namespace BPX.Service
 
 			return retVal;
 		}
-
 	}
 
 	public interface IAccountService

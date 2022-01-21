@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace BPX.Utils
+﻿namespace BPX.Utils
 {
-    public class BootstrapAlertBox
+	public class BootstrapAlertBox
     {
 		// DO NOT provide the default constructor
 		//public BootstrapAlertBox()

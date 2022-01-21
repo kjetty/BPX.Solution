@@ -75,7 +75,7 @@ namespace BPX.Website.Controllers
 							// get userMeta
 							cacheKey = $"user:{userId}:meta";
 							currUserMeta = bpxCache.GetCache<UserMeta>(cacheKey);
-
+							
 							if (currUserMeta == null)
 							{
 								currUserMeta = accountService.GetUserMeta(userId);
@@ -84,6 +84,8 @@ namespace BPX.Website.Controllers
 
 							if (currUserMeta != null)
 							{
+								currUserMeta.LoginToken = loginToken;
+
 								// get userRoleIds
 								cacheKey = $"user:{userId}:roles";
 								currUserMeta.UserRoleIds = bpxCache.GetCache<List<int>>(cacheKey);

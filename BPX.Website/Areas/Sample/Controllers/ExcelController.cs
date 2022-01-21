@@ -11,7 +11,7 @@ namespace BPX.Website.Areas.Sample.Controllers
 {
 	public class ExcelController : BaseController<ExcelController>
 	{
-		public ExcelController(ICoreService coreService, ILogger<ExcelController> logger, IAccountService accountService) : base(coreService, logger, accountService)
+		public ExcelController(ILogger<ExcelController> logger, ICoreService coreService) : base(logger, coreService)
         {
 
 		}

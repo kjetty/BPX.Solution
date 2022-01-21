@@ -76,11 +76,8 @@ namespace BPX.Service
 	public interface ICacheService
 	{
 		//void SetCache<T>(T values, string key);
-
 		void SetCache<T>(T values, string key, ICacheKeyService CacheKeyService);
-
 		T GetCache<T>(string key) where T : class;
-
 		void RemoveCache(string key);
 	}
 }

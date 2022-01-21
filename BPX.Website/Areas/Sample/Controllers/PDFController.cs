@@ -16,7 +16,7 @@ namespace BPX.Website.Areas.Sample.Controllers
     [Area("Sample")]
     public class PDFController : BaseController<PDFController>
 	{
-		public PDFController(ICoreService coreService, ILogger<PDFController> logger, IAccountService accountService) : base(coreService, logger, accountService)
+		public PDFController(ILogger<PDFController> logger, ICoreService coreService) : base(logger, coreService)
         {
 
 		}

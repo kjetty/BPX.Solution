@@ -16,7 +16,7 @@ namespace BPX.Website.Areas.Admin.Controllers
         private readonly IPermitService permitService;
         private readonly IRoleService roleService;
 
-        public GenerateScriptsController(ICoreService coreService, ILogger<GenerateScriptsController> logger, IAccountService accountService, IPermitService permitService, IRoleService roleService) : base(coreService, logger, accountService)
+        public GenerateScriptsController(ILogger<GenerateScriptsController> logger, ICoreService coreService, IPermitService permitService, IRoleService roleService) : base(logger, coreService)
         {
             this.permitService = permitService;
             this.roleService = roleService;

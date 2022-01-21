@@ -2,7 +2,6 @@
 using BPX.Domain.ViewModels;
 using BPX.Service;
 using BPX.Utils;
-using BPX.Website.CustomCode.Cache;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -20,23 +19,24 @@ namespace BPX.Website.Controllers
 {
 	public class BaseController<T> : Controller where T : class
 	{
-		// configuration
-		protected readonly ICoreService coreService;
 		protected readonly ILogger<T> logger;
-		protected readonly IAccountService accountService;
-
+		protected readonly ICoreService coreService;
+		
 		// bpx project variables
 		protected int bpxPageSize;
 		protected UserMeta currUserMeta;
 		protected string currMenuString;
-		
-		public BaseController(ICoreService coreService, ILogger<T> logger, IAccountService accountService)
+		protected ICacheService cacheService;
+		protected ICacheKeyService cacheKeyService;
+
+		public BaseController(ILogger<T> logger, ICoreService coreService)
 		{
 			this.coreService = coreService;
 			this.logger = logger;
-			this.accountService = accountService;
-			bpxPageSize = Convert.ToInt32(coreService.GetConfiguration().GetSection("AppSettings").GetSection("PageSize").Value);
-			currUserMeta = new UserMeta();
+			this.cacheService = coreService.GetCacheService();
+			this.cacheKeyService = coreService.GetCacheKeyService();
+			this.bpxPageSize = Convert.ToInt32(coreService.GetConfiguration().GetSection("AppSettings").GetSection("PageSize").Value);
+			this.currUserMeta = new UserMeta();
 		}
 
         public override void OnActionExecuting(ActionExecutingContext ctx)
@@ -56,7 +56,7 @@ namespace BPX.Website.Controllers
 
 						// get user data from the loginToken
 						// SECURITY - verify against the database for every request
-						int userId = accountService.GetUserId(loginToken);
+						int userId = coreService.GetUserId(loginToken);
 
 						if (userId > 0)
 						{
@@ -67,12 +67,12 @@ namespace BPX.Website.Controllers
 
 							// get userMeta
 							cacheKey = $"user:{userId}:meta";
-							currUserMeta = coreService.GetCacheService().GetCache<UserMeta>(cacheKey);
+							currUserMeta = cacheService.GetCache<UserMeta>(cacheKey);
 							
 							if (currUserMeta == null)
 							{
-								currUserMeta = accountService.GetUserMeta(userId);
-								coreService.GetCacheService().SetCache(currUserMeta, cacheKey, coreService.GetCacheKeyService());
+								currUserMeta = coreService.GetUserMeta(userId);
+								cacheService.SetCache(currUserMeta, cacheKey, cacheKeyService);
 							}
 
 							if (currUserMeta != null)
@@ -81,32 +81,32 @@ namespace BPX.Website.Controllers
 
 								// get userRoleIds
 								cacheKey = $"user:{userId}:roles";
-								currUserMeta.UserRoleIds = coreService.GetCacheService().GetCache<List<int>>(cacheKey);
+								currUserMeta.UserRoleIds = cacheService.GetCache<List<int>>(cacheKey);
 
 								if (currUserMeta.UserRoleIds == null)
 								{
-									currUserMeta.UserRoleIds = accountService.GetUserRoleIds(userId);
-									coreService.GetCacheService().SetCache(currUserMeta.UserRoleIds, cacheKey, coreService.GetCacheKeyService());
+									currUserMeta.UserRoleIds = coreService.GetUserRoleIds(userId);
+									cacheService.SetCache(currUserMeta.UserRoleIds, cacheKey, cacheKeyService);
 								}
 
 								// get userPermitIds
 								cacheKey = $"user:{userId}:permits";
-								currUserMeta.UserPermitIds = coreService.GetCacheService().GetCache<List<int>>(cacheKey);
+								currUserMeta.UserPermitIds = cacheService.GetCache<List<int>>(cacheKey);
 
 								if (currUserMeta.UserPermitIds == null)
 								{
-									currUserMeta.UserPermitIds = accountService.GetUserPermitIds(currUserMeta.UserRoleIds);
-									coreService.GetCacheService().SetCache(currUserMeta.UserPermitIds, cacheKey, coreService.GetCacheKeyService());
+									currUserMeta.UserPermitIds = coreService.GetUserPermitIds(currUserMeta.UserRoleIds);
+									cacheService.SetCache(currUserMeta.UserPermitIds, cacheKey, cacheKeyService);
 								}
 																
 								// get menuBar
 								cacheKey = $"roles:{string.Join(string.Empty, currUserMeta.UserRoleIds)}:menu";
-								currMenuString = coreService.GetCacheService().GetCache<string>(cacheKey);
+								currMenuString = cacheService.GetCache<string>(cacheKey);
 
 								if (currMenuString == null)
 								{
-									currMenuString = accountService.GetUserMenuString(currUserMeta.UserRoleIds);
-									coreService.GetCacheService().SetCache(currMenuString, cacheKey, coreService.GetCacheKeyService());
+									currMenuString = coreService.GetUserMenuString(currUserMeta.UserRoleIds);
+									cacheService.SetCache(currMenuString, cacheKey, cacheKeyService);
 								}								
 
 								//// populate ViewBag

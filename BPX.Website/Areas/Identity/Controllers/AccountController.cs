@@ -24,7 +24,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         private readonly IUserService userService;
         private readonly IUserRoleService userRoleService;
 
-        public AccountController(ICoreService coreService, ILogger<AccountController> logger, IAccountService accountService, ILoginService loginService, IUserService userService, IUserRoleService userRoleService) : base(coreService, logger, accountService)
+        public AccountController(ILogger<AccountController> logger, ICoreService coreService, ILoginService loginService, IUserService userService, IUserRoleService userRoleService) : base(logger, coreService)
         {
             this.loginService = loginService;
             this.userService = userService;

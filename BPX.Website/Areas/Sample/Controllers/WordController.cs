@@ -15,7 +15,7 @@ namespace BPX.Website.Areas.Sample.Controllers
 {
 	public class WordController : BaseController<WordController>
     {
-		public WordController(ICoreService coreService, ILogger<WordController> logger, IAccountService accountService) : base(coreService, logger, accountService)
+		public WordController(ILogger<WordController> logger, ICoreService coreService) : base(logger, coreService)
 		{
 
 		}

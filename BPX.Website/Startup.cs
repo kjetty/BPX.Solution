@@ -1,7 +1,6 @@
 using BPX.DAL.Context;
 using BPX.DAL.Repository;
 using BPX.Service;
-using BPX.Website.CustomCode.Cache;
 using BPX.Website.MiddleWare;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -57,7 +56,7 @@ namespace BPX.Website
 			// inject services
 			services.AddScoped<ICoreService, CoreService>();
 			services.AddScoped<CacheKeyService, CacheKeyService>();
-			services.AddScoped<IAccountService, AccountService>();
+			//services.AddScoped<IAccountService, AccountService>();
 
 			services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IUserService, UserService>();

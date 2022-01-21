@@ -1,5 +1,4 @@
 ﻿using BPX.Service;
-using BPX.Website.CustomCode.Cache;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
@@ -16,7 +15,7 @@ namespace BPX.Website.Controllers
 
 		private UserService _userService;
 
-		public HomeController(ICoreService coreService, ILogger<HomeController> logger, IAccountService accountService, IUserService userService) : base(coreService, logger, accountService)
+		public HomeController(ILogger<HomeController> logger, ICoreService coreService, IUserService userService) : base(logger, coreService)
 		{
 			_userService = (UserService)userService;
 		}
@@ -25,10 +24,6 @@ namespace BPX.Website.Controllers
 		{
 			//var nums = new List<int> { 1, 2, 3, 54,21,678, 4,8,3,9};
 			//var result = string.Join(string.Empty, nums);
-
-
-
-
 
 			//logger.LogError("test error from BPX " + this.bpxUseCache + "|" + this.bpxPageSize);
 

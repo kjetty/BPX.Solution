@@ -23,12 +23,6 @@ namespace BPX.Website
 
 		public IConfiguration Configuration { get; }
 
-		// convert IConfiguration Configuration to static, to enable access aywhere using  Startup.Configuration.GetSection...
-		// ref https://stackoverflow.com/questions/39231951/how-do-i-access-configuration-in-any-class-in-asp-net-core
-		//public or internal static IConfiguration Configuration { get; private set; }
-
-		//public static IConfiguration Configuration { get; private set; }
-
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
@@ -55,9 +49,6 @@ namespace BPX.Website
 
 			// inject services
 			services.AddScoped<ICoreService, CoreService>();
-			services.AddScoped<CacheKeyService, CacheKeyService>();
-			//services.AddScoped<IAccountService, AccountService>();
-
 			services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();

@@ -49,13 +49,13 @@ namespace BPX.Website
 
 			// inject services
 			services.AddScoped<ICoreService, CoreService>();
+			services.AddScoped<ICacheKeyService, CacheKeyService>();
 			services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IUserRoleService, UserRoleService>();
             services.AddScoped<IPermitService, PermitService>();
 			services.AddScoped<IRolePermitService, RolePermitService>();
-			services.AddScoped<ICacheKeyService, CacheKeyService>();
 			services.AddScoped<IMenuService, MenuService>();
 			services.AddScoped<IMenuRoleService, MenuRoleService>();			
 
@@ -81,8 +81,7 @@ namespace BPX.Website
 			// distributed cache
 			services.AddDistributedMemoryCache();
 
-			//// inject cache
-			//services.AddScoped<IBPXCache, BPXCache>();
+			// inject cache
 			services.AddScoped<ICacheService, CacheService>();
 
 			services.AddControllersWithViews();

@@ -37,15 +37,13 @@ namespace BPX.Website.Controllers
 
 		// bpx project variables
 		protected int bpxPageSize;
-		protected string currMenuString;
 		protected UserMeta currUserMeta;
-		protected RequestMeta currRequestMeta;
-
+		protected string currMenuString;
+		
 		public BaseController()
 		{
 			bpxPageSize = Convert.ToInt32(Startup.Configuration.GetSection("AppSettings").GetSection("PageSize").Value);
 			currUserMeta = new UserMeta();
-			currRequestMeta = new RequestMeta();
 		}
 
         public override void OnActionExecuting(ActionExecutingContext ctx)
@@ -54,19 +52,12 @@ namespace BPX.Website.Controllers
 
 			if (ctx.HttpContext != null)
 			{
-				// populate RequestMeta
-				currRequestMeta.host = ctx.HttpContext.Request.Host.ToString().ToLower().Trim();
-				currRequestMeta.area = (ctx.RouteData.Values["area"] as string)?.ToLower();
-				currRequestMeta.controller = (ctx.RouteData.Values["controller"] as string)?.ToLower();
-				currRequestMeta.action = (ctx.RouteData.Values["action"] as string)?.ToLower();
-				currRequestMeta.id = (ctx.RouteData.Values["id"] as string)?.ToLower();
-
 				if (ctx.HttpContext.User != null)
 			    {
 					var claimCurrLoginToken = ctx.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "currLoginToken");
 
 					if (claimCurrLoginToken != null)
-					{
+					{						
 						// get current loginToken value
 						string loginToken = claimCurrLoginToken.Value;
 
@@ -76,6 +67,9 @@ namespace BPX.Website.Controllers
 
 						if (userId > 0)
 						{
+							//var watch = new System.Diagnostics.Stopwatch();
+							//watch.Start();
+							
 							string cacheKey = string.Empty;
 
 							// get userMeta
@@ -90,11 +84,28 @@ namespace BPX.Website.Controllers
 
 							if (currUserMeta != null)
 							{
-								string menuString = string.Empty;
-								string userRoleIdsString = string.Join(string.Empty, currUserMeta.UserRoleIds);
-								
+								// get userRoleIds
+								cacheKey = $"user:{userId}:roles";
+								currUserMeta.UserRoleIds = bpxCache.GetCache<List<int>>(cacheKey);
+
+								if (currUserMeta.UserRoleIds == null)
+								{
+									currUserMeta.UserRoleIds = accountService.GetUserRoleIds(userId);
+									bpxCache.SetCache(currUserMeta.UserRoleIds, cacheKey, CacheKeyService);
+								}
+
+								// get userPermitIds
+								cacheKey = $"user:{userId}:permits";
+								currUserMeta.UserPermitIds = bpxCache.GetCache<List<int>>(cacheKey);
+
+								if (currUserMeta.UserPermitIds == null)
+								{
+									currUserMeta.UserPermitIds = accountService.GetUserPermitIds(currUserMeta.UserRoleIds);
+									bpxCache.SetCache(currUserMeta.UserPermitIds, cacheKey, CacheKeyService);
+								}
+																
 								// get menuBar
-								cacheKey = $"roles:{userRoleIdsString}:menu";
+								cacheKey = $"roles:{string.Join(string.Empty, currUserMeta.UserRoleIds)}:menu";
 								currMenuString = bpxCache.GetCache<string>(cacheKey);
 
 								if (currMenuString == null)
@@ -105,8 +116,8 @@ namespace BPX.Website.Controllers
 
 								//// populate ViewBag
 								////ViewBag.currUserMeta = currUserMeta;
-								//ViewBag.currMenuString = currMenuString;
-								//ViewBag.currUserPermitIds = currUserMeta.UserPermitIds;
+								ViewBag.currMenuString = currMenuString;
+								ViewBag.currUserPermitIds = currUserMeta.UserPermitIds;
 
 								////// Developer Override for Permits - BaseController (Part A) + PermitAttribute (PartB)
 								////// OverrideOverrideOverride 
@@ -123,6 +134,12 @@ namespace BPX.Website.Controllers
 								//	ViewBag.currUserPermitIds = tempUserPermitIds;
 								//}
 								////// END
+
+								//watch.Stop();
+
+								//double elapsedTime = (double)watch.ElapsedTicks / (double)Stopwatch.Frequency;
+								//string executionTime = (elapsedTime * 1000000).ToString("F2") + " microseconds";
+								//ShowAlert(AlertType.Info, $"Execution Time: {executionTime}");
 							}
 						}
 					}

@@ -36,36 +36,34 @@ namespace BPX.Service
 
 			return 0;
 		}
-
+		
 		public UserMeta GetUserMeta(int userId)
 		{
 			UserMeta userMeta = new UserMeta();
 
-			//var watch = new System.Diagnostics.Stopwatch();
-			//watch.Start();
 
-			var login = loginService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.UserId.Equals(userId)).SingleOrDefault();
 			var user = userService.GetRecordByID(userId);
-			var userRolesIds = userRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.UserId == userId).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
-			var userPermitIds = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && userRolesIds.Contains(c.RoleId)).OrderBy(c => c.PermitID).Select(c => c.PermitID).Distinct().ToList();
 			
-			userMeta.LoginToken = login.LoginToken;
-			userMeta.LastLoginDate = (DateTime)login.LastLoginDate;
-			userMeta.UserId = login.UserId;
+			userMeta.UserId = userId;
 			userMeta.FirstName = user.FirstName;
 			userMeta.LastName = user.LastName;
 			userMeta.FullName = user.FirstName + " " + user.LastName;
 			userMeta.Email = user.Email;
 			userMeta.Mobile = user.Mobile;
-			userMeta.UserRoleIds = userRolesIds;
-			userMeta.UserPermitIds = userPermitIds;
 
-			//watch.Stop();
 
-			//double elapsedTime = (double)watch.ElapsedTicks / (double)Stopwatch.Frequency;
-			//string executionTime = (elapsedTime * 1000000).ToString("F2") + " microseconds";
 
 			return userMeta;
+		}
+
+		public List<int> GetUserRoleIds(int userId)
+		{
+			return userRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.UserId == userId).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
+		}
+
+		public List<int> GetUserPermitIds(List<int> userRoleIds)
+		{
+			return rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && userRoleIds.Contains(c.RoleId)).OrderBy(c => c.PermitID).Select(c => c.PermitID).Distinct().ToList();
 		}
 
 		public string GetUserMenuString(List<int> userRoleIds)
@@ -85,7 +83,7 @@ namespace BPX.Service
 
 			return menuString;
 		}
-	
+
 		public bool IsUserPermitted(string logintoken, int permitId)
 		{
 			// this call for permit validation is not recommended, because these database calls cannot be cached (not here)
@@ -102,14 +100,16 @@ namespace BPX.Service
 
 			return retVal;
 		}
+
 	}
 
 	public interface IAccountService
 	{
 		int GetUserId(string loginToken);
 		UserMeta GetUserMeta(int userId);
+		List<int> GetUserRoleIds(int userId);
+		List<int> GetUserPermitIds(List<int> userRoleIds);
 		string GetUserMenuString(List<int> userRoleIds);
-
 		bool IsUserPermitted(string logintoken, int permitId);
 	}
 }

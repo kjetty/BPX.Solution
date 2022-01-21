@@ -270,12 +270,12 @@ namespace BPX.Website.Areas.Identity.Controllers
             catch (Exception ex)
             {
                 // prepare data
-                string currControllerAction = "[" + currRequestMeta.controller + "." + currRequestMeta.action + "]";
+                
                 string errorStackTrace = ex.StackTrace.ToString();
                 string errorMessage = GetGarneredErrorMessage(ex);
 
                 // log
-                logger.Log(LogLevel.Error, currControllerAction + " " + errorMessage + " " + errorStackTrace);
+                logger.Log(LogLevel.Error, errorMessage + " " + errorStackTrace);
 
                 // set alert
                 ShowAlert(AlertType.Error, errorMessage);
@@ -362,12 +362,12 @@ namespace BPX.Website.Areas.Identity.Controllers
             catch (Exception ex)
             {
                 // prepare data
-                string currControllerAction = "[" + currRequestMeta.controller + "." + currRequestMeta.action + "]";
+                
                 string errorStackTrace = ex.StackTrace.ToString();
                 string errorMessage = GetGarneredErrorMessage(ex);
 
                 // log
-                logger.Log(LogLevel.Error, currControllerAction + " " + errorMessage + " " + errorStackTrace);
+                logger.Log(LogLevel.Error, errorMessage + " " + errorStackTrace);
 
                 // set alert
                 ShowAlert(AlertType.Error, errorMessage);

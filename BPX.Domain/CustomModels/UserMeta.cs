@@ -6,7 +6,6 @@ namespace BPX.Domain.CustomModels
 	public class UserMeta
 	{
 		public string LoginToken { get; set; }
-		public DateTime LastLoginDate { get; set; }
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
 		public string FullName { get; set; }
@@ -19,15 +18,14 @@ namespace BPX.Domain.CustomModels
 		public UserMeta()
 		{
 			LoginToken = string.Empty;
-			LastLoginDate = DateTime.MinValue;
 			FirstName = string.Empty;
 			LastName = string.Empty;
 			FullName = string.Empty;
 			Email = string.Empty;
 			Mobile = string.Empty;
 			UserId = 0;
-			UserRoleIds = new List<int>() { };
-			UserPermitIds = new List<int>() { };
+			UserRoleIds = null;
+			UserPermitIds = null;
 		}
 	}
 }

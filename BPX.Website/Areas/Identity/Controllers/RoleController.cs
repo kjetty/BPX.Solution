@@ -405,42 +405,10 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
 
             var role = roleService.GetRecordByID(id);
-            string cacheKey = string.Empty;
-
-            //listPermits
-            cacheKey = "permits:all";
-            List<Permit> listPermits = listPermits = cacheService.GetCache<List<Permit>>(cacheKey);
-
-            if (listPermits == null)
-            {
-                listPermits = permitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active)).OrderBy(c => c.PermitArea).ThenBy(c => c.PermitController).ThenBy(c => c.PermitName).ToList();
-                cacheService.SetCache(listPermits, cacheKey, cacheKeyService);
-            }
-
-            //listRolePermitIDs
-            cacheKey = $"role:{id}:permits";
-            List<int> listRolePermitIDs = cacheService.GetCache<List<int>>(cacheKey);
-
-            if (listRolePermitIDs == null)
-            {
-                listRolePermitIDs = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.RoleId.Equals(id)).OrderBy(c => c.PermitID).Select(c => c.PermitID).ToList();
-                cacheService.SetCache(listRolePermitIDs, cacheKey, cacheKeyService);
-            }
-
-            //listPermitAreas
-            cacheKey = $"permitareas:all";
-            List<string> listAreas = cacheService.GetCache<List<string>>(cacheKey);
-
-            if (listAreas == null)
-            {
-                listAreas = listPermits.OrderBy(c => c.PermitArea).Select(c => c.PermitArea).Distinct().ToList();
-                cacheService.SetCache(listAreas, cacheKey, cacheKeyService);
-            }
-
-            listPermits = permitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active)).OrderBy(c => c.PermitArea).ThenBy(c => c.PermitController).ThenBy(c => c.PermitName).ToList();
-            listRolePermitIDs = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.RoleId.Equals(id)).OrderBy(c => c.PermitID).Select(c => c.PermitID).ToList();
-            listAreas = listPermits.OrderBy(c => c.PermitArea).Select(c => c.PermitArea).Distinct().ToList();
-
+            var listPermits = permitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active)).OrderBy(c => c.PermitArea).ThenBy(c => c.PermitController).ThenBy(c => c.PermitName).ToList();     
+            var listRolePermitIDs = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.RoleId.Equals(id)).OrderBy(c => c.PermitID).Select(c => c.PermitID).ToList();      
+            var listAreas = listPermits.OrderBy(c => c.PermitArea).Select(c => c.PermitArea).Distinct().ToList();
+                         
             // set ViewBag
             ViewBag.role = role;
             ViewBag.listAreas = listAreas;

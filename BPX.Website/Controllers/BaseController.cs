@@ -56,7 +56,7 @@ namespace BPX.Website.Controllers
 
 						// get user data from the loginToken
 						// SECURITY - verify against the database for every request
-						int userId = coreService.GetUserId(loginToken);
+						int userId = coreService.GetUserId(claimCurrLoginToken.Value);
 
 						if (userId > 0)
 						{

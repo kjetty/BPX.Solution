@@ -66,63 +66,39 @@ namespace BPX.Website.CustomCode.Authorize
 
 				if (claimCurrLoginToken != null)
 				{
-					// get current loginToken value
-					string loginToken = claimCurrLoginToken.Value;
-
-					// verify access (process A - using optinmed database calls)
-					// avoid this call, as this function makes un-cached database calls and can be slow
-					//var accountService = (AccountService)context.HttpContext.RequestServices.GetService(typeof(IAccountService));
-					//success = accountService.IsUserPermitted(loginToken, permitId);
-
-					//OR
-
-					// verify access (process B - using cache and intersect function)
 					var coreService = (ICoreService)context.HttpContext.RequestServices.GetService(typeof(ICoreService));
-					var loginService = (ILoginService)context.HttpContext.RequestServices.GetService(typeof(ILoginService));
-					var userRoleService = (IUserRoleService)context.HttpContext.RequestServices.GetService(typeof(IUserRoleService));
-					var rolePermitService = (IRolePermitService)context.HttpContext.RequestServices.GetService(typeof(IRolePermitService));
-					//var bpxCache = (IBPXCache)context.HttpContext.RequestServices.GetService(typeof(IBPXCache));
-					//var CacheKeyService = (ICacheKeyService)context.HttpContext.RequestServices.GetService(typeof(ICacheKeyService));
+					int userId = coreService.GetUserId(claimCurrLoginToken.Value);
 
-					var login = loginService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.LoginToken.Equals(loginToken)).SingleOrDefault();
+					if (userId > 0)
+					{	
+						var cacheKey = string.Empty;
+						var cacheService = coreService.GetCacheService();
+						var cacheKeyService = coreService.GetCacheKeyService();
 
-					if (login != null)
-					{
-						int userId = login.UserId;
+						// userRoleIds
+						cacheKey = $"user:{userId}:roles";
+						var userRoleIds = cacheService.GetCache<List<int>>(cacheKey);
 
-						if (userId > 0)
+						if (userRoleIds == null)
 						{
-							string cacheKey = string.Empty;
+							userRoleIds = coreService.GetUserRoleIds(userId);
+							coreService.GetCacheService().SetCache(userRoleIds, cacheKey, cacheKeyService);
+						}
 
-							// userRoleIds
-							cacheKey = $"user:{userId}:roles";
-							var userRoleIds = coreService.GetCacheService().GetCache<List<int>>(cacheKey);
+						// permitRoleIds
+						cacheKey = $"permit:{permitId}:roles";
+						var permitRoleIds = cacheService.GetCache<List<int>>(cacheKey);
 
-							if (userRoleIds == null)
-							{
-								userRoleIds = userRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.UserId == userId).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
-								coreService.GetCacheService().SetCache(userRoleIds, cacheKey, coreService.GetCacheKeyService());
-							}
+						if (permitRoleIds == null)
+						{
+							permitRoleIds = coreService.GetPermitRoles(permitId);
+							coreService.GetCacheService().SetCache(permitRoleIds, cacheKey, cacheKeyService);
+						}
 
-							// permitRoleIds
-							cacheKey = $"permit:{permitId}:roles";
-							var permitRoleIds = coreService.GetCacheService().GetCache<List<int>>(cacheKey);
-
-							if (permitRoleIds == null)
-							{
-								permitRoleIds = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.PermitID == permitId).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
-								coreService.GetCacheService().SetCache(permitRoleIds, cacheKey, coreService.GetCacheKeyService());
-
-								//note
-								//permitRoleIds can be further refined to filter using userRoleIds, but then caching cannot be applied
-								//we are resorting to get all roles per permit [permitRoleIds] so that we can use cache for performance
-							}
-
-							// intersect to check for any matching ROLES
-							if (permitRoleIds.Any(x => userRoleIds.Any(y => y == x)))
-							{
-								success = true;
-							}
+						// intersect to check for any matching ROLES
+						if (permitRoleIds.Any(x => userRoleIds.Any(y => y == x)))
+						{
+							success = true;
 						}
 					}
 				}

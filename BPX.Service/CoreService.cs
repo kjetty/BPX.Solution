@@ -85,6 +85,11 @@ namespace BPX.Service
 			return rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && userRoleIds.Contains(c.RoleId)).OrderBy(c => c.PermitID).Select(c => c.PermitID).Distinct().ToList();
 		}
 
+		public List<int> GetPermitRoles(int permitId)
+		{
+			return rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.PermitID == permitId).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
+		}
+
 		public string GetUserMenuString(List<int> userRoleIds)
 		{
 			var menuRoleList = menuRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals("A") && userRoleIds.Contains(c.RoleId)).Select(c => c.MenuId).ToList();
@@ -113,6 +118,7 @@ namespace BPX.Service
 		UserMeta GetUserMeta(int userId);
 		List<int> GetUserRoleIds(int userId);
 		List<int> GetUserPermitIds(List<int> userRoleIds);
+		List<int> GetPermitRoles(int permitId);
 		string GetUserMenuString(List<int> userRoleIds);
 	}
 }

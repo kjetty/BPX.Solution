@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BPX.Service;
+using Microsoft.AspNetCore.Http;
 using System.Diagnostics;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace BPX.Website.MiddleWare
@@ -8,7 +11,7 @@ namespace BPX.Website.MiddleWare
 	{
 		// name of the Response Header, Custom Headers starts with "X-"  
 		private const string RESPONSE_HEADER_RESPONSE_TIME = "x-response-time";
-		
+
 		// handle to the next Middleware in the pipeline  
 		private readonly RequestDelegate _next;
 
@@ -17,12 +20,37 @@ namespace BPX.Website.MiddleWare
 			_next = next;
 		}
 
-		public Task InvokeAsync(HttpContext context)
+		public Task InvokeAsync(HttpContext context, ICoreService coreService)
 		{
 			var watch = new Stopwatch();
 			watch.Start();
 
-			context.Response.OnStarting(() => { 
+			//if (context != null)
+			//{
+			//	if (context.User != null)
+			//	{
+			//		var claimCurrLoginToken = context.User.Claims.FirstOrDefault(c => c.Type == "currLoginToken");
+
+			//		if (claimCurrLoginToken != null)
+			//		{
+			//			// get current loginToken value
+			//			string loginToken = claimCurrLoginToken.Value;
+
+			//			// get user data from the loginToken
+			//			// SECURITY - verify against the database for every request
+			//			int userId = coreService.GetUserId(claimCurrLoginToken.Value);
+
+			//			if (userId > 0)
+			//			{
+			//				context.Response.Clear();
+			//				context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+			//				return Task.CompletedTask;
+			//			}
+			//		}
+			//	}
+			//}
+
+			context.Response.OnStarting(() => {
 				watch.Stop();
 
 				var elapsedTime = watch.ElapsedMilliseconds;

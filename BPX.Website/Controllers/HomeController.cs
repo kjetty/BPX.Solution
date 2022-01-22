@@ -1,7 +1,9 @@
-﻿using BPX.Service;
+﻿using BPX.Domain.ViewModels;
+using BPX.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Diagnostics;
 
 namespace BPX.Website.Controllers
 {
@@ -94,6 +96,12 @@ namespace BPX.Website.Controllers
 		public IActionResult Privacy()
 		{
 			return View();
+		}
+
+		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+		public IActionResult Error()
+		{
+			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 		}
 	}
 }

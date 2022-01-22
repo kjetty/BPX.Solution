@@ -20,6 +20,10 @@ namespace BPX.Website.Controllers
 		public IActionResult Index()
 		{
 
+			int i = 0;
+			int j = 42 / i;
+
+
 			//var nums = new List<int> { 1, 2, 3, 54,21,678, 4,8,3,9};
 			//var result = string.Join(string.Empty, nums);
 

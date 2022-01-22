@@ -1,5 +1,7 @@
 ﻿using BPX.Domain.ViewModels;
 using BPX.Service;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -105,6 +107,17 @@ namespace BPX.Website.Controllers
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Error()
 		{
+			var exceptionFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+
+			if (exceptionFeature != null)
+			{
+				logger.Log(LogLevel.Error, exceptionFeature.Path + " " + exceptionFeature.Error.Message + " " + exceptionFeature.Error.StackTrace);
+			}
+			else
+			{
+				logger.Log(LogLevel.Error, "An exception occurred. Error unkown");
+			}
+
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 		}
 	}

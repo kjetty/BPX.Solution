@@ -20,7 +20,6 @@ namespace BPX.Website.Areas.Identity.Controllers
         private readonly IPermitService permitService;
         private readonly IRoleService roleService;
 
-
         public PermitController(ILogger<PermitController> logger, ICoreService coreService, IUserService userService, IPermitService permitService, IRoleService roleService) : base(logger, coreService)
         {
             this.userService = userService;
@@ -129,13 +128,11 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
             catch (Exception ex)
             {
-                // prepare data
-                
-                string errorStackTrace = ex.StackTrace.ToString();
-                string errorMessage = GetGarneredErrorMessage(ex);
+                // prepare data				
+                string errorMessage = GetInnerExceptionMessage(ex);
 
                 // log
-                logger.Log(LogLevel.Error, errorMessage + " " + errorStackTrace);
+                logger.Log(LogLevel.Error, ex, "PermitController.135");
 
                 // set alert
                 ShowAlert(AlertType.Error, errorMessage);
@@ -202,13 +199,11 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
             catch (Exception ex)
             {
-                // prepare data
-                
-                string errorStackTrace = ex.StackTrace.ToString();
-                string errorMessage = GetGarneredErrorMessage(ex);
+                // prepare data				
+                string errorMessage = GetInnerExceptionMessage(ex);
 
                 // log
-                logger.Log(LogLevel.Error, errorMessage + " " + errorStackTrace);
+                logger.Log(LogLevel.Error, ex, "PermitController.206");
 
                 // set alert
                 ShowAlert(AlertType.Error, errorMessage);
@@ -274,13 +269,11 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
             catch (Exception ex)
             {
-                // prepare data
-                
-                string errorStackTrace = ex.StackTrace.ToString();
-                string errorMessage = GetGarneredErrorMessage(ex);
+                // prepare data				
+                string errorMessage = GetInnerExceptionMessage(ex);
 
                 // log
-                logger.Log(LogLevel.Error, errorMessage + " " + errorStackTrace);
+                logger.Log(LogLevel.Error, ex, "PermitController.276");
 
                 // set alert
                 ShowAlert(AlertType.Error, errorMessage);
@@ -380,13 +373,11 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
             catch (Exception ex)
             {
-                // prepare data
-                
-                string errorStackTrace = ex.StackTrace.ToString();
-                string errorMessage = GetGarneredErrorMessage(ex);
+                // prepare data				
+                string errorMessage = GetInnerExceptionMessage(ex);
 
                 // log
-                logger.Log(LogLevel.Error, errorMessage + " " + errorStackTrace);
+                logger.Log(LogLevel.Error, ex, "PermitController.380");
 
                 // set alert
                 ShowAlert(AlertType.Error, errorMessage);

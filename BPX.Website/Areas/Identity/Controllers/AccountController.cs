@@ -75,7 +75,11 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex.Message + ", " + ex.StackTrace);
+                // prepare data				
+                string errorMessage = GetInnerExceptionMessage(ex);
+
+                // log
+                logger.Log(LogLevel.Error, ex, "AccountController.082");
             }
 
             ////// Developer Override for Password
@@ -269,13 +273,11 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
             catch (Exception ex)
             {
-                // prepare data
-                
-                string errorStackTrace = ex.StackTrace.ToString();
-                string errorMessage = GetGarneredErrorMessage(ex);
+                // prepare data				
+                string errorMessage = GetInnerExceptionMessage(ex);
 
                 // log
-                logger.Log(LogLevel.Error, errorMessage + " " + errorStackTrace);
+                logger.Log(LogLevel.Error, ex, "AccountController.280");
 
                 // set alert
                 ShowAlert(AlertType.Error, errorMessage);
@@ -361,13 +363,11 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
             catch (Exception ex)
             {
-                // prepare data
-                
-                string errorStackTrace = ex.StackTrace.ToString();
-                string errorMessage = GetGarneredErrorMessage(ex);
+                // prepare data				
+                string errorMessage = GetInnerExceptionMessage(ex);
 
                 // log
-                logger.Log(LogLevel.Error, errorMessage + " " + errorStackTrace);
+                logger.Log(LogLevel.Error, ex, "AccountController.370");
 
                 // set alert
                 ShowAlert(AlertType.Error, errorMessage);

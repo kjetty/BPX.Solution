@@ -129,13 +129,11 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
             catch (Exception ex)
             {
-                // prepare data
-                
-                string errorStackTrace = ex.StackTrace.ToString();
-                string errorMessage = GetGarneredErrorMessage(ex);
+                // prepare data				
+                string errorMessage = GetInnerExceptionMessage(ex);
 
                 // log
-                logger.Log(LogLevel.Error, errorMessage + " " + errorStackTrace);
+                logger.Log(LogLevel.Error, ex, "RoleController.136");
 
                 // set alert
                 ShowAlert(AlertType.Error, errorMessage);
@@ -199,13 +197,11 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
             catch (Exception ex)
             {
-                // prepare data
-                
-                string errorStackTrace = ex.StackTrace.ToString();
-                string errorMessage = GetGarneredErrorMessage(ex);
+                // prepare data				
+                string errorMessage = GetInnerExceptionMessage(ex);
 
                 // log
-                logger.Log(LogLevel.Error, errorMessage + " " + errorStackTrace);
+                logger.Log(LogLevel.Error, ex, "RoleController.204");
 
                 // set alert
                 ShowAlert(AlertType.Error, errorMessage);
@@ -271,13 +267,11 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
             catch (Exception ex)
             {
-                // prepare data
-                
-                string errorStackTrace = ex.StackTrace.ToString();
-                string errorMessage = GetGarneredErrorMessage(ex);
+                // prepare data				
+                string errorMessage = GetInnerExceptionMessage(ex);
 
                 // log
-                logger.Log(LogLevel.Error, errorMessage + " " + errorStackTrace);
+                logger.Log(LogLevel.Error, ex, "RoleController.274");
 
                 // set alert
                 ShowAlert(AlertType.Error, errorMessage);
@@ -377,13 +371,11 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
             catch (Exception ex)
             {
-                // prepare data
-                
-                string errorStackTrace = ex.StackTrace.ToString();
-                string errorMessage = GetGarneredErrorMessage(ex);
+                // prepare data				
+                string errorMessage = GetInnerExceptionMessage(ex);
 
                 // log
-                logger.Log(LogLevel.Error, errorMessage + " " + errorStackTrace);
+                logger.Log(LogLevel.Error, ex, "RoleController.378");
 
                 // set alert
                 ShowAlert(AlertType.Error, errorMessage);

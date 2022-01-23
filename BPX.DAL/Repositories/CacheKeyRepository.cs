@@ -27,17 +27,17 @@ namespace BPX.DAL.Repository
 
         public IQueryable<CacheKey> GetRecordsByFilter(Expression<Func<CacheKey, bool>> filter)
         {
-            return _context.CacheKeys.Where(filter);
+            return context.CacheKeys.Where(filter);
         }
 
         public void InsertRecord(CacheKey entity)
         {
-            _context.CacheKeys.Add(entity);
+            context.CacheKeys.Add(entity);
         }
 
         public void UpdateRecord(CacheKey entity)
         {
-            _context.Entry(entity).State = EntityState.Modified;
+            context.Entry(entity).State = EntityState.Modified;
         }
     }
 

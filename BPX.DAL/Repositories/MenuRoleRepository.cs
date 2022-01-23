@@ -23,22 +23,22 @@ namespace BPX.DAL.Repository
 
         public MenuRole GetRecordByID(int id)
         {
-            return _context.MenuRoles.Where(c => c.MenuRoleId == id).SingleOrDefault();
+            return context.MenuRoles.Where(c => c.MenuRoleId == id).SingleOrDefault();
         }
 
         public IQueryable<MenuRole> GetRecordsByFilter(Expression<Func<MenuRole, bool>> filter)
         {
-            return _context.MenuRoles.Where(filter);
+            return context.MenuRoles.Where(filter);
         }
 
         public void InsertRecord(MenuRole entity)
         {
-            _context.MenuRoles.Add(entity);
+            context.MenuRoles.Add(entity);
         }
 
         public void UpdateRecord(MenuRole entity)
         {
-            _context.Entry(entity).State = EntityState.Modified;
+            context.Entry(entity).State = EntityState.Modified;
         }
     }
 

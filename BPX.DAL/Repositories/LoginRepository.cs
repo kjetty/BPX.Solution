@@ -22,22 +22,22 @@ namespace BPX.DAL.Repository
 
         public Login GetRecordByID(int id)
         {
-            return _context.Logins.Where(c => c.UserId == id).SingleOrDefault();
+            return context.Logins.Where(c => c.UserId == id).SingleOrDefault();
         }
 
         public IQueryable<Login> GetRecordsByFilter(Expression<Func<Login, bool>> filter)
         {
-            return _context.Logins.Where(filter);
+            return context.Logins.Where(filter);
         }
 
         public void InsertRecord(Login entity)
         {
-            _context.Logins.Add(entity);
+            context.Logins.Add(entity);
         }
 
         public void UpdateRecord(Login entity)
         {
-            _context.Entry(entity).State = EntityState.Modified;
+            context.Entry(entity).State = EntityState.Modified;
         }
     }
 

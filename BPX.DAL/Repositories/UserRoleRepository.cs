@@ -22,22 +22,22 @@ namespace BPX.DAL.Repository
 
         public UserRole GetRecordByID(int id)
         {
-            return _context.UserRoles.Where(c => c.UserRoleId == id).SingleOrDefault();
+            return context.UserRoles.Where(c => c.UserRoleId == id).SingleOrDefault();
         }
 
         public IQueryable<UserRole> GetRecordsByFilter(Expression<Func<UserRole, bool>> filter)
         {
-            return _context.UserRoles.Where(filter);
+            return context.UserRoles.Where(filter);
         }
 
         public void InsertRecord(UserRole entity)
         {
-            _context.UserRoles.Add(entity);
+            context.UserRoles.Add(entity);
         }
 
         public void UpdateRecord(UserRole entity)
         {
-            _context.Entry(entity).State = EntityState.Modified;
+            context.Entry(entity).State = EntityState.Modified;
         }
     }
 

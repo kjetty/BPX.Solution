@@ -35,7 +35,7 @@ namespace BPX.DAL.Repository
             searchForString = searchForString.Length == 0 ? string.Empty : searchForString;
 
             // get model : IQueryable : apply statusFlag
-            var model = _context.Permits.Where(c => c.StatusFlag == statusFlag);
+            var model = context.Permits.Where(c => c.StatusFlag == statusFlag);
 
             // apply search
             if (searchForString.Length > 0)
@@ -76,22 +76,22 @@ namespace BPX.DAL.Repository
 
         public Permit GetRecordByID(int id)
         {
-            return _context.Permits.Where(c => c.PermitID == id).SingleOrDefault();
+            return context.Permits.Where(c => c.PermitID == id).SingleOrDefault();
         }
 
         public IQueryable<Permit> GetRecordsByFilter(Expression<Func<Permit, bool>> filter)
         {
-            return _context.Permits.Where(filter);
+            return context.Permits.Where(filter);
         }
 
         public void InsertRecord(Permit entity)
         {
-            _context.Permits.Add(entity);
+            context.Permits.Add(entity);
         }
 
         public void UpdateRecord(Permit entity)
         {
-            _context.Entry(entity).State = EntityState.Modified;
+            context.Entry(entity).State = EntityState.Modified;
         }
     }
 

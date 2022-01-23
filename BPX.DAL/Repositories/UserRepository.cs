@@ -35,7 +35,7 @@ namespace BPX.DAL.Repository
             searchForString = searchForString.Length == 0 ? string.Empty : searchForString;
 
             // get model : IQueryable : apply statusFlag
-            var model = _context.Users.Where(c => c.StatusFlag == statusFlag);
+            var model = context.Users.Where(c => c.StatusFlag == statusFlag);
 
             // apply search
             if (searchForString.Length > 0)
@@ -71,22 +71,22 @@ namespace BPX.DAL.Repository
 
         public User GetRecordByID(int id)
         {
-            return _context.Users.Where(c => c.UserId == id).SingleOrDefault();
+            return context.Users.Where(c => c.UserId == id).SingleOrDefault();
         }
 
         public IQueryable<User> GetRecordsByFilter(Expression<Func<User, bool>> filter)
         {
-            return _context.Users.Where(filter);
+            return context.Users.Where(filter);
         }
 
         public void InsertRecord(User entity)
         {
-            _context.Users.Add(entity);
+            context.Users.Add(entity);
         }
 
         public void UpdateRecord(User entity)
         {
-            _context.Entry(entity).State = EntityState.Modified;
+            context.Entry(entity).State = EntityState.Modified;
         }
     }
 

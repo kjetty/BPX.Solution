@@ -22,22 +22,22 @@ namespace BPX.DAL.Repository
 
         public RolePermit GetRecordByID(int id)
         {
-            return _context.RolePermits.Where(c => c.RolePermitID == id).SingleOrDefault();
+            return context.RolePermits.Where(c => c.RolePermitID == id).SingleOrDefault();
         }
 
         public IQueryable<RolePermit> GetRecordsByFilter(Expression<Func<RolePermit, bool>> filter)
         {
-            return _context.RolePermits.Where(filter);
+            return context.RolePermits.Where(filter);
         }
 
         public void InsertRecord(RolePermit entity)
         {
-            _context.RolePermits.Add(entity);
+            context.RolePermits.Add(entity);
         }
 
         public void UpdateRecord(RolePermit entity)
         {
-            _context.Entry(entity).State = EntityState.Modified;
+            context.Entry(entity).State = EntityState.Modified;
         }
     }
 

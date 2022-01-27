@@ -132,6 +132,8 @@ namespace BPX.Website.Controllers
 								//double elapsedTime = (double)watch.ElapsedTicks / (double)Stopwatch.Frequency;
 								//string executionTime = (elapsedTime * 1000000).ToString("F2") + " microseconds";
 								//ShowAlert(AlertType.Info, $"Execution Time: {executionTime}");
+
+								ShowAlert(AlertType.Info, "test message");
 							}
 						}
 					}

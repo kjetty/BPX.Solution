@@ -130,7 +130,7 @@ CREATE TABLE MenuPermits (
     ModifiedDate      datetime            NOT NULL,
     PRIMARY KEY CLUSTERED (MenuPermitId ASC),
     CONSTRAINT FK_Menus_Permits_MenuId FOREIGN KEY (MenuId) REFERENCES Menus (MenuId),
-    CONSTRAINT FK_Menus_Permits_PermitId FOREIGN KEY (MenuId) REFERENCES Permits (PermitId)
+    CONSTRAINT FK_Menus_Permits_PermitId FOREIGN KEY (PermitId) REFERENCES Permits (PermitId)
 );
 
 --users

@@ -4,8 +4,8 @@ alter table RolePermits drop constraint FK_Roles_Permits_RoleId;
 alter table RolePermits drop constraint FK_Roles_Permits_PermitId;
 alter table UserRoles drop constraint FK_Users_Roles_UserId;
 alter table UserRoles drop constraint FK_Users_Roles_RoleId;
-alter table MenuRoles drop constraint FK_Menus_Roles_MenuId;
-alter table MenuRoles drop constraint FK_Menus_Roles_RoleId;
+alter table MenuPermits drop constraint FK_Menus_Permits_MenuId;
+alter table MenuPermits drop constraint FK_Menus_Permits_PermitId;
 
 --delete constraints
 alter table Permits drop constraint UC_Permits_PermitEnum;
@@ -16,7 +16,7 @@ alter table Logins drop constraint UC_Logins_UserId;
 --drop tables
 DROP TABLE RolePermits;
 DROP TABLE UserRoles;
-DROP TABLE MenuRoles;
+DROP TABLE MenuPermits;
 DROP TABLE Permits;
 DROP TABLE Roles;
 DROP TABLE Logins;
@@ -121,16 +121,16 @@ CREATE TABLE UserRoles (
     CONSTRAINT FK_Users_Roles_RoleId FOREIGN KEY (RoleId) REFERENCES Roles (RoleId)
 );
 
-CREATE TABLE MenuRoles (
-    MenuRoleId        int IDENTITY(1,1)   NOT NULL,
+CREATE TABLE MenuPermits (
+    MenuPermitId      int IDENTITY(1,1)   NOT NULL,
     MenuId            int                 NOT NULL,
-    RoleId            int                 NOT NULL,
+    PermitId          int                 NOT NULL,
     StatusFlag        char(1)             NOT NULL,
     ModifiedBy        int                 NOT NULL,
     ModifiedDate      datetime            NOT NULL,
-    PRIMARY KEY CLUSTERED (MenuRoleId ASC),
-    CONSTRAINT FK_Menus_Roles_MenuId FOREIGN KEY (MenuId) REFERENCES Menus (MenuId),
-    CONSTRAINT FK_Menus_Roles_RoleId FOREIGN KEY (RoleId) REFERENCES Roles (RoleId)
+    PRIMARY KEY CLUSTERED (MenuPermitId ASC),
+    CONSTRAINT FK_Menus_Permits_MenuId FOREIGN KEY (MenuId) REFERENCES Menus (MenuId),
+    CONSTRAINT FK_Menus_Permits_PermitId FOREIGN KEY (MenuId) REFERENCES Permits (PermitId)
 );
 
 --users
@@ -344,8 +344,7 @@ insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNum
 insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,StatusFlag,ModifiedBy,ModifiedDate) values ('Permit',null,'/Identity/Permit',0,0,3,'A',1,getDate());
 insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,StatusFlag,ModifiedBy,ModifiedDate) values ('Account',null,'/Identity/Account',0,0,3,'A',1,getDate());
 
---menuRoles
-insert into MenuRoles (MenuId,RoleId,StatusFlag,ModifiedBy,ModifiedDate) values ('3','1','A',1,getDate());
-insert into MenuRoles (MenuId,RoleId,StatusFlag,ModifiedBy,ModifiedDate) values ('4','1','A',1,getDate());
-insert into MenuRoles (MenuId,RoleId,StatusFlag,ModifiedBy,ModifiedDate) values ('5','1','A',1,getDate());
-
+--MenuPermits
+insert into MenuPermits (MenuId,PermitId,StatusFlag,ModifiedBy,ModifiedDate) values ('3','3','A',1,getDate());
+insert into MenuPermits (MenuId,PermitId,StatusFlag,ModifiedBy,ModifiedDate) values ('4','9','A',1,getDate());
+insert into MenuPermits (MenuId,PermitId,StatusFlag,ModifiedBy,ModifiedDate) values ('5','21','A',1,getDate());

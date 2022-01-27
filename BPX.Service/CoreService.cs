@@ -1,4 +1,5 @@
 ﻿using BPX.Domain.CustomModels;
+using BPX.Domain.DbModels;
 using BPX.Utils;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -107,6 +108,65 @@ namespace BPX.Service
 
 			return menuString;
 		}
+
+		public string xxxGenerateMenu()
+		{
+			string menuString = string.Empty;
+
+
+			return menuString;
+
+
+			//var listMenu = new JVKDbContext().Menus.Where(c => c.StatusFlag == "A").ToList();
+
+			////get root or home
+			//var root = listMenu.Where(c => c.ParentMenuUID == "the-root").SingleOrDefault();
+
+			////start adding children to the root
+			//AddChildMenuItems(listMenu, root);
+
+			//currMenuString = currMenuString.Trim();
+			//currMenuString = new Regex("dropdown-menu").Replace(currMenuString, "nav navbar-nav", 1);
+			//currMenuString = currMenuString.Trim();
+
+			//return currMenuString;
+		}
+
+		private void xxxAddChildMenuItems(List<Menu> listMenu, Menu menu)
+		{
+			//var listMenuChildren = listMenu.Where(c => c.ParentMenuUID == menu.MenuUID).OrderBy(c => c.OrderNumber).ToList();
+
+			//if (listMenuChildren.Count > 0)
+			//{
+			//	currMenuString += "<ul class=\"dropdown-menu\">";
+
+			//	foreach (var item in listMenuChildren)
+			//	{
+			//		currMenuString += "<li>";
+
+			//		//if current item has children
+			//		if (listMenu.Where(c => c.ParentMenuUID == item.MenuUID).ToList().Count > 0)
+			//		{
+			//			if (item.HLevel > 2)
+			//				currMenuString += "<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">" + item.MenuName + "<b class=\"caret-right\"></b></a>";
+			//			else
+			//				currMenuString += "<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">" + item.MenuName + "<b class=\"caret\"></b></a>";
+			//		}
+			//		else
+			//		{
+			//			currMenuString += "<a href=\"" + item.MenuURL + "\">" + item.MenuName + "</a>";
+			//		}
+
+			//		//make recursive calls to add children
+			//		AddChildMenuItems(listMenu, item);
+
+			//		currMenuString += "</li>";
+			//	}
+
+			//	currMenuString += "</ul>";
+			//}
+		}
+
 	}
 
 	public interface ICoreService

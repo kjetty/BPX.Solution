@@ -143,12 +143,12 @@ namespace BPX.Website.Controllers
 		private List<Menu> GetMenuHierarchy()
 		{
 			// get menuHierarchy
-			string cacheKey = "menu:all";
+			string cacheKey = "menu:hierarchy";
 			List<Menu> menuHierarchy = cacheService.GetCache<List<Menu>>(cacheKey);
 
 			if (menuHierarchy == null)
 			{
-				menuHierarchy = coreService.GetMenuAll();
+				menuHierarchy = coreService.GetMenuHierarchy();
 				cacheService.SetCache(menuHierarchy, cacheKey, cacheKeyService);
 			}
 

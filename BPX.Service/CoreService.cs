@@ -93,7 +93,7 @@ namespace BPX.Service
 			return rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.PermitID == permitId).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
 		}
 
-		public List<Menu> GetMenuAll()
+		public List<Menu> GetMenuHierarchy()
 		{
 			return menuService.GetMenuHierarchy();
 		}	
@@ -230,7 +230,7 @@ namespace BPX.Service
 		List<int> GetUserRoleIds(int userId);
 		List<int> GetUserPermitIds(List<int> userRoleIds);
 		List<int> GetPermitRoles(int permitId);
-		List<Menu> GetMenuAll();
-		string GetMenuString(List<int> userPermitIds, List<Menu> menuAll);
+		List<Menu> GetMenuHierarchy();
+		string GetMenuString(List<int> userPermitIds, List<Menu> menuHierarchy);
 	}
 }

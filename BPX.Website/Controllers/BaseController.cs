@@ -102,7 +102,7 @@ namespace BPX.Website.Controllers
 
 								if (currMenuString == null)
 								{
-									currMenuString = coreService.GetUserMenuString(currUserMeta.UserRoleIds);
+									currMenuString = coreService.GetMenuString(currUserMeta.UserPermitIds);
 									cacheService.SetCache(currMenuString, cacheKey, cacheKeyService);
 								}								
 

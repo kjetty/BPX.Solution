@@ -19,6 +19,7 @@ namespace BPX.Service
 		private readonly IRolePermitService rolePermitService;
 		private readonly IMenuService menuService;
 		private readonly IMenuPermitService menuRoleService;
+		private string menuString;
 
 		public CoreService(IConfiguration configuration, ICacheService cacheService, ICacheKeyService cacheKeyService, ILoginService loginService, IUserService userService, IUserRoleService userRoleService, IRolePermitService rolePermitService, IMenuService menuService, IMenuPermitService menuRoleService)
 		{
@@ -31,6 +32,7 @@ namespace BPX.Service
 			this.rolePermitService = rolePermitService;
 			this.menuService = menuService;
 			this.menuRoleService = menuRoleService;
+			this.menuString = string.Empty;
 		}
 
 		public ICacheKeyService GetCacheKeyService()
@@ -91,82 +93,83 @@ namespace BPX.Service
 			return rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.PermitID == permitId).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
 		}
 
-		public string GetUserMenuString(List<int> userPermitIds)
+		public string GetMenuString(List<int> userPermitIds)
 		{
-			//var menuRoleList = menuRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals("A") && userPermitIds.Contains(c.PermitId)).Select(c => c.MenuId).ToList();
-			//var menuList = menuService.GetRecordsByFilter(c => c.StatusFlag.Equals("A")).ToList();
+			menuString = string.Empty;
+			var menuList = menuService.GetRecordsByFilter(c => c.StatusFlag.Equals("A")).OrderBy(c => c.OrderNumber).ToList();
+			var root = menuList.Where(c => c.ParentMenuId.Equals(0)).SingleOrDefault();
 
-			string menuString = string.Empty;
-
-			//foreach (var itemMenu in menuList)
-			//{
-			//	if (menuRoleList.Contains(itemMenu.MenuId))
-			//	{
-			//		menuString += $"<li class=\"nav-item\"><a class=\"nav-link text-dark\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName}</a></li>";
-			//	}
-			//}
+			//AddRoot(menuList, root);
+			AddMenuItemsLevelOne(menuList, root);
 
 			return menuString;
 		}
 
-		public string xxxGenerateMenu()
+		private void AddRoot(List<Menu> menuList, Menu menu)
 		{
-			string menuString = string.Empty;
-
-
-			return menuString;
-
-
-			//var listMenu = new JVKDbContext().Menus.Where(c => c.StatusFlag == "A").ToList();
-
-			////get root or home
-			//var root = listMenu.Where(c => c.ParentMenuUID == "the-root").SingleOrDefault();
-
-			////start adding children to the root
-			//AddChildMenuItems(listMenu, root);
-
-			//currMenuString = currMenuString.Trim();
-			//currMenuString = new Regex("dropdown-menu").Replace(currMenuString, "nav navbar-nav", 1);
-			//currMenuString = currMenuString.Trim();
-
-			//return currMenuString;
+			menuString += "<li>";
+			menuString += $"<a class=\"nav-link\" href=\"{menu.MenuURL}\">{menu.MenuName}</a>";
+			menuString += "</li>";
 		}
 
-		private void xxxAddChildMenuItems(List<Menu> listMenu, Menu menu)
+		private void AddMenuItemsLevelOne(List<Menu> menuList, Menu menu)
 		{
-			//var listMenuChildren = listMenu.Where(c => c.ParentMenuUID == menu.MenuUID).OrderBy(c => c.OrderNumber).ToList();
+			var levelOneMenuItems = menuList.Where(c => c.ParentMenuId.Equals(menu.MenuId)).ToList();
 
-			//if (listMenuChildren.Count > 0)
-			//{
-			//	currMenuString += "<ul class=\"dropdown-menu\">";
+			if (levelOneMenuItems.Count > 0)
+			{
+				foreach (var itemMenu in levelOneMenuItems)
+				{
+					menuString += "<li class=\"dropdown\">";
+					menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName}</a>";
 
-			//	foreach (var item in listMenuChildren)
-			//	{
-			//		currMenuString += "<li>";
+					AddMenuItemsLevelTwo(menuList, itemMenu);
 
-			//		//if current item has children
-			//		if (listMenu.Where(c => c.ParentMenuUID == item.MenuUID).ToList().Count > 0)
-			//		{
-			//			if (item.HLevel > 2)
-			//				currMenuString += "<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">" + item.MenuName + "<b class=\"caret-right\"></b></a>";
-			//			else
-			//				currMenuString += "<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">" + item.MenuName + "<b class=\"caret\"></b></a>";
-			//		}
-			//		else
-			//		{
-			//			currMenuString += "<a href=\"" + item.MenuURL + "\">" + item.MenuName + "</a>";
-			//		}
-
-			//		//make recursive calls to add children
-			//		AddChildMenuItems(listMenu, item);
-
-			//		currMenuString += "</li>";
-			//	}
-
-			//	currMenuString += "</ul>";
-			//}
+					menuString += "</li>";
+				}
+			}
 		}
 
+		private void AddMenuItemsLevelTwo(List<Menu> menuList, Menu menu)
+		{
+			var levelTwoMenuItems = menuList.Where(c => c.ParentMenuId.Equals(menu.MenuId)).ToList();
+
+			if (levelTwoMenuItems.Count > 0)
+			{
+				menuString += "<ul>";
+
+				foreach (var itemMenu in levelTwoMenuItems)
+				{
+					menuString += "<li class=\"dropdown\">";
+					menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName}</a>";
+
+					AddMenuItemsLevelThree(menuList, itemMenu);
+
+					menuString += "</li>";
+				}
+
+				menuString += "</ul>";
+			}
+		}
+
+		private void AddMenuItemsLevelThree(List<Menu> menuList, Menu menu)
+		{
+			var levelTwoMenuItems = menuList.Where(c => c.ParentMenuId.Equals(menu.MenuId)).ToList();
+
+			if (levelTwoMenuItems.Count > 0)
+			{
+				menuString += "<ul>";
+
+				foreach (var itemMenu in levelTwoMenuItems)
+				{
+					menuString += "<li>";
+					menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName}</a>";
+					menuString += "</li>";
+				}
+
+				menuString += "</ul>";
+			}
+		}
 	}
 
 	public interface ICoreService
@@ -179,6 +182,6 @@ namespace BPX.Service
 		List<int> GetUserRoleIds(int userId);
 		List<int> GetUserPermitIds(List<int> userRoleIds);
 		List<int> GetPermitRoles(int permitId);
-		string GetUserMenuString(List<int> userRoleIds);
+		string GetMenuString(List<int> userRoleIds);
 	}
 }

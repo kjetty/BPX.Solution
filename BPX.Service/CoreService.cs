@@ -18,9 +18,9 @@ namespace BPX.Service
 		private readonly IUserRoleService userRoleService;
 		private readonly IRolePermitService rolePermitService;
 		private readonly IMenuService menuService;
-		private readonly IMenuRoleService menuRoleService;
+		private readonly IMenuPermitService menuRoleService;
 
-		public CoreService(IConfiguration configuration, ICacheService cacheService, ICacheKeyService cacheKeyService, ILoginService loginService, IUserService userService, IUserRoleService userRoleService, IRolePermitService rolePermitService, IMenuService menuService, IMenuRoleService menuRoleService)
+		public CoreService(IConfiguration configuration, ICacheService cacheService, ICacheKeyService cacheKeyService, ILoginService loginService, IUserService userService, IUserRoleService userRoleService, IRolePermitService rolePermitService, IMenuService menuService, IMenuPermitService menuRoleService)
 		{
 			this.configuration = configuration;
 			this.cacheService = cacheService;
@@ -91,20 +91,20 @@ namespace BPX.Service
 			return rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.PermitID == permitId).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
 		}
 
-		public string GetUserMenuString(List<int> userRoleIds)
+		public string GetUserMenuString(List<int> userPermitIds)
 		{
-			var menuRoleList = menuRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals("A") && userRoleIds.Contains(c.RoleId)).Select(c => c.MenuId).ToList();
-			var menuList = menuService.GetRecordsByFilter(c => c.StatusFlag.Equals("A")).ToList();
+			//var menuRoleList = menuRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals("A") && userPermitIds.Contains(c.PermitId)).Select(c => c.MenuId).ToList();
+			//var menuList = menuService.GetRecordsByFilter(c => c.StatusFlag.Equals("A")).ToList();
 
 			string menuString = string.Empty;
 
-			foreach (var itemMenu in menuList)
-			{
-				if (menuRoleList.Contains(itemMenu.MenuId))
-				{
-					menuString += $"<li class=\"nav-item\"><a class=\"nav-link text-dark\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName}</a></li>";
-				}
-			}
+			//foreach (var itemMenu in menuList)
+			//{
+			//	if (menuRoleList.Contains(itemMenu.MenuId))
+			//	{
+			//		menuString += $"<li class=\"nav-item\"><a class=\"nav-link text-dark\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName}</a></li>";
+			//	}
+			//}
 
 			return menuString;
 		}

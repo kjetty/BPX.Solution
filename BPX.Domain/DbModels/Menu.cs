@@ -7,7 +7,7 @@ namespace BPX.Domain.DbModels
     {
         public Menu()
         {
-            //MenuRoles = new HashSet<MenuRole>();
+            //MenuPermits = new HashSet<MenuPermit>();
         }
 
         [Key]
@@ -40,6 +40,6 @@ namespace BPX.Domain.DbModels
         [Required]
         public DateTime ModifiedDate { get; set; }
 
-        //public virtual ICollection<MenuRole> MenuRoles { get; set; }
+        //public virtual ICollection<MenuPermit> MenuPermits { get; set; }
     }
 }

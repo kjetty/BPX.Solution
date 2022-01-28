@@ -45,7 +45,7 @@ namespace BPX.Website
 			services.AddScoped<IRolePermitRepository, RolePermitRepository>();
 			services.AddScoped<ICacheKeyRepository, CacheKeyRepository>();
 			services.AddScoped<IMenuRepository, MenuRepository>();
-			services.AddScoped<IMenuRoleRepository, MenuRoleRepository>();
+			services.AddScoped<IMenuPermitRepository, MenuPermitRepository>();
 
 			// inject services
 			services.AddScoped<ICoreService, CoreService>();
@@ -57,7 +57,7 @@ namespace BPX.Website
             services.AddScoped<IPermitService, PermitService>();
 			services.AddScoped<IRolePermitService, RolePermitService>();
 			services.AddScoped<IMenuService, MenuService>();
-			services.AddScoped<IMenuRoleService, MenuRoleService>();			
+			services.AddScoped<IMenuPermitService, MenuPermitService>();			
 
 			// authentication and cookie options
 			services

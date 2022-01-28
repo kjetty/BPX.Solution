@@ -7,31 +7,31 @@ using X.PagedList;
 
 namespace BPX.Service
 {
-    public class MenuRoleService : IMenuRoleService
+    public class MenuPermitService : IMenuPermitService
     {
-        public MenuRoleRepository menuRoleRepository;
+        public MenuPermitRepository menuRoleRepository;
 
-        public MenuRoleService(IMenuRoleRepository menuRoleRepository)
+        public MenuPermitService(IMenuPermitRepository menuRoleRepository)
         {
-            this.menuRoleRepository = (MenuRoleRepository)menuRoleRepository;
+            this.menuRoleRepository = (MenuPermitRepository)menuRoleRepository;
         }
 
-        public IPagedList<MenuRole> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
+        public IPagedList<MenuPermit> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
         {
             throw new NotImplementedException();
         }
 
-        public MenuRole GetRecordByID(int id)
+        public MenuPermit GetRecordByID(int id)
         {
             return menuRoleRepository.GetRecordByID(id);
         }
 
-        public IQueryable<MenuRole> GetRecordsByFilter(Expression<Func<MenuRole, bool>> filter)
+        public IQueryable<MenuPermit> GetRecordsByFilter(Expression<Func<MenuPermit, bool>> filter)
         {
             return menuRoleRepository.GetRecordsByFilter(filter);
         }
 
-        public void InsertRecord(MenuRole entity)
+        public void InsertRecord(MenuPermit entity)
         {
             //...
             //business rules validation, if any
@@ -40,7 +40,7 @@ namespace BPX.Service
             menuRoleRepository.InsertRecord(entity);
         }
 
-        public void UpdateRecord(MenuRole entity)
+        public void UpdateRecord(MenuPermit entity)
         {
             //...
             //business rules validation, if any
@@ -55,7 +55,7 @@ namespace BPX.Service
         }
     }
 
-    public interface IMenuRoleService : IGenericService<MenuRole>
+    public interface IMenuPermitService : IGenericService<MenuPermit>
     {
     }
 }

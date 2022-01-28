@@ -93,57 +93,73 @@ namespace BPX.Service
 			return rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.PermitID == permitId).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
 		}
 
-		public string GetMenuString(List<int> userPermitIds)
+		public List<Menu> GetMenuAll()
+		{
+			return menuService.GetMenuHierarchy();
+		}	
+
+		public string GetMenuString(List<int> userPermitIds, List<Menu> menuAll)
 		{
 			menuString = string.Empty;
-			var menuList = menuService.GetRecordsByFilter(c => c.StatusFlag.Equals("A")).OrderBy(c => c.OrderNumber).ToList();
-			var root = menuList.Where(c => c.ParentMenuId.Equals(0)).SingleOrDefault();
 
-			//AddRoot(menuList, root);
-			AddMenuItemsLevelOne(menuList, root);
+			// todo :: get TreePath(s) from userPermitIds
+
+
+
+			// generate the menuString
+			AddMenuItemsLevelOne(menuAll, AddRoot(menuAll));
 
 			return menuString;
 		}
 
-		private void AddRoot(List<Menu> menuList, Menu menu)
+		private Menu AddRoot(List<Menu> menuAll)
 		{
+			var root = menuAll.Where(c => c.ParentMenuId.Equals(0)).SingleOrDefault();
+
 			menuString += "<li>";
-			menuString += $"<a class=\"nav-link\" href=\"{menu.MenuURL}\">{menu.MenuName}</a>";
+			menuString += $"<a class=\"nav-link\" href=\"{root.MenuURL}\">{root.MenuName}</a>";
 			menuString += "</li>";
+
+			return root;
 		}
 
-		private void AddMenuItemsLevelOne(List<Menu> menuList, Menu menu)
+		private void AddMenuItemsLevelOne(List<Menu> menuAll, Menu menu)
 		{
-			var levelOneMenuItems = menuList.Where(c => c.ParentMenuId.Equals(menu.MenuId)).ToList();
+			var levelOneMenuItems = menuAll.Where(c => c.ParentMenuId.Equals(menu.MenuId)).ToList();
 
 			if (levelOneMenuItems.Count > 0)
 			{
 				foreach (var itemMenu in levelOneMenuItems)
 				{
-					var levelTwoMenuItems = menuList.Where(c => c.ParentMenuId.Equals(itemMenu.MenuId)).ToList();
+					//string allowedTreePath = ".1.3.17.45.";
 
-					if (levelTwoMenuItems.Count > 0)
+					//if (allowedTreePath.StartsWith(itemMenu.TreePath))
 					{
-						menuString += "<li class=\"dropdown\">";
-						menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName} <i class=\"bi bi-chevron-down\"></i></a>";
+						var levelTwoMenuItems = menuAll.Where(c => c.ParentMenuId.Equals(itemMenu.MenuId)).ToList();
 
-						AddMenuItemsLevelTwo(menuList, itemMenu);
+						if (levelTwoMenuItems.Count > 0)
+						{
+							menuString += "<li class=\"dropdown\">";
+							menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName} <i class=\"bi bi-chevron-down\"></i></a>";
 
-						menuString += "</li>";
+							AddMenuItemsLevelTwo(menuAll, itemMenu);
+
+							menuString += "</li>";
+						}
+						else
+						{
+							menuString += "<li>";
+							menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName}</a>";
+							menuString += "</li>";
+						}
 					}
-					else
-					{
-						menuString += "<li>";
-						menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName}</a>";
-						menuString += "</li>";
-					}					
 				}
 			}
 		}
 
-		private void AddMenuItemsLevelTwo(List<Menu> menuList, Menu menu)
+		private void AddMenuItemsLevelTwo(List<Menu> menuAll, Menu menu)
 		{
-			var levelTwoMenuItems = menuList.Where(c => c.ParentMenuId.Equals(menu.MenuId)).ToList();
+			var levelTwoMenuItems = menuAll.Where(c => c.ParentMenuId.Equals(menu.MenuId)).ToList();
 
 			if (levelTwoMenuItems.Count > 0)
 			{
@@ -151,22 +167,27 @@ namespace BPX.Service
 
 				foreach (var itemMenu in levelTwoMenuItems)
 				{
-					var levelThreeMenuItems = menuList.Where(c => c.ParentMenuId.Equals(itemMenu.MenuId)).ToList();
+					//string allowedTreePath = ".1.3.17.45.";
 
-					if (levelThreeMenuItems.Count > 0)
+					//if (allowedTreePath.StartsWith(itemMenu.TreePath))
 					{
-						menuString += "<li class=\"dropdown\">";
-						menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName} <i class=\"bi bi-chevron-right\"></i></a>";
+						var levelThreeMenuItems = menuAll.Where(c => c.ParentMenuId.Equals(itemMenu.MenuId)).ToList();
 
-						AddMenuItemsLevelThree(menuList, itemMenu);
+						if (levelThreeMenuItems.Count > 0)
+						{
+							menuString += "<li class=\"dropdown\">";
+							menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName} <i class=\"bi bi-chevron-right\"></i></a>";
 
-						menuString += "</li>";
-					}
-					else
-					{
-						menuString += "<li>";
-						menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName}</a>";
-						menuString += "</li>";
+							AddMenuItemsLevelThree(menuAll, itemMenu);
+
+							menuString += "</li>";
+						}
+						else
+						{
+							menuString += "<li>";
+							menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName}</a>";
+							menuString += "</li>";
+						}
 					}
 				}
 
@@ -174,9 +195,9 @@ namespace BPX.Service
 			}
 		}
 
-		private void AddMenuItemsLevelThree(List<Menu> menuList, Menu menu)
+		private void AddMenuItemsLevelThree(List<Menu> menuAll, Menu menu)
 		{
-			var levelThreeMenuItems = menuList.Where(c => c.ParentMenuId.Equals(menu.MenuId)).ToList();
+			var levelThreeMenuItems = menuAll.Where(c => c.ParentMenuId.Equals(menu.MenuId)).ToList();
 
 			if (levelThreeMenuItems.Count > 0)
 			{
@@ -184,9 +205,14 @@ namespace BPX.Service
 
 				foreach (var itemMenu in levelThreeMenuItems)
 				{
-					menuString += "<li>";
-					menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName}</a>";
-					menuString += "</li>";
+					//string allowedTreePath = ".1.3.17.45.";
+
+					//if (allowedTreePath.StartsWith(itemMenu.TreePath))
+					{
+						menuString += "<li>";
+						menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName}</a>";
+						menuString += "</li>";
+					}
 				}
 
 				menuString += "</ul>";
@@ -204,6 +230,7 @@ namespace BPX.Service
 		List<int> GetUserRoleIds(int userId);
 		List<int> GetUserPermitIds(List<int> userRoleIds);
 		List<int> GetPermitRoles(int permitId);
-		string GetMenuString(List<int> userPermitIds);
+		List<Menu> GetMenuAll();
+		string GetMenuString(List<int> userPermitIds, List<Menu> menuAll);
 	}
 }

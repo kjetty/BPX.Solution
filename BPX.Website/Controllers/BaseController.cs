@@ -1,4 +1,5 @@
 ﻿using BPX.Domain.CustomModels;
+using BPX.Domain.DbModels;
 using BPX.Domain.ViewModels;
 using BPX.Service;
 using BPX.Utils;
@@ -95,14 +96,14 @@ namespace BPX.Website.Controllers
 									currUserMeta.UserPermitIds = coreService.GetUserPermitIds(currUserMeta.UserRoleIds);
 									cacheService.SetCache(currUserMeta.UserPermitIds, cacheKey, cacheKeyService);
 								}
-																
+
 								// get menuBar
-								cacheKey = $"roles:{string.Join(string.Empty, currUserMeta.UserRoleIds)}:menu";
+								cacheKey = $"roles:{string.Join(".", currUserMeta.UserRoleIds)}:menu";
 								currMenuString = cacheService.GetCache<string>(cacheKey);
 
 								if (currMenuString == null)
 								{
-									currMenuString = coreService.GetMenuString(currUserMeta.UserPermitIds);
+									currMenuString = coreService.GetMenuString(currUserMeta.UserPermitIds, GetMenuAll());
 									cacheService.SetCache(currMenuString, cacheKey, cacheKeyService);
 								}								
 
@@ -139,6 +140,21 @@ namespace BPX.Website.Controllers
 					}
 				}
 			}
+		}
+
+		private List<Menu> GetMenuAll()
+		{
+			// get menuHierarchy
+			string cacheKey = "menu:all";
+			List<Menu> menuAll = cacheService.GetCache<List<Menu>>(cacheKey);
+
+			if (menuAll == null)
+			{
+				menuAll = coreService.GetMenuAll();
+				cacheService.SetCache(menuAll, cacheKey, cacheKeyService);
+			}
+
+			return menuAll;
 		}
 
 		protected void ShowAlertBox(AlertType alertType, string alertMessage)

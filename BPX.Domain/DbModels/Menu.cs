@@ -30,6 +30,9 @@ namespace BPX.Domain.DbModels
 
         public int OrderNumber { get; set; }
 
+        [StringLength(32)]
+        public string TreePath { get; set; }
+
         [Required]
         [StringLength(1)]
         public string StatusFlag { get; set; }

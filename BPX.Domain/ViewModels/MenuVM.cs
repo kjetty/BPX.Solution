@@ -33,6 +33,9 @@ namespace BPX.Domain.ViewModels
         [Display(Name = "Order Number")]
         public int OrderNumber { get; set; }
 
+        [StringLength(32)]
+        [Display(Name = "Tree Path")]
+        public string TreePath { get; set; }
 
         public static explicit operator MenuMiniViewModel(Menu dm)
         {

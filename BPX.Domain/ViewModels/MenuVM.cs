@@ -51,7 +51,8 @@ namespace BPX.Domain.ViewModels
                 MenuURL = dm.MenuURL,
                 ParentMenuId = dm.ParentMenuId,
                 HLevel = dm.HLevel,
-                OrderNumber = dm.OrderNumber
+                OrderNumber = dm.OrderNumber,
+                TreePath = dm.TreePath
             };
         }
 
@@ -69,7 +70,8 @@ namespace BPX.Domain.ViewModels
                 MenuURL = vm.MenuURL,
                 ParentMenuId = vm.ParentMenuId,
                 HLevel = vm.HLevel,
-                OrderNumber = vm.OrderNumber
+                OrderNumber = vm.OrderNumber,
+                TreePath = vm.TreePath
             };
         }
     }
@@ -104,6 +106,7 @@ namespace BPX.Domain.ViewModels
                 ParentMenuId = dm.ParentMenuId,
                 HLevel = dm.HLevel,
                 OrderNumber = dm.OrderNumber,
+                TreePath = dm.TreePath,
                 // set generic data
                 StatusFlag = dm.StatusFlag,
                 ModifiedBy = dm.ModifiedBy,
@@ -126,6 +129,7 @@ namespace BPX.Domain.ViewModels
                 ParentMenuId = vm.ParentMenuId,
                 HLevel = vm.HLevel,
                 OrderNumber = vm.OrderNumber,
+                TreePath = vm.TreePath,
                 // set generic data
                 StatusFlag = vm.StatusFlag,
                 ModifiedBy = vm.ModifiedBy,

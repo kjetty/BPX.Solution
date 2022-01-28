@@ -103,7 +103,7 @@ namespace BPX.Website.Controllers
 
 								if (currMenuString == null)
 								{
-									currMenuString = coreService.GetMenuString(currUserMeta.UserPermitIds, GetMenuAll());
+									currMenuString = coreService.GetMenuString(currUserMeta.UserPermitIds, GetMenuHierarchy());
 									cacheService.SetCache(currMenuString, cacheKey, cacheKeyService);
 								}								
 
@@ -133,8 +133,6 @@ namespace BPX.Website.Controllers
 								//double elapsedTime = (double)watch.ElapsedTicks / (double)Stopwatch.Frequency;
 								//string executionTime = (elapsedTime * 1000000).ToString("F2") + " microseconds";
 								//ShowAlertBox(AlertType.Info, $"Execution Time: {executionTime}");
-
-								ShowAlertBox(AlertType.Info, "test message");
 							}
 						}
 					}
@@ -142,19 +140,19 @@ namespace BPX.Website.Controllers
 			}
 		}
 
-		private List<Menu> GetMenuAll()
+		private List<Menu> GetMenuHierarchy()
 		{
 			// get menuHierarchy
 			string cacheKey = "menu:all";
-			List<Menu> menuAll = cacheService.GetCache<List<Menu>>(cacheKey);
+			List<Menu> menuHierarchy = cacheService.GetCache<List<Menu>>(cacheKey);
 
-			if (menuAll == null)
+			if (menuHierarchy == null)
 			{
-				menuAll = coreService.GetMenuAll();
-				cacheService.SetCache(menuAll, cacheKey, cacheKeyService);
+				menuHierarchy = coreService.GetMenuAll();
+				cacheService.SetCache(menuHierarchy, cacheKey, cacheKeyService);
 			}
 
-			return menuAll;
+			return menuHierarchy;
 		}
 
 		protected void ShowAlertBox(AlertType alertType, string alertMessage)

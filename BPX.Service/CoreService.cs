@@ -98,7 +98,7 @@ namespace BPX.Service
 			return menuService.GetMenuHierarchy();
 		}	
 
-		public string GetMenuString(List<int> userPermitIds, List<Menu> menuAll)
+		public string GetMenuString(List<int> userPermitIds, List<Menu> menuHierarchy)
 		{
 			menuString = string.Empty;
 
@@ -107,14 +107,14 @@ namespace BPX.Service
 
 
 			// generate the menuString
-			AddMenuItemsLevelOne(menuAll, AddRoot(menuAll));
+			AddMenuItemsLevelOne(menuHierarchy, AddRoot(menuHierarchy));
 
 			return menuString;
 		}
 
-		private Menu AddRoot(List<Menu> menuAll)
+		private Menu AddRoot(List<Menu> menuHierarchy)
 		{
-			var root = menuAll.Where(c => c.ParentMenuId.Equals(0)).SingleOrDefault();
+			var root = menuHierarchy.Where(c => c.ParentMenuId.Equals(0)).SingleOrDefault();
 
 			menuString += "<li>";
 			menuString += $"<a class=\"nav-link\" href=\"{root.MenuURL}\">{root.MenuName}</a>";
@@ -123,9 +123,9 @@ namespace BPX.Service
 			return root;
 		}
 
-		private void AddMenuItemsLevelOne(List<Menu> menuAll, Menu menu)
+		private void AddMenuItemsLevelOne(List<Menu> menuHierarchy, Menu menu)
 		{
-			var levelOneMenuItems = menuAll.Where(c => c.ParentMenuId.Equals(menu.MenuId)).ToList();
+			var levelOneMenuItems = menuHierarchy.Where(c => c.ParentMenuId.Equals(menu.MenuId)).ToList();
 
 			if (levelOneMenuItems.Count > 0)
 			{
@@ -135,14 +135,14 @@ namespace BPX.Service
 
 					//if (allowedTreePath.StartsWith(itemMenu.TreePath))
 					{
-						var levelTwoMenuItems = menuAll.Where(c => c.ParentMenuId.Equals(itemMenu.MenuId)).ToList();
+						var levelTwoMenuItems = menuHierarchy.Where(c => c.ParentMenuId.Equals(itemMenu.MenuId)).ToList();
 
 						if (levelTwoMenuItems.Count > 0)
 						{
 							menuString += "<li class=\"dropdown\">";
 							menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName} <i class=\"bi bi-chevron-down\"></i></a>";
 
-							AddMenuItemsLevelTwo(menuAll, itemMenu);
+							AddMenuItemsLevelTwo(menuHierarchy, itemMenu);
 
 							menuString += "</li>";
 						}
@@ -157,9 +157,9 @@ namespace BPX.Service
 			}
 		}
 
-		private void AddMenuItemsLevelTwo(List<Menu> menuAll, Menu menu)
+		private void AddMenuItemsLevelTwo(List<Menu> menuHierarchy, Menu menu)
 		{
-			var levelTwoMenuItems = menuAll.Where(c => c.ParentMenuId.Equals(menu.MenuId)).ToList();
+			var levelTwoMenuItems = menuHierarchy.Where(c => c.ParentMenuId.Equals(menu.MenuId)).ToList();
 
 			if (levelTwoMenuItems.Count > 0)
 			{
@@ -171,14 +171,14 @@ namespace BPX.Service
 
 					//if (allowedTreePath.StartsWith(itemMenu.TreePath))
 					{
-						var levelThreeMenuItems = menuAll.Where(c => c.ParentMenuId.Equals(itemMenu.MenuId)).ToList();
+						var levelThreeMenuItems = menuHierarchy.Where(c => c.ParentMenuId.Equals(itemMenu.MenuId)).ToList();
 
 						if (levelThreeMenuItems.Count > 0)
 						{
 							menuString += "<li class=\"dropdown\">";
 							menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName} <i class=\"bi bi-chevron-right\"></i></a>";
 
-							AddMenuItemsLevelThree(menuAll, itemMenu);
+							AddMenuItemsLevelThree(menuHierarchy, itemMenu);
 
 							menuString += "</li>";
 						}
@@ -195,9 +195,9 @@ namespace BPX.Service
 			}
 		}
 
-		private void AddMenuItemsLevelThree(List<Menu> menuAll, Menu menu)
+		private void AddMenuItemsLevelThree(List<Menu> menuHierarchy, Menu menu)
 		{
-			var levelThreeMenuItems = menuAll.Where(c => c.ParentMenuId.Equals(menu.MenuId)).ToList();
+			var levelThreeMenuItems = menuHierarchy.Where(c => c.ParentMenuId.Equals(menu.MenuId)).ToList();
 
 			if (levelThreeMenuItems.Count > 0)
 			{

@@ -131,9 +131,9 @@ namespace BPX.Website.Controllers
 
 								//double elapsedTime = (double)watch.ElapsedTicks / (double)Stopwatch.Frequency;
 								//string executionTime = (elapsedTime * 1000000).ToString("F2") + " microseconds";
-								//ShowAlert(AlertType.Info, $"Execution Time: {executionTime}");
+								//ShowAlertBox(AlertType.Info, $"Execution Time: {executionTime}");
 
-								ShowAlert(AlertType.Info, "test message");
+								ShowAlertBox(AlertType.Info, "test message");
 							}
 						}
 					}
@@ -141,16 +141,16 @@ namespace BPX.Website.Controllers
 			}
 		}
 
-		protected void ShowAlert(AlertType alertType, string alertMessage)
+		protected void ShowAlertBox(AlertType alertType, string alertMessage)
         {
 			string tempMessage = string.Empty;
 			tempMessage += " " + (alertMessage ?? string.Empty);
 
             //// set alert
-            //ViewBag.alertBox = new BootstrapAlertBox(alertType, tempMessage);
+            //ViewBag.alertBox = new AlertBox(alertType, tempMessage);
 
             // set alert
-            TempData["alertBox"] = JsonConvert.SerializeObject(new BootstrapAlertBox(alertType, tempMessage));
+            TempData["alertBox"] = JsonConvert.SerializeObject(new AlertBox(alertType, tempMessage));
         }
 
         protected string GetModelErrorMessage(ModelStateDictionary modelState)

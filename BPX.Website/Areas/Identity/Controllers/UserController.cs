@@ -122,7 +122,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 					ModelState.AddModelError("", modelErrorMessage);
 
 					// set alert
-					ShowAlert(AlertType.Error, modelErrorMessage);
+					ShowAlertBox(AlertType.Error, modelErrorMessage);
 
 					return View(collection);
 				}
@@ -151,7 +151,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 				userService.SaveDBChanges();
 
 				// set alert
-				ShowAlert(AlertType.Success, "User is successfully updated.");
+				ShowAlertBox(AlertType.Success, "User is successfully updated.");
 
 				return RedirectToAction(nameof(Index));
 			}
@@ -164,7 +164,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 				logger.Log(LogLevel.Error, ex, "UserController.164");
 
 				// set alert
-				ShowAlert(AlertType.Error, errorMessage);
+				ShowAlertBox(AlertType.Error, errorMessage);
 
 				return RedirectToAction(nameof(Edit), new { id });
 			}
@@ -202,7 +202,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 					ModelState.AddModelError("", modelErrorMessage);
 
 					// set alert
-					ShowAlert(AlertType.Error, modelErrorMessage);
+					ShowAlertBox(AlertType.Error, modelErrorMessage);
 
 					return View(collection);
 				}
@@ -234,7 +234,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 				}
 
 				// set alert
-				ShowAlert(AlertType.Success, "User is successfully deleted.");
+				ShowAlertBox(AlertType.Success, "User is successfully deleted.");
 
 				return RedirectToAction(nameof(Index));
 			}
@@ -247,7 +247,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 				logger.Log(LogLevel.Error, ex, "UserController.247");
 
 				// set alert
-				ShowAlert(AlertType.Error, errorMessage);
+				ShowAlertBox(AlertType.Error, errorMessage);
 
 				return RedirectToAction(nameof(Delete), new { id });
 			}
@@ -326,7 +326,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 					ModelState.AddModelError("", modelErrorMessage);
 
 					// set alert
-					ShowAlert(AlertType.Error, modelErrorMessage);
+					ShowAlertBox(AlertType.Error, modelErrorMessage);
 
 					return View(collection);
 				}
@@ -350,7 +350,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 				userService.SaveDBChanges();
 
 				// set alert
-				ShowAlert(AlertType.Success, "User is successfully restored.");
+				ShowAlertBox(AlertType.Success, "User is successfully restored.");
 
 				return RedirectToAction(nameof(Index));
 			}
@@ -363,7 +363,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 				logger.Log(LogLevel.Error, ex, "UserController.363");
 
 				// set alert
-				ShowAlert(AlertType.Error, errorMessage);
+				ShowAlertBox(AlertType.Error, errorMessage);
 
 				return RedirectToAction(nameof(Delete), new { id });
 			}
@@ -376,7 +376,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 			if (id <= 0)
 			{
 				// set alert
-				ShowAlert(AlertType.Error, "User Id is not valid.");
+				ShowAlertBox(AlertType.Error, "User Id is not valid.");
 
 				return RedirectToAction(nameof(Index));
 			}
@@ -471,7 +471,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 			cacheService.RemoveCache(cacheKey);
 
 			// set alert
-			ShowAlert(AlertType.Success, "User Roles are successfully updated.");
+			ShowAlertBox(AlertType.Success, "User Roles are successfully updated.");
 
 			return RedirectToAction(nameof(Index));
 		}

@@ -4,12 +4,15 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<!-- title -->
-	<title>@ViewData["Title"] - BPX.Website</title>
+	<title>@ViewData["Title"] - BPX</title>
 	<!-- css -->
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css" />
 	<link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
 	<link rel="stylesheet" href="~/css/PagedList.css" />
 	<link rel="stylesheet" href="~/css/site.css" />
+	<!-- javascripts -->
+	<!-- all javascripts moved to botton of the page for perormance -->
 </head>
 <body>
 	<header>
@@ -20,9 +23,13 @@
 						aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
-				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-					<partial name="_MenuPartial" />
-					<partial name="_LoginPartial" />
+				<div class="navbar-collapse collapse d-sm-inline-flex text-right justify-content-between">
+					<nav id="navbar" class="navbar">
+						<ul>
+							<partial name="_PartialMenu" />
+							<partial name="_PartialLogin" />
+						</ul>
+					</nav>
 				</div>
 			</div>
 		</nav>
@@ -32,7 +39,7 @@
 			<div style="margin-bottom:16px; font-size: 15px;">
 				breadcrumb > home > about > them
 			</div>
-			<partial name="_BootstrapAlertBox.cshtml" />
+			<partial name="_PartialAlertBox" />
 			@RenderBody()
 		</main>
 	</div>

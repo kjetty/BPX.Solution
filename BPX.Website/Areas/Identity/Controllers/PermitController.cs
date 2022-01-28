@@ -97,7 +97,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     ModelState.AddModelError("", modelErrorMessage);
 
                     // set alert
-                    ShowAlert(AlertType.Error, modelErrorMessage);
+                    ShowAlertBox(AlertType.Error, modelErrorMessage);
 
                     return View(collection);
                 }
@@ -122,7 +122,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 permitService.SaveDBChanges();
 
                 // set alert
-                ShowAlert(AlertType.Success, "Permit is successfully created.");
+                ShowAlertBox(AlertType.Success, "Permit is successfully created.");
 
                 return RedirectToAction(nameof(Index));
             }
@@ -135,7 +135,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 logger.Log(LogLevel.Error, ex, "PermitController.135");
 
                 // set alert
-                ShowAlert(AlertType.Error, errorMessage);
+                ShowAlertBox(AlertType.Error, errorMessage);
 
                 return RedirectToAction(nameof(Create));
             }
@@ -165,7 +165,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     ModelState.AddModelError("", modelErrorMessage);
 
                     // set alert
-                    ShowAlert(AlertType.Error, modelErrorMessage);
+                    ShowAlertBox(AlertType.Error, modelErrorMessage);
 
                     return View(collection);
                 }
@@ -193,7 +193,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 permitService.SaveDBChanges();
 
                 // set alert
-                ShowAlert(AlertType.Success, "Permit is successfully updated.");
+                ShowAlertBox(AlertType.Success, "Permit is successfully updated.");
 
                 return RedirectToAction(nameof(Index));
             }
@@ -206,7 +206,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 logger.Log(LogLevel.Error, ex, "PermitController.206");
 
                 // set alert
-                ShowAlert(AlertType.Error, errorMessage);
+                ShowAlertBox(AlertType.Error, errorMessage);
 
                 return RedirectToAction(nameof(Edit), new { id });
             }
@@ -240,7 +240,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     ModelState.AddModelError("", modelErrorMessage);
 
                     // set alert
-                    ShowAlert(AlertType.Error, modelErrorMessage);
+                    ShowAlertBox(AlertType.Error, modelErrorMessage);
 
                     return View(collection);
                 }
@@ -263,7 +263,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 permitService.SaveDBChanges();
 
                 // set alert
-                ShowAlert(AlertType.Success, "Permit is successfully deleted.");
+                ShowAlertBox(AlertType.Success, "Permit is successfully deleted.");
 
                 return RedirectToAction(nameof(Index));
             }
@@ -276,7 +276,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 logger.Log(LogLevel.Error, ex, "PermitController.276");
 
                 // set alert
-                ShowAlert(AlertType.Error, errorMessage);
+                ShowAlertBox(AlertType.Error, errorMessage);
 
                 return RedirectToAction(nameof(Delete), new { id });
             }
@@ -344,7 +344,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     ModelState.AddModelError("", modelErrorMessage);
 
                     // set alert
-                    ShowAlert(AlertType.Error, modelErrorMessage);
+                    ShowAlertBox(AlertType.Error, modelErrorMessage);
 
                     return View(collection);
                 }
@@ -367,7 +367,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 permitService.SaveDBChanges();
 
                 // set alert
-                ShowAlert(AlertType.Success, "Permit is successfully restored.");
+                ShowAlertBox(AlertType.Success, "Permit is successfully restored.");
 
                 return RedirectToAction(nameof(Index));
             }
@@ -380,7 +380,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 logger.Log(LogLevel.Error, ex, "PermitController.380");
 
                 // set alert
-                ShowAlert(AlertType.Error, errorMessage);
+                ShowAlertBox(AlertType.Error, errorMessage);
 
                 return RedirectToAction(nameof(Delete), new { id });
             }

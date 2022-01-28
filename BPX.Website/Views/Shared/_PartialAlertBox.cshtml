@@ -4,51 +4,51 @@
 @{
     if (TempData.ContainsKey("alertBox"))
     {
-        BootstrapAlertBox bootstrapAlertBox = JsonConvert.DeserializeObject<BootstrapAlertBox>((string)TempData["alertBox"]);
+        AlertBox alertBox = JsonConvert.DeserializeObject<AlertBox>((string)TempData["alertBox"]);
 
-        if (bootstrapAlertBox != null)
+        if (alertBox != null)
         {
-            if (bootstrapAlertBox.alertType == (int)AlertType.Success)
+            if (alertBox.alertType == (int)AlertType.Success)
             {
                 <div class="alert alert-success alert-white rounded" style="xmargin-top:20px;">
                     <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
                     <div class="icon">
                         <i class="fa fa-check fa-lg"></i>
                         &nbsp;&nbsp;&nbsp;<strong>Success!</strong>
-                        @bootstrapAlertBox.alertMessage
+                        @alertBox.alertMessage
                     </div>
                 </div>
             }
-            else if (bootstrapAlertBox.alertType == (int)AlertType.Info)
+            else if (alertBox.alertType == (int)AlertType.Info)
             {
                 <div class="alert alert-info alert-white rounded" style="xmargin-top:20px;">
                     <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
                     <div class="icon">
                         <i class="fa fa-info-circle fa-lg"></i>
                         &nbsp;&nbsp;&nbsp;<strong>Information!</strong>
-                        @bootstrapAlertBox.alertMessage
+                        @alertBox.alertMessage
                     </div>
                 </div>
             }
-            else if (bootstrapAlertBox.alertType == (int)AlertType.Warning)
+            else if (alertBox.alertType == (int)AlertType.Warning)
             {
                 <div class="alert alert-warning alert-white rounded" style="xmargin-top:20px;">
                     <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
                     <div class="icon">
                         <i class="fa fa-exclamation-triangle fa-lg"></i>
                         &nbsp;&nbsp;&nbsp;<strong>Warning!</strong>
-                        @bootstrapAlertBox.alertMessage
+                        @alertBox.alertMessage
                     </div>
                 </div>
             }
-            else if (bootstrapAlertBox.alertType == (int)AlertType.Error)
+            else if (alertBox.alertType == (int)AlertType.Error)
             {
                 <div class="alert alert-danger alert-white rounded" style="xmargin-top:20px; width:100%">
                     <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
                     <div class="icon">
                         <i class="fa fa-times-circle fa-lg"></i>
                         &nbsp;&nbsp;&nbsp;<strong>Error!</strong>
-                        @bootstrapAlertBox.alertMessage
+                        @alertBox.alertMessage
                     </div>
                 </div>
             }

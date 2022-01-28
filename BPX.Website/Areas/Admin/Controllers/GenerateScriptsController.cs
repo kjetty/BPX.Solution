@@ -40,7 +40,7 @@ namespace BPX.Website.Areas.Admin.Controllers
             Generate_PermitConstants();
 
             // set alert
-            ShowAlert(AlertType.Success, "PermitConstans.cs  is successfully generated.");
+            ShowAlertBox(AlertType.Success, "PermitConstans.cs  is successfully generated.");
 
             return View();
         }

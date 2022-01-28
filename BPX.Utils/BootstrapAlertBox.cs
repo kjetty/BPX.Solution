@@ -1,18 +1,18 @@
 ﻿namespace BPX.Utils
 {
-	public class BootstrapAlertBox
+	public class AlertBox
     {
 		// DO NOT provide the default constructor
-		//public BootstrapAlertBox()
+		//public AlertBox()
 		//{
 		//}
 
-		//public BootstrapAlertBox()
+		//public AlertBox()
 		//{
         //      throw new NotImplementedException();
 		//}
 
-        public BootstrapAlertBox(AlertType alertType, string alertMessage)
+        public AlertBox(AlertType alertType, string alertMessage)
         {
             this.alertType = (int)alertType;
             this.alertMessage = alertMessage;

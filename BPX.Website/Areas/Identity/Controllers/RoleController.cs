@@ -100,7 +100,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     ModelState.AddModelError("", modelErrorMessage);
 
                     // set alert
-                    ShowAlert(AlertType.Error, modelErrorMessage);
+                    ShowAlertBox(AlertType.Error, modelErrorMessage);
 
                     return View(collection);
                 }
@@ -123,7 +123,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 roleService.SaveDBChanges();
 
                 // set alert
-                ShowAlert(AlertType.Success, "Role is successfully created.");
+                ShowAlertBox(AlertType.Success, "Role is successfully created.");
 
                 return RedirectToAction(nameof(Index));
             }
@@ -136,7 +136,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 logger.Log(LogLevel.Error, ex, "RoleController.136");
 
                 // set alert
-                ShowAlert(AlertType.Error, errorMessage);
+                ShowAlertBox(AlertType.Error, errorMessage);
                 return RedirectToAction(nameof(Create));
             }
         }
@@ -165,7 +165,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     ModelState.AddModelError("", modelErrorMessage);
 
                     // set alert
-                    ShowAlert(AlertType.Error, modelErrorMessage);
+                    ShowAlertBox(AlertType.Error, modelErrorMessage);
 
                     return View(collection);
                 }
@@ -191,7 +191,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 roleService.SaveDBChanges();
 
                 // set alert
-                ShowAlert(AlertType.Success, "Role is successfully updated.");
+                ShowAlertBox(AlertType.Success, "Role is successfully updated.");
 
                 return RedirectToAction(nameof(Index));
             }
@@ -204,7 +204,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 logger.Log(LogLevel.Error, ex, "RoleController.204");
 
                 // set alert
-                ShowAlert(AlertType.Error, errorMessage);
+                ShowAlertBox(AlertType.Error, errorMessage);
 
                 return RedirectToAction(nameof(Edit), new { id });
             }
@@ -238,7 +238,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     ModelState.AddModelError("", modelErrorMessage);
 
                     // set alert
-                    ShowAlert(AlertType.Error, modelErrorMessage);
+                    ShowAlertBox(AlertType.Error, modelErrorMessage);
 
                     return View(collection);
                 }
@@ -261,7 +261,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 roleService.SaveDBChanges();
 
                 // set alert
-                ShowAlert(AlertType.Success, "Role is successfully deleted.");
+                ShowAlertBox(AlertType.Success, "Role is successfully deleted.");
 
                 return RedirectToAction(nameof(Index));
             }
@@ -274,7 +274,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 logger.Log(LogLevel.Error, ex, "RoleController.274");
 
                 // set alert
-                ShowAlert(AlertType.Error, errorMessage);
+                ShowAlertBox(AlertType.Error, errorMessage);
 
                 return RedirectToAction(nameof(Delete), new { id });
             }
@@ -342,7 +342,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     ModelState.AddModelError("", modelErrorMessage);
 
                     // set alert
-                    ShowAlert(AlertType.Error, modelErrorMessage);
+                    ShowAlertBox(AlertType.Error, modelErrorMessage);
 
                     return View(collection);
                 }
@@ -365,7 +365,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 roleService.SaveDBChanges();
 
                 // set alert
-                ShowAlert(AlertType.Success, "Role is successfully restored.");
+                ShowAlertBox(AlertType.Success, "Role is successfully restored.");
 
                 return RedirectToAction(nameof(Index));
             }
@@ -378,7 +378,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 logger.Log(LogLevel.Error, ex, "RoleController.378");
 
                 // set alert
-                ShowAlert(AlertType.Error, errorMessage);
+                ShowAlertBox(AlertType.Error, errorMessage);
 
                 return RedirectToAction(nameof(Delete), new { id });
             }
@@ -391,7 +391,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             if (id <= 0)
             {
                 // set alert
-                ShowAlert(AlertType.Error, "Role Id is not valid.");
+                ShowAlertBox(AlertType.Error, "Role Id is not valid.");
 
                 return RedirectToAction(nameof(Index));
             }
@@ -477,7 +477,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
 
             // set alert
-            ShowAlert(AlertType.Success, "Role Permits are successfully updated.");
+            ShowAlertBox(AlertType.Success, "Role Permits are successfully updated.");
 
             //return Permit(id);
             return RedirectToAction(nameof(Index));

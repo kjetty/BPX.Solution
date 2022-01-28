@@ -52,7 +52,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             if (login == null)
             {
                 // set alert
-                ShowAlert(AlertType.Warning, "Login failed. Please try again. ");
+                ShowAlertBox(AlertType.Warning, "Login failed. Please try again. ");
 
                 return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
@@ -60,7 +60,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             if (login.UserId <= 0)
             {
                 // set alert
-                ShowAlert(AlertType.Warning, "Login failed. Try again.");
+                ShowAlertBox(AlertType.Warning, "Login failed. Try again.");
 
                 return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
@@ -99,7 +99,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 			if (!passwordIsVerified)
             {
                 // set alert
-                ShowAlert(AlertType.Warning, "Login failed. Try again.");
+                ShowAlertBox(AlertType.Warning, "Login failed. Try again.");
 
                 return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
@@ -198,7 +198,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     ModelState.AddModelError("", modelErrorMessage);
 
                     // set alert
-                    ShowAlert(AlertType.Error, modelErrorMessage);
+                    ShowAlertBox(AlertType.Error, modelErrorMessage);
 
                     return View(collection);
                 }
@@ -210,7 +210,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     ModelState.AddModelError("", errorMessage);
 
                     // set alert
-                    ShowAlert(AlertType.Error, errorMessage);
+                    ShowAlertBox(AlertType.Error, errorMessage);
 
                     return View(collection);
                 }
@@ -259,14 +259,14 @@ namespace BPX.Website.Areas.Identity.Controllers
                     loginService.SaveDBChanges();
 
                     // set alert
-                    ShowAlert(AlertType.Success, "Login is successfully created.");
+                    ShowAlertBox(AlertType.Success, "Login is successfully created.");
 
                     return RedirectToAction(nameof(Login), new { controller = "Account" });
                 }
                 else
                 {
                     // set alert box
-                    ShowAlert(AlertType.Warning, "Login ID is already taken. Please try another name.");
+                    ShowAlertBox(AlertType.Warning, "Login ID is already taken. Please try another name.");
 
                     return View(collection);
                 }
@@ -280,7 +280,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 logger.Log(LogLevel.Error, ex, "AccountController.280");
 
                 // set alert
-                ShowAlert(AlertType.Error, errorMessage);
+                ShowAlertBox(AlertType.Error, errorMessage);
 
                 return RedirectToAction(nameof(Register));
             }
@@ -314,7 +314,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     ModelState.AddModelError("", modelErrorMessage);
 
                     // set alert
-                    ShowAlert(AlertType.Error, modelErrorMessage);
+                    ShowAlertBox(AlertType.Error, modelErrorMessage);
 
                     return View(collection);
                 }
@@ -326,7 +326,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     ModelState.AddModelError("", errorMessage);
 
                     // set alert
-                    ShowAlert(AlertType.Error, errorMessage);
+                    ShowAlertBox(AlertType.Error, errorMessage);
 
                     return View(collection);
                 }
@@ -337,7 +337,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     ModelState.AddModelError("", errorMessage);
 
                     // set alert
-                    ShowAlert(AlertType.Error, errorMessage);
+                    ShowAlertBox(AlertType.Error, errorMessage);
 
                     return View(collection);
                 }
@@ -356,7 +356,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 loginService.SaveDBChanges();
 
                 // set alert
-                ShowAlert(AlertType.Success, "Password is successfully changed.");
+                ShowAlertBox(AlertType.Success, "Password is successfully changed.");
 
                 return RedirectToAction(nameof(Login), new { controller = "Account" });
 
@@ -370,7 +370,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 logger.Log(LogLevel.Error, ex, "AccountController.370");
 
                 // set alert
-                ShowAlert(AlertType.Error, errorMessage);
+                ShowAlertBox(AlertType.Error, errorMessage);
 
                 //return RedirectToAction(nameof(Register));
                 return RedirectToAction("Index", "Home", new { area = "" });
@@ -395,7 +395,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             if (currUserMeta.UserId > 0)
             {
                 // set alert
-                ShowAlert(AlertType.Info, "User is successfully logged off.");
+                ShowAlertBox(AlertType.Info, "User is successfully logged off.");
             }
 
             return RedirectToAction("Index", "Home", new { area = "" });

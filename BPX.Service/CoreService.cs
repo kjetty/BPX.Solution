@@ -18,10 +18,10 @@ namespace BPX.Service
 		private readonly IUserRoleService userRoleService;
 		private readonly IRolePermitService rolePermitService;
 		private readonly IMenuService menuService;
-		private readonly IMenuPermitService menuRoleService;
+		private readonly IMenuPermitService menuPermitService;
 		private string menuString;
 
-		public CoreService(IConfiguration configuration, ICacheService cacheService, ICacheKeyService cacheKeyService, ILoginService loginService, IUserService userService, IUserRoleService userRoleService, IRolePermitService rolePermitService, IMenuService menuService, IMenuPermitService menuRoleService)
+		public CoreService(IConfiguration configuration, ICacheService cacheService, ICacheKeyService cacheKeyService, ILoginService loginService, IUserService userService, IUserRoleService userRoleService, IRolePermitService rolePermitService, IMenuService menuService, IMenuPermitService menuPermitService)
 		{
 			this.configuration = configuration;
 			this.cacheService = cacheService;
@@ -31,7 +31,7 @@ namespace BPX.Service
 			this.userRoleService = userRoleService;
 			this.rolePermitService = rolePermitService;
 			this.menuService = menuService;
-			this.menuRoleService = menuRoleService;
+			this.menuPermitService = menuPermitService;
 			this.menuString = string.Empty;
 		}
 

@@ -9,11 +9,11 @@ namespace BPX.Service
 {
     public class MenuPermitService : IMenuPermitService
     {
-        public MenuPermitRepository menuRoleRepository;
+        public MenuPermitRepository menuPermitRepository;
 
-        public MenuPermitService(IMenuPermitRepository menuRoleRepository)
+        public MenuPermitService(IMenuPermitRepository menuPermitRepository)
         {
-            this.menuRoleRepository = (MenuPermitRepository)menuRoleRepository;
+            this.menuPermitRepository = (MenuPermitRepository)menuPermitRepository;
         }
 
         public IPagedList<MenuPermit> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
@@ -23,12 +23,12 @@ namespace BPX.Service
 
         public MenuPermit GetRecordByID(int id)
         {
-            return menuRoleRepository.GetRecordByID(id);
+            return menuPermitRepository.GetRecordByID(id);
         }
 
         public IQueryable<MenuPermit> GetRecordsByFilter(Expression<Func<MenuPermit, bool>> filter)
         {
-            return menuRoleRepository.GetRecordsByFilter(filter);
+            return menuPermitRepository.GetRecordsByFilter(filter);
         }
 
         public void InsertRecord(MenuPermit entity)
@@ -37,7 +37,7 @@ namespace BPX.Service
             //business rules validation, if any
             //...
 
-            menuRoleRepository.InsertRecord(entity);
+            menuPermitRepository.InsertRecord(entity);
         }
 
         public void UpdateRecord(MenuPermit entity)
@@ -46,12 +46,12 @@ namespace BPX.Service
             //business rules validation, if any
             //...
 
-            menuRoleRepository.UpdateRecord(entity);
+            menuPermitRepository.UpdateRecord(entity);
         }
 
         public void SaveDBChanges()
         {
-            menuRoleRepository.SaveDBChanges();
+            menuPermitRepository.SaveDBChanges();
         }
     }
 

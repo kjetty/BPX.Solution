@@ -53,7 +53,7 @@ namespace BPX.Website.Controllers
 						string loginToken = claimCurrLoginToken.Value;
 
 						// get user data from the loginToken
-						// SECURITY - verify against the database for every request
+						// SECURITY SECURITY SECURITY :: always verify against the database on every request
 						int userId = coreService.GetUserId(claimCurrLoginToken.Value);
 
 						if (userId > 0)
@@ -61,54 +61,24 @@ namespace BPX.Website.Controllers
 							//var watch = new System.Diagnostics.Stopwatch();
 							//watch.Start();
 
-							string cacheKey = string.Empty;
-
 							// get userMeta
-							cacheKey = $"user:{userId}:meta";
-							currUserMeta = cacheService.GetCache<UserMeta>(cacheKey);
-							
-							if (currUserMeta == null)
-							{
-								currUserMeta = coreService.GetUserMeta(userId);
-								cacheService.SetCache(currUserMeta, cacheKey, cacheKeyService);
-							}
+							currUserMeta = GetUserMeta(userId);
 
 							if (currUserMeta != null)
 							{
+								// apply loginToken
 								currUserMeta.LoginToken = loginToken;
 
-								// get userRoleIds
-								cacheKey = $"user:{userId}:roles";
-								currUserMeta.UserRoleIds = cacheService.GetCache<List<int>>(cacheKey);
+								// get and apply userRoleIds
+								currUserMeta.UserRoleIds = GetUserRoleIds(userId);								
 
-								if (currUserMeta.UserRoleIds == null)
-								{
-									currUserMeta.UserRoleIds = coreService.GetUserRoleIds(userId);
-									cacheService.SetCache(currUserMeta.UserRoleIds, cacheKey, cacheKeyService);
-								}
+								// get and apply userPermitIds
+								currUserMeta.UserPermitIds = GetUserPermitIds(userId, currUserMeta.UserRoleIds);								
 
-								// get userPermitIds
-								cacheKey = $"user:{userId}:permits";
-								currUserMeta.UserPermitIds = cacheService.GetCache<List<int>>(cacheKey);
+								// get menuString
+								currMenuString = GetMenuString(currUserMeta.UserRoleIds, currUserMeta.UserPermitIds);
 
-								if (currUserMeta.UserPermitIds == null)
-								{
-									currUserMeta.UserPermitIds = coreService.GetUserPermitIds(currUserMeta.UserRoleIds);
-									cacheService.SetCache(currUserMeta.UserPermitIds, cacheKey, cacheKeyService);
-								}
-
-								// get menuBar
-								cacheKey = $"roles:{string.Join(".", currUserMeta.UserRoleIds)}:menu";
-								currMenuString = cacheService.GetCache<string>(cacheKey);
-
-								if (currMenuString == null)
-								{
-									currMenuString = coreService.GetMenuString(currUserMeta.UserPermitIds, GetMenuHierarchy());
-									cacheService.SetCache(currMenuString, cacheKey, cacheKeyService);
-								}								
-
-								//// populate ViewBag
-								////ViewBag.currUserMeta = currUserMeta;
+								// populate ViewBag
 								ViewBag.currMenuString = currMenuString;
 								ViewBag.currUserPermitIds = currUserMeta.UserPermitIds;
 
@@ -129,7 +99,6 @@ namespace BPX.Website.Controllers
 								////// END
 
 								//watch.Stop();
-
 								//double elapsedTime = (double)watch.ElapsedTicks / (double)Stopwatch.Frequency;
 								//string executionTime = (elapsedTime * 1000000).ToString("F2") + " microseconds";
 								//ShowAlertBox(AlertType.Info, $"Execution Time: {executionTime}");
@@ -140,9 +109,64 @@ namespace BPX.Website.Controllers
 			}
 		}
 
+		private UserMeta GetUserMeta(int userId)
+		{
+			string cacheKey = $"user:{userId}:meta";
+			UserMeta userMeta = cacheService.GetCache<UserMeta>(cacheKey);
+
+			if (userMeta == null)
+			{
+				userMeta = coreService.GetUserMeta(userId);
+				cacheService.SetCache(userMeta, cacheKey, cacheKeyService);
+			}
+
+			return userMeta;
+		}
+
+		private List<int> GetUserRoleIds(int userId)
+		{
+			string cacheKey = $"user:{userId}:roles";
+			List<int> userRoleIds = cacheService.GetCache<List<int>>(cacheKey);
+
+			if (userRoleIds == null)
+			{
+				userRoleIds = coreService.GetUserRoleIds(userId);
+				cacheService.SetCache(userRoleIds, cacheKey, cacheKeyService);
+			}
+
+			return userRoleIds;
+		}
+
+		private List<int> GetUserPermitIds(int userId, List<int> userRoleIds)
+		{
+			string cacheKey = $"user:{userId}:permits";
+			List<int> userPermitIds = cacheService.GetCache<List<int>>(cacheKey);
+
+			if (userPermitIds == null)
+			{
+				userPermitIds = coreService.GetUserPermitIds(userRoleIds);
+				cacheService.SetCache(userPermitIds, cacheKey, cacheKeyService);
+			}
+
+			return userPermitIds;
+		}
+
+		private string GetMenuString(List<int> userRoleIds, List<int> userPermitIds)
+		{
+			string cacheKey = $"roles:{string.Join(".", userRoleIds)}:menu";
+			string menuString = cacheService.GetCache<string>(cacheKey);
+
+			if (menuString == null)
+			{
+				menuString = coreService.GetMenuString(userPermitIds, GetMenuHierarchy());
+				cacheService.SetCache(menuString, cacheKey, cacheKeyService);
+			}
+
+			return menuString;
+		}
+
 		private List<Menu> GetMenuHierarchy()
 		{
-			// get menuHierarchy
 			string cacheKey = "menu:hierarchy";
 			List<Menu> menuHierarchy = cacheService.GetCache<List<Menu>>(cacheKey);
 

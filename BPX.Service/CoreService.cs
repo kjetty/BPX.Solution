@@ -104,8 +104,6 @@ namespace BPX.Service
 
 			// todo :: get TreePath(s) from userPermitIds
 
-
-
 			// generate the menuString
 			AddMenuItemsLevelOne(menuHierarchy, AddRoot(menuHierarchy));
 

@@ -42,8 +42,9 @@ namespace BPX.DAL.Repository
             context.Entry(entity).State = EntityState.Modified;
         }
 
-        public List<Menu> GetMenuHierarchy()
+        public List<Menu> GetMenuHierarchy(string orderBy)
 		{
+
             ////cte (common time execution) recursive hierarchy query
             //WITH cte_menus AS (
             //    SELECT 	    MenuId, MenuName, MenuDescription, MenuURL, ParentMenuId, 1 AS hLevel, OrderNumber, 
@@ -63,6 +64,13 @@ namespace BPX.DAL.Repository
             //FROM 		cte_menus 
             //ORDER BY 	hLevel, OrderNumber
 
+            string cteOrderBy = "hLevel, OrderNumber";
+
+            if (orderBy != null && orderBy.Trim().ToLower().Equals("url"))
+			{
+                cteOrderBy = "MenuURL";
+            }
+
             string cteQuery = string.Empty;
             cteQuery += "WITH cte_menus AS ( ";
             cteQuery += "	SELECT 		MenuId, MenuName, MenuDescription, MenuURL, ParentMenuId, 1 AS hLevel, OrderNumber, ";
@@ -80,7 +88,7 @@ namespace BPX.DAL.Repository
             cteQuery += "SELECT 		MenuId, MenuName, MenuDescription, MenuURL, ParentMenuId, hLevel, OrderNumber, ";
             cteQuery += "			CAST('.' + TreePath + '.' AS VARCHAR(32)) AS TreePath, StatusFlag, ModifiedBy, ModifiedDate ";
             cteQuery += "FROM 		cte_menus ";
-            cteQuery += "ORDER BY 	MenuURL ";
+            cteQuery += "ORDER BY " + cteOrderBy;
 
             return context.Menus.FromSqlRaw(cteQuery).ToList();
         }
@@ -88,6 +96,6 @@ namespace BPX.DAL.Repository
 
     public interface IMenuRepository : IRepository<Menu>
     {
-        List<Menu> GetMenuHierarchy();
+        List<Menu> GetMenuHierarchy(string orderBy);
     }
 }

@@ -22,12 +22,12 @@ namespace BPX.Website.Areas.Identity.Controllers
         private readonly IPermitService permitService;
         private readonly IRolePermitService rolePermitService;
 
-        public RoleController(ILogger<RoleController> logger, ICoreService coreService, IUserService userService, IRoleService roleService, IPermitService permitService, IRolePermitService rolePermitService) : base(logger, coreService)
+        public RoleController(ILogger<RoleController> logger, ICoreService coreService, IRoleService roleService, IPermitService permitService) : base(logger, coreService)
         {
-            this.userService = userService;
+            this.userService = coreService.GetUserService();
             this.roleService = roleService;
             this.permitService = permitService;
-            this.rolePermitService = rolePermitService;
+            this.rolePermitService = coreService.GetRolePermitService();
         }
 
         // GET: /Identity/Role

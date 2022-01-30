@@ -32,10 +32,10 @@ namespace BPX.Service
 			this.menuService = menuService;
 			this.menuPermitService = menuPermitService;
 		}
-
-		public ICacheKeyService GetCacheKeyService()
+		
+		public IConfiguration GetConfiguration()
 		{
-			return cacheKeyService;
+			return configuration;
 		}
 
 		public ICacheService GetCacheService()
@@ -43,9 +43,39 @@ namespace BPX.Service
 			return cacheService;
 		}
 
-		public IConfiguration GetConfiguration()
+		public ICacheKeyService GetCacheKeyService()
 		{
-			return configuration;
+			return cacheKeyService;
+		}
+
+		public ILoginService GetLoginService()
+		{
+			return loginService;
+		}
+		
+		public IUserService GetUserService()
+		{
+			return userService;
+		}
+		
+		public IUserRoleService GetUserRoleService()
+		{
+			return userRoleService;
+		}
+		
+		public IRolePermitService GetRolePermitService()
+		{
+			return rolePermitService;
+		}
+		
+		public IMenuService GetMenuService()
+		{
+			return menuService;
+		}
+		
+		public IMenuPermitService GetMenuPermitService()
+		{
+			return menuPermitService;
 		}
 
 		public int GetUserId(string loginToken)
@@ -91,10 +121,10 @@ namespace BPX.Service
 			return rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.PermitID == permitId).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
 		}
 
-		public List<Menu> GetMenuHierarchy()
+		public List<Menu> GetMenuHierarchy(string orderBy = null)
 		{
-			return menuService.GetMenuHierarchy();
-		}	
+			return menuService.GetMenuHierarchy(orderBy);
+		}
 
 		public string GetMenuString(List<int> userPermitIds, List<Menu> menuHierarchy)
 		{
@@ -221,12 +251,18 @@ namespace BPX.Service
 		IConfiguration GetConfiguration();
 		ICacheService GetCacheService();
 		ICacheKeyService GetCacheKeyService();
+		ILoginService GetLoginService();
+		IUserService GetUserService();
+		IUserRoleService GetUserRoleService();
+		IRolePermitService GetRolePermitService();
+		IMenuService GetMenuService();
+		IMenuPermitService GetMenuPermitService();
 		int GetUserId(string loginToken);
 		UserMeta GetUserMeta(int userId);
 		List<int> GetUserRoleIds(int userId);
 		List<int> GetUserPermitIds(List<int> userRoleIds);
 		List<int> GetPermitRoles(int permitId);
-		List<Menu> GetMenuHierarchy();
+		List<Menu> GetMenuHierarchy(string orderBy = null);
 		string GetMenuString(List<int> userPermitIds, List<Menu> menuHierarchy);
 	}
 }

@@ -24,11 +24,11 @@ namespace BPX.Website.Areas.Identity.Controllers
         private readonly IUserService userService;
         private readonly IUserRoleService userRoleService;
 
-        public AccountController(ILogger<AccountController> logger, ICoreService coreService, ILoginService loginService, IUserService userService, IUserRoleService userRoleService) : base(logger, coreService)
+        public AccountController(ILogger<AccountController> logger, ICoreService coreService) : base(logger, coreService)
         {
-            this.loginService = loginService;
-            this.userService = userService;
-            this.userRoleService = userRoleService;
+            this.loginService = coreService.GetLoginService();
+            this.userService = coreService.GetUserService();
+            this.userRoleService = coreService.GetUserRoleService();
         }
 
         // GET: /Identity/Account/Login
@@ -46,6 +46,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(BPXLoginViewModel model)
         {
+
             var login = loginService.GetRecordsByFilter(c => c.StatusFlag == RecordStatus.Active && c.LoginId == model.LoginId).FirstOrDefault();
             bool passwordIsVerified = false;
 

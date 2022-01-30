@@ -65,11 +65,11 @@
 	</dl>
 </div>
 <div>
-	@*@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.Update))*@
+	@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.Update))
 	{
 		<a asp-area="Identity" asp-action="Update" asp-route-id="@Model.MenuId">Edit</a> @Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;")
 	}
-	@*@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.List))*@
+	@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.List))
 	{
 		<a asp-area="Identity" asp-action="Index">Back to List</a>
 	}

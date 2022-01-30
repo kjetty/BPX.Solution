@@ -66,7 +66,7 @@
 </div>
 
 <div>
-	@*@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.List))*@
+	@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.List))
 	{
 		<a asp-action="Index">Back to List</a>
 	}

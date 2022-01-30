@@ -20,9 +20,9 @@ namespace BPX.Website.Areas.Identity.Controllers
         private readonly IPermitService permitService;
         private readonly IRoleService roleService;
 
-        public PermitController(ILogger<PermitController> logger, ICoreService coreService, IUserService userService, IPermitService permitService, IRoleService roleService) : base(logger, coreService)
+        public PermitController(ILogger<PermitController> logger, ICoreService coreService, IPermitService permitService, IRoleService roleService) : base(logger, coreService)
         {
-            this.userService = userService;
+            this.userService = coreService.GetUserService();
             this.permitService = permitService;
             this.roleService = roleService;
         }

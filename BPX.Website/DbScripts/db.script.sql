@@ -266,6 +266,7 @@ insert into Permits (PermitArea,PermitController,PermitName,PermitEnum,StatusFla
 insert into Permits (PermitArea,PermitController,PermitName,PermitEnum,StatusFlag,ModifiedBy,ModifiedDate) values ('Identity','User','Filter','Identity.User.Filter','A',1,getDate());
 insert into Permits (PermitArea,PermitController,PermitName,PermitEnum,StatusFlag,ModifiedBy,ModifiedDate) values ('Identity','User','ListDeleted','Identity.User.ListDeleted','A',1,getDate());
 insert into Permits (PermitArea,PermitController,PermitName,PermitEnum,StatusFlag,ModifiedBy,ModifiedDate) values ('Identity','User','Undelete','Identity.User.Undelete','A',1,getDate());
+insert into Permits (PermitArea,PermitController,PermitName,PermitEnum,StatusFlag,ModifiedBy,ModifiedDate) values ('Identity','User','ChangePassword','Identity.User.ChangePassword','A',1,getDate());
 
 insert into Permits (PermitArea,PermitController,PermitName,PermitEnum,StatusFlag,ModifiedBy,ModifiedDate) values ('Identity','Role','Create','Identity.Role.Create','A',1,getDate());
 insert into Permits (PermitArea,PermitController,PermitName,PermitEnum,StatusFlag,ModifiedBy,ModifiedDate) values ('Identity','Role','Read','Identity.Role.Read','A',1,getDate());
@@ -334,6 +335,8 @@ insert into RolePermits (RoleId,PermitId,StatusFlag,ModifiedBy,ModifiedDate) val
 insert into RolePermits (RoleId,PermitId,StatusFlag,ModifiedBy,ModifiedDate) values ('1','33','A',1,getDate());
 insert into RolePermits (RoleId,PermitId,StatusFlag,ModifiedBy,ModifiedDate) values ('1','34','A',1,getDate());
 insert into RolePermits (RoleId,PermitId,StatusFlag,ModifiedBy,ModifiedDate) values ('1','35','A',1,getDate());
+insert into RolePermits (RoleId,PermitId,StatusFlag,ModifiedBy,ModifiedDate) values ('1','36','A',1,getDate());
+insert into RolePermits (RoleId,PermitId,StatusFlag,ModifiedBy,ModifiedDate) values ('1','37','A',1,getDate());
 
 --userRoles
 insert into UserRoles (UserId,RoleId,StatusFlag,ModifiedBy,ModifiedDate) values ('2','1','A',1,getDate());
@@ -346,14 +349,9 @@ insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNum
 insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Group 5',null,'/g5',1,0,5,null,'A',1,getDate());
 insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Group 6',null,'/g6',1,0,6,null,'A',1,getDate());
 insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Group 7',null,'/g7',1,0,7,null,'A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Group 8',null,'/g8',1,0,8,null,'A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Group 9',null,'/g9',1,0,9,null,'A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 21',null,'/g2/p21',2,0,1,null,'A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 22',null,'/g2/p22',2,0,2,null,'A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 23',null,'/g2/p23',2,0,3,null,'A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 24',null,'/g2/p24',2,0,4,null,'A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 25',null,'/g2/p25',2,0,5,null,'A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 31',null,'/g3/p31',3,0,1,null,'A',1,getDate());
+insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Admin',null,'/Admin',1,0,8,null,'A',1,getDate());
+insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Identity',null,'/Identity',1,0,9,null,'A',1,getDate());
+insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 31',null,'/g3/p31',3,0,2,null,'A',1,getDate());
 insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 32',null,'/g3/p32',3,0,2,null,'A',1,getDate());
 insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 33',null,'/g3/p33',3,0,3,null,'A',1,getDate());
 insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 34',null,'/g3/p34',3,0,4,null,'A',1,getDate());
@@ -373,23 +371,18 @@ insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNum
 insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 66',null,'/g6/p66',6,0,6,null,'A',1,getDate());
 insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 67',null,'/g6/p67',6,0,7,null,'A',1,getDate());
 insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 68',null,'/g6/p68',6,0,8,null,'A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 81',null,'/g8/p81',8,0,1,null,'A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 82',null,'/g8/p82',8,0,2,null,'A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 83',null,'/g8/p83',8,0,3,null,'A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 84',null,'/g8/p84',8,0,4,null,'A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 85',null,'/g8/p85',8,0,5,null,'A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 86',null,'/g8/p86',8,0,6,null,'A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 91',null,'/g9/p91',9,0,1,null,'A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 92',null,'/g9/p92',9,0,2,null,'A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 93',null,'/g9/p93',9,0,3,null,'A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 94',null,'/g9/p94',9,0,4,null,'A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 331',null,'/g3/p33/p331',17,0,1,null,'A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 332',null,'/g3/p33/p332',17,0,2,null,'A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 333',null,'/g3/p33/p333',17,0,3,null,'A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 334',null,'/g3/p33/p334',17,0,4,null,'A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 521',null,'/g5/p52/p521',25,0,1,null,'A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 522',null,'/g5/p52/p522',25,0,2,null,'A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 523',null,'/g5/p52/p523',25,0,3,null,'A',1,getDate());
+insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 331',null,'/g3/p33/p331',10,0,1,null,'A',1,getDate());
+insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 332',null,'/g3/p33/p332',10,0,2,null,'A',1,getDate());
+insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 333',null,'/g3/p33/p333',10,0,3,null,'A',1,getDate());
+insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 334',null,'/g3/p33/p334',10,0,4,null,'A',1,getDate());
+insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 521',null,'/g5/p52/p521',20,0,1,null,'A',1,getDate());
+insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 522',null,'/g5/p52/p522',20,0,2,null,'A',1,getDate());
+insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Page 523',null,'/g5/p52/p523',20,0,3,null,'A',1,getDate());
+insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Menu',null,'/Identity/Menu',9,0,2,null,'A',1,getDate());
+insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Permit',null,'/Identity/Permit',9,0,3,null,'A',1,getDate());
+insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Role',null,'/Identity/Role',9,0,4,null,'A',1,getDate());
+insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('User',null,'/Identity/User',9,0,5,null,'A',1,getDate());
+insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Generate Scripts 31',null,'/Admin/GenerateScripts',8,0,1,null,'A',1,getDate());
 
 --MenuPermits
 insert into MenuPermits (MenuId,PermitId,StatusFlag,ModifiedBy,ModifiedDate) values ('3','3','A',1,getDate());

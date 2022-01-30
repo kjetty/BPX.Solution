@@ -20,15 +20,12 @@ namespace BPX.Website.Areas.Identity.Controllers
         private readonly IMenuService menuService;
         private readonly IMenuPermitService menuPermitService;
 
-        public MenuController(ILogger<MenuController> logger, ICoreService coreService, IUserService userService, IMenuService menuService, IMenuPermitService menuPermitService) : base(logger, coreService)
+        public MenuController(ILogger<MenuController> logger, ICoreService coreService) : base(logger, coreService)
 		{
-            this.userService = userService;
-            this.menuService = menuService;
-            this.menuPermitService = menuPermitService;
-
-            //coreService.
+            this.userService = coreService.GetUserService();
+            this.menuService = coreService.GetMenuService();
+            this.menuPermitService = coreService.GetMenuPermitService();
         }
-
 
         // GET: /Identity/Menu
         [Permit(Permits.Identity.Menu.List)]
@@ -41,7 +38,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 		[Permit(Permits.Identity.Menu.List)]
 		public IActionResult List()
 		{
-			var menuList = coreService.GetMenuHierarchy();
+			var menuList = coreService.GetMenuHierarchy("url");
 
 			List<MenuMiniViewModel> model = new List<MenuMiniViewModel>();
 
@@ -470,6 +467,5 @@ namespace BPX.Website.Areas.Identity.Controllers
             //return Permit(id);
             return RedirectToAction(nameof(Index));
         }
-
     }
 }

@@ -55,14 +55,14 @@ namespace BPX.Service
             menuRepository.SaveDBChanges();
         }
 
-        public List<Menu> GetMenuHierarchy()
+        public List<Menu> GetMenuHierarchy(string orderBy)
         {
-            return menuRepository.GetMenuHierarchy();
+            return menuRepository.GetMenuHierarchy(orderBy);
         }
     }
 
     public interface IMenuService : IGenericService<Menu>
     {
-            List<Menu> GetMenuHierarchy();
+            List<Menu> GetMenuHierarchy(string orderBy);
     }
 }

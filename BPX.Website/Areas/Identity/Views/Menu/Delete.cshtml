@@ -69,7 +69,7 @@
 	<form asp-action="Delete">
 		<input type="hidden" asp-for="MenuId" />
 		<input type="submit" value="   Delete   " class="btn btn-danger" />  &nbsp;&nbsp; | &nbsp;&nbsp;
-		@*@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.List))*@
+		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.List))
 		{
 			<a asp-action="Index">Back to List</a>
 		}

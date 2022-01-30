@@ -23,10 +23,10 @@ namespace BPX.Website.Areas.Identity.Controllers
 		private readonly IUserRoleService userRoleService;
 		private readonly IRoleService roleService;
 
-        public UserController(ILogger<UserController> logger, ICoreService coreService, IUserService userService, IUserRoleService userRoleService, IRoleService roleService) : base(logger, coreService)
+        public UserController(ILogger<UserController> logger, ICoreService coreService, IRoleService roleService) : base(logger, coreService)
         {
-			this.userService = userService;
-			this.userRoleService = userRoleService;
+			this.userService = coreService.GetUserService();
+			this.userRoleService = coreService.GetUserRoleService();
 			this.roleService = roleService;
 		}
 

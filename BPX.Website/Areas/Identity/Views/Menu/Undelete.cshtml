@@ -69,11 +69,11 @@
 	<form asp-action="Undelete">
 		<input type="hidden" asp-for="MenuId" />
 		<input type="submit" value="   Restore   " class="btn btn-primary" /> &nbsp;&nbsp; | &nbsp;&nbsp;
-		@*@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.ListDeleted))*@
+		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.ListDeleted))
 		{
 			<a asp-area="Identity" asp-controller="Menu" asp-action="ListDeleted" style="text-decoration:none;" title="Back to Deleted List">Back to Deleted List</a> @Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;")
 		}
-		@*@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.List))*@
+		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.List))
 		{
 			<a asp-action="Index">Back to List</a>
 		}

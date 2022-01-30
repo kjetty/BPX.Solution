@@ -195,7 +195,7 @@ namespace BPX.Website.Controllers
         {
             return string.Join(" ", modelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
         }
-
+		
 		protected string GetInnerExceptionMessage(Exception ex)
         {
 			Exception exception = ex;

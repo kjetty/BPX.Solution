@@ -279,7 +279,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         }
 
         // GET: /Identity/Role/ListDeleted
-        [Permit(Permits.Identity.Role.Delete)]
+        [Permit(Permits.Identity.Role.ListDeleted)]
         public ActionResult ListDeleted()
         {
             return ListDeleted(1, bpxPageSize, string.Empty, string.Empty, string.Empty, string.Empty);
@@ -287,7 +287,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
         // POST: /Identity/Role/ListDeleted
         [HttpPost]
-        //[Permit(Permits.Identity.Role.Delete)]
+        [Permit(Permits.Identity.Role.ListDeleted)]
         public ActionResult ListDeleted(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
         {
             // check input and set defaults
@@ -313,7 +313,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         }
 
         // GET: /Identity/Role/Undelete/5
-        [Permit(Permits.Identity.Role.Restore)]
+        [Permit(Permits.Identity.Role.Undelete)]
         public ActionResult Undelete(int id)
         {
             var model = (RoleViewModel)roleService.GetRecordByID(id);
@@ -328,7 +328,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         // POST: /Identity/Role/Undelete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Permit(Permits.Identity.Role.Restore)]
+        [Permit(Permits.Identity.Role.Undelete)]
         public ActionResult Undelete(int id, IFormCollection collection)
         {
             try

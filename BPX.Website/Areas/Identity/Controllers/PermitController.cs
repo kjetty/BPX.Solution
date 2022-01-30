@@ -315,7 +315,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         }
 
         // GET: /Identity/Permit/Undelete/5
-        [Permit(Permits.Identity.Permit.Restore)]
+        [Permit(Permits.Identity.Permit.Undelete)]
         public ActionResult Undelete(int id)
         {
             var model = (PermitViewModel)permitService.GetRecordByID(id);
@@ -330,7 +330,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         // POST: /Identity/Permit/Undelete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Permit(Permits.Identity.Permit.Restore)]
+        [Permit(Permits.Identity.Permit.Undelete)]
         public ActionResult Undelete(int id, IFormCollection collection)
         {
             try

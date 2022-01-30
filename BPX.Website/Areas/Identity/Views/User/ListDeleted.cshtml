@@ -174,7 +174,7 @@
 								</div>
 							</td>
 							<td class="text-center">
-								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.User.Restore))
+								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.User.Undelete))
 								{
 									<a asp-area="Identity" asp-controller="User" asp-action="Undelete" asp-route-id="@item.UserId" title="restore" class="fa fa-power-off fa-xs" style="text-decoration: none; color: darkslategray;"></a>
 								}

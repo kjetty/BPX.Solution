@@ -31,14 +31,14 @@ namespace BPX.Website.Areas.Identity.Controllers
 
 
         // GET: /Identity/Menu
+        [Permit(Permits.Identity.Menu.List)]
         public IActionResult Index()
 		{
 			return RedirectToAction("List");
 		}
 
 		// GET: /Identity/Menu/List
-		//[Permit(Permits.Identity.Menu.List)]
-		[Permit(Permits.Identity.User.List)]
+		[Permit(Permits.Identity.Menu.List)]
 		public IActionResult List()
 		{
 			var menuList = coreService.GetMenuHierarchy();
@@ -54,7 +54,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 		}
 
         // GET: /Identity/Menu/Create
-        //[Permit(Permits.Identity.Menu.Create)]
+        [Permit(Permits.Identity.Menu.Create)]
         public ActionResult Create()
         {
             return View();
@@ -63,7 +63,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         // POST: /Identity/Menu/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Permit(Permits.Identity.Menu.Create)]
+        [Permit(Permits.Identity.Menu.Create)]        
         public ActionResult Create(MenuMiniViewModel collection)
         {
             try
@@ -117,7 +117,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         }
 
         // GET: /Identity/Menu/Read/5
-        //[Permit(Permits.Identity.Menu.Read)]
+        [Permit(Permits.Identity.Menu.Read)]
         public ActionResult Read(int id)
         {
             var model = (MenuViewModel)menuService.GetRecordByID(id);
@@ -130,7 +130,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         }
 
         // GET: /Identity/Menu/Update/5
-        //[Permit(Permits.Identity.Menu.Update)]
+        [Permit(Permits.Identity.Menu.Update)]
         public ActionResult Update(int id)
         {
             var model = (MenuMiniViewModel)menuService.GetRecordByID(id);
@@ -141,7 +141,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         // POST: /Identity/Menu/Update/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Permit(Permits.Identity.Menu.Update)]
+        [Permit(Permits.Identity.Menu.Update)]
         public ActionResult Update(int id, MenuMiniViewModel collection)
         {
             try
@@ -199,7 +199,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         }
 
         // GET: /Identity/Menu/Delete/5
-        //[Permit(Permits.Identity.Menu.Delete)]
+        [Permit(Permits.Identity.Menu.Delete)]
         public ActionResult Delete(int id)
         {
             var model = (MenuViewModel)menuService.GetRecordByID(id);
@@ -214,7 +214,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         // POST: /Identity/Menu/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Permit(Permits.Identity.Menu.Delete)]
+        [Permit(Permits.Identity.Menu.Delete)]
         public ActionResult Delete(int id, IFormCollection collection)
         {
             try
@@ -269,7 +269,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         }
 
         // GET: /Identity/Menu/ListDeleted
-        //[Permit(Permits.Identity.Menu.Delete)]
+        [Permit(Permits.Identity.Menu.ListDeleted)]
         public ActionResult ListDeleted()
         {
             return ListDeleted(1, bpxPageSize, string.Empty, string.Empty, string.Empty, string.Empty);
@@ -277,7 +277,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
         // POST: /Identity/Menu/ListDeleted
         [HttpPost]
-        //[Permit(Permits.Identity.Menu.Delete)]
+        [Permit(Permits.Identity.Menu.ListDeleted)]
         public ActionResult ListDeleted(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
         {
             // check input and set defaults
@@ -303,7 +303,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         }
 
         // GET: /Identity/Menu/Undelete/5
-        //[Permit(Permits.Identity.Menu.Restore)]
+        [Permit(Permits.Identity.Menu.Undelete)]
         public ActionResult Undelete(int id)
         {
             var model = (MenuViewModel)menuService.GetRecordByID(id);
@@ -318,7 +318,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         // POST: /Identity/Menu/Undelete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Permit(Permits.Identity.Menu.Restore)]
+        [Permit(Permits.Identity.Menu.Undelete)]
         public ActionResult Undelete(int id, IFormCollection collection)
         {
             try
@@ -373,7 +373,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         }
 
         // GET: /Identity/Menu/Permit/5
-        //[Permit(Permits.Identity.MenuPermit.CRUD)]
+        [Permit(Permits.Identity.MenuPermit.CRUD)]
         public ActionResult Permit(int id)
         {
             if (id <= 0)
@@ -400,7 +400,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
         // GET: /Identity/Menu/Permit/5
         [HttpPost]
-        //[Permit(Permits.Identity.MenuPermit.CRUD)]
+        [Permit(Permits.Identity.MenuPermit.CRUD)]
         public ActionResult Permit(int id, List<int> permitIDs)
         {
             //var listMenuPermits = menuPermitService.GetRecordsByFilter(c => c.MenuId == id).ToList();

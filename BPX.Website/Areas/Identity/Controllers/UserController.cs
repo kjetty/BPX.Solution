@@ -31,6 +31,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 		}
 
 		// GET: /Identity/User
+		[Permit(Permits.Identity.User.List)]
 		public ActionResult Index()
 		{
 			return RedirectToAction("List");
@@ -292,7 +293,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 		}
 
         // GET: /Identity/User/Undelete/5
-        [Permit(Permits.Identity.User.Restore)]
+        [Permit(Permits.Identity.User.Undelete)]
         public ActionResult Undelete(int id)
         {
 			var model = (UserViewModel)userService.GetRecordByID(id);
@@ -311,7 +312,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         // POST: /Identity/User/Undelete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Permit(Permits.Identity.User.Restore)]
+        [Permit(Permits.Identity.User.Undelete)]
         public ActionResult Undelete(int id, IFormCollection collection)
         {
 			try

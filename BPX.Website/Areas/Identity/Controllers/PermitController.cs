@@ -60,19 +60,6 @@ namespace BPX.Website.Areas.Identity.Controllers
             return View(model);
         }
 
-        // GET: /Identity/Permit/Read/5
-        [Permit(Permits.Identity.Permit.Read)]
-        public ActionResult Read(int id)
-        {
-            var model = (PermitViewModel)permitService.GetRecordByID(id);
-            var modelModifiedBy = userService.GetRecordByID(model.ModifiedBy);
-
-            // set ViewBag
-            ViewBag.modifiedByName = modelModifiedBy.FirstName + " " + modelModifiedBy.LastName;
-
-            return View(model);
-        }
-
         // GET: /Identity/Permit/Create
         [Permit(Permits.Identity.Permit.Create)]
         public ActionResult Create()
@@ -137,6 +124,19 @@ namespace BPX.Website.Areas.Identity.Controllers
 
                 return RedirectToAction(nameof(Create));
             }
+        }
+
+        // GET: /Identity/Permit/Read/5
+        [Permit(Permits.Identity.Permit.Read)]
+        public ActionResult Read(int id)
+        {
+            var model = (PermitViewModel)permitService.GetRecordByID(id);
+            var modelModifiedBy = userService.GetRecordByID(model.ModifiedBy);
+
+            // set ViewBag
+            ViewBag.modifiedByName = modelModifiedBy.FirstName + " " + modelModifiedBy.LastName;
+
+            return View(model);
         }
 
         // GET: /Identity/Permit/Update/5

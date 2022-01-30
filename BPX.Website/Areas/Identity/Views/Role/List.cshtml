@@ -132,11 +132,11 @@
 							<td class="text-center">
 								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.Update))
 								{
-									<a asp-area="Identity" asp-controller="Role" asp-action="Edit" asp-route-id="@item.RoleId" title="edit" class="fa fa-pen fa-xs" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+									<a asp-area="Identity" asp-controller="Role" asp-action="Update" asp-route-id="@item.RoleId" title="edit" class="fa fa-pen fa-xs" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
 								}
 								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.Read))
 								{
-									<a asp-area="Identity" asp-controller="Role" asp-action="Details" asp-route-id="@item.RoleId" title="view" class="fa fa-search fa-xs" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+									<a asp-area="Identity" asp-controller="Role" asp-action="Read" asp-route-id="@item.RoleId" title="view" class="fa fa-search fa-xs" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
 								}
 								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.Delete))
 								{

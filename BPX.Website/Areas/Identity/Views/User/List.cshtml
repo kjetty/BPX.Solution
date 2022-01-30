@@ -1,11 +1,11 @@
-﻿@model X.PagedList.IPagedList<BPX.Domain.ViewModels.PermitMiniViewModel>
+﻿@model X.PagedList.IPagedList<BPX.Domain.ViewModels.UserMiniViewModel>
 
 @using BPX.Website.CustomCode.Authorize;
 @using X.PagedList.Mvc.Core;
 @using X.PagedList.Web.Common;
 
 @{
-	ViewBag.Title = "List of Permits";
+	ViewBag.Title = "List of Users";
 
 	ViewBag.pageNumber = (ViewBag.pageNumber ?? 1);
 	ViewBag.pageSize = (ViewBag.pageSize ?? 10);
@@ -14,7 +14,7 @@
 	ViewBag.sortOrder = (ViewBag.sortOrder ?? string.Empty);
 	ViewBag.searchForString = (ViewBag.searchForString ?? string.Empty);
 
-	//local variables
+	// local variables
 	var localSortOrder = "";
 	var localSortIcon = "";
 }
@@ -30,14 +30,14 @@
 
 <div class="row">
 	<div class="col-md-9">
-		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.Create))
+		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.User.Create))
 		{
-			<a asp-area="Identity" asp-controller="Permit" asp-action="Create" class="btn btn-primary fa-sm" title="Add Permit"><i class="fa fa-plus-circle"></i> &nbsp; Add Permit</a>
+			<a asp-area="Identity" asp-controller="account" asp-action="register" class="btn btn-primary fa-sm" title="Add User"><i class="fa fa-plus-circle"></i> &nbsp; Add User</a>
 		}
 	</div>
 	<div class="col-md-3">
 		<div class="input-group">
-			@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.Filter))
+			@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.User.Filter))
 			{
 				<input id="searchInput" name="searchInput" type="text" class="form-control" placeholder="Search data" value="@ViewBag.searchForString">
 				<div class="input-group-append">
@@ -61,7 +61,7 @@
 						localSortOrder = "";
 						localSortIcon = "fa-sort";
 
-						if (ViewBag.sortByColumn == "PermitID")
+						if (ViewBag.sortByColumn == "UserId")
 						{
 							localSortOrder = ViewBag.sortOrder;
 
@@ -71,12 +71,12 @@
 								localSortIcon += "-" + "down";
 						}
 					}
-					<th class="text-center" style="width:75px;">ID <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="PermitID" sortOrder="@localSortOrder"></span></th>
+					<th class="text-center" style="width:75px;">ID <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="UserId" sortOrder="@localSortOrder"></span></th>
 					@{
 						localSortOrder = "";
 						localSortIcon = "fa-sort";
 
-						if (ViewBag.sortByColumn == "PermitArea")
+						if (ViewBag.sortByColumn == "FirstName")
 						{
 							localSortOrder = ViewBag.sortOrder;
 
@@ -86,12 +86,12 @@
 								localSortIcon += "-" + "down";
 						}
 					}
-					<th style="width:175px;">Permit Area <span class="fa @localSortIcon sortBtn" style="float: right; margin-top:5px;" sortByColumn="PermitArea" sortOrder="@localSortOrder"></span></th>
+					<th style="width:175px;">First Name <span class="fa @localSortIcon sortBtn" style="float: right; margin-top:5px;" sortByColumn="FirstName" sortOrder="@localSortOrder"></span></th>
 					@{
 						localSortOrder = "";
 						localSortIcon = "fa-sort";
 
-						if (ViewBag.sortByColumn == "PermitController")
+						if (ViewBag.sortByColumn == "LastName")
 						{
 							localSortOrder = ViewBag.sortOrder;
 
@@ -101,12 +101,12 @@
 								localSortIcon += "-" + "down";
 						}
 					}
-					<th style="width:175px;">Permit Controller <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="PermitController" sortOrder="@localSortOrder"></span></th>
+					<th style="width:175px;">Last Name <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="LastName" sortOrder="@localSortOrder"></span></th>
 					@{
 						localSortOrder = "";
 						localSortIcon = "fa-sort";
 
-						if (ViewBag.sortByColumn == "PermitName")
+						if (ViewBag.sortByColumn == "Email")
 						{
 							localSortOrder = ViewBag.sortOrder;
 
@@ -116,23 +116,9 @@
 								localSortIcon += "-" + "down";
 						}
 					}
-					<th style="width:175px;">Permit Name <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="PermitName" sortOrder="@localSortOrder"></span></th>
-					@{
-						localSortOrder = "";
-						localSortIcon = "fa-sort";
-
-						if (ViewBag.sortByColumn == "PermitEnum")
-						{
-							localSortOrder = ViewBag.sortOrder;
-
-							if (localSortOrder == "asc")
-								localSortIcon += "-" + "up";
-							if (localSortOrder == "desc")
-								localSortIcon += "-" + "down";
-						}
-					}
-					<th style="width:175px;">Permit Enumerator <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="PermitEnum" sortOrder="@localSortOrder"></span></th>
-					<th class="text-center" style="width:125px;">Action</th>
+					<th style="width:250px;">Email <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="Email" sortOrder="@localSortOrder"></span></th>
+					<th>Roles</th>
+					<th class="text-center" style="width:175px;">Action</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -151,32 +137,62 @@
 					{
 						<tr>
 							<td class="text-center">
-								@Html.DisplayFor(modelItem => item.PermitID)
+								@Html.DisplayFor(modelItem => item.UserId)
 							</td>
 							<td>
-								@Html.DisplayFor(modelItem => item.PermitArea)
+								@Html.DisplayFor(modelItem => item.FirstName)
 							</td>
 							<td>
-								@Html.DisplayFor(modelItem => item.PermitController)
+								@Html.DisplayFor(modelItem => item.LastName)
 							</td>
 							<td>
-								@Html.DisplayFor(modelItem => item.PermitName)
+								@item.Email
 							</td>
 							<td>
-								@Html.DisplayFor(modelItem => item.PermitEnum)
+								<div style="width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+									@{ int counter = 0;
+
+										if (ViewBag.listUsersRoles != null && ViewBag.listRoles != null)
+										{
+											foreach (var itemUserRole in ViewBag.listUsersRoles)
+											{
+												if (itemUserRole.UserId == item.UserId)
+												{
+													foreach (var itemRole in ViewBag.listRoles)
+													{
+														if (itemUserRole.RoleId == itemRole.RoleId)
+														{
+															counter++;
+															if (counter > 1)
+															{
+																@Html.Raw(", ")
+															}
+
+															@itemRole.RoleName
+														}
+													}
+												}
+											}
+										}
+									}
+								</div>
 							</td>
 							<td class="text-center">
-								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.Update))
+								@if (((List<int>)((List<int>)ViewBag.currUserPermitIds)).Contains(Permits.Identity.User.Update))
 								{
-									<a asp-area="Identity" asp-controller="Permit" asp-action="Edit" asp-route-id="@item.PermitID" title="edit" class="fa fa-pen fa-xs" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+									<a asp-area="Identity" asp-controller="User" asp-action="Update" asp-route-id="@item.UserId" title="edit" class="fa fa-pen fa-xs" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
 								}
-								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.Read))
+								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.User.Read))
 								{
-									<a asp-area="Identity" asp-controller="Permit" asp-action="Details" asp-route-id="@item.PermitID" title="view" class="fa fa-search fa-xs" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+									<a asp-area="Identity" asp-controller="User" asp-action="Read" asp-route-id="@item.UserId" title="view" class="fa fa-search fa-xs" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
 								}
-								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.Delete))
+								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.User.Delete))
 								{
-									<a asp-area="Identity" asp-controller="Permit" asp-action="Delete" asp-route-id="@item.PermitID" title="delete" class="fa fa-trash fa-xs" style="text-decoration: none; color: darkslategray;"></a>
+									<a asp-area="Identity" asp-controller="User" asp-action="Delete" asp-route-id="@item.UserId" title="delete" class="fa fa-trash fa-xs" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+								}
+								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.UserRole.CRUD))
+								{
+									@Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;") <a asp-area="Identity" asp-controller="User" asp-action="Role" asp-route-id="@item.UserId" title="role" class="fa fa-mask fa-xs" style="text-decoration: none; color: darkslategray;"></a>
 								}
 							</td>
 						</tr>
@@ -201,9 +217,9 @@
 		</select>
 		Entries
 		<br />
-		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.ListDeleted))
+		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.User.ListDeleted))
 		{
-			<a asp-area="Identity" asp-controller="Permit" asp-action="ListDeleted" style="text-decoration:none;" title="View deleted records">View deleted records</a>
+			<a asp-area="Identity" asp-controller="User" asp-action="ListDeleted" style="text-decoration:none;" title="View deleted records">View deleted records</a>
 		}
 	</div>
 	<div class="col-md-8 text-right" style="vertical-align:top;">
@@ -212,7 +228,7 @@
 </div>
 
 <div>
-	<form id="formForPaging" action="/Identity/Permit" method="post">
+	<form id="formForPaging" action="/Identity/User/List" method="post">
 		<input type="hidden" id="pageNumber" name="pageNumber" value="1" />
 		<input type="hidden" id="pageSize" name="pageSize" value="10" />
 		<input type="hidden" id="statusFlag" name="statusFlag" value="" />
@@ -310,3 +326,7 @@
 		}
 	</script>
 }
+
+@*
+	https://webdesignerwall.com/wdw-snippet/bootstrap-4-text-input-with-search-icon
+*@

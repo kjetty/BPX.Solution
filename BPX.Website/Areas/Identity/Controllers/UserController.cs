@@ -30,18 +30,15 @@ namespace BPX.Website.Areas.Identity.Controllers
 			this.roleService = roleService;
 		}
 
-        // GET: /Identity/User
-        [Permit(Permits.Identity.User.List)]
-        public ActionResult Index()
-        {
-			// invoke POST
-			return Index(1, bpxPageSize, string.Empty, string.Empty, string.Empty, string.Empty);
+		// GET: /Identity/User
+		public ActionResult Index()
+		{
+			return RedirectToAction("List");
 		}
 
-        // POST: /Identity/User
-        [HttpPost]
+        // GET: /Identity/User/List
         [Permit(Permits.Identity.User.List)]
-        public ActionResult Index(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
+        public ActionResult List(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
         {
 			// check input and set defaults
 			pageNumber = (pageNumber <= 0) ? 1 : pageNumber;
@@ -72,9 +69,9 @@ namespace BPX.Website.Areas.Identity.Controllers
 			return View(model);
 		}
 
-        // GET: /Identity/User/Details/5
+        // GET: /Identity/User/Read/5
         [Permit(Permits.Identity.User.Read)]
-        public ActionResult Details(int id)
+        public ActionResult Read(int id)
         {
 			//todo
 			//restrict details view to current user and user with .List permit
@@ -92,9 +89,9 @@ namespace BPX.Website.Areas.Identity.Controllers
 			return View(model);
 		}
 
-        // GET: /Identity/User/Edit/5
+        // GET: /Identity/User/Update/5
         [Permit(Permits.Identity.User.Update)]
-        public ActionResult Edit(int id)
+        public ActionResult Update(int id)
         {
 			var model = (UserMiniViewModel)userService.GetRecordByID(id);
 
@@ -107,11 +104,11 @@ namespace BPX.Website.Areas.Identity.Controllers
 			return View(model);
 		}
 
-        // POST: /Identity/User/Edit/5
+        // POST: /Identity/User/Update/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Permit(Permits.Identity.User.Update)]
-        public ActionResult Edit(int id, UserMiniViewModel collection)
+        public ActionResult Update(int id, UserMiniViewModel collection)
         {
 			try
 			{
@@ -166,7 +163,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 				// set alert
 				ShowAlertBox(AlertType.Error, errorMessage);
 
-				return RedirectToAction(nameof(Edit), new { id });
+				return RedirectToAction(nameof(Update), new { id });
 			}
 		}
 

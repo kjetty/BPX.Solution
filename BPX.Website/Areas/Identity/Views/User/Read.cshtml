@@ -5,7 +5,7 @@
 @using System.Reflection;
 
 @{
-	ViewData["Title"] = "User Details";
+	ViewData["Title"] = "User Read";
 }
 
 <div class="row">
@@ -79,7 +79,7 @@
 <div>
 	@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.User.Update))
 	{
-		<a asp-area="Identity" asp-action="Edit" asp-route-id="@Model.UserId">Edit</a> @Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;")
+		<a asp-area="Identity" asp-action="Update" asp-route-id="@Model.UserId">Edit</a> @Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;")
 	}
 	@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.User.List))
 	{

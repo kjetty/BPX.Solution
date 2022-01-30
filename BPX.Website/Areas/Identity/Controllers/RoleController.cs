@@ -34,14 +34,12 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Role.List)]
         public ActionResult Index()
         {
-            // invoke POST
-            return Index(1, bpxPageSize, string.Empty, string.Empty, string.Empty, string.Empty);
+            return RedirectToAction("List");
         }
 
-        // POST: /Identity/Role
-        [HttpPost]
+        // GET: /Identity/Role/List
         [Permit(Permits.Identity.Role.List)]
-        public ActionResult Index(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
+        public ActionResult List(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
         {
             // check input and set defaults
             pageNumber = (pageNumber <= 0) ? 1 : pageNumber;
@@ -65,9 +63,9 @@ namespace BPX.Website.Areas.Identity.Controllers
             return View(model);
         }
 
-        // GET: /Identity/Role/Details/5
+        // GET: /Identity/Role/Read/5
         [Permit(Permits.Identity.Role.Read)]
-        public ActionResult Details(int id)
+        public ActionResult Read(int id)
         {
             var model = (RoleViewModel)roleService.GetRecordByID(id);
             var modelModifiedBy = userService.GetRecordByID(model.ModifiedBy);
@@ -141,20 +139,20 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
         }
 
-        // GET: /Identity/Role/Edit/5
+        // GET: /Identity/Role/Update/5
         [Permit(Permits.Identity.Role.Update)]
-        public ActionResult Edit(int id)
+        public ActionResult Update(int id)
         {
             var model = (RoleMiniViewModel)roleService.GetRecordByID(id);
 
             return View(model);
         }
 
-        // POST: /Identity/Role/Edit/5
+        // POST: /Identity/Role/Update/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Permit(Permits.Identity.Role.Update)]
-        public ActionResult Edit(int id, RoleMiniViewModel collection)
+        public ActionResult Update(int id, RoleMiniViewModel collection)
         {
             try
             {
@@ -206,7 +204,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // set alert
                 ShowAlertBox(AlertType.Error, errorMessage);
 
-                return RedirectToAction(nameof(Edit), new { id });
+                return RedirectToAction(nameof(Update), new { id });
             }
         }
 

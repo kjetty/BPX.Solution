@@ -80,7 +80,7 @@ namespace BPX.DAL.Repository
             cteQuery += "SELECT 		MenuId, MenuName, MenuDescription, MenuURL, ParentMenuId, hLevel, OrderNumber, ";
             cteQuery += "			CAST('.' + TreePath + '.' AS VARCHAR(32)) AS TreePath, StatusFlag, ModifiedBy, ModifiedDate ";
             cteQuery += "FROM 		cte_menus ";
-            cteQuery += "ORDER BY 	hLevel, OrderNumber ";
+            cteQuery += "ORDER BY 	MenuURL ";
 
             return context.Menus.FromSqlRaw(cteQuery).ToList();
         }

@@ -19,7 +19,6 @@ namespace BPX.Service
 		private readonly IRolePermitService rolePermitService;
 		private readonly IMenuService menuService;
 		private readonly IMenuPermitService menuPermitService;
-		private string menuString;
 
 		public CoreService(IConfiguration configuration, ICacheService cacheService, ICacheKeyService cacheKeyService, ILoginService loginService, IUserService userService, IUserRoleService userRoleService, IRolePermitService rolePermitService, IMenuService menuService, IMenuPermitService menuPermitService)
 		{
@@ -32,7 +31,6 @@ namespace BPX.Service
 			this.rolePermitService = rolePermitService;
 			this.menuService = menuService;
 			this.menuPermitService = menuPermitService;
-			this.menuString = string.Empty;
 		}
 
 		public ICacheKeyService GetCacheKeyService()
@@ -100,17 +98,17 @@ namespace BPX.Service
 
 		public string GetMenuString(List<int> userPermitIds, List<Menu> menuHierarchy)
 		{
-			menuString = string.Empty;
+			string menuString = string.Empty;
 
 			// todo :: get TreePath(s) from userPermitIds
 
 			// generate the menuString
-			AddMenuItemsLevelOne(menuHierarchy, AddRoot(menuHierarchy));
+			AddMenuItemsLevelOne(ref menuString, menuHierarchy, AddRoot(ref menuString, menuHierarchy));
 
 			return menuString;
 		}
 
-		private Menu AddRoot(List<Menu> menuHierarchy)
+		private Menu AddRoot(ref string menuString, List<Menu> menuHierarchy)
 		{
 			var root = menuHierarchy.Where(c => c.ParentMenuId.Equals(0)).SingleOrDefault();
 
@@ -121,7 +119,7 @@ namespace BPX.Service
 			return root;
 		}
 
-		private void AddMenuItemsLevelOne(List<Menu> menuHierarchy, Menu menu)
+		private void AddMenuItemsLevelOne(ref string menuString, List<Menu> menuHierarchy, Menu menu)
 		{
 			var levelOneMenuItems = menuHierarchy.Where(c => c.ParentMenuId.Equals(menu.MenuId)).ToList();
 
@@ -140,7 +138,7 @@ namespace BPX.Service
 							menuString += "<li class=\"dropdown\">";
 							menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName} <i class=\"bi bi-chevron-down\"></i></a>";
 
-							AddMenuItemsLevelTwo(menuHierarchy, itemMenu);
+							AddMenuItemsLevelTwo(ref menuString, menuHierarchy, itemMenu);
 
 							menuString += "</li>";
 						}
@@ -155,7 +153,7 @@ namespace BPX.Service
 			}
 		}
 
-		private void AddMenuItemsLevelTwo(List<Menu> menuHierarchy, Menu menu)
+		private void AddMenuItemsLevelTwo(ref string menuString, List<Menu> menuHierarchy, Menu menu)
 		{
 			var levelTwoMenuItems = menuHierarchy.Where(c => c.ParentMenuId.Equals(menu.MenuId)).ToList();
 
@@ -176,7 +174,7 @@ namespace BPX.Service
 							menuString += "<li class=\"dropdown\">";
 							menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName} <i class=\"bi bi-chevron-right\"></i></a>";
 
-							AddMenuItemsLevelThree(menuHierarchy, itemMenu);
+							AddMenuItemsLevelThree(ref menuString, menuHierarchy, itemMenu);
 
 							menuString += "</li>";
 						}
@@ -193,7 +191,7 @@ namespace BPX.Service
 			}
 		}
 
-		private void AddMenuItemsLevelThree(List<Menu> menuHierarchy, Menu menu)
+		private void AddMenuItemsLevelThree(ref string menuString, List<Menu> menuHierarchy, Menu menu)
 		{
 			var levelThreeMenuItems = menuHierarchy.Where(c => c.ParentMenuId.Equals(menu.MenuId)).ToList();
 

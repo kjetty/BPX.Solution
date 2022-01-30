@@ -1,101 +1,73 @@
-﻿@model IEnumerable<BPX.Domain.ViewModels.MenuMiniViewModel>
+﻿@model BPX.Domain.ViewModels.MenuMiniViewModel
+
+@using BPX.Website.CustomCode.Authorize;
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Create Menu";
 }
 
-<h1>Index</h1>
+<div class="row">
+	<div class="col-md-12">
+		<h5>@ViewBag.Title</h5>
+	</div>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table table-sm table-striped table-hover border-bottom table-bordered">
-	<thead>
-		<tr>
-			@*<th>
-				@Html.DisplayNameFor(model => model.MenuId)
-			</th>*@
-			<th>
-				@*@Html.DisplayNameFor(model => model.MenuName)*@
-				Name
-			</th>
-			@*<th>
-				@Html.DisplayNameFor(model => model.MenuDescription)
-			</th>*@
-			<th>
-				@*@Html.DisplayNameFor(model => model.MenuURL)*@
-				URL
-			</th>
-			@*<th>
-				@Html.DisplayNameFor(model => model.ParentMenuId)
-			</th>*@
-			@*<th>
-				@Html.DisplayNameFor(model => model.HLevel)
-			</th>*@
-			<th>
-				@*@Html.DisplayNameFor(model => model.OrderNumber)*@
-				Order
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.TreePath)
-			</th>
-			<th>
-				Action
-			</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model)
-		{
-			<tr>
-				@*<td>
-					@Html.DisplayFor(modelItem => item.MenuId)
-				</td>*@
-				<td>
-					@{
-						for (int i = 2; i <= item.HLevel - 1; i++)
-						{
-							@Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-						}
+<p></p>
+<hr />
 
-						if (item.ParentMenuId.Equals(0))
-						{
-							<span class="bi-house-fill">&nbsp;</span>
-						}
-					}
+<div class="row">
+	<div class="col-md-12">
+		<form asp-action="Create">
+			@*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
+			@*<input type="hidden" asp-for="MenuId" />*@
+			<div class="row form-group">
+				<div class="col-md-2">
+					<label asp-for="MenuName" class="control-label"></label>
+				</div>
+				<div class="col-md-4 input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fa fa-at fa-fw"></i></span>
+					</div>
+					<input asp-for="MenuName" class="form-control" />
+				</div>
+				<div class="col-md-6">
+					<i class="fa fa-asterisk fa-xs" style="color:red; margin-left:-22px; padding-right:5px; font-size: 0.5rem;" aria-hidden="true"></i>
+					<span asp-validation-for="MenuName" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="row form-group">
+				<div class="col-md-2">
+					<label asp-for="MenuDescription" class="control-label"></label>
+				</div>
+				<div class="col-md-4 input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fa fa-align-justify fa-fw"></i></span>
+					</div>
+					<input asp-for="MenuDescription" class="form-control" />
+				</div>
+				<div class="col-md-6">
+					<i class="fa fa-asterisk fa-xs" style="color:red; margin-left:-22px; padding-right:5px; font-size: 0.5rem;" aria-hidden="true"></i>
+					<span asp-validation-for="MenuDescription" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="row form-group">
+				<div class="col-md-2">
+					&nbsp;
+				</div>
+				<div class="col-md-4 input-group">
+					<input type="submit" value="   Create   " class="btn btn-primary" />
+				</div>
+				<div class="col-md-6">
+					&nbsp;
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
 
-					@Html.DisplayFor(modelItem => item.MenuName)
-				</td>
-				@*<td>
-					@Html.DisplayFor(modelItem => item.MenuDescription)
-				</td>*@
-				<td>
-					@Html.DisplayFor(modelItem => item.MenuURL)
-				</td>
-				@*<td>
-					@Html.DisplayFor(modelItem => item.ParentMenuId)
-				</td>*@
-				@*<td>
-					@Html.DisplayFor(modelItem => item.HLevel)
-				</td>*@
-				<td>
-					@Html.DisplayFor(modelItem => item.OrderNumber)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.TreePath)
-				</td>
-				<td style="padding-left: 1em; padding-right:1em;">
-					<a asp-area="Identity" asp-controller="Menu" asp-action="Create" asp-route-id="@item.MenuId" title="create" class="bi-plus-circle" style="text-decoration: none;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
-					<a asp-area="Identity" asp-controller="Menu" asp-action="Read" asp-route-id="@item.MenuId" title="read" class="bi-eye" style="text-decoration: none;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
-					<a asp-area="Identity" asp-controller="Menu" asp-action="Update" asp-route-id="@item.MenuId" title="update" class="bi-pencil" style="text-decoration: none;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
-					<a asp-area="Identity" asp-controller="Menu" asp-action="Delete" asp-route-id="@item.MenuId" title="delete" class="bi-trash" style="text-decoration: none;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;...&nbsp;&nbsp;&nbsp;")
-					<a asp-area="Identity" asp-controller="Menu" asp-action="Permit" asp-route-id="@item.MenuId" title="permit" class="bi-person-badge" style="text-decoration: none;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
-
-					@*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-		@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-		@Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
-				</td>
-			</tr>
-		}
-	</tbody>
-</table>
+<div>
+	@*@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.List))*@
+	{
+		<a asp-action="Index">Back to List</a>
+	}
+</div>

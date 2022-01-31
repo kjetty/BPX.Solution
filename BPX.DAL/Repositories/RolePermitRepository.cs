@@ -20,9 +20,9 @@ namespace BPX.DAL.Repository
             throw new NotImplementedException();
         }
 
-        public RolePermit GetRecordByID(int id)
+        public RolePermit GetRecordById(int id)
         {
-            return context.RolePermits.Where(c => c.RolePermitID == id).SingleOrDefault();
+            return context.RolePermits.Where(c => c.RolePermitId == id).SingleOrDefault();
         }
 
         public IQueryable<RolePermit> GetRecordsByFilter(Expression<Func<RolePermit, bool>> filter)

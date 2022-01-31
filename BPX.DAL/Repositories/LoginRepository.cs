@@ -20,7 +20,7 @@ namespace BPX.DAL.Repository
             throw new NotImplementedException();
         }
 
-        public Login GetRecordByID(int id)
+        public Login GetRecordById(int id)
         {
             return context.Logins.Where(c => c.UserId == id).SingleOrDefault();
         }

@@ -134,8 +134,8 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Role.Read)]
         public ActionResult Read(int id)
         {
-            var model = (RoleViewModel)roleService.GetRecordByID(id);
-            var modelModifiedBy = userService.GetRecordByID(model.ModifiedBy);
+            var model = (RoleViewModel)roleService.GetRecordById(id);
+            var modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
 
             // set ViewBag
             ViewBag.modifiedByName = modelModifiedBy.FirstName + " " + modelModifiedBy.LastName;
@@ -147,7 +147,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Role.Update)]
         public ActionResult Update(int id)
         {
-            var model = (RoleMiniViewModel)roleService.GetRecordByID(id);
+            var model = (RoleMiniViewModel)roleService.GetRecordById(id);
 
             return View(model);
         }
@@ -173,7 +173,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 }
 
                 // get existing data
-                var recordRole = roleService.GetRecordByID(id);
+                var recordRole = roleService.GetRecordById(id);
 
                 if (recordRole.StatusFlag == RecordStatus.Active)
                 {
@@ -216,8 +216,8 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Role.Delete)]
         public ActionResult Delete(int id)
         {
-            var model = (RoleViewModel)roleService.GetRecordByID(id);
-            var modelModifiedBy = userService.GetRecordByID(model.ModifiedBy);
+            var model = (RoleViewModel)roleService.GetRecordById(id);
+            var modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
 
             // set ViewBag
             ViewBag.modifiedByName = modelModifiedBy.FirstName + " " + modelModifiedBy.LastName;
@@ -246,7 +246,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 }
 
                 // get existing data
-                var recordRole = roleService.GetRecordByID(id);
+                var recordRole = roleService.GetRecordById(id);
 
                 if (recordRole.StatusFlag == RecordStatus.Active)
                 {
@@ -313,8 +313,8 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Role.Undelete)]
         public ActionResult Undelete(int id)
         {
-            var model = (RoleViewModel)roleService.GetRecordByID(id);
-            var modelModifiedBy = userService.GetRecordByID(model.ModifiedBy);
+            var model = (RoleViewModel)roleService.GetRecordById(id);
+            var modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
 
             // set ViewBag
             ViewBag.modifiedByName = modelModifiedBy.FirstName + " " + modelModifiedBy.LastName;
@@ -343,7 +343,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 }
 
                 // get existing data
-                var recordRole = roleService.GetRecordByID(id);
+                var recordRole = roleService.GetRecordById(id);
 
                 if (recordRole.StatusFlag == RecordStatus.Inactive)
                 {
@@ -391,16 +391,16 @@ namespace BPX.Website.Areas.Identity.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var role = roleService.GetRecordByID(id);
+            var role = roleService.GetRecordById(id);
             var listPermits = permitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active)).OrderBy(c => c.PermitArea).ThenBy(c => c.PermitController).ThenBy(c => c.PermitName).ToList();     
-            var listRolePermitIDs = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.RoleId.Equals(id)).OrderBy(c => c.PermitID).Select(c => c.PermitID).ToList();      
+            var listRolePermitIds = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.RoleId.Equals(id)).OrderBy(c => c.PermitId).Select(c => c.PermitId).ToList();      
             var listAreas = listPermits.OrderBy(c => c.PermitArea).Select(c => c.PermitArea).Distinct().ToList();
                          
             // set ViewBag
             ViewBag.role = role;
             ViewBag.listAreas = listAreas;
             ViewBag.listPermits = listPermits;
-            ViewBag.listRolePermitIDs = listRolePermitIDs;
+            ViewBag.listRolePermitIds = listRolePermitIds;
 
             return View();
         }
@@ -408,7 +408,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         // GET: /Identity/Role/Permit/5
         [HttpPost]
         [Permit(Permits.Identity.RolePermit.CRUD)]
-        public ActionResult Permit(int id, List<int> permitIDs)
+        public ActionResult Permit(int id, List<int> permitIds)
         {
             var listRolePermits = rolePermitService.GetRecordsByFilter(c => c.RoleId == id).ToList();
 
@@ -423,9 +423,9 @@ namespace BPX.Website.Areas.Identity.Controllers
             rolePermitService.SaveDBChanges();
 
             // add or activate received permits for the role
-            foreach (var permitID in permitIDs)
+            foreach (var permitID in permitIds)
             {
-                var existingRolePermit = rolePermitService.GetRecordsByFilter(c => c.RoleId == id && c.PermitID == permitID).FirstOrDefault();
+                var existingRolePermit = rolePermitService.GetRecordsByFilter(c => c.RoleId == id && c.PermitId == permitID).FirstOrDefault();
 
                 if (existingRolePermit != null)
                 {
@@ -440,7 +440,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     RolePermit newRolePermit = new()
                     {
                         RoleId = id,
-                        PermitID = permitID,
+                        PermitId = permitID,
                         StatusFlag = RecordStatus.Active,
                         ModifiedBy = 1,
                         ModifiedDate = DateTime.Now

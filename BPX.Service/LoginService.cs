@@ -21,9 +21,9 @@ namespace BPX.Service
 			throw new NotImplementedException();
 		}
 
-		public Login GetRecordByID(int id)
+		public Login GetRecordById(int id)
 		{
-			return loginRepository.GetRecordByID(id);
+			return loginRepository.GetRecordById(id);
 		}
 
 		public IQueryable<Login> GetRecordsByFilter(Expression<Func<Login, bool>> filter)

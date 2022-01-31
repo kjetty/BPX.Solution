@@ -56,7 +56,7 @@
 						localSortOrder = "";
 						localSortIcon = "fa-sort";
 
-						if (ViewBag.sortByColumn == "PermitID")
+						if (ViewBag.sortByColumn == "PermitId")
 						{
 							localSortOrder = ViewBag.sortOrder;
 
@@ -66,7 +66,7 @@
 								localSortIcon += "-" + "down";
 						}
 					}
-					<th class="text-center" style="width:75px;">ID <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="PermitID" sortOrder="@localSortOrder"></span></th>
+					<th class="text-center" style="width:75px;">ID <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="PermitId" sortOrder="@localSortOrder"></span></th>
 					@{
 						localSortOrder = "";
 						localSortIcon = "fa-sort";
@@ -146,7 +146,7 @@
 					{
 						<tr>
 							<td class="text-center">
-								@Html.DisplayFor(modelItem => item.PermitID)
+								@Html.DisplayFor(modelItem => item.PermitId)
 							</td>
 							<td>
 								@Html.DisplayFor(modelItem => item.PermitArea)
@@ -163,7 +163,7 @@
 							<td class="text-center">
 								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.Undelete))
 								{
-									<a asp-area="Identity" asp-controller="Permit" asp-action="Undelete" asp-route-id="@item.PermitID" title="restore" class="bi-power" style="text-decoration: none; color: darkslategray;"></a>
+									<a asp-area="Identity" asp-controller="Permit" asp-action="Undelete" asp-route-id="@item.PermitId" title="restore" class="bi-power" style="text-decoration: none; color: darkslategray;"></a>
 								}
 							</td>
 						</tr>

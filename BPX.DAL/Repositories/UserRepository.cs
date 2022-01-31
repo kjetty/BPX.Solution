@@ -69,7 +69,7 @@ namespace BPX.DAL.Repository
             return model.ToPagedList(pageNumber, pageSize);
         }
 
-        public User GetRecordByID(int id)
+        public User GetRecordById(int id)
         {
             return context.Users.Where(c => c.UserId == id).SingleOrDefault();
         }

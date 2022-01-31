@@ -72,11 +72,11 @@ namespace BPX.Website.Areas.Admin.Controllers
                     tempString += "\t" + "\t" + "\t" + "{ " + Environment.NewLine;
 
                     // db call
-                    var permitObjList = permitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.PermitArea.Equals(itemPermitArea) && c.PermitController.Equals(itemControllerArea)).OrderBy(c => c.PermitName).Select(c => new { c.PermitID, c.PermitName, c.PermitEnum }).OrderBy(c => c.PermitName).ToList();
+                    var permitObjList = permitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.PermitArea.Equals(itemPermitArea) && c.PermitController.Equals(itemControllerArea)).OrderBy(c => c.PermitName).Select(c => new { c.PermitId, c.PermitName, c.PermitEnum }).OrderBy(c => c.PermitName).ToList();
 
                     foreach (var itemPermitObj in permitObjList)
                     {
-                        tempString += "\t" + "\t" + "\t" + "\t" + "public const int " + itemPermitObj.PermitName + " = " + itemPermitObj.PermitID + "; \t\t\t //" + itemPermitObj.PermitEnum + Environment.NewLine;
+                        tempString += "\t" + "\t" + "\t" + "\t" + "public const int " + itemPermitObj.PermitName + " = " + itemPermitObj.PermitId + "; \t\t\t //" + itemPermitObj.PermitEnum + Environment.NewLine;
                     }
 
                     tempString += "\t" + "\t" + "\t" + "} " + Environment.NewLine + Environment.NewLine;

@@ -7,7 +7,7 @@ namespace BPX.Domain.ViewModels
     {
         [Key]
         [Display(Name = "Permit ID")]
-        public int PermitID { get; set; }
+        public int PermitId { get; set; }
 
         [Required]
         [StringLength(32)]
@@ -36,7 +36,7 @@ namespace BPX.Domain.ViewModels
 
             return new PermitMiniViewModel
             {
-                PermitID = dm.PermitID,
+                PermitId = dm.PermitId,
                 PermitArea = dm.PermitArea,
                 PermitController = dm.PermitController,
                 PermitName = dm.PermitName,
@@ -51,7 +51,7 @@ namespace BPX.Domain.ViewModels
 
             return new Permit
             {
-                PermitID = vm.PermitID,
+                PermitId = vm.PermitId,
                 PermitArea = vm.PermitArea,
                 PermitController = vm.PermitController,
                 PermitName = vm.PermitName,
@@ -83,7 +83,7 @@ namespace BPX.Domain.ViewModels
             return new PermitViewModel
             {
                 // set core data
-                PermitID = dm.PermitID,
+                PermitId = dm.PermitId,
                 PermitArea = dm.PermitArea,
                 PermitController = dm.PermitController,
                 PermitName = dm.PermitName,
@@ -103,7 +103,7 @@ namespace BPX.Domain.ViewModels
             return new Permit
             {
                 // set core data
-                PermitID = vm.PermitID,
+                PermitId = vm.PermitId,
                 PermitArea = vm.PermitArea,
                 PermitController = vm.PermitController,
                 PermitName = vm.PermitName,

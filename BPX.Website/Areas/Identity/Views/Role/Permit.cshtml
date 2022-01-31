@@ -64,13 +64,13 @@
 													{
 														if (currController == itemPermit2.PermitController)
 														{
-															if (((IList<int>)ViewBag.listRolePermitIDs).Contains(itemPermit2.PermitID))
+															if (((IList<int>)ViewBag.listRolePermitIds).Contains(itemPermit2.PermitId))
 															{
-																<input type="checkbox" class="@classAreaController @classArea" name="PermitIDs" value="@itemPermit2.PermitID" checked="checked" />
+																<input type="checkbox" class="@classAreaController @classArea" name="PermitIds" value="@itemPermit2.PermitId" checked="checked" />
 															}
 															else
 															{
-																<input type="checkbox" class="@classAreaController @classArea" name="PermitIDs" value="@itemPermit2.PermitID" />
+																<input type="checkbox" class="@classAreaController @classArea" name="PermitIds" value="@itemPermit2.PermitId" />
 															}
 
 															@itemPermit2.PermitName

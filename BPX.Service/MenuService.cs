@@ -22,9 +22,9 @@ namespace BPX.Service
             throw new NotImplementedException();
         }
 
-        public Menu GetRecordByID(int id)
+        public Menu GetRecordById(int id)
         {
-            return menuRepository.GetRecordByID(id);
+            return menuRepository.GetRecordById(id);
         }
 
         public IQueryable<Menu> GetRecordsByFilter(Expression<Func<Menu, bool>> filter)

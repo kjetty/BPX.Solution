@@ -11,7 +11,7 @@ namespace BPX.Domain.DbModels
         }
 
         [Key]
-        public int PermitID { get; set; }
+        public int PermitId { get; set; }
 
         [Required]
         [StringLength(32)]

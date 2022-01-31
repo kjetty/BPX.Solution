@@ -94,7 +94,7 @@ namespace BPX.Service
 		{
 			UserMeta userMeta = new UserMeta();
 
-			var user = userService.GetRecordByID(userId);
+			var user = userService.GetRecordById(userId);
 
 			userMeta.UserId = userId;
 			userMeta.FirstName = user.FirstName;
@@ -113,12 +113,12 @@ namespace BPX.Service
 
 		public List<int> GetUserPermitIds(List<int> userRoleIds)
 		{
-			return rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && userRoleIds.Contains(c.RoleId)).OrderBy(c => c.PermitID).Select(c => c.PermitID).Distinct().ToList();
+			return rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && userRoleIds.Contains(c.RoleId)).OrderBy(c => c.PermitId).Select(c => c.PermitId).Distinct().ToList();
 		}
 
 		public List<int> GetPermitRoles(int permitId)
 		{
-			return rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.PermitID == permitId).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
+			return rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.PermitId == permitId).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
 		}
 
 		public List<Menu> GetMenuHierarchy(string statusFlag, string orderBy)

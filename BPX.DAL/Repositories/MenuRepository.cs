@@ -22,7 +22,7 @@ namespace BPX.DAL.Repository
             throw new NotImplementedException();
         }
 
-        public Menu GetRecordByID(int id)
+        public Menu GetRecordById(int id)
         {
             return context.Menus.Where(c => c.MenuId == id).SingleOrDefault();
         }

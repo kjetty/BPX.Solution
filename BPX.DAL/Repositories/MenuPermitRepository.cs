@@ -21,7 +21,7 @@ namespace BPX.DAL.Repository
             throw new NotImplementedException();
         }
 
-        public MenuPermit GetRecordByID(int id)
+        public MenuPermit GetRecordById(int id)
         {
             return context.MenuPermits.Where(c => c.MenuPermitId == id).SingleOrDefault();
         }

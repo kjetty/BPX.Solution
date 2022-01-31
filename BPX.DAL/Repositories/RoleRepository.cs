@@ -64,7 +64,7 @@ namespace BPX.DAL.Repository
             return model.ToPagedList(pageNumber, pageSize);
         }
 
-        public Role GetRecordByID(int id)
+        public Role GetRecordById(int id)
         {
             return context.Roles.Where(c => c.RoleId == id).SingleOrDefault();
         }

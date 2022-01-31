@@ -6,13 +6,13 @@ namespace BPX.Domain.DbModels
     public partial class RolePermit
     {
         [Key]
-        public int RolePermitID { get; set; }
+        public int RolePermitId { get; set; }
 
         [Required]
         public int RoleId { get; set; }
 
         [Required]
-        public int PermitID { get; set; }
+        public int PermitId { get; set; }
 
         [Required]
         [StringLength(1)]

@@ -20,7 +20,7 @@ namespace BPX.DAL.Repository
             throw new NotImplementedException();
         }
 
-        public CacheKey GetRecordByID(int id)
+        public CacheKey GetRecordById(int id)
         {
             throw new NotImplementedException();
         }

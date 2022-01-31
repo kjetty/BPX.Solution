@@ -20,7 +20,7 @@ namespace BPX.DAL.Repository
             throw new NotImplementedException();
         }
 
-        public UserRole GetRecordByID(int id)
+        public UserRole GetRecordById(int id)
         {
             return context.UserRoles.Where(c => c.UserRoleId == id).SingleOrDefault();
         }

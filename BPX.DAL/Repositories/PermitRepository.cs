@@ -30,7 +30,7 @@ namespace BPX.DAL.Repository
             pageNumber = pageNumber <= 0 ? 1 : pageNumber;
             pageSize = pageSize <= 0 ? 1 : pageSize;
             statusFlag = statusFlag.Length == 0 ? RecordStatus.Active : statusFlag;
-            sortByColumn = sortByColumn.Length == 0 ? "PermitID" : sortByColumn;
+            sortByColumn = sortByColumn.Length == 0 ? "PermitId" : sortByColumn;
             sortOrder = sortOrder.Length == 0 ? SortOrder.Ascending : sortOrder;
             searchForString = searchForString.Length == 0 ? string.Empty : searchForString;
 
@@ -66,7 +66,7 @@ namespace BPX.DAL.Repository
                     break;
 
                 default:
-                    model = (sortOrder == SortOrder.Descending) ? model.OrderByDescending(c => c.PermitID) : model.OrderBy(c => c.PermitID);
+                    model = (sortOrder == SortOrder.Descending) ? model.OrderByDescending(c => c.PermitId) : model.OrderBy(c => c.PermitId);
                     break;
             }
 
@@ -74,9 +74,9 @@ namespace BPX.DAL.Repository
             return model.ToPagedList(pageNumber, pageSize);
         }
 
-        public Permit GetRecordByID(int id)
+        public Permit GetRecordById(int id)
         {
-            return context.Permits.Where(c => c.PermitID == id).SingleOrDefault();
+            return context.Permits.Where(c => c.PermitId == id).SingleOrDefault();
         }
 
         public IQueryable<Permit> GetRecordsByFilter(Expression<Func<Permit, bool>> filter)

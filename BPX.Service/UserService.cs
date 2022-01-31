@@ -21,9 +21,9 @@ namespace BPX.Service
             return userRepository.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString);
         }
 
-        public User GetRecordByID(int id)
+        public User GetRecordById(int id)
         {
-            return userRepository.GetRecordByID(id);
+            return userRepository.GetRecordById(id);
         }
 
         public IQueryable<User> GetRecordsByFilter(Expression<Func<User, bool>> filter)

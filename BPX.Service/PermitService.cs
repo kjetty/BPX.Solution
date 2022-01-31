@@ -21,9 +21,9 @@ namespace BPX.Service
             return permitRepository.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString);
         }
 
-        public Permit GetRecordByID(int id)
+        public Permit GetRecordById(int id)
         {
-            return permitRepository.GetRecordByID(id);
+            return permitRepository.GetRecordById(id);
         }
 
         public IQueryable<Permit> GetRecordsByFilter(Expression<Func<Permit, bool>> filter)

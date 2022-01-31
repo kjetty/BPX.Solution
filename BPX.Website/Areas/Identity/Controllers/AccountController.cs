@@ -116,7 +116,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             loginService.SaveDBChanges();
 
             // get user and userRoles
-            var user = userService.GetRecordByID(login.UserId);
+            var user = userService.GetRecordById(login.UserId);
             var userRolesIds = userRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.UserId.Equals(login.UserId)).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
 
             string lastName = user.LastName ?? string.Empty;
@@ -349,7 +349,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // todo :: verify old password
 
                 // get user
-                var login = loginService.GetRecordByID(currUserMeta.UserId);
+                var login = loginService.GetRecordById(currUserMeta.UserId);
 
 				// hash the password
 				var passwordHasher = new PasswordHasher<Login>();
@@ -389,7 +389,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         {
             if (currUserMeta.UserId > 0)
             {
-                var login = loginService.GetRecordByID(currUserMeta.UserId);
+                var login = loginService.GetRecordById(currUserMeta.UserId);
 
                 login.LoginToken = Guid.NewGuid().ToString();
                 login.LastLoginDate = DateTime.Now;

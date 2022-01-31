@@ -130,8 +130,8 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Permit.Read)]
         public ActionResult Read(int id)
         {
-            var model = (PermitViewModel)permitService.GetRecordByID(id);
-            var modelModifiedBy = userService.GetRecordByID(model.ModifiedBy);
+            var model = (PermitViewModel)permitService.GetRecordById(id);
+            var modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
 
             // set ViewBag
             ViewBag.modifiedByName = modelModifiedBy.FirstName + " " + modelModifiedBy.LastName;
@@ -143,7 +143,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Permit.Update)]
         public ActionResult Update(int id)
         {
-            var model = (PermitMiniViewModel)permitService.GetRecordByID(id);
+            var model = (PermitMiniViewModel)permitService.GetRecordById(id);
 
             return View(model);
         }
@@ -169,7 +169,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 }
 
                 // get existing data
-                var recordPermit = permitService.GetRecordByID(id);
+                var recordPermit = permitService.GetRecordById(id);
 
                 if (recordPermit.StatusFlag == RecordStatus.Active)
                 {
@@ -214,8 +214,8 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Permit.Delete)]
         public ActionResult Delete(int id)
         {
-            var model = (PermitViewModel)permitService.GetRecordByID(id);
-            var modelModifiedBy = userService.GetRecordByID(model.ModifiedBy);
+            var model = (PermitViewModel)permitService.GetRecordById(id);
+            var modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
 
             // set ViewBag
             ViewBag.modifiedByName = modelModifiedBy.FirstName + " " + modelModifiedBy.LastName;
@@ -244,7 +244,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 }
 
                 // get existing data
-                var recordPermit = permitService.GetRecordByID(id);
+                var recordPermit = permitService.GetRecordById(id);
 
                 if (recordPermit.StatusFlag == RecordStatus.Active)
                 {
@@ -310,8 +310,8 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Permit.Undelete)]
         public ActionResult Undelete(int id)
         {
-            var model = (PermitViewModel)permitService.GetRecordByID(id);
-            var modelModifiedBy = userService.GetRecordByID(model.ModifiedBy);
+            var model = (PermitViewModel)permitService.GetRecordById(id);
+            var modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
 
             // set ViewBag
             ViewBag.modifiedByName = modelModifiedBy.FirstName + " " + modelModifiedBy.LastName;
@@ -340,7 +340,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 }
 
                 // get existing data
-                var recordPermit = permitService.GetRecordByID(id);
+                var recordPermit = permitService.GetRecordById(id);
 
                 if (recordPermit.StatusFlag == RecordStatus.Inactive)
                 {

@@ -7,7 +7,7 @@ namespace BPX.DAL.Repository
 {
     public interface IRepository<T> where T : class
     {
-        T GetRecordByID(int id);
+        T GetRecordById(int id);
 
         IPagedList<T> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString);
 

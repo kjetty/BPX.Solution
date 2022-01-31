@@ -21,9 +21,9 @@ namespace BPX.Service
             throw new NotImplementedException();
         }
 
-        public MenuPermit GetRecordByID(int id)
+        public MenuPermit GetRecordById(int id)
         {
-            return menuPermitRepository.GetRecordByID(id);
+            return menuPermitRepository.GetRecordById(id);
         }
 
         public IQueryable<MenuPermit> GetRecordsByFilter(Expression<Func<MenuPermit, bool>> filter)

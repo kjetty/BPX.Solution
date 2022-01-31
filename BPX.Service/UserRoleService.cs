@@ -21,9 +21,9 @@ namespace BPX.Service
             throw new NotImplementedException();
         }
 
-        public UserRole GetRecordByID(int id)
+        public UserRole GetRecordById(int id)
         {
-            return userRoleRepository.GetRecordByID(id);
+            return userRoleRepository.GetRecordById(id);
         }
 
         public IQueryable<UserRole> GetRecordsByFilter(Expression<Func<UserRole, bool>> filter)

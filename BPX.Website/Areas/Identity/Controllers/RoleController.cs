@@ -192,6 +192,9 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // commit changes to database
                 roleService.SaveDBChanges();
 
+                // reset cache
+                ResetCache();
+
                 // set alert
                 ShowAlertBox(AlertType.Success, "Role is successfully updated.");
 
@@ -261,6 +264,9 @@ namespace BPX.Website.Areas.Identity.Controllers
 
                 // commit changes to database
                 roleService.SaveDBChanges();
+
+                // reset cache
+                ResetCache();
 
                 // set alert
                 ShowAlertBox(AlertType.Success, "Role is successfully deleted.");
@@ -359,6 +365,9 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // commit changes to database
                 roleService.SaveDBChanges();
 
+                // reset cache
+                ResetCache();
+
                 // set alert
                 ShowAlertBox(AlertType.Success, "Role is successfully restored.");
 
@@ -452,30 +461,25 @@ namespace BPX.Website.Areas.Identity.Controllers
 
             rolePermitService.SaveDBChanges();
 
-            // remove from cache
-            string cacheKey = string.Empty;
-
-            // user:{id}:roles
-            cacheKey = $"role:{id}:permits";
-            cacheService.RemoveCache(cacheKey);
-
-            // user:{id}:meta
-            //cacheKey = $"user:{id}:meta";
-            //cacheService.RemoveCache(cacheKey);
-
-            // permit:{id}:roles
-            var cacheKeys = cacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.StartsWith("permit:")).OrderBy(c => c.CacheKeyName).ToList();
-            foreach (var itemCacheKey in cacheKeys)
-			{ 
-                cacheService.RemoveCache(itemCacheKey.CacheKeyName);
-            }
-
+            // reset cache
+            ResetCache();
 
             // set alert
             ShowAlertBox(AlertType.Success, "Role Permits are successfully updated.");
 
             //return Permit(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        private void ResetCache()
+        {
+            //// cache :: remove following :: ALL
+            var listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.ModifiedDate >= DateTime.Now.AddMinutes(-240)).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
+
+			foreach (var itemCacheKeyName in listCacheKeyNames)
+			{
+				cacheService.RemoveCache(itemCacheKeyName.ToString());
+			}
         }
     }
 }

@@ -71,28 +71,28 @@ namespace BPX.Website.CustomCode.Authorize
 
 					if (userId > 0)
 					{	
-						var cacheKey = string.Empty;
+						string cacheKeyName = string.Empty;
 						var cacheService = coreService.GetCacheService();
 						var cacheKeyService = coreService.GetCacheKeyService();
 
 						// userRoleIds
-						cacheKey = $"user:{userId}:roles";
-						var userRoleIds = cacheService.GetCache<List<int>>(cacheKey);
+						cacheKeyName = $"user:{userId}:roles";
+						var userRoleIds = cacheService.GetCache<List<int>>(cacheKeyName);
 
 						if (userRoleIds == null)
 						{
 							userRoleIds = coreService.GetUserRoleIds(userId);
-							coreService.GetCacheService().SetCache(userRoleIds, cacheKey, cacheKeyService);
+							coreService.GetCacheService().SetCache(userRoleIds, cacheKeyName, cacheKeyService);
 						}
 
 						// permitRoleIds
-						cacheKey = $"permit:{permitId}:roles";
-						var permitRoleIds = cacheService.GetCache<List<int>>(cacheKey);
+						cacheKeyName = $"permit:{permitId}:roles";
+						var permitRoleIds = cacheService.GetCache<List<int>>(cacheKeyName);
 
 						if (permitRoleIds == null)
 						{
 							permitRoleIds = coreService.GetPermitRoles(permitId);
-							coreService.GetCacheService().SetCache(permitRoleIds, cacheKey, cacheKeyService);
+							coreService.GetCacheService().SetCache(permitRoleIds, cacheKeyName, cacheKeyService);
 						}
 
 						// intersect to check for any matching ROLES

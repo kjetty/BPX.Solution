@@ -113,13 +113,13 @@ namespace BPX.Website.Controllers
 
 		private UserMeta GetUserMeta(int userId)
 		{
-			string cacheKey = $"user:{userId}:meta";
-			UserMeta userMeta = cacheService.GetCache<UserMeta>(cacheKey);
+			string cacheKeyName = $"user:{userId}:meta";
+			UserMeta userMeta = cacheService.GetCache<UserMeta>(cacheKeyName);
 
 			if (userMeta == null)
 			{
 				userMeta = coreService.GetUserMeta(userId);
-				cacheService.SetCache(userMeta, cacheKey, cacheKeyService);
+				cacheService.SetCache(userMeta, cacheKeyName, cacheKeyService);
 			}
 
 			return userMeta;
@@ -127,13 +127,13 @@ namespace BPX.Website.Controllers
 
 		private List<int> GetUserRoleIds(int userId)
 		{
-			string cacheKey = $"user:{userId}:roles";
-			List<int> userRoleIds = cacheService.GetCache<List<int>>(cacheKey);
+			string cacheKeyName = $"user:{userId}:roles";
+			List<int> userRoleIds = cacheService.GetCache<List<int>>(cacheKeyName);
 
 			if (userRoleIds == null)
 			{
 				userRoleIds = coreService.GetUserRoleIds(userId);
-				cacheService.SetCache(userRoleIds, cacheKey, cacheKeyService);
+				cacheService.SetCache(userRoleIds, cacheKeyName, cacheKeyService);
 			}
 
 			return userRoleIds;
@@ -141,13 +141,13 @@ namespace BPX.Website.Controllers
 
 		private List<int> GetUserPermitIds(int userId, List<int> userRoleIds)
 		{
-			string cacheKey = $"user:{userId}:permits";
-			List<int> userPermitIds = cacheService.GetCache<List<int>>(cacheKey);
+			string cacheKeyName = $"user:{userId}:permits";
+			List<int> userPermitIds = cacheService.GetCache<List<int>>(cacheKeyName);
 
 			if (userPermitIds == null)
 			{
 				userPermitIds = coreService.GetUserPermitIds(userRoleIds);
-				cacheService.SetCache(userPermitIds, cacheKey, cacheKeyService);
+				cacheService.SetCache(userPermitIds, cacheKeyName, cacheKeyService);
 			}
 
 			return userPermitIds;
@@ -155,13 +155,13 @@ namespace BPX.Website.Controllers
 
 		private string GetMenuString(List<int> userRoleIds, List<int> userPermitIds)
 		{
-			string cacheKey = $"roles:{string.Join(".", userRoleIds)}:menu";
-			string menuString = cacheService.GetCache<string>(cacheKey);
+			string cacheKeyName = $"roles:{string.Join(".", userRoleIds)}:menu";
+			string menuString = cacheService.GetCache<string>(cacheKeyName);
 
 			if (menuString == null)
 			{
 				menuString = coreService.GetMenuString(userPermitIds, GetMenuHierarchy(RecordStatus.Active, string.Empty));
-				cacheService.SetCache(menuString, cacheKey, cacheKeyService);
+				cacheService.SetCache(menuString, cacheKeyName, cacheKeyService);
 			}
 
 			return menuString;
@@ -169,13 +169,13 @@ namespace BPX.Website.Controllers
 
 		private List<Menu> GetMenuHierarchy(string statusFlag, string orderBy)
 		{
-			string cacheKey = "menu:hierarchy";
-			List<Menu> menuHierarchy = cacheService.GetCache<List<Menu>>(cacheKey);
+			string cacheKeyName = $"menu:hierarchy";
+			List<Menu> menuHierarchy = cacheService.GetCache<List<Menu>>(cacheKeyName);
 
 			if (menuHierarchy == null)
 			{
 				menuHierarchy = coreService.GetMenuHierarchy(statusFlag, orderBy);
-				cacheService.SetCache(menuHierarchy, cacheKey, cacheKeyService);
+				cacheService.SetCache(menuHierarchy, cacheKeyName, cacheKeyService);
 			}
 
 			return menuHierarchy;

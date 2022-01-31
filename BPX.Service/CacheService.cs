@@ -30,7 +30,7 @@ namespace BPX.Service
 		//	DistributedCacheEntryOptions cacheOptions = new()
 		//	{
 		//		AbsoluteExpiration = DateTime.Now.AddDays(7),
-		//		SlidingExpiration = TimeSpan.FromMinutes(30)
+		//		SlidingExpiration = TimeSpan.FromMinutes(240)
 		//	};
 
 		//	distributedCache.Set(key, JsonSerializer.SerializeToUtf8Bytes(values), cacheOptions);
@@ -41,7 +41,7 @@ namespace BPX.Service
 			DistributedCacheEntryOptions cacheOptions = new()
 			{
 				AbsoluteExpiration = DateTime.Now.AddDays(7),
-				SlidingExpiration = TimeSpan.FromMinutes(30)
+				SlidingExpiration = TimeSpan.FromMinutes(240)
 			};
 
 			distributedCache.Set(key, JsonSerializer.SerializeToUtf8Bytes(values), cacheOptions);

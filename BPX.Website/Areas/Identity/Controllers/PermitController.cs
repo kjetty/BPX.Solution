@@ -16,12 +16,16 @@ namespace BPX.Website.Areas.Identity.Controllers
 	[Area("Identity")]
     public class PermitController : BaseController<PermitController>
     {
+        private readonly ICacheService cacheService;
+        private readonly ICacheKeyService cacheKeyService;
         private readonly IUserService userService;
         private readonly IPermitService permitService;
         private readonly IRoleService roleService;
 
         public PermitController(ILogger<PermitController> logger, ICoreService coreService, IPermitService permitService, IRoleService roleService) : base(logger, coreService)
         {
+            this.cacheService = coreService.GetCacheService();
+            this.cacheKeyService = coreService.GetCacheKeyService();
             this.userService = coreService.GetUserService();
             this.permitService = permitService;
             this.roleService = roleService;
@@ -190,6 +194,9 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // commit changes to database
                 permitService.SaveDBChanges();
 
+                // reset cache
+                ResetCache();
+
                 // set alert
                 ShowAlertBox(AlertType.Success, "Permit is successfully updated.");
 
@@ -259,6 +266,9 @@ namespace BPX.Website.Areas.Identity.Controllers
 
                 // commit changes to database
                 permitService.SaveDBChanges();
+
+                // reset cache
+                ResetCache();
 
                 // set alert
                 ShowAlertBox(AlertType.Success, "Permit is successfully deleted.");
@@ -356,6 +366,9 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // commit changes to database
                 permitService.SaveDBChanges();
 
+                // reset cache
+                ResetCache();
+
                 // set alert
                 ShowAlertBox(AlertType.Success, "Permit is successfully restored.");
 
@@ -373,6 +386,17 @@ namespace BPX.Website.Areas.Identity.Controllers
                 ShowAlertBox(AlertType.Error, errorMessage);
 
                 return RedirectToAction(nameof(Delete), new { id });
+            }
+        }
+
+        private void ResetCache()
+        {
+            //// cache :: remove following :: ALL
+            var listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.ModifiedDate >= DateTime.Now.AddMinutes(-240)).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
+
+            foreach (var itemCacheKeyName in listCacheKeyNames)
+            {
+                cacheService.RemoveCache(itemCacheKeyName.ToString());
             }
         }
     }

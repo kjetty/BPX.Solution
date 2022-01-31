@@ -152,6 +152,9 @@ namespace BPX.Website.Areas.Identity.Controllers
 				// commit changes to database
 				userService.SaveDBChanges();
 
+				// reset cache
+				ResetCache(id);
+
 				// set alert
 				ShowAlertBox(AlertType.Success, "User is successfully updated.");
 
@@ -227,13 +230,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 				// commit changes to database
 				userService.SaveDBChanges();
 
-				//// handle cache :: remove from cache using keys from the database
-				////var CacheKeys = cacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.Contains($"user:{id}:") && c.ModifiedDate >= DateTime.Now.AddMinutes(-30)).OrderBy(c => c.CacheKeyName).ToList();
-
-				//foreach(var cacheKeyName in CacheKeys)
-				//{
-				//	cacheService.RemoveCache(cacheKeyName.ToString());
-				//}
+				// reset cache
+				ResetCache(id);
 
 				// set alert
 				ShowAlertBox(AlertType.Success, "User is successfully deleted.");
@@ -343,6 +341,9 @@ namespace BPX.Website.Areas.Identity.Controllers
 				// commit changes to database
 				userService.SaveDBChanges();
 
+				// reset cache
+				ResetCache(id);
+
 				// set alert
 				ShowAlertBox(AlertType.Success, "User is successfully restored.");
 
@@ -376,27 +377,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 			}
 
 			var user = userService.GetRecordById(id);
-			string cacheKey = string.Empty;
-
-			// listRoles
-			cacheKey = "roles:all";
-			List<Role> listRoles = listRoles = cacheService.GetCache<List<Role>>(cacheKey);
-
-			if (listRoles == null)
-			{
-				listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active)).OrderBy(c => c.RoleName).ToList();
-				cacheService.SetCache(listRoles, cacheKey, cacheKeyService);
-			}
-
-			// listUserRoleIds
-			cacheKey = $"user:{id}:roles";
-			List<int> listUserRoleIds = cacheService.GetCache<List<int>>(cacheKey);
-
-			if (listUserRoleIds == null)
-			{
-				listUserRoleIds = userRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.UserId.Equals(id)).OrderBy(c => c.RoleId).Select(c => c.RoleId).ToList();
-				cacheService.SetCache(listUserRoleIds, cacheKey, cacheKeyService);
-			}
+			var listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active)).OrderBy(c => c.RoleName).ToList();
+			var listUserRoleIds = userRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.UserId.Equals(id)).OrderBy(c => c.RoleId).Select(c => c.RoleId).ToList();
 			
 			// set ViewBag
 			ViewBag.user = user;
@@ -453,21 +435,28 @@ namespace BPX.Website.Areas.Identity.Controllers
 
 			userRoleService.SaveDBChanges();
 
-			// remove from cache
-			string cacheKey = string.Empty;
-
-			// user:{id}:roles
-			cacheKey = $"user:{id}:roles";
-			cacheService.RemoveCache(cacheKey);
-
-			// user:{id}:meta
-			cacheKey = $"user:{id}:meta";
-			cacheService.RemoveCache(cacheKey);
+			// reset cache
+			ResetCache(id);
 
 			// set alert
 			ShowAlertBox(AlertType.Success, "User Roles are successfully updated.");
 
 			return RedirectToAction(nameof(Index));
+		}
+	
+		private void ResetCache(int id)
+		{
+			//// cache :: remove following :: 
+			// $"user:{userId}:meta";
+			// $"user:{userId}:roles";
+			// $"user:{userId}:permits";
+
+			var listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.Contains($"user:{id}:") && c.ModifiedDate >= DateTime.Now.AddMinutes(-240)).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
+
+			foreach (var itemCacheKeyName in listCacheKeyNames)
+			{
+				cacheService.RemoveCache(itemCacheKeyName.ToString());
+			}
 		}
 	}
 }

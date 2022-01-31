@@ -107,12 +107,11 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // commit changes to database
                 menuService.SaveDBChanges();
 
-                // handle cache :: remove all cache related to :: menu
-                var cacheKeys = cacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.Contains("menu")).OrderBy(c => c.CacheKeyName).ToList();
-                foreach (var itemCacheKey in cacheKeys)
-                {
-                    cacheService.RemoveCache(itemCacheKey.CacheKeyName);
-                }
+                // update treePath and hLevel
+                UpdateTreePath();
+
+                // reset cache
+                ResetCache();
 
                 // set alert
                 ShowAlertBox(AlertType.Success, "Menu is successfully created.");
@@ -198,12 +197,11 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // commit changes to database
                 menuService.SaveDBChanges();
 
-                // handle cache :: remove all cache related to :: menu
-                var cacheKeys = cacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.Contains("menu")).OrderBy(c => c.CacheKeyName).ToList();
-                foreach (var itemCacheKey in cacheKeys)
-                {
-                    cacheService.RemoveCache(itemCacheKey.CacheKeyName);
-                }
+                // update treePath and hLevel
+                UpdateTreePath();
+
+                // reset cache
+                ResetCache();
 
                 // set alert
                 ShowAlertBox(AlertType.Success, "Menu is successfully updated.");
@@ -275,12 +273,11 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // commit changes to database
                 menuService.SaveDBChanges();
 
-                // handle cache :: remove all cache related to :: menu
-                var cacheKeys = cacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.Contains("menu")).OrderBy(c => c.CacheKeyName).ToList();
-                foreach (var itemCacheKey in cacheKeys)
-                {
-                    cacheService.RemoveCache(itemCacheKey.CacheKeyName);
-                }
+                // update treePath and hLevel
+                UpdateTreePath();
+
+                // reset cache
+                ResetCache();
 
                 // set alert
                 ShowAlertBox(AlertType.Success, "Menu is successfully deleted.");
@@ -368,12 +365,11 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // commit changes to database
                 menuService.SaveDBChanges();
 
-                // handle cache :: remove all cache related to :: menu
-                var cacheKeys = cacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.Contains("menu")).OrderBy(c => c.CacheKeyName).ToList();
-                foreach (var itemCacheKey in cacheKeys)
-                {
-                    cacheService.RemoveCache(itemCacheKey.CacheKeyName);
-                }
+                // update treePath and hLevel
+                UpdateTreePath();
+
+                // reset cache
+                ResetCache();
 
                 // set alert
                 ShowAlertBox(AlertType.Success, "Menu is successfully restored.");
@@ -468,18 +464,45 @@ namespace BPX.Website.Areas.Identity.Controllers
 
 			menuPermitService.SaveDBChanges();
 
-			// handle cache :: remove all cache related to :: menu
-			var cacheKeys = cacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.Contains("menu")).OrderBy(c => c.CacheKeyName).ToList();
-            foreach (var itemCacheKey in cacheKeys)
-            {
-                cacheService.RemoveCache(itemCacheKey.CacheKeyName);
-            }
+            // update treePath and hLevel
+            UpdateTreePath();
+
+            // reset cache
+            ResetCache();
 
             // set alert
             ShowAlertBox(AlertType.Success, "Menu Permits are successfully updated.");
 
             //return Permit(id);
             return RedirectToAction(nameof(Index));
+        }
+    
+        private void UpdateTreePath()
+		{
+            List<Menu> menuHierarchy = menuService.GetMenuHierarchy(RecordStatus.Active, "url");
+
+            foreach (var itemMenu in menuHierarchy)
+			{
+                var recordMenu = menuService.GetRecordById(itemMenu.MenuId);
+
+                recordMenu.HLevel = itemMenu.HLevel;
+                recordMenu.TreePath = itemMenu.TreePath;
+
+                menuService.UpdateRecord(recordMenu);
+            }
+
+            menuService.SaveDBChanges();
+        }
+
+        private void ResetCache()
+        {
+            //// cache :: remove following :: ALL
+            var listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.ModifiedDate >= DateTime.Now.AddMinutes(-240)).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
+
+            foreach (var itemCacheKeyName in listCacheKeyNames)
+            {
+                cacheService.RemoveCache(itemCacheKeyName.ToString());
+            }
         }
     }
 }

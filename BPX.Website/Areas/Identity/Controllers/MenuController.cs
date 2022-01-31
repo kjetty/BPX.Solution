@@ -16,12 +16,16 @@ namespace BPX.Website.Areas.Identity.Controllers
 	[Area("Identity")]
 	public class MenuController : BaseController<MenuController>
 	{
+        private readonly ICacheService cacheService;
+        private readonly ICacheKeyService cacheKeyService;
         private readonly IUserService userService;
         private readonly IMenuService menuService;
         private readonly IMenuPermitService menuPermitService;
 
         public MenuController(ILogger<MenuController> logger, ICoreService coreService) : base(logger, coreService)
 		{
+            this.cacheService = coreService.GetCacheService();
+            this.cacheKeyService = coreService.GetCacheKeyService();
             this.userService = coreService.GetUserService();
             this.menuService = coreService.GetMenuService();
             this.menuPermitService = coreService.GetMenuPermitService();
@@ -52,8 +56,12 @@ namespace BPX.Website.Areas.Identity.Controllers
 
         // GET: /Identity/Menu/Create
         [Permit(Permits.Identity.Menu.Create)]
-        public ActionResult Create()
+        public ActionResult Create(int id)
         {
+            //get parentMenu detail
+            var parentMenu = menuService.GetRecordByID(id);
+            ViewBag.parentMenu = parentMenu;
+
             return View();
         }
 
@@ -82,6 +90,9 @@ namespace BPX.Website.Areas.Identity.Controllers
                     // set core data
                     MenuName = collection.MenuName,
                     MenuDescription = collection.MenuDescription,
+                    MenuURL = collection.MenuURL,
+                    ParentMenuId = collection.ParentMenuId,
+                    OrderNumber = collection.OrderNumber,
                     // set generic data
                     StatusFlag = RecordStatus.Active,
                     ModifiedBy = 1,
@@ -93,6 +104,13 @@ namespace BPX.Website.Areas.Identity.Controllers
 
                 // commit changes to database
                 menuService.SaveDBChanges();
+
+                // handle cache :: remove all cache related to :: menu
+                var cacheKeys = cacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.Contains("menu")).OrderBy(c => c.CacheKeyName).ToList();
+                foreach (var itemCacheKey in cacheKeys)
+                {
+                    cacheService.RemoveCache(itemCacheKey.CacheKeyName);
+                }
 
                 // set alert
                 ShowAlertBox(AlertType.Success, "Menu is successfully created.");
@@ -163,6 +181,9 @@ namespace BPX.Website.Areas.Identity.Controllers
                     // set core data
                     recordMenu.MenuName = collection.MenuName;
                     recordMenu.MenuDescription = collection.MenuDescription;
+                    recordMenu.MenuURL = collection.MenuURL;
+                    recordMenu.ParentMenuId = collection.ParentMenuId;
+                    recordMenu.OrderNumber = collection.OrderNumber;
                     // set generic data
                     recordMenu.StatusFlag = RecordStatus.Active;
                     recordMenu.ModifiedBy = 1;
@@ -174,6 +195,13 @@ namespace BPX.Website.Areas.Identity.Controllers
 
                 // commit changes to database
                 menuService.SaveDBChanges();
+
+                // handle cache :: remove all cache related to :: menu
+                var cacheKeys = cacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.Contains("menu")).OrderBy(c => c.CacheKeyName).ToList();
+                foreach (var itemCacheKey in cacheKeys)
+                {
+                    cacheService.RemoveCache(itemCacheKey.CacheKeyName);
+                }
 
                 // set alert
                 ShowAlertBox(AlertType.Success, "Menu is successfully updated.");
@@ -244,6 +272,13 @@ namespace BPX.Website.Areas.Identity.Controllers
 
                 // commit changes to database
                 menuService.SaveDBChanges();
+
+                // handle cache :: remove all cache related to :: menu
+                var cacheKeys = cacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.Contains("menu")).OrderBy(c => c.CacheKeyName).ToList();
+                foreach (var itemCacheKey in cacheKeys)
+                {
+                    cacheService.RemoveCache(itemCacheKey.CacheKeyName);
+                }
 
                 // set alert
                 ShowAlertBox(AlertType.Success, "Menu is successfully deleted.");
@@ -348,6 +383,13 @@ namespace BPX.Website.Areas.Identity.Controllers
 
                 // commit changes to database
                 menuService.SaveDBChanges();
+
+                // handle cache :: remove all cache related to :: menu
+                var cacheKeys = cacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.Contains("menu")).OrderBy(c => c.CacheKeyName).ToList();
+                foreach (var itemCacheKey in cacheKeys)
+                {
+                    cacheService.RemoveCache(itemCacheKey.CacheKeyName);
+                }
 
                 // set alert
                 ShowAlertBox(AlertType.Success, "Menu is successfully restored.");

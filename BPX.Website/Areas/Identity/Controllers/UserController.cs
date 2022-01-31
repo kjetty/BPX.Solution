@@ -19,6 +19,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 	[Area("Identity")]
     public class UserController : BaseController<UserController>
     {
+		private readonly ICacheService cacheService;
+		private readonly ICacheKeyService cacheKeyService;
 		private readonly IUserService userService;
 		private readonly IUserRoleService userRoleService;
 		private readonly IRoleService roleService;

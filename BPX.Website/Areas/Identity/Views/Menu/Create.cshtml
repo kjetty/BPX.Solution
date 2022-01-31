@@ -26,12 +26,12 @@
 				</div>
 				<div class="col-md-4 input-group">
 					<div class="input-group-prepend">
-						<span class="input-group-text"><i class="fa fa-at fa-fw"></i></span>
+						<span class="input-group-text"><i class="bi-at"></i></span>
 					</div>
 					<input asp-for="MenuName" class="form-control" />
 				</div>
 				<div class="col-md-6">
-					<i class="fa fa-asterisk fa-xs" style="color:red; margin-left:-22px; padding-right:5px; font-size: 0.5rem;" aria-hidden="true"></i>
+					<i class="bi-asterisk" style="color:red; margin-left:-22px; padding-right:5px; font-size: 0.5rem;" aria-hidden="true"></i>
 					<span asp-validation-for="MenuName" class="text-danger"></span>
 				</div>
 			</div>
@@ -41,15 +41,61 @@
 				</div>
 				<div class="col-md-4 input-group">
 					<div class="input-group-prepend">
-						<span class="input-group-text"><i class="fa fa-align-justify fa-fw"></i></span>
+						<span class="input-group-text"><i class="bi-card-text"></i></span>
 					</div>
 					<input asp-for="MenuDescription" class="form-control" />
 				</div>
+			</div>
+
+			<div class="row form-group">
+				<div class="col-md-2">
+					<label asp-for="MenuURL" class="control-label"></label>
+				</div>
+				<div class="col-md-4 input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="bi-link"></i></span>
+					</div>
+					<input asp-for="MenuURL" class="form-control" value="@ViewBag.parentMenu.MenuURL" />
+				</div>
 				<div class="col-md-6">
-					<i class="fa fa-asterisk fa-xs" style="color:red; margin-left:-22px; padding-right:5px; font-size: 0.5rem;" aria-hidden="true"></i>
-					<span asp-validation-for="MenuDescription" class="text-danger"></span>
+					<i class="bi-asterisk" style="color:red; margin-left:-22px; padding-right:5px; font-size: 0.5rem;" aria-hidden="true"></i>
+					<span asp-validation-for="MenuURL" class="text-danger"></span>
 				</div>
 			</div>
+
+			<div class="row form-group">
+				<div class="col-md-2">
+					<label asp-for="ParentMenuId" class="control-label"></label>
+				</div>
+				<div class="col-md-4 input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="bi-people"></i></span>
+					</div>
+					<input asp-for="ParentMenuId" class="form-control" value="@ViewBag.parentMenu.MenuId" />
+				</div>
+				<div class="col-md-6">
+					<i class="bi-asterisk" style="color:red; margin-left:-22px; padding-right:5px; font-size: 0.5rem;" aria-hidden="true"></i>
+					<span asp-validation-for="ParentMenuId" class="text-danger"></span>
+				</div>
+			</div>
+
+			<div class="row form-group">
+				<div class="col-md-2">
+					<label asp-for="OrderNumber" class="control-label"></label>
+				</div>
+				<div class="col-md-4 input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="bi-list-ol"></i></span>
+					</div>
+					<input asp-for="OrderNumber" class="form-control" value="1" />
+				</div>
+				<div class="col-md-6">
+					<i class="bi-asterisk" style="color:red; margin-left:-22px; padding-right:5px; font-size: 0.5rem;" aria-hidden="true"></i>
+					<span asp-validation-for="OrderNumber" class="text-danger"></span>
+				</div>
+			</div>
+
+
 			<div class="row form-group">
 				<div class="col-md-2">
 					&nbsp;
@@ -71,3 +117,20 @@
 		<a asp-action="Index">Back to List</a>
 	}
 </div>
+
+@section ScriptsAtBottom {
+	<partial name="_PartialValidationScripts" />
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			var parentMenuURL = "@ViewBag.parentMenu.MenuURL";
+			var tempMenuURL = "";
+
+            @Html.Raw("$(\"#MenuName" + "\").keyup(function () {\n")
+			@Html.Raw("     tempMenuURL = parentMenuURL + '/' + this.value;\n")
+			@*@Html.Raw("     alert(tempMenuURL);\n")*@ 
+			@Html.Raw("     $(\"#MenuURL" + "\").val(tempMenuURL);\n")
+            @Html.Raw("});\n\n")
+        });
+	</script>
+}

@@ -17,6 +17,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 	[Area("Identity")]
     public class RoleController : BaseController<RoleController>
     {
+        private readonly ICacheService cacheService;
+        private readonly ICacheKeyService cacheKeyService;
         private readonly IUserService userService;
         private readonly IRoleService roleService;
         private readonly IPermitService permitService;
@@ -24,6 +26,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 
         public RoleController(ILogger<RoleController> logger, ICoreService coreService, IRoleService roleService, IPermitService permitService) : base(logger, coreService)
         {
+            this.cacheService = coreService.GetCacheService();
+            this.cacheKeyService = coreService.GetCacheKeyService();
             this.userService = coreService.GetUserService();
             this.roleService = roleService;
             this.permitService = permitService;

@@ -18,13 +18,15 @@ namespace BPX.Website.Controllers
 {
 	public class BaseController<T> : Controller where T : class
 	{
+		// protected vars 
 		protected readonly ILogger<T> logger;
 		protected readonly ICoreService coreService;
 		protected int bpxPageSize;
 		protected UserMeta currUserMeta;
 		protected string currMenuString;
-		protected ICacheService cacheService;
-		protected ICacheKeyService cacheKeyService;
+		// private vars
+		private ICacheService cacheService;
+		private ICacheKeyService cacheKeyService;
 
 		public BaseController(ILogger<T> logger, ICoreService coreService)
 		{

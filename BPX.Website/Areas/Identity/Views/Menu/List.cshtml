@@ -85,15 +85,20 @@
 					@Html.DisplayFor(modelItem => item.TreePath)
 				</td>
 				<td style="padding-left: 1em; padding-right:1em;">
-					<a asp-area="Identity" asp-controller="Menu" asp-action="Create" asp-route-id="@item.MenuId" title="create" class="bi-plus-circle" style="text-decoration: none;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
-					<a asp-area="Identity" asp-controller="Menu" asp-action="Read" asp-route-id="@item.MenuId" title="read" class="bi-eye" style="text-decoration: none;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
-					<a asp-area="Identity" asp-controller="Menu" asp-action="Update" asp-route-id="@item.MenuId" title="update" class="bi-pencil" style="text-decoration: none;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
-					<a asp-area="Identity" asp-controller="Menu" asp-action="Delete" asp-route-id="@item.MenuId" title="delete" class="bi-trash" style="text-decoration: none;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-					<a asp-area="Identity" asp-controller="Menu" asp-action="Permit" asp-route-id="@item.MenuId" title="permit" class="bi-person-badge" style="text-decoration: none;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
-
-					@*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-					@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-					@Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+					@{ 
+						if (item.ParentMenuId.Equals(0))
+						{
+							@Html.Raw(" -- root menu element --")
+						}
+						else
+						{
+							<a asp-area="Identity" asp-controller="Menu" asp-action="Create" asp-route-id="@item.MenuId" title="create" class="bi-plus-circle" style="text-decoration: none;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+							<a asp-area="Identity" asp-controller="Menu" asp-action="Read" asp-route-id="@item.MenuId" title="read" class="bi-eye" style="text-decoration: none;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+							<a asp-area="Identity" asp-controller="Menu" asp-action="Update" asp-route-id="@item.MenuId" title="update" class="bi-pencil" style="text-decoration: none;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+							<a asp-area="Identity" asp-controller="Menu" asp-action="Delete" asp-route-id="@item.MenuId" title="delete" class="bi-trash" style="text-decoration: none;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+							<a asp-area="Identity" asp-controller="Menu" asp-action="Permit" asp-route-id="@item.MenuId" title="permit" class="bi-person-badge" style="text-decoration: none;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+						}
+					}
 				</td>
 			</tr>
 		}

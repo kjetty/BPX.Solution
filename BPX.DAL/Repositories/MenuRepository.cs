@@ -42,7 +42,7 @@ namespace BPX.DAL.Repository
             context.Entry(entity).State = EntityState.Modified;
         }
 
-        public List<Menu> GetMenuHierarchy(string orderBy)
+        public List<Menu> GetMenuHierarchy(string statusFlag, string orderBy)
 		{
 
             ////cte (common time execution) recursive hierarchy query
@@ -64,9 +64,16 @@ namespace BPX.DAL.Repository
             //FROM 		cte_menus 
             //ORDER BY 	hLevel, OrderNumber
 
+            string cteStatusFlag = RecordStatus.Active;
+
+            if (statusFlag.Equals(RecordStatus.Inactive))
+			{
+                cteStatusFlag = RecordStatus.Inactive;
+            }
+
             string cteOrderBy = "hLevel, OrderNumber";
 
-            if (orderBy != null && orderBy.Trim().ToLower().Equals("url"))
+            if (orderBy.Trim().ToLower().Equals("url"))
 			{
                 cteOrderBy = "MenuURL";
             }
@@ -76,14 +83,14 @@ namespace BPX.DAL.Repository
             cteQuery += "	SELECT 		MenuId, MenuName, MenuDescription, MenuURL, ParentMenuId, 1 AS hLevel, OrderNumber, ";
             cteQuery += "				CAST(MenuId AS VARCHAR(32)) AS TreePath, StatusFlag, ModifiedBy, ModifiedDate  ";
             cteQuery += "	FROM 		Menus ";
-            cteQuery += "	WHERE 		StatusFlag = 'A' ";
+            cteQuery += "	WHERE 		StatusFlag = '" + cteStatusFlag + "'";
             cteQuery += "	AND 		ParentMenuId = 0";
             cteQuery += "	UNION ALL ";
             cteQuery += "	SELECT 		m.MenuId, m.MenuName, m.MenuDescription, m.MenuURL, m.ParentMenuId, cte.hLevel + 1, m.OrderNumber, ";
             cteQuery += "				CAST(cte.TreePath + '.' + CAST(m.MenuId AS VARCHAR(32)) AS VARCHAR(32)) AS TreePath, m.StatusFlag, m.ModifiedBy, m.ModifiedDate ";
             cteQuery += "	FROM 		Menus m ";
             cteQuery += "	INNER JOIN 	cte_menus cte ON cte.MenuId = m.ParentMenuId ";
-            cteQuery += "	WHERE 		m.StatusFlag = 'A' ";
+            cteQuery += "	WHERE 		m.StatusFlag = '" + cteStatusFlag + "'";
             cteQuery += ") ";
             cteQuery += "SELECT 		MenuId, MenuName, MenuDescription, MenuURL, ParentMenuId, hLevel, OrderNumber, ";
             cteQuery += "			CAST('.' + TreePath + '.' AS VARCHAR(32)) AS TreePath, StatusFlag, ModifiedBy, ModifiedDate ";
@@ -96,6 +103,6 @@ namespace BPX.DAL.Repository
 
     public interface IMenuRepository : IRepository<Menu>
     {
-        List<Menu> GetMenuHierarchy(string orderBy);
+        List<Menu> GetMenuHierarchy(string statusFlag, string orderBy);
     }
 }

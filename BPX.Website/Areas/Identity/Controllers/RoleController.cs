@@ -182,7 +182,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     recordRole.RoleDescription = collection.RoleDescription;
                     // set generic data
                     recordRole.StatusFlag = RecordStatus.Active;
-                    recordRole.ModifiedBy = 1;
+                    recordRole.ModifiedBy = currUserMeta.UserId;
                     recordRole.ModifiedDate = DateTime.Now;
 
                     // edit record
@@ -252,7 +252,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 {
                     // set generic data
                     recordRole.StatusFlag = RecordStatus.Inactive;
-                    recordRole.ModifiedBy = 1;
+                    recordRole.ModifiedBy = currUserMeta.UserId;
                     recordRole.ModifiedDate = DateTime.Now;
 
                     // edit record
@@ -282,15 +282,8 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
         }
 
-        // GET: /Identity/Role/ListDeleted
-        [Permit(Permits.Identity.Role.ListDeleted)]
-        public ActionResult ListDeleted()
-        {
-            return ListDeleted(1, bpxPageSize, string.Empty, string.Empty, string.Empty, string.Empty);
-        }
 
-        // POST: /Identity/Role/ListDeleted
-        [HttpPost]
+        // GET + POST: /Identity/Role/ListDeleted
         [Permit(Permits.Identity.Role.ListDeleted)]
         public ActionResult ListDeleted(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
         {
@@ -356,7 +349,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 {
                     // set generic data
                     recordRole.StatusFlag = RecordStatus.Active;
-                    recordRole.ModifiedBy = 1;
+                    recordRole.ModifiedBy = currUserMeta.UserId;
                     recordRole.ModifiedDate = DateTime.Now;
 
                     // edit record
@@ -423,7 +416,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             foreach (var rolePermit in listRolePermits)
             {
                 rolePermit.StatusFlag = RecordStatus.Inactive;
-                rolePermit.ModifiedBy = 1;
+                rolePermit.ModifiedBy = currUserMeta.UserId;
                 rolePermit.ModifiedDate = DateTime.Now;
             }
 
@@ -437,7 +430,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 if (existingRolePermit != null)
                 {
                     existingRolePermit.StatusFlag = RecordStatus.Active;
-                    existingRolePermit.ModifiedBy = 1;
+                    existingRolePermit.ModifiedBy = currUserMeta.UserId;
                     existingRolePermit.ModifiedDate = DateTime.Now;
 
                     rolePermitService.UpdateRecord(existingRolePermit);

@@ -108,7 +108,10 @@ namespace BPX.Website.Areas.Identity.Controllers
             // generate new LoginToken on every login
             login.LoginToken = Guid.NewGuid().ToString();
             login.LastLoginDate = DateTime.Now;
-            
+            // set generic data
+            //login.ModifiedBy = 1; //TODO ??? think
+            login.ModifiedDate = DateTime.Now;
+
             // save changes
             loginService.SaveDBChanges();
 
@@ -353,6 +356,9 @@ namespace BPX.Website.Areas.Identity.Controllers
 				string hashedPassword = passwordHasher.HashPassword(login, collection.NewPassword);
 
                 login.PasswordHash = hashedPassword;
+                // set generic data
+                login.ModifiedBy = 1;
+                login.ModifiedDate = DateTime.Now;
 
                 loginService.SaveDBChanges();
 
@@ -387,7 +393,10 @@ namespace BPX.Website.Areas.Identity.Controllers
 
                 login.LoginToken = Guid.NewGuid().ToString();
                 login.LastLoginDate = DateTime.Now;
-                
+                // set generic data
+                login.ModifiedBy = 1;
+                login.ModifiedDate = DateTime.Now;
+
                 loginService.SaveDBChanges();
             }
 

@@ -140,7 +140,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 					recordUser.Mobile = collection.Mobile;
 					// set generic data
 					recordUser.StatusFlag = RecordStatus.Active;
-					recordUser.ModifiedBy = 1;
+					recordUser.ModifiedBy = currUserMeta.UserId;
 					recordUser.ModifiedDate = DateTime.Now;
 
 					// edit record
@@ -215,7 +215,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 				{
 					// set generic data
 					recordUser.StatusFlag = RecordStatus.Inactive;
-					recordUser.ModifiedBy = 1;
+					recordUser.ModifiedBy = currUserMeta.UserId;
 					recordUser.ModifiedDate = DateTime.Now;
 
 					// edit record
@@ -225,13 +225,13 @@ namespace BPX.Website.Areas.Identity.Controllers
 				// commit changes to database
 				userService.SaveDBChanges();
 
-				// handle cache :: remove from cache using keys from the database
-				var CacheKeys = cacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.Contains($"user:{id}:") && c.ModifiedDate >= DateTime.Now.AddMinutes(-30)).OrderBy(c => c.CacheKeyName).ToList();
+				//// handle cache :: remove from cache using keys from the database
+				////var CacheKeys = cacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.Contains($"user:{id}:") && c.ModifiedDate >= DateTime.Now.AddMinutes(-30)).OrderBy(c => c.CacheKeyName).ToList();
 
-				foreach(var cacheKeyName in CacheKeys)
-				{
-					cacheService.RemoveCache(cacheKeyName.ToString());
-				}
+				//foreach(var cacheKeyName in CacheKeys)
+				//{
+				//	cacheService.RemoveCache(cacheKeyName.ToString());
+				//}
 
 				// set alert
 				ShowAlertBox(AlertType.Success, "User is successfully deleted.");
@@ -252,16 +252,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 				return RedirectToAction(nameof(Delete), new { id });
 			}
 		}
-
-        // GET: /Identity/User/ListDeleted
-        [Permit(Permits.Identity.User.ListDeleted)]
-        public ActionResult ListDeleted()
-        {
-            return ListDeleted(1, bpxPageSize, string.Empty, string.Empty, string.Empty, string.Empty);
-        }
-
-        // POST: /Identity/User/ListDeleted
-        [HttpPost]
+		
+        // GET + POST: /Identity/User/ListDeleted
         [Permit(Permits.Identity.User.ListDeleted)]
         public ActionResult ListDeleted(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
         {
@@ -339,7 +331,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 				{
 					// set generic data
 					recordUser.StatusFlag = RecordStatus.Active;
-					recordUser.ModifiedBy = 1;
+					recordUser.ModifiedBy = currUserMeta.UserId;
 					recordUser.ModifiedDate = DateTime.Now;
 
 					// edit record
@@ -423,7 +415,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 			foreach (var userRole in listUserRoles)
 			{
 				userRole.StatusFlag = RecordStatus.Inactive;
-				userRole.ModifiedBy = 1;
+				userRole.ModifiedBy = currUserMeta.UserId;
 				userRole.ModifiedDate = DateTime.Now;
 			}
 
@@ -437,7 +429,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 				if (existingUserRole != null)
 				{
 					existingUserRole.StatusFlag = RecordStatus.Active;
-					existingUserRole.ModifiedBy = 1;
+					existingUserRole.ModifiedBy = currUserMeta.UserId;
 					existingUserRole.ModifiedDate = DateTime.Now;
 
 					userRoleService.UpdateRecord(existingUserRole);

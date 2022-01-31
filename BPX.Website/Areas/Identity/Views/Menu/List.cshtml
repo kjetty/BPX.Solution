@@ -1,37 +1,36 @@
 ﻿@model IEnumerable<BPX.Domain.ViewModels.MenuMiniViewModel>
 
+@using BPX.Website.CustomCode.Authorize;
+
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Menu Hierarchy</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table table-sm table-striped table-hover border-bottom table-bordered">
 	<thead>
 		<tr>
 			@*<th>
-				@Html.DisplayNameFor(model => model.MenuId)
-			</th>*@
+					@Html.DisplayNameFor(model => model.MenuId)
+				</th>*@
 			<th>
 				@*@Html.DisplayNameFor(model => model.MenuName)*@
 				Name
 			</th>
 			@*<th>
-				@Html.DisplayNameFor(model => model.MenuDescription)
-			</th>*@
+					@Html.DisplayNameFor(model => model.MenuDescription)
+				</th>*@
 			<th>
 				@*@Html.DisplayNameFor(model => model.MenuURL)*@
 				URL
 			</th>
 			@*<th>
-				@Html.DisplayNameFor(model => model.ParentMenuId)
-			</th>*@
+					@Html.DisplayNameFor(model => model.ParentMenuId)
+				</th>*@
 			@*<th>
-				@Html.DisplayNameFor(model => model.HLevel)
-			</th>*@
+					@Html.DisplayNameFor(model => model.HLevel)
+				</th>*@
 			<th>
 				@*@Html.DisplayNameFor(model => model.OrderNumber)*@
 				Order
@@ -39,7 +38,7 @@
 			<th>
 				@Html.DisplayNameFor(model => model.TreePath)
 			</th>
-			<th>
+			<th style="width:230px;">
 				Action
 			</th>
 		</tr>
@@ -49,8 +48,8 @@
 		{
 			<tr>
 				@*<td>
-					@Html.DisplayFor(modelItem => item.MenuId)
-				</td>*@
+						@Html.DisplayFor(modelItem => item.MenuId)
+					</td>*@
 				<td>
 					@{
 						for (int i = 2; i <= item.HLevel - 1; i++)
@@ -67,32 +66,39 @@
 					@Html.DisplayFor(modelItem => item.MenuName)
 				</td>
 				@*<td>
-					@Html.DisplayFor(modelItem => item.MenuDescription)
-				</td>*@
+						@Html.DisplayFor(modelItem => item.MenuDescription)
+					</td>*@
 				<td>
 					@Html.DisplayFor(modelItem => item.MenuURL)
 				</td>
 				@*<td>
-					@Html.DisplayFor(modelItem => item.ParentMenuId)
-				</td>*@
+						@Html.DisplayFor(modelItem => item.ParentMenuId)
+					</td>*@
 				@*<td>
-					@Html.DisplayFor(modelItem => item.HLevel)
-				</td>*@
+						@Html.DisplayFor(modelItem => item.HLevel)
+					</td>*@
 				<td>
 					@Html.DisplayFor(modelItem => item.OrderNumber)
 				</td>
 				<td>
 					@Html.DisplayFor(modelItem => item.TreePath)
 				</td>
-				<td style="padding-left: 1em; padding-right:1em;">
-					@{ 
+				<td style="padding-left: 1em;">
+					@{
 						if (item.ParentMenuId.Equals(0))
 						{
 							@Html.Raw(" -- root menu element --")
 						}
 						else
 						{
-							<a asp-area="Identity" asp-controller="Menu" asp-action="Create" asp-route-id="@item.MenuId" title="create" class="bi-plus-circle" style="text-decoration: none;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+							if (item.HLevel >= 4)
+							{
+								<span class="bi-x"></span> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+							}
+							else
+							{
+								<a asp-area="Identity" asp-controller="Menu" asp-action="Create" asp-route-id="@item.MenuId" title="create" class="bi-plus-circle" style="text-decoration: none;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+							}
 							<a asp-area="Identity" asp-controller="Menu" asp-action="Read" asp-route-id="@item.MenuId" title="read" class="bi-eye" style="text-decoration: none;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
 							<a asp-area="Identity" asp-controller="Menu" asp-action="Update" asp-route-id="@item.MenuId" title="update" class="bi-pencil" style="text-decoration: none;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
 							<a asp-area="Identity" asp-controller="Menu" asp-action="Delete" asp-route-id="@item.MenuId" title="delete" class="bi-trash" style="text-decoration: none;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
@@ -104,3 +110,9 @@
 		}
 	</tbody>
 </table>
+<br />
+
+@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.User.ListDeleted))
+{
+	<a asp-area="Identity" asp-controller="Menu" asp-action="ListDeleted" style="text-decoration:none;" title="View deleted records">View deleted records</a>
+}

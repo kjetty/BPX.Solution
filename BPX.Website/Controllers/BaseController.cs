@@ -160,21 +160,21 @@ namespace BPX.Website.Controllers
 
 			if (menuString == null)
 			{
-				menuString = coreService.GetMenuString(userPermitIds, GetMenuHierarchy());
+				menuString = coreService.GetMenuString(userPermitIds, GetMenuHierarchy(RecordStatus.Active, string.Empty));
 				cacheService.SetCache(menuString, cacheKey, cacheKeyService);
 			}
 
 			return menuString;
 		}
 
-		private List<Menu> GetMenuHierarchy()
+		private List<Menu> GetMenuHierarchy(string statusFlag, string orderBy)
 		{
 			string cacheKey = "menu:hierarchy";
 			List<Menu> menuHierarchy = cacheService.GetCache<List<Menu>>(cacheKey);
 
 			if (menuHierarchy == null)
 			{
-				menuHierarchy = coreService.GetMenuHierarchy();
+				menuHierarchy = coreService.GetMenuHierarchy(statusFlag, orderBy);
 				cacheService.SetCache(menuHierarchy, cacheKey, cacheKeyService);
 			}
 

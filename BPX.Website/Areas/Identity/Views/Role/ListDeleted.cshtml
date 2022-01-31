@@ -127,7 +127,7 @@
 							<td class="text-center">
 								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.Undelete))
 								{
-									<a asp-area="Identity" asp-controller="Role" asp-action="Undelete" asp-route-id="@item.RoleId" title="restore" class="fa fa-power-off fa-xs" style="text-decoration: none; color: darkslategray;"></a>
+									<a asp-area="Identity" asp-controller="Role" asp-action="Undelete" asp-route-id="@item.RoleId" title="restore" class="bi-power" style="text-decoration: none; color: darkslategray;"></a>
 								}
 							</td>
 						</tr>

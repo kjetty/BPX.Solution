@@ -180,7 +180,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     recordPermit.PermitEnum = collection.PermitEnum;
                     // set generic data
                     recordPermit.StatusFlag = RecordStatus.Active;
-                    recordPermit.ModifiedBy = 1;
+                    recordPermit.ModifiedBy = currUserMeta.UserId;
                     recordPermit.ModifiedDate = DateTime.Now;
 
                     // edit record
@@ -250,7 +250,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 {
                     // set generic data
                     recordPermit.StatusFlag = RecordStatus.Inactive;
-                    recordPermit.ModifiedBy = 1;
+                    recordPermit.ModifiedBy = currUserMeta.UserId;
                     recordPermit.ModifiedDate = DateTime.Now;
 
                     // edit record
@@ -280,15 +280,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
         }
 
-        // GET: /Identity/Permit/ListDeleted
-        [Permit(Permits.Identity.Permit.ListDeleted)]
-        public ActionResult ListDeleted()
-        {
-            return ListDeleted(1, bpxPageSize, string.Empty, string.Empty, string.Empty, string.Empty);
-        }
-
-        // POST: /Identity/Permit/ListDeleted
-        [HttpPost]
+        // GET + POST: /Identity/Permit/ListDeleted
         [Permit(Permits.Identity.Permit.ListDeleted)]
         public ActionResult ListDeleted(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
         {
@@ -354,7 +346,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 {
                     // set generic data
                     recordPermit.StatusFlag = RecordStatus.Active;
-                    recordPermit.ModifiedBy = 1;
+                    recordPermit.ModifiedBy = currUserMeta.UserId;
                     recordPermit.ModifiedDate = DateTime.Now;
 
                     // edit record

@@ -42,7 +42,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 		[Permit(Permits.Identity.Menu.List)]
 		public IActionResult List()
 		{
-			var menuList = coreService.GetMenuHierarchy("url");
+			var menuList = coreService.GetMenuHierarchy(RecordStatus.Active, "url");
 
 			List<MenuMiniViewModel> model = new List<MenuMiniViewModel>();
 
@@ -186,7 +186,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     recordMenu.OrderNumber = collection.OrderNumber;
                     // set generic data
                     recordMenu.StatusFlag = RecordStatus.Active;
-                    recordMenu.ModifiedBy = 1;
+                    recordMenu.ModifiedBy = currUserMeta.UserId;
                     recordMenu.ModifiedDate = DateTime.Now;
 
                     // edit record
@@ -263,7 +263,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 {
                     // set generic data
                     recordMenu.StatusFlag = RecordStatus.Inactive;
-                    recordMenu.ModifiedBy = 1;
+                    recordMenu.ModifiedBy = currUserMeta.UserId;
                     recordMenu.ModifiedDate = DateTime.Now;
 
                     // edit record
@@ -300,36 +300,18 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
         }
 
-        // GET: /Identity/Menu/ListDeleted
-        [Permit(Permits.Identity.Menu.ListDeleted)]
-        public ActionResult ListDeleted()
-        {
-            return ListDeleted(1, bpxPageSize, string.Empty, string.Empty, string.Empty, string.Empty);
-        }
-
         // POST: /Identity/Menu/ListDeleted
-        [HttpPost]
         [Permit(Permits.Identity.Menu.ListDeleted)]
-        public ActionResult ListDeleted(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
+        public ActionResult ListDeleted(string temptemp)
         {
-            // check input and set defaults
-            pageNumber = (pageNumber <= 0) ? 1 : pageNumber;
-            pageSize = (pageSize <= 0) ? bpxPageSize : pageSize;
-            statusFlag = RecordStatus.Inactive;   //force set to Active records always
-            sortByColumn = (sortByColumn == null || sortByColumn.Trim().Length == 0) ? string.Empty : sortByColumn;
-            sortOrder = (sortOrder == null || sortOrder.Trim().Length == 0) ? SortOrder.Ascending : sortOrder;
-            searchForString = (searchForString == null || searchForString.Trim().Length == 0) ? string.Empty : searchForString;
+            var menuList = coreService.GetMenuService().GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Inactive)).ToList();
 
-            // fetch data
-            var model = menuService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString).Select(c => (MenuMiniViewModel)c);
+            List<MenuMiniViewModel> model = new List<MenuMiniViewModel>();
 
-            // set pagination data
-            ViewBag.pageNumber = pageNumber;
-            ViewBag.pageSize = pageSize;
-            ViewBag.statusFlag = statusFlag;
-            ViewBag.sortByColumn = sortByColumn;
-            ViewBag.sortOrder = sortOrder;
-            ViewBag.searchForString = searchForString;
+            foreach (var itemMenu in menuList)
+            {
+                model.Add((MenuMiniViewModel)itemMenu);
+            }
 
             return View(model);
         }
@@ -374,7 +356,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 {
                     // set generic data
                     recordMenu.StatusFlag = RecordStatus.Active;
-                    recordMenu.ModifiedBy = 1;
+                    recordMenu.ModifiedBy = currUserMeta.UserId;
                     recordMenu.ModifiedDate = DateTime.Now;
 
                     // edit record
@@ -448,7 +430,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             //foreach (var menuPermit in listMenuPermits)
             //{
             //    menuPermit.StatusFlag = RecordStatus.Inactive;
-            //    menuPermit.ModifiedBy = 1;
+            //    menuPermit.ModifiedBy = currUserMeta.UserId;
             //    menuPermit.ModifiedDate = DateTime.Now;
             //}
 
@@ -462,7 +444,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             //    if (existingMenuPermit != null)
             //    {
             //        existingMenuPermit.StatusFlag = RecordStatus.Active;
-            //        existingMenuPermit.ModifiedBy = 1;
+            //        existingMenuPermit.ModifiedBy = currUserMeta.UserId;
             //        existingMenuPermit.ModifiedDate = DateTime.Now;
 
             //        menuPermitService.UpdateRecord(existingMenuPermit);

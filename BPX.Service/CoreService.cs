@@ -142,9 +142,9 @@ namespace BPX.Service
 		{
 			var root = menuHierarchy.Where(c => c.ParentMenuId.Equals(0)).SingleOrDefault();
 
-			menuString += "<li>";
-			menuString += $"<a class=\"nav-link\" href=\"{root.MenuURL}\">{root.MenuName}</a>";
-			menuString += "</li>";
+			//menuString += "<li>";
+			//menuString += $"<a class=\"nav-link\" href=\"{root.MenuURL}\">{root.MenuName}</a>";
+			//menuString += "</li>";
 
 			return root;
 		}

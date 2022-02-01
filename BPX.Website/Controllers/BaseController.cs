@@ -160,7 +160,7 @@ namespace BPX.Website.Controllers
 
 			if (menuString == null)
 			{
-				menuString = coreService.GetMenuString(userPermitIds, GetMenuHierarchy(RecordStatus.Active, string.Empty));
+				menuString = coreService.GetMenuString(userPermitIds, GetMenuHierarchy(RecordStatus.Active, "url"));
 				cacheService.SetCache(menuString, cacheKeyName, cacheKeyService);
 			}
 

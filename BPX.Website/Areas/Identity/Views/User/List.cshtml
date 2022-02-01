@@ -42,7 +42,7 @@
 				<input id="searchInput" name="searchInput" type="text" class="form-control" placeholder="Search data" value="@ViewBag.searchForString">
 				<div class="input-group-append">
 					<button id="searchBtn" class="btn btn-primary" type="button">
-						<i class="bi-search"></i>
+						<i class="bi-funnel"></i>
 					</button>
 				</div>
 			}
@@ -178,13 +178,13 @@
 								</div>
 							</td>
 							<td class="text-center">
+								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.User.Read))
+								{
+									<a asp-area="Identity" asp-controller="User" asp-action="Read" asp-route-id="@item.UserId" title="view" class="bi-search" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+								}
 								@if (((List<int>)((List<int>)ViewBag.currUserPermitIds)).Contains(Permits.Identity.User.Update))
 								{
 									<a asp-area="Identity" asp-controller="User" asp-action="Update" asp-route-id="@item.UserId" title="edit" class="bi-pencil" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
-								}
-								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.User.Read))
-								{
-									<a asp-area="Identity" asp-controller="User" asp-action="Read" asp-route-id="@item.UserId" title="view" class="bi-eye" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
 								}
 								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.User.Delete))
 								{
@@ -192,7 +192,7 @@
 								}
 								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.UserRole.CRUD))
 								{
-									@Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;") <a asp-area="Identity" asp-controller="User" asp-action="Role" asp-route-id="@item.UserId" title="role" class="fa fa-mask fa-xs" style="text-decoration: none; color: darkslategray;"></a>
+									@Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;") <a asp-area="Identity" asp-controller="User" asp-action="Role" asp-route-id="@item.UserId" title="roles" class="fa fa-theater-masks xbi-people" style="text-decoration: none; color: darkslategray;"></a>
 								}
 							</td>
 						</tr>

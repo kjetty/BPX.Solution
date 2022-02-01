@@ -42,7 +42,7 @@
 				<input id="searchInput" name="searchInput" type="text" class="form-control" placeholder="Search data" value="@ViewBag.searchForString">
 				<div class="input-group-append">
 					<button id="searchBtn" class="btn btn-primary" type="button">
-						<i class="bi-search"></i>
+						<i class="bi-funnel"></i>
 					</button>
 				</div>
 			}
@@ -130,13 +130,13 @@
 								@Html.DisplayFor(modelItem => item.RoleDescription)
 							</td>
 							<td class="text-center">
+								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.Read))
+								{
+									<a asp-area="Identity" asp-controller="Role" asp-action="Read" asp-route-id="@item.RoleId" title="view" class="bi-search" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+								}
 								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.Update))
 								{
 									<a asp-area="Identity" asp-controller="Role" asp-action="Update" asp-route-id="@item.RoleId" title="edit" class="bi-pencil" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
-								}
-								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.Read))
-								{
-									<a asp-area="Identity" asp-controller="Role" asp-action="Read" asp-route-id="@item.RoleId" title="view" class="bi-eye" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
 								}
 								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.Delete))
 								{
@@ -144,7 +144,7 @@
 								}
 								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.RolePermit.CRUD))
 								{
-									@Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;") <a asp-area="Identity" asp-controller="Role" asp-action="Permit" asp-route-id="@item.RoleId" title="delete" class="bi-person-badge" style="text-decoration: none; color: darkslategray;"></a>
+									@Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;") <a asp-area="Identity" asp-controller="Role" asp-action="Permit" asp-route-id="@item.RoleId" title="delete" class="far fa-address-card xbi-person-badge" style="text-decoration: none; color: darkslategray;"></a>
 								}
 							</td>
 						</tr>

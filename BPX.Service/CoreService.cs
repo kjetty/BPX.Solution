@@ -175,7 +175,7 @@ namespace BPX.Service
 						if (levelTwoMenuItems.Count > 0)
 						{
 							menuString += "<li class=\"dropdown\">";
-							menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName} <i class=\"bi bi-chevron-down\"></i></a>";
+							menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName} <i class=\"fa fa-angle-down\"></i></a>";
 
 							AddMenuItemsLevelTwo(ref menuString, menuHierarchy, itemMenu, listMenu, userPermitIds);
 
@@ -221,7 +221,7 @@ namespace BPX.Service
 						if (levelThreeMenuItems.Count > 0)
 						{
 							menuString += "<li class=\"dropdown\">";
-							menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName} <i class=\"bi bi-chevron-right\"></i></a>";
+							menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName} <i class=\"fa fa-angle-right\"></i></a>";
 
 							AddMenuItemsLevelThree(ref menuString, menuHierarchy, itemMenu, listMenu, userPermitIds);
 

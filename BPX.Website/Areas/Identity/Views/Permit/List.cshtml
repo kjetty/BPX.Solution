@@ -32,7 +32,7 @@
 	<div class="col-md-9">
 		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.Create))
 		{
-			<a asp-area="Identity" asp-controller="Permit" asp-action="Create" class="btn btn-primary fa-sm" title="Add Permit"><i class="fa fa-plus-circle"></i> &nbsp; Add Permit</a>
+			<a asp-area="Identity" asp-controller="Permit" asp-action="Create" class="btn btn-primary fa-sm" title="Add Permit"><i class="bi-plus-circle"></i> &nbsp; Add Permit</a>
 		}
 	</div>
 	<div class="col-md-3">
@@ -42,7 +42,7 @@
 				<input id="searchInput" name="searchInput" type="text" class="form-control" placeholder="Search data" value="@ViewBag.searchForString">
 				<div class="input-group-append">
 					<button id="searchBtn" class="btn btn-primary" type="button">
-						<i class="fa fa-search fa-sm"></i>
+						<i class="bi-search"></i>
 					</button>
 				</div>
 			}
@@ -132,7 +132,7 @@
 						}
 					}
 					<th style="width:175px;">Permit Enumerator <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="PermitEnum" sortOrder="@localSortOrder"></span></th>
-					<th class="text-center" style="width:125px;">Action</th>
+					<th class="text-center" style="width:200px;">Action</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -168,15 +168,19 @@
 							<td class="text-center">
 								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.Update))
 								{
-									<a asp-area="Identity" asp-controller="Permit" asp-action="Update" asp-route-id="@item.PermitId" title="edit" class="fa fa-pen fa-xs" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+									<a asp-area="Identity" asp-controller="Permit" asp-action="Update" asp-route-id="@item.PermitId" title="edit" class="bi-pencil" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
 								}
 								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.Read))
 								{
-									<a asp-area="Identity" asp-controller="Permit" asp-action="Read" asp-route-id="@item.PermitId" title="view" class="fa fa-search fa-xs" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+									<a asp-area="Identity" asp-controller="Permit" asp-action="Read" asp-route-id="@item.PermitId" title="view" class="bi-eye" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
 								}
 								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.Delete))
 								{
-									<a asp-area="Identity" asp-controller="Permit" asp-action="Delete" asp-route-id="@item.PermitId" title="delete" class="fa fa-trash fa-xs" style="text-decoration: none; color: darkslategray;"></a>
+									<a asp-area="Identity" asp-controller="Permit" asp-action="Delete" asp-route-id="@item.PermitId" title="delete" class="bi-trash" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+								}
+								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.Delete))
+								{
+									@Html.Raw("&nbsp;&nbsp;&nbsp;")<a asp-area="Identity" asp-controller="Permit" asp-action="RolesAndMenus" asp-route-id="@item.PermitId" title="roles and menus" class="bi-bounding-box" style="text-decoration: none; color: darkslategray;"></a>
 								}
 							</td>
 						</tr>
@@ -305,7 +309,6 @@
 			$("#sortOrder").val(sortOrder);
             $("#searchForString").val(searchForString);
 
-			$("#spanSpinner").show();
 			$("#formForPaging").submit();
 		}
 	</script>

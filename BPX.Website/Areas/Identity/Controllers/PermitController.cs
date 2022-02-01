@@ -19,16 +19,23 @@ namespace BPX.Website.Areas.Identity.Controllers
         private readonly ICacheService cacheService;
         private readonly ICacheKeyService cacheKeyService;
         private readonly IUserService userService;
+        private readonly IMenuService menuService;
         private readonly IPermitService permitService;
         private readonly IRoleService roleService;
+        private readonly IRolePermitService rolePermitService;
+        private readonly IMenuPermitService menuPermitService;
+
 
         public PermitController(ILogger<PermitController> logger, ICoreService coreService, IPermitService permitService, IRoleService roleService) : base(logger, coreService)
         {
             this.cacheService = coreService.GetCacheService();
             this.cacheKeyService = coreService.GetCacheKeyService();
             this.userService = coreService.GetUserService();
+            this.menuService = coreService.GetMenuService();
             this.permitService = permitService;
             this.roleService = roleService;
+            this.rolePermitService = coreService.GetRolePermitService();
+            this.menuPermitService = coreService.GetMenuPermitService();
         }
 
         // GET: /Identity/Permit
@@ -388,6 +395,35 @@ namespace BPX.Website.Areas.Identity.Controllers
                 return RedirectToAction(nameof(Delete), new { id });
             }
         }
+
+        // GET: /Identity/Permit/RolesAndMenus/5
+        [Permit(Permits.Identity.Permit.Read)]
+        public ActionResult RolesAndMenus(int id)
+        {
+            if (id <= 0)
+            {
+                // set alert
+                ShowAlertBox(AlertType.Error, "Permit Id is not valid.");
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            var permit = permitService.GetRecordById(id);
+            var listRoleIds = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.PermitId.Equals(id)).Select(c => c.RoleId).ToList();
+            var listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && listRoleIds.Contains(c.RoleId)).ToList();
+            var listMenuIds = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.PermitId.Equals(id)).Select(c => c.MenuId).ToList();
+            var listMenus = menuService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && listMenuIds.Contains(c.MenuId)).ToList();
+
+            // set ViewBag
+            ViewBag.permit = permit;
+            ViewBag.listRoleIds = listRoleIds;
+            ViewBag.listRoles = listRoles;
+            ViewBag.listMenuIds = listMenuIds;
+            ViewBag.listMenus = listMenus;
+
+            return View();
+        }
+
 
         private void ResetCache()
         {

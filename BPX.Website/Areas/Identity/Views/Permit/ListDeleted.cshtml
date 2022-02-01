@@ -37,7 +37,7 @@
 				<input id="searchInput" name="searchInput" type="text" class="form-control" placeholder="Search data" value="@ViewBag.searchForString">
 				<div class="input-group-append">
 					<button id="searchBtn" class="btn btn-primary" type="button">
-						<i class="fa fa-search fa-sm"></i>
+						<i class="bi-search"></i>
 					</button>
 				</div>
 			}
@@ -292,7 +292,6 @@
 			$("#sortOrder").val(sortOrder);
             $("#searchForString").val(searchForString);
 
-			$("#spanSpinner").show();
 			$("#formForPaging").submit();
 		}
 	</script>

@@ -1,0 +1,42 @@
+﻿@{
+	ViewData["Title"] = "Roles And Menus";
+}
+
+<div class="row">
+	<div class="col-md-12">
+		<h5>@ViewBag.Title - @ViewBag.permit.PermitEnum</h5>
+	</div>
+</div>
+
+<p></p>
+<hr />
+
+@*
+ViewBag.listRoleIds = listRoleIds;
+ViewBag.listRoles = listRoles;
+ViewBag.listMenuIds = listMenuIds;
+ViewBag.listMenus = listMenus;
+*@
+
+<div class="row">
+	<div class="col-md-6">
+		Roles
+		<hr />
+		@{
+			foreach(var itemRole in ViewBag.listRoles)
+			{
+				@Html.Raw(itemRole.RoleName + "<br />")
+			}
+		}
+	</div>
+	<div class="col-md-6">
+		Menus
+		<hr />
+		@{
+			foreach (var itemMenu in ViewBag.listMenus)
+			{
+				@Html.Raw(itemMenu.MenuURL + "<br />")
+			}
+		}
+	</div>
+</div>

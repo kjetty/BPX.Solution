@@ -126,6 +126,24 @@ namespace BPX.Service
 			return menuService.GetMenuHierarchy(statusFlag, orderBy);
 		}
 
+		public string GetBreadcrumb(int menuId)
+		{
+			string breadcrumb = string.Empty;
+			List<Menu> listBreadcrumb = menuService.GetBreadCrumb(menuId);
+
+			if (listBreadcrumb != null && listBreadcrumb.Count > 0)
+			{
+				listBreadcrumb.Reverse();
+
+				foreach(var itemBreadcrumb in listBreadcrumb)
+				{
+					breadcrumb += $"<li class=\"breadcrumb-item\"><a href=\"{itemBreadcrumb.MenuURL}\">{itemBreadcrumb.MenuName}</a></li>";
+				}
+			}	
+			
+			return breadcrumb;
+		}
+
 		public string GetMenuString(List<int> userPermitIds, List<Menu> menuHierarchy)
 		{
 			string menuString = string.Empty;
@@ -283,6 +301,7 @@ namespace BPX.Service
 		IUserService GetUserService();
 		IUserRoleService GetUserRoleService();
 		IRolePermitService GetRolePermitService();
+		string GetBreadcrumb(int menuId);
 		IMenuService GetMenuService();
 		IMenuPermitService GetMenuPermitService();
 		int GetUserId(string loginToken);

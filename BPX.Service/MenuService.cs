@@ -55,6 +55,11 @@ namespace BPX.Service
             menuRepository.SaveDBChanges();
         }
 
+        public List<Menu> GetBreadCrumb(int menuId)
+		{
+            return menuRepository.GetBreadCrumb(menuId);
+        }
+
         public List<Menu> GetMenuHierarchy(string statusflag, string orderBy)
         {
             return menuRepository.GetMenuHierarchy(statusflag, orderBy);
@@ -63,6 +68,7 @@ namespace BPX.Service
 
     public interface IMenuService : IGenericService<Menu>
     {
-            List<Menu> GetMenuHierarchy(string statusflag, string orderBy);
+        List<Menu> GetBreadCrumb(int menuId);
+        List<Menu> GetMenuHierarchy(string statusflag, string orderBy);
     }
 }

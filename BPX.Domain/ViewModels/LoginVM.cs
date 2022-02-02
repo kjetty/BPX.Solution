@@ -134,7 +134,7 @@ namespace BPX.Domain.ViewModels
 	public class BPXLoginViewModel
 	{
 		[Required]
-		[Display(Name = "Login ID")]
+		[Display(Name = "Login Id")]
 		public string LoginId { get; set; }
 
 		[Required]
@@ -168,7 +168,7 @@ namespace BPX.Domain.ViewModels
         public string CellPhone { get; set; }
 
         [Required]
-        [Display(Name = "Login ID")]
+        [Display(Name = "Login Id")]
         public string LoginId { get; set; }
 
         [Required]
@@ -188,7 +188,7 @@ namespace BPX.Domain.ViewModels
     public class ChangePasswordViewModel
     {
         [Key]
-        [Display(Name = "User ID")]
+        [Display(Name = "User Id")]
         public int UserId { get; set; }
 
         [Required]

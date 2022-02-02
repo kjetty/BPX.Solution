@@ -23,6 +23,8 @@ namespace BPX.Website.Controllers
 		protected readonly ICoreService coreService;
 		protected int bpxPageSize;
 		protected UserMeta currUserMeta;
+		protected List<Menu> currMenuHierarchy;
+		protected string currBreadcrump;
 		protected string currMenuString;
 		// private vars
 		private ICacheService cacheService;
@@ -75,13 +77,20 @@ namespace BPX.Website.Controllers
 								currUserMeta.UserRoleIds = GetUserRoleIds(userId);								
 
 								// get and apply userPermitIds
-								currUserMeta.UserPermitIds = GetUserPermitIds(userId, currUserMeta.UserRoleIds);								
+								currUserMeta.UserPermitIds = GetUserPermitIds(userId, currUserMeta.UserRoleIds);
+
+								// get menuHierarchy
+								currMenuHierarchy = GetMenuHierarchy(RecordStatus.Active, "url");
 
 								// get menuString
-								currMenuString = GetMenuString(currUserMeta.UserRoleIds, currUserMeta.UserPermitIds);
+								currMenuString = GetMenuString(currUserMeta.UserRoleIds, currUserMeta.UserPermitIds, currMenuHierarchy);
+
+								// get breadcrumb
+								currBreadcrump = GetBreadCrumb(ctx, currMenuHierarchy);
 
 								// populate ViewBag
 								ViewBag.currMenuString = currMenuString;
+								ViewBag.currBreadcrump = currBreadcrump;
 								ViewBag.currUserPermitIds = currUserMeta.UserPermitIds;
 
 								////// Developer Override for Permits - BaseController (Part A) + PermitAttribute (PartB)
@@ -153,14 +162,41 @@ namespace BPX.Website.Controllers
 			return userPermitIds;
 		}
 
-		private string GetMenuString(List<int> userRoleIds, List<int> userPermitIds)
+		private string GetBreadCrumb(ActionExecutingContext ctx, List<Menu> menuHierarchy)
+		{
+			string currArea = ctx.HttpContext.Request.RouteValues["area"] != null ? ctx.HttpContext.Request.RouteValues["area"].ToString() : string.Empty;
+			string currController = ctx.HttpContext.Request.RouteValues["controller"] != null ? ctx.HttpContext.Request.RouteValues["controller"].ToString() : string.Empty;
+			string currAction = ctx.HttpContext.Request.RouteValues["action"] != null ? ctx.HttpContext.Request.RouteValues["action"].ToString() : string.Empty;
+			//string currId = ctx.HttpContext.Request.RouteValues["id"] != null ? ctx.HttpContext.Request.RouteValues["id"].ToString() : string.Empty;
+			
+			string lookupURL = $"/{currArea}/{currController}";
+			int menuId = menuHierarchy.Where(c => c.MenuURL.Equals(lookupURL)).Select(c => c.MenuId).SingleOrDefault();
+
+			if (menuId <= 0)
+			{
+				return "cannot / generate / breadcrumb";
+			}
+
+			string cacheKeyName = $"menu:{menuId}:breadcrumb";
+			string breadcrumb = cacheService.GetCache<string>(cacheKeyName);
+
+			if (breadcrumb == null)
+			{
+				breadcrumb = coreService.GetBreadcrumb(menuId);
+				cacheService.SetCache(breadcrumb, cacheKeyName, cacheKeyService);
+			}
+
+			return breadcrumb += $"<li class=\"breadcrumb-item active\">{currAction}</li>";
+		}
+
+		private string GetMenuString(List<int> userRoleIds, List<int> userPermitIds, List<Menu> menuHierarchy)
 		{
 			string cacheKeyName = $"roles:{string.Join(".", userRoleIds)}:menu";
 			string menuString = cacheService.GetCache<string>(cacheKeyName);
 
 			if (menuString == null)
 			{
-				menuString = coreService.GetMenuString(userPermitIds, GetMenuHierarchy(RecordStatus.Active, "url"));
+				menuString = coreService.GetMenuString(userPermitIds, menuHierarchy);
 				cacheService.SetCache(menuString, cacheKeyName, cacheKeyService);
 			}
 

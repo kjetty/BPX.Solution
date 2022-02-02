@@ -8,111 +8,117 @@
 
 <h1>Menu Hierarchy</h1>
 
-<table class="table table-sm table-striped table-hover border-bottom table-bordered">
-	<thead>
-		<tr>
-			@*<th>
-					@Html.DisplayNameFor(model => model.MenuId)
-				</th>*@
-			<th>
-				@*@Html.DisplayNameFor(model => model.MenuName)*@
-				Name
-			</th>
-			@*<th>
-					@Html.DisplayNameFor(model => model.MenuDescription)
-				</th>*@
-			<th>
-				@*@Html.DisplayNameFor(model => model.MenuURL)*@
-				URL
-			</th>
-			@*<th>
-					@Html.DisplayNameFor(model => model.ParentMenuId)
-				</th>*@
-			@*<th>
-					@Html.DisplayNameFor(model => model.HLevel)
-				</th>*@
-			<th>
-				@*@Html.DisplayNameFor(model => model.OrderNumber)*@
-				Order
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.TreePath)
-			</th>
-			<th style="width:230px;">
-				Action
-			</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model)
-		{
+<div class="row">
+	<table class="table table-sm table-striped table-hover border-bottom table-bordered">
+		<thead>
 			<tr>
-				@*<td>
-						@Html.DisplayFor(modelItem => item.MenuId)
-					</td>*@
-				<td>
-					@{
-						for (int i = 2; i <= item.HLevel - 1; i++)
-						{
-							@Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-						}
-
-						if (item.ParentMenuId.Equals(0))
-						{
-							<span class="bi-house-fill">&nbsp;</span>
-						}
-					}
-
-					@Html.DisplayFor(modelItem => item.MenuName)
-				</td>
-				@*<td>
-						@Html.DisplayFor(modelItem => item.MenuDescription)
-					</td>*@
-				<td>
-					@Html.DisplayFor(modelItem => item.MenuURL)
-				</td>
-				@*<td>
-						@Html.DisplayFor(modelItem => item.ParentMenuId)
-					</td>*@
-				@*<td>
-						@Html.DisplayFor(modelItem => item.HLevel)
-					</td>*@
-				<td>
-					@Html.DisplayFor(modelItem => item.OrderNumber)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.TreePath)
-				</td>
-				<td style="padding-left: 1em;">
-					@{
-						if (item.ParentMenuId.Equals(0))
-						{
-							@Html.Raw(" -- root menu element --")
-						}
-						else
-						{
-							if (item.HLevel >= 4)
+				@*<th>
+						@Html.DisplayNameFor(model => model.MenuId)
+					</th>*@
+				<th>
+					@*@Html.DisplayNameFor(model => model.MenuName)*@
+					Name
+				</th>
+				@*<th>
+						@Html.DisplayNameFor(model => model.MenuDescription)
+					</th>*@
+				<th>
+					@*@Html.DisplayNameFor(model => model.MenuURL)*@
+					URL
+				</th>
+				@*<th>
+						@Html.DisplayNameFor(model => model.ParentMenuId)
+					</th>*@
+				@*<th>
+						@Html.DisplayNameFor(model => model.HLevel)
+					</th>*@
+				<th>
+					@*@Html.DisplayNameFor(model => model.OrderNumber)*@
+					Order
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.TreePath)
+				</th>
+				<th style="width:230px;">
+					Action
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					@*<td>
+							@Html.DisplayFor(modelItem => item.MenuId)
+						</td>*@
+					<td>
+						@{
+							for (int i = 2; i <= item.HLevel - 1; i++)
 							{
-								<span class="bi-x"></span> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+								@Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+							}
+
+							if (item.ParentMenuId.Equals(0))
+							{
+								<span class="bi-house-fill" style="color: darkslategrey;">&nbsp;</span>
+							}
+						}
+
+						@Html.DisplayFor(modelItem => item.MenuName)
+					</td>
+					@*<td>
+							@Html.DisplayFor(modelItem => item.MenuDescription)
+						</td>*@
+					<td>
+						@Html.DisplayFor(modelItem => item.MenuURL)
+					</td>
+					@*<td>
+							@Html.DisplayFor(modelItem => item.ParentMenuId)
+						</td>*@
+					@*<td>
+							@Html.DisplayFor(modelItem => item.HLevel)
+						</td>*@
+					<td>
+						@Html.DisplayFor(modelItem => item.OrderNumber)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.TreePath)
+					</td>
+					<td style="padding-left: 1em;">
+						@{
+							if (item.ParentMenuId.Equals(0))
+							{
+								@Html.Raw(" -- root menu element --")
 							}
 							else
 							{
-				<a asp-area="Identity" asp-controller="Menu" asp-action="Create" asp-route-id="@item.MenuId" title="create" class="bi-plus-circle" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw(" &nbsp;&nbsp;&nbsp;")
-				   }
-							<a asp-area="Identity" asp-controller="Menu" asp-action="Read" asp-route-id="@item.MenuId" title="read" class="bi-search" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
-							<a asp-area="Identity" asp-controller="Menu" asp-action="Update" asp-route-id="@item.MenuId" title="update" class="bi-pencil" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
-							<a asp-area="Identity" asp-controller="Menu" asp-action="Delete" asp-route-id="@item.MenuId" title="delete" class="bi-trash" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-							<a asp-area="Identity" asp-controller="Menu" asp-action="Permit" asp-route-id="@item.MenuId" title="permit" class="far fa-address-card" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+								if (item.HLevel >= 4)
+								{
+									<span class="bi-x"></span> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+								}
+								else
+								{
+									<a asp-area="Identity" asp-controller="Menu" asp-action="Create" asp-route-id="@item.MenuId" title="create" class="bi-plus-circle" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw(" &nbsp;&nbsp;&nbsp;")
+								}
+								<a asp-area="Identity" asp-controller="Menu" asp-action="Read" asp-route-id="@item.MenuId" title="read" class="bi-search" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+								<a asp-area="Identity" asp-controller="Menu" asp-action="Update" asp-route-id="@item.MenuId" title="update" class="bi-pencil" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+								<a asp-area="Identity" asp-controller="Menu" asp-action="Delete" asp-route-id="@item.MenuId" title="delete" class="bi-trash" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+								<a asp-area="Identity" asp-controller="Menu" asp-action="Permit" asp-route-id="@item.MenuId" title="permit" class="far fa-address-card" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+							}
 						}
-					}
-				</td>
-			</tr>
-		}
-	</tbody>
-</table>
-<br />
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
 
-@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.User.ListDeleted))
-{
-	<a asp-area="Identity" asp-controller="Menu" asp-action="ListDeleted" style="text-decoration:none;" title="View deleted records">View deleted records</a>
-}
+<p></p>
+
+<div class="row">
+	@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.User.ListDeleted))
+	{
+		<a asp-area="Identity" asp-controller="Menu" asp-action="ListDeleted" style="text-decoration:none;" title="View deleted records">View deleted records</a>
+	}
+</div>
+

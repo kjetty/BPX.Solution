@@ -17,7 +17,7 @@
 <p></p>
 <hr />
 
-<div>
+<div class="row">
 	<dl class="row">
 		<dt class="col-sm-2">
 			<span class="bi-at"></span>
@@ -90,7 +90,10 @@
 		</dd>
 	</dl>
 </div>
-<div>
+
+<p></p>
+
+<div class="row">
 	@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.Update))
 	{
 		<a asp-area="Identity" asp-action="Update" asp-route-id="@Model.MenuId">Edit</a> @Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;")

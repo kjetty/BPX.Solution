@@ -26,7 +26,7 @@
 				</div>
 				<div class="col-md-4 input-group">
 					<div class="input-group-prepend">
-						<span class="input-group-text"><i class="bi-at"></i></span>
+						<span class="input-group-text bi-at"></span>
 					</div>
 					<input asp-for="MenuName" class="form-control" />
 				</div>
@@ -41,7 +41,7 @@
 				</div>
 				<div class="col-md-4 input-group">
 					<div class="input-group-prepend">
-						<span class="input-group-text"><i class="bi-card-text"></i></span>
+						<span class="input-group-text bi-card-text"></span>
 					</div>
 					<input asp-for="MenuDescription" class="form-control" />
 				</div>
@@ -57,7 +57,7 @@
 				</div>
 				<div class="col-md-4 input-group">
 					<div class="input-group-prepend">
-						<span class="input-group-text"><i class="bi-link"></i></span>
+						<span class="input-group-text bi-link"></span>
 					</div>
 					<input asp-for="MenuURL" class="form-control" />
 				</div>
@@ -72,7 +72,7 @@
 				</div>
 				<div class="col-md-4 input-group">
 					<div class="input-group-prepend">
-						<span class="input-group-text"><i class="bi-people"></i></span>
+						<span class="input-group-text bi-people"></span>
 					</div>
 					<input asp-for="ParentMenuId" class="form-control" readonly />
 				</div>
@@ -87,7 +87,7 @@
 				</div>
 				<div class="col-md-4 input-group">
 					<div class="input-group-prepend">
-						<span class="input-group-text"><i class="bi-list-ol"></i></span>
+						<span class="input-group-text bi-list-ol"></span>
 					</div>
 					<input asp-for="OrderNumber" class="form-control" />
 				</div>
@@ -111,7 +111,7 @@
 	</div>
 </div>
 
-<div>
+<div class="row">
 	@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.List))
 	{
 		<a asp-action="Index">Back to List</a>

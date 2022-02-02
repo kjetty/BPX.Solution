@@ -42,6 +42,42 @@ namespace BPX.DAL.Repository
             context.Entry(entity).State = EntityState.Modified;
         }
 
+        public List<Menu> GetBreadCrumb(int menuId)
+		{
+            //WITH CTE_breadcrumb
+            //AS
+            //(
+            //    SELECT      MenuId, MenuName, MenuDescription, MenuURL, ParentMenuId, hLevel, OrderNumber, TreePath, StatusFlag, ModifiedBy, ModifiedDate
+            //    FROM        Menus
+            //    WHERE       StatusFlag = 'A' AND MenuId = 15
+            //    UNION ALL
+            //    SELECT      m.MenuId, m.MenuName, m.MenuDescription, m.MenuURL, m.ParentMenuId, m.hLevel, m.OrderNumber, m.TreePath, m.StatusFlag, m.ModifiedBy, m.ModifiedDate
+            //    FROM        Menus m
+            //    INNER JOIN  CTE_breadcrumb cte ON cte.ParentMenuId = m.MenuId
+            //    WHERE       m.StatusFlag = 'A'
+            //)
+            //SELECT    MenuId, MenuName, MenuDescription, MenuURL, ParentMenuId, hLevel, OrderNumber, TreePath, StatusFlag, ModifiedBy, ModifiedDate
+            //FROM      CTE_breadcrumb
+
+            string cteQuery = string.Empty;
+            cteQuery += "WITH CTE_breadcrumb ";
+            cteQuery += "AS ";
+            cteQuery += "( ";
+            cteQuery += "    SELECT      MenuId, MenuName, MenuDescription, MenuURL, ParentMenuId, hLevel, OrderNumber, TreePath, StatusFlag, ModifiedBy, ModifiedDate ";
+            cteQuery += "    FROM        Menus ";
+            cteQuery += "    WHERE       StatusFlag = '" + RecordStatus.Active + "' AND MenuId = " + Convert.ToInt32(menuId);
+            cteQuery += "    UNION ALL ";
+            cteQuery += "    SELECT      m.MenuId, m.MenuName, m.MenuDescription, m.MenuURL, m.ParentMenuId, m.hLevel, m.OrderNumber, m.TreePath, m.StatusFlag, m.ModifiedBy, m.ModifiedDate ";
+            cteQuery += "    FROM        Menus m ";
+            cteQuery += "    INNER JOIN  CTE_breadcrumb cte ON cte.ParentMenuId = m.MenuId ";
+            cteQuery += "    WHERE       m.StatusFlag = '" + RecordStatus.Active + "' ";
+            cteQuery += ") ";
+            cteQuery += "SELECT    MenuId, MenuName, MenuDescription, MenuURL, ParentMenuId, hLevel, OrderNumber, TreePath, StatusFlag, ModifiedBy, ModifiedDate ";
+            cteQuery += "FROM      CTE_breadcrumb ";
+
+            return context.Menus.FromSqlRaw(cteQuery).ToList();
+        }
+    
         public List<Menu> GetMenuHierarchy(string statusFlag, string orderBy)
 		{
 
@@ -103,6 +139,7 @@ namespace BPX.DAL.Repository
 
     public interface IMenuRepository : IRepository<Menu>
     {
-        List<Menu> GetMenuHierarchy(string statusFlag, string orderBy);
+        List<Menu> GetBreadCrumb(int menuId); 
+        List<Menu> GetMenuHierarchy(string statusFlag, string orderBy); 
     }
 }

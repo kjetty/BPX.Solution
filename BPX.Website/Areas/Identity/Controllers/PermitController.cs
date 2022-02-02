@@ -410,9 +410,9 @@ namespace BPX.Website.Areas.Identity.Controllers
 
             var permit = permitService.GetRecordById(id);
             var listRoleIds = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.PermitId.Equals(id)).Select(c => c.RoleId).ToList();
-            var listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && listRoleIds.Contains(c.RoleId)).ToList();
+            var listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && listRoleIds.Contains(c.RoleId)).OrderBy(c => c.RoleName).ToList();
             var listMenuIds = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.PermitId.Equals(id)).Select(c => c.MenuId).ToList();
-            var listMenus = menuService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && listMenuIds.Contains(c.MenuId)).ToList();
+            var listMenus = menuService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && listMenuIds.Contains(c.MenuId)).OrderBy(c => c.MenuURL).ToList();
 
             // set ViewBag
             ViewBag.permit = permit;

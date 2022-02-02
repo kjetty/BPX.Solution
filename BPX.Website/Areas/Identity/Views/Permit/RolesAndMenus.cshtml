@@ -1,4 +1,8 @@
-﻿@{
+﻿@using BPX.Utils;
+@using BPX.Website.CustomCode.Authorize;
+@using System.Reflection;
+
+@{
 	ViewData["Title"] = "Roles And Menus";
 }
 
@@ -9,34 +13,50 @@
 </div>
 
 <p></p>
-<hr />
 
 @*
-ViewBag.listRoleIds = listRoleIds;
-ViewBag.listRoles = listRoles;
-ViewBag.listMenuIds = listMenuIds;
-ViewBag.listMenus = listMenus;
+	ViewBag.listRoleIds = listRoleIds;
+	ViewBag.listRoles = listRoles;
+	ViewBag.listMenuIds = listMenuIds;
+	ViewBag.listMenus = listMenus;
 *@
 
 <div class="row">
 	<div class="col-md-6">
-		Roles
-		<hr />
-		@{
-			foreach(var itemRole in ViewBag.listRoles)
-			{
-				@Html.Raw(itemRole.RoleName + "<br />")
+		<h5>Roles</h5>
+
+		<ol class="list-group list-group-numbered">
+			@{
+				foreach (var itemRole in ViewBag.listRoles)
+				{
+					<li class="list-group-item">@Html.Raw(itemRole.RoleName)</li>
+				}
 			}
-		}
+		</ol>
+
 	</div>
 	<div class="col-md-6">
-		Menus
-		<hr />
-		@{
-			foreach (var itemMenu in ViewBag.listMenus)
-			{
-				@Html.Raw(itemMenu.MenuURL + "<br />")
+		<h5>Menu</h5>
+
+		<ol class="list-group list-group-numbered">
+			@{
+				foreach (var itemRole in ViewBag.listMenus)
+				{
+					<li class="list-group-item">@Html.Raw(itemRole.MenuURL)</li>
+				}
 			}
-		}
+		</ol>
+
 	</div>
 </div>
+
+<p></p>
+
+@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.List))
+{
+	<div>
+		<a asp-action="Index">Back to List</a>
+	</div>
+}
+
+

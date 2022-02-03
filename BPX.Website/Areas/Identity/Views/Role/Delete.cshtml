@@ -18,60 +18,62 @@
 <p></p>
 <hr />
 
-<div>
-	<dl class="row">
-		<dt class="col-sm-2">
-			@Html.DisplayNameFor(model => model.RoleName)
-		</dt>
-		<dd class="col-sm-10">
-			@Html.DisplayFor(model => model.RoleName) &nbsp;
-		</dd>
-		<dt class="col-sm-2">
-			@Html.DisplayNameFor(model => model.RoleDescription)
-		</dt>
-		<dd class="col-sm-10">
-			@Html.DisplayFor(model => model.RoleDescription) &nbsp;
-		</dd>
-		<dt class="col-sm-2">
-			@Html.DisplayNameFor(model => model.StatusFlag)
-		</dt>
-		<dd class="col-sm-10">
-			@Html.DisplayFor(model => model.StatusFlag)
+<div class="row">
+	<div class="col-md-12">
+		<dl class="row">
+			<dt class="col-sm-2">
+				@Html.DisplayNameFor(model => model.RoleName)
+			</dt>
+			<dd class="col-sm-10">
+				@Html.DisplayFor(model => model.RoleName) &nbsp;
+			</dd>
+			<dt class="col-sm-2">
+				@Html.DisplayNameFor(model => model.RoleDescription)
+			</dt>
+			<dd class="col-sm-10">
+				@Html.DisplayFor(model => model.RoleDescription) &nbsp;
+			</dd>
+			<dt class="col-sm-2">
+				@Html.DisplayNameFor(model => model.StatusFlag)
+			</dt>
+			<dd class="col-sm-10">
+				@Html.DisplayFor(model => model.StatusFlag)
 
-			@{
-				var recordStatus = typeof(RecordStatus).GetFields(BindingFlags.Static | BindingFlags.Public);
+				@{
+					var recordStatus = typeof(RecordStatus).GetFields(BindingFlags.Static | BindingFlags.Public);
 
-				foreach (var item in recordStatus)
-				{
-					if (Model.StatusFlag == item.GetRawConstantValue().ToString())
+					foreach (var item in recordStatus)
 					{
-						@Html.Raw("&nbsp;(" + @item.Name + ")");
+						if (Model.StatusFlag == item.GetRawConstantValue().ToString())
+						{
+							@Html.Raw("&nbsp;(" + @item.Name + ")");
 
+						}
 					}
 				}
-			}
-			&nbsp;
-		</dd>
-		<dt class="col-sm-2">
-			@Html.DisplayNameFor(model => model.ModifiedBy)
-		</dt>
-		<dd class="col-sm-10">
-			@ViewBag.modifiedByName &nbsp;
-		</dd>
-		<dt class="col-sm-2">
-			@Html.DisplayNameFor(model => model.ModifiedDate)
-		</dt>
-		<dd class="col-sm-10">
-			@Html.DisplayFor(model => model.ModifiedDate) &nbsp;
-		</dd>
-	</dl>
+				&nbsp;
+			</dd>
+			<dt class="col-sm-2">
+				@Html.DisplayNameFor(model => model.ModifiedBy)
+			</dt>
+			<dd class="col-sm-10">
+				@ViewBag.modifiedByName &nbsp;
+			</dd>
+			<dt class="col-sm-2">
+				@Html.DisplayNameFor(model => model.ModifiedDate)
+			</dt>
+			<dd class="col-sm-10">
+				@Html.DisplayFor(model => model.ModifiedDate) &nbsp;
+			</dd>
+		</dl>
 
-	<form asp-action="Delete">
-		<input type="hidden" asp-for="RoleId" />
-		<input type="submit" value="   Delete   " class="btn btn-danger" />  &nbsp;&nbsp; | &nbsp;&nbsp;
-		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.List))
-		{
-			<a asp-action="Index">Back to List</a>
-		}
-	</form>
+		<form asp-action="Delete">
+			<input type="hidden" asp-for="RoleId" />
+			<input type="submit" value="   Delete   " class="btn btn-danger" />  &nbsp;&nbsp; | &nbsp;&nbsp;
+			@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.List))
+			{
+				<a asp-action="Index">Back to List</a>
+			}
+		</form>
+	</div>
 </div>

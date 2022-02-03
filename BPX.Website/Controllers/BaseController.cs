@@ -96,16 +96,17 @@ namespace BPX.Website.Controllers
 								////// Developer Override for Permits - BaseController (Part A) + PermitAttribute (PartB)
 								////// OverrideOverrideOverride 
 								////// use for testing only
-								////// comment befor publishing
+								////// comment before publishing
 								////// START
-								//if (currRequestMeta.host.Contains("localhost"))
+								//if (ctx.HttpContext.Request.Host.Value.Contains("localhost"))
 								//{
 								//	List<int> tempUserPermitIds = new List<int>();
 								//	for (int i = 0; i < 10000; i++)
 								//	{
 								//		tempUserPermitIds.Add(i);
 								//	}
-								//	ViewBag.currUserPermitIds = tempUserPermitIds;
+								//	currUserMeta.UserPermitIds = tempUserPermitIds;
+								//	ViewBag.currUserPermitIds = currUserMeta.UserPermitIds;
 								//}
 								////// END
 
@@ -174,7 +175,7 @@ namespace BPX.Website.Controllers
 
 			if (menuId <= 0)
 			{
-				return "cannot / generate / breadcrumb";
+				return "<li class=\"breadcrumb-item\">cannot</li><li class=\"breadcrumb-item\">generate</li><li class=\"breadcrumb-item\">breadcrumb</li>";
 			}
 
 			string cacheKeyName = $"menu:{menuId}:breadcrumb";

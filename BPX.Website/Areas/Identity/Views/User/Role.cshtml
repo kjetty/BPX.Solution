@@ -53,7 +53,6 @@
 
 								@Html.Raw("</td>")
 								@Html.Raw("</tr>")
-
 							}
 
 							@Html.Raw("</table>")
@@ -67,23 +66,25 @@
 	</div>
 </div>
 
-<div>
-	<a asp-action="Index">Back to List</a>
+<div class="row">
+	<div class="col-md-12">
+		<a asp-action="Index">Back to List</a>
+	</div>
 </div>
 
 @section ScriptsAtBottom
 {
 	<script type="text/javascript">
-        $(document).ready(function () {
-            @if (ViewBag.listRoles != null)
-            {
-                @Html.Raw("$(\"#handleAdmin" + "\").change(function () {\n")
-                @Html.Raw("\t$(\".classAdmin" + "\").removeAttr('checked');\n")
-                @Html.Raw("\tif (this.checked) {\n")
-                @Html.Raw("\t\t$(\".classAdmin" + "\").attr('checked', 'checked');\n")
-                @Html.Raw("\t}\n")
-                @Html.Raw("});\n\n")
-            }
-        });
+		$(document).ready(function () {
+			@if (ViewBag.listRoles != null)
+			{
+				@Html.Raw("$(\"#handleAdmin" + "\").change(function () {\n")
+				@Html.Raw("\t$(\".classAdmin" + "\").removeAttr('checked');\n")
+				@Html.Raw("\tif (this.checked) {\n")
+				@Html.Raw("\t\t$(\".classAdmin" + "\").attr('checked', 'checked');\n")
+				@Html.Raw("\t}\n")
+				@Html.Raw("});\n\n")
+			}
+		});
 	</script>
 }

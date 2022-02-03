@@ -50,7 +50,6 @@
 					<span asp-validation-for="MenuDescription" class="text-danger"></span>
 				</div>
 			</div>
-
 			<div class="row form-group">
 				<div class="col-md-2">
 					<label asp-for="MenuURL" class="control-label"></label>
@@ -102,6 +101,12 @@
 				</div>
 				<div class="col-md-4 input-group">
 					<input type="submit" value="   Save   " class="btn btn-primary" />
+					<span style="margin: 5px 0 0 10px">
+						@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.List))
+						{
+							@Html.Raw("&nbsp; &nbsp; | &nbsp; &nbsp;"); <a asp-action="Index">Back to List</a>
+						}
+					</span>
 				</div>
 				<div class="col-md-6">
 					&nbsp;
@@ -109,13 +114,6 @@
 			</div>
 		</form>
 	</div>
-</div>
-
-<div class="row">
-	@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.List))
-	{
-		<a asp-action="Index">Back to List</a>
-	}
 </div>
 
 @section ScriptsAtBottom {

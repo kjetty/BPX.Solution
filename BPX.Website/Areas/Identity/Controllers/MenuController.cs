@@ -37,7 +37,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Menu.List)]
         public IActionResult Index()
 		{
-			return RedirectToAction("List");
+            return RedirectToAction("List");
 		}
 
 		// GET: /Identity/Menu/List
@@ -496,7 +496,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 
         private void ResetCache()
         {
-            //// cache :: remove following :: ALL
+            //// cache :: remove following :: 
+            //// ALL
             var listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.ModifiedDate >= DateTime.Now.AddMinutes(-240)).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
 
             foreach (var itemCacheKeyName in listCacheKeyNames)

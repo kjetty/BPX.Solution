@@ -77,7 +77,6 @@
 					<span asp-validation-for="ParentMenuId" class="text-danger"></span>
 				</div>
 			</div>
-
 			<div class="row form-group">
 				<div class="col-md-2">
 					<label asp-for="OrderNumber" class="control-label"></label>
@@ -99,6 +98,12 @@
 				</div>
 				<div class="col-md-4 input-group">
 					<input type="submit" value="   Create   " class="btn btn-primary" />
+					<span style="margin: 5px 0 0 10px">
+						@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.List))
+						{
+							@Html.Raw("&nbsp; &nbsp; | &nbsp; &nbsp;"); <a asp-action="Index">Back to List</a>
+						}
+					</span>
 				</div>
 				<div class="col-md-6">
 					&nbsp;
@@ -108,28 +113,19 @@
 	</div>
 </div>
 
-<div class="row">
-	<div class="col-md-12">
-		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.List))
-		{
-			<a asp-action="Index">Back to List</a>
-		}
-	</div>
-</div>
-
 @section ScriptsAtBottom {
 	<partial name="_PartialValidationScripts" />
 
 	<script type="text/javascript">
-	$(document).ready(function () {
-		var parentMenuURL = "@ViewBag.parentMenu.MenuURL";
-		var tempMenuURL = "";
+		$(document).ready(function () {
+			var parentMenuURL = "@ViewBag.parentMenu.MenuURL";
+			var tempMenuURL = "";
 
-        @Html.Raw("$(\"#MenuName" + "\").keyup(function () {\n")
-		@Html.Raw("     tempMenuURL = parentMenuURL + '/' + this.value;\n")
-		@*@Html.Raw("     alert(tempMenuURL);\n")*@
-		@Html.Raw("     $(\"#MenuURL" + "\").val(tempMenuURL);\n")
-        @Html.Raw("});\n\n")
-    });
+			@Html.Raw("$(\"#MenuName" + "\").keyup(function () {\n")
+			@Html.Raw("     tempMenuURL = parentMenuURL + '/' + this.value;\n")
+			@*@Html.Raw("     alert(tempMenuURL);\n")*@
+			@Html.Raw("     $(\"#MenuURL" + "\").val(tempMenuURL);\n")
+			@Html.Raw("});\n\n")
+		});
 	</script>
 }

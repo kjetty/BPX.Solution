@@ -424,10 +424,10 @@ namespace BPX.Website.Areas.Identity.Controllers
             return View();
         }
 
-
         private void ResetCache()
         {
-            //// cache :: remove following :: ALL
+            //// cache :: remove following :: 
+            //// ALL
             var listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.ModifiedDate >= DateTime.Now.AddMinutes(-240)).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
 
             foreach (var itemCacheKeyName in listCacheKeyNames)

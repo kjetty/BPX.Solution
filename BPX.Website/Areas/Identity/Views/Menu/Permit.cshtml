@@ -1,6 +1,7 @@
 ﻿@model BPX.Domain.ViewModels.MenuMiniViewModel
 
 @using System.Text.RegularExpressions
+@using BPX.Website.CustomCode.Authorize;
 
 @{
 	ViewData["Title"] = "Menu Permits";
@@ -20,87 +21,86 @@
 		<form asp-action="Permit">
 			@*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
 			<input type="hidden" asp-for="MenuId" />
-			<div class="row form-group">
-				<div class="col-md-12">
-					@if (ViewBag.listAreas != null)
-					{
-						foreach (var area in ViewBag.listAreas)
-						{
-							string handleArea = "handle" + area;
-							string classArea = "class" + area;
 
-							<div class="card">
-								<div class="card-header">
-									<input type="checkbox" id="@handleArea" style="box-shadow: 0 0 3px red;" />
-									@area
-								</div>
-								<div class="card-body">
-									@Html.Raw("<table>")
+			@if (ViewBag.listAreas != null)
+			{
+				foreach (var area in ViewBag.listAreas)
+				{
+					string handleArea = "handle" + area;
+					string classArea = "class" + area;
 
-									@if (ViewBag.listPermits != null)
+					<div class="card">
+						<div class="card-header">
+							<input type="checkbox" id="@handleArea" style="box-shadow: 0 0 3px red;" />
+							@area
+						</div>
+						<div class="card-body">
+							@Html.Raw("<table>")
+
+							@if (ViewBag.listPermits != null)
+							{
+								string prevController = string.Empty;
+								string currController = string.Empty;
+
+								foreach (var itemPermit in ViewBag.listPermits)
+								{
+									if (itemPermit.PermitArea == area)
 									{
-										string prevController = string.Empty;
-										string currController = string.Empty;
+										currController = itemPermit.PermitController;
 
-										foreach (var itemPermit in ViewBag.listPermits)
+										if (prevController != currController)
 										{
-											if (itemPermit.PermitArea == area)
+											string handlAreaController = Regex.Replace("handle" + area + currController, @"\s", "");
+											string classAreaController = Regex.Replace("class" + area + currController, @"\s", "");
+
+											@Html.Raw("<tr>")
+											@Html.Raw("<td style=\"width:175px;\">")
+											<input type="checkbox" id="@handlAreaController" style="box-shadow: 0 0 3px red;" />
+											@itemPermit.PermitController
+											@Html.Raw("</td>")
+											@Html.Raw("<td style=\"padding-left:25px;\">")
+
+											foreach (var itemPermit2 in ViewBag.listPermits)
 											{
-												currController = itemPermit.PermitController;
-
-												if (prevController != currController)
+												if (currController == itemPermit2.PermitController)
 												{
-													string handlAreaController = Regex.Replace("handle" + area + currController, @"\s", "");
-													string classAreaController = Regex.Replace("class" + area + currController, @"\s", "");
-
-													@Html.Raw("<tr>")
-													@Html.Raw("<td style=\"width:175px;\">")
-													<input type="checkbox" id="@handlAreaController" style="box-shadow: 0 0 3px red;" />
-													@itemPermit.PermitController
-													@Html.Raw("</td>")
-													@Html.Raw("<td style=\"padding-left:25px;\">")
-
-													foreach (var itemPermit2 in ViewBag.listPermits)
+													if (((IList<int>)ViewBag.listMenuPermitIds).Contains(itemPermit2.PermitId))
 													{
-														if (currController == itemPermit2.PermitController)
-														{
-															if (((IList<int>)ViewBag.listMenuPermitIds).Contains(itemPermit2.PermitId))
-															{
-																<input type="checkbox" class="@classAreaController @classArea" name="PermitIds" value="@itemPermit2.PermitId" checked="checked" />
-															}
-															else
-															{
-																<input type="checkbox" class="@classAreaController @classArea" name="PermitIds" value="@itemPermit2.PermitId" />
-															}
-
-															@itemPermit2.PermitName
-															@Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;")
-														}
+														<input type="checkbox" class="@classAreaController @classArea" name="PermitIds" value="@itemPermit2.PermitId" checked="checked" />
 													}
-													@Html.Raw("</td>")
-													@Html.Raw("</tr>")
+													else
+													{
+														<input type="checkbox" class="@classAreaController @classArea" name="PermitIds" value="@itemPermit2.PermitId" />
+													}
+
+													@itemPermit2.PermitName
+													@Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;")
 												}
 											}
-
-											prevController = currController;
+											@Html.Raw("</td>")
+											@Html.Raw("</tr>")
 										}
 									}
 
-									@Html.Raw("</table>")
-								</div>
-							</div>
-							<br />
-						}
-					}
-					<input type="submit" value="   Save   " class="btn btn-primary" />
-				</div>
-			</div>
+									prevController = currController;
+								}
+							}
+
+							@Html.Raw("</table>")
+						</div>
+					</div>
+					<br />
+				}
+			}
+			<input type="submit" value="   Save   " class="btn btn-primary" />
+			<span style="margin: 5px 0 0 10px">
+				@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.List))
+				{
+					@Html.Raw("&nbsp; &nbsp; | &nbsp; &nbsp;"); <a asp-action="Index">Back to List</a>
+				}
+			</span>
 		</form>
 	</div>
-</div>
-
-<div class="row">
-	<a asp-action="Index">Back to List</a>
 </div>
 
 @section ScriptsAtBottom

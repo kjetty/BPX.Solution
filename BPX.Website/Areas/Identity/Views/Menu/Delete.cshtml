@@ -96,11 +96,13 @@
 
 		<form asp-action="Delete">
 			<input type="hidden" asp-for="MenuId" />
-			<input type="submit" value="   Delete   " class="btn btn-danger" />  &nbsp;&nbsp; | &nbsp;&nbsp;
-			@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.List))
-			{
-				<a asp-action="Index">Back to List</a>
-			}
+			<input type="submit" value="   Delete   " class="btn btn-danger" />
+			<span style="margin: 5px 0 0 10px">
+				@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.List))
+				{
+					@Html.Raw("&nbsp; &nbsp; | &nbsp; &nbsp;"); <a asp-action="Index">Back to List</a>
+				}
+			</span>
 		</form>
 	</div>
 </div>

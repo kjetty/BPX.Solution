@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Diagnostics;
 using System.Linq;
 
@@ -26,12 +27,14 @@ namespace BPX.Website.Controllers
 		protected List<Menu> currMenuHierarchy;
 		protected string currBreadcrump;
 		protected string currMenuString;
+		protected TextInfo textInfo;
 		// private vars
 		private ICacheService cacheService;
 		private ICacheKeyService cacheKeyService;
 
 		public BaseController(ILogger<T> logger, ICoreService coreService)
 		{
+			this.textInfo = new CultureInfo("en-US", false).TextInfo;
 			this.logger = logger;
 			this.coreService = coreService;
 			this.bpxPageSize = Convert.ToInt32(coreService.GetConfiguration().GetSection("AppSettings").GetSection("PageSize").Value);
@@ -169,11 +172,21 @@ namespace BPX.Website.Controllers
 			string currController = ctx.HttpContext.Request.RouteValues["controller"] != null ? ctx.HttpContext.Request.RouteValues["controller"].ToString() : string.Empty;
 			string currAction = ctx.HttpContext.Request.RouteValues["action"] != null ? ctx.HttpContext.Request.RouteValues["action"].ToString() : string.Empty;
 			//string currId = ctx.HttpContext.Request.RouteValues["id"] != null ? ctx.HttpContext.Request.RouteValues["id"].ToString() : string.Empty;
-			
-			string lookupURL = $"/{currArea}/{currController}";
-			int menuId = menuHierarchy.Where(c => c.MenuURL.Equals(lookupURL)).Select(c => c.MenuId).SingleOrDefault();
 
-			if (menuId <= 0)
+			currArea = textInfo.ToTitleCase(currArea);
+			currController = textInfo.ToTitleCase(currController);
+			currAction = textInfo.ToTitleCase(currAction);
+
+			string lookupURL = $"/{currArea}/{currController}".ToLower();
+
+			if (currController.Equals("Home"))
+			{
+				lookupURL = lookupURL.Replace("/home", string.Empty);
+			}
+
+			int menuId = menuHierarchy.Where(c => c.MenuURL.ToLower().Equals(lookupURL)).Select(c => c.MenuId).SingleOrDefault();
+
+			if (menuId < 0)
 			{
 				return "<li class=\"breadcrumb-item\">cannot</li><li class=\"breadcrumb-item\">generate</li><li class=\"breadcrumb-item\">breadcrumb</li>";
 			}
@@ -183,11 +196,16 @@ namespace BPX.Website.Controllers
 
 			if (breadcrumb == null)
 			{
-				breadcrumb = coreService.GetBreadcrumb(menuId);
+				breadcrumb = coreService.GetBreadcrumb(menuId, currController);
 				cacheService.SetCache(breadcrumb, cacheKeyName, cacheKeyService);
 			}
 
-			return breadcrumb += $"<li class=\"breadcrumb-item active\">{currAction}</li>";
+			if (!currAction.Equals("Index"))
+			{
+				breadcrumb += $"<li class=\"breadcrumb-item active\">{currAction}</li>";
+			}
+
+			return breadcrumb;
 		}
 
 		private string GetMenuString(List<int> userRoleIds, List<int> userPermitIds, List<Menu> menuHierarchy)

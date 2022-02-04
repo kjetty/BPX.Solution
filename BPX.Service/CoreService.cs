@@ -126,7 +126,7 @@ namespace BPX.Service
 			return menuService.GetMenuHierarchy(statusFlag, orderBy);
 		}
 
-		public string GetBreadcrumb(int menuId)
+		public string GetBreadcrumb(int menuId, string currController)
 		{
 			string breadcrumb = string.Empty;
 			List<Menu> listBreadcrumb = menuService.GetBreadCrumb(menuId);
@@ -135,9 +135,24 @@ namespace BPX.Service
 			{
 				listBreadcrumb.Reverse();
 
-				foreach(var itemBreadcrumb in listBreadcrumb)
+				foreach (var itemBreadcrumb in listBreadcrumb)
 				{
-					breadcrumb += $"<li class=\"breadcrumb-item\"><a href=\"{itemBreadcrumb.MenuURL}\" class=\"text-decoration-none\">{itemBreadcrumb.MenuName}</a></li>";
+					if (itemBreadcrumb.MenuURL.Equals("/"))
+					{
+						breadcrumb += $"<li class=\"breadcrumb-item\"><a href=\"{itemBreadcrumb.MenuURL}\" class=\"text-decoration-none\"><span class=\"fa fa-home\">&nbsp;</span>{itemBreadcrumb.MenuName}</a></li>";
+					}
+					else
+					{
+						if (currController.Equals("Home"))
+						{
+							breadcrumb += $"<li class=\"breadcrumb-item\">{itemBreadcrumb.MenuName}</li>";
+
+						}
+						else
+						{
+							breadcrumb += $"<li class=\"breadcrumb-item\"><a href=\"{itemBreadcrumb.MenuURL}\" class=\"text-decoration-none\">{itemBreadcrumb.MenuName}</a></li>";
+						}
+					}
 				}
 			}	
 			
@@ -301,7 +316,7 @@ namespace BPX.Service
 		IUserService GetUserService();
 		IUserRoleService GetUserRoleService();
 		IRolePermitService GetRolePermitService();
-		string GetBreadcrumb(int menuId);
+		string GetBreadcrumb(int menuId, string currController);
 		IMenuService GetMenuService();
 		IMenuPermitService GetMenuPermitService();
 		int GetUserId(string loginToken);

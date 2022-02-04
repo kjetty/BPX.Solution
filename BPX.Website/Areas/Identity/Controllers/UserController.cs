@@ -365,8 +365,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 		}
 
 		// GET: /Identity/User/Role/5
-		[Permit(Permits.Identity.UserRole.CRUD)]
-		public ActionResult Role(int id)
+		[Permit(Permits.Identity.User.UserRoles)]
+		public ActionResult UserRoles(int id)
 		{
 			if (id <= 0)
 			{
@@ -390,8 +390,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 
 		// GET: /Identity/User/Role/5
 		[HttpPost]
-		[Permit(Permits.Identity.UserRole.CRUD)]
-		public ActionResult Role(int id, List<int> roleIds)
+		[Permit(Permits.Identity.User.UserRoles)]
+		public ActionResult UserRoles(int id, List<int> roleIds)
 		{
 			var listUserRoles = userRoleService.GetRecordsByFilter(c => c.UserId == id).ToList();
 

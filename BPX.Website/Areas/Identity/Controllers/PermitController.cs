@@ -398,7 +398,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
         // GET: /Identity/Permit/RolesAndMenus/5
         [Permit(Permits.Identity.Permit.Read)]
-        public ActionResult RolesAndMenus(int id)
+        public ActionResult PermitRolesMenus(int id)
         {
             if (id <= 0)
             {

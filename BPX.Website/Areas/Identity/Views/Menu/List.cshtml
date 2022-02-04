@@ -79,12 +79,12 @@
 									}
 									else
 									{
-										<a asp-area="Identity" asp-controller="Menu" asp-action="Create" asp-route-id="@item.MenuId" title="create" class="bi-plus-circle" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw(" &nbsp;&nbsp;&nbsp;")
+										<a asp-action="Create" asp-route-id="@item.MenuId" title="create" class="bi-plus-circle" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw(" &nbsp;&nbsp;&nbsp;")
 									}
-									<a asp-area="Identity" asp-controller="Menu" asp-action="Read" asp-route-id="@item.MenuId" title="read" class="bi-search" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
-									<a asp-area="Identity" asp-controller="Menu" asp-action="Update" asp-route-id="@item.MenuId" title="update" class="bi-pencil" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
-									<a asp-area="Identity" asp-controller="Menu" asp-action="Delete" asp-route-id="@item.MenuId" title="delete" class="bi-trash" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-									<a asp-area="Identity" asp-controller="Menu" asp-action="Permit" asp-route-id="@item.MenuId" title="permit" class="far fa-address-card" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+									<a asp-action="Read" asp-route-id="@item.MenuId" title="read" class="bi-search" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+									<a asp-action="Update" asp-route-id="@item.MenuId" title="update" class="bi-pencil" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+									<a asp-action="Delete" asp-route-id="@item.MenuId" title="delete" class="bi-trash" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+									<a asp-action="MenuPermits" asp-route-id="@item.MenuId" title="menu permits" class="far fa-address-card" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
 								}
 							}
 						</td>

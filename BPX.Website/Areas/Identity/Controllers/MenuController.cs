@@ -392,8 +392,8 @@ namespace BPX.Website.Areas.Identity.Controllers
         }
 
         // GET: /Identity/Menu/Permit/5
-        [Permit(Permits.Identity.MenuPermit.CRUD)]
-        public ActionResult Permit(int id)
+        [Permit(Permits.Identity.Menu.MenuPermits)]
+        public ActionResult MenuPermits(int id)
         {
             if (id <= 0)
             {
@@ -419,8 +419,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 
         // GET: /Identity/Menu/Permit/5
         [HttpPost]
-        [Permit(Permits.Identity.MenuPermit.CRUD)]
-        public ActionResult Permit(int id, List<int> permitIds)
+        [Permit(Permits.Identity.Menu.MenuPermits)]
+        public ActionResult MenuPermits(int id, List<int> permitIds)
         {
 			var listMenuPermits = menuPermitService.GetRecordsByFilter(c => c.MenuId == id).ToList();
 

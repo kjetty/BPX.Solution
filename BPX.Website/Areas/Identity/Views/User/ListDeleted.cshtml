@@ -6,7 +6,6 @@
 
 @{
 	ViewBag.Title = "List of deleted Users";
-
 	ViewBag.pageNumber = (ViewBag.pageNumber ?? 1);
 	ViewBag.pageSize = (ViewBag.pageSize ?? 10);
 	ViewBag.statusFlag = (ViewBag.statusFlag ?? string.Empty);
@@ -38,7 +37,7 @@
 				<input id="searchInput" name="searchInput" type="text" class="form-control" placeholder="Search data" value="@ViewBag.searchForString">
 				<div class="input-group-append">
 					<button id="searchBtn" class="btn btn-primary" type="button">
-						<i class="bi-search"></i>
+						<i class="bi-funnel"></i>
 					</button>
 				</div>
 			}
@@ -176,7 +175,7 @@
 							<td class="text-center">
 								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.User.Undelete))
 								{
-									<a asp-area="Identity" asp-controller="User" asp-action="Undelete" asp-route-id="@item.UserId" title="restore" class="bi-power" style="text-decoration: none; color: darkslategray;"></a>
+									<a asp-action="Undelete" asp-route-id="@item.UserId" title="restore" class="bi-plug" style="text-decoration: none; color: darkslategray;"></a>
 								}
 							</td>
 						</tr>
@@ -200,19 +199,19 @@
 			<option value="100" selected="@(ViewBag.pageSize == 100)">100</option>
 		</select>
 		Entries
-		<br />
+		<p></p>
 		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.User.List))
 		{
-			<a asp-area="Identity" asp-controller="User" asp-action="Index" style="text-decoration:none;" title="Back to List">Back to List</a>
+			<a asp-action="List">Back to List</a>
 		}
 	</div>
 	<div class="col-md-8 text-right" style="vertical-align:top;">
-		@Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+		@Html.PagedListPager(Model, page => Url.Action("List", new { page = page }), PagedListRenderOptions.ClassicPlusFirstAndLast)
 	</div>
 </div>
 
 <div>
-	<form id="formForPaging" action="/Identity/User/Listdeleted" method="post">
+	<form id="formForPaging" asp-action="ListDeleted" method="post">
 		<input type="hidden" id="pageNumber" name="pageNumber" value="1" />
 		<input type="hidden" id="pageSize" name="pageSize" value="10" />
 		<input type="hidden" id="statusFlag" name="statusFlag" value="" />

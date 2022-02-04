@@ -22,35 +22,35 @@
 	<div class="col-md-12">
 		<dl class="row">
 			<dt class="col-sm-2">
-				<i class="bi-globe"></i>
+				<span class="bi-globe"></span>
 				@Html.DisplayNameFor(model => model.PermitArea)
 			</dt>
 			<dd class="col-sm-10">
 				@Html.DisplayFor(model => model.PermitArea) &nbsp;
 			</dd>
 			<dt class="col-sm-2">
-				<i class="bi-gear"></i>
+				<span class="bi-gear"></span>
 				@Html.DisplayNameFor(model => model.PermitController)
 			</dt>
 			<dd class="col-sm-10">
-				@Html.DisplayFor(model => model.PermitController) &nbsp;
+				@Html.DisplayFor(model => model.PermitController)
 			</dd>
 			<dt class="col-sm-2">
-				<i class="bi-at"></i>
+				<span class="bi-at"></span>
 				@Html.DisplayNameFor(model => model.PermitName)
 			</dt>
 			<dd class="col-sm-10">
-				@Html.DisplayFor(model => model.PermitName) &nbsp;
+				@Html.DisplayFor(model => model.PermitName)
 			</dd>
 			<dt class="col-sm-2">
-				<i class="bi-list"></i>
+				<span class="bi-list-ol"></span>
 				@Html.DisplayNameFor(model => model.PermitEnum)
 			</dt>
 			<dd class="col-sm-10">
-				@Html.DisplayFor(model => model.PermitEnum) &nbsp;
+				@Html.DisplayFor(model => model.PermitEnum)
 			</dd>
 			<dt class="col-sm-2">
-				<i class="bi-flag"></i>
+				<span class="bi-flag"></span>
 				@Html.DisplayNameFor(model => model.StatusFlag)
 			</dt>
 			<dd class="col-sm-10">
@@ -64,35 +64,36 @@
 						if (Model.StatusFlag == item.GetRawConstantValue().ToString())
 						{
 							@Html.Raw("&nbsp;(" + @item.Name + ")");
-
 						}
 					}
 				}
 				&nbsp;
 			</dd>
 			<dt class="col-sm-2">
-				<i class="bi-person"></i>
+				<span class="bi-person-circle"></span>
 				@Html.DisplayNameFor(model => model.ModifiedBy)
 			</dt>
 			<dd class="col-sm-10">
-				@ViewBag.modifiedByName &nbsp;
+				@ViewBag.modifiedByName
 			</dd>
 			<dt class="col-sm-2">
-				<i class="bi-clock"></i>
+				<span class="bi-clock"></span>
 				@Html.DisplayNameFor(model => model.ModifiedDate)
 			</dt>
 			<dd class="col-sm-10">
-				@Html.DisplayFor(model => model.ModifiedDate) &nbsp;
+				@Html.DisplayFor(model => model.ModifiedDate)
 			</dd>
 		</dl>
 
-		<form asp-action="Delete">
+		<form asp-action="Delete" method="post">
 			<input type="hidden" asp-for="PermitId" />
-			<input type="submit" value="   Delete   " class="btn btn-danger" />  &nbsp;&nbsp; | &nbsp;&nbsp;
-			@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.List))
-			{
-				<a asp-action="Index">Back to List</a>
-			}
+			<input type="submit" value="   Delete   " class="btn btn-danger" />
+			<span style="margin: 5px 0 0 10px">
+				@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.List))
+				{
+					@Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;") <a asp-action="List">Back to List</a>
+				}
+			</span>
 		</form>
 	</div>
 </div>

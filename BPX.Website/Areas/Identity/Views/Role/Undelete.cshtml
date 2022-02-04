@@ -22,18 +22,21 @@
 	<div class="col-md-12">
 		<dl class="row">
 			<dt class="col-sm-2">
+				<span class="bi-at"></span>
 				@Html.DisplayNameFor(model => model.RoleName)
 			</dt>
 			<dd class="col-sm-10">
-				@Html.DisplayFor(model => model.RoleName) &nbsp;
+				@Html.DisplayFor(model => model.RoleName) 
 			</dd>
 			<dt class="col-sm-2">
+				<span class="bi-card-text"></span>
 				@Html.DisplayNameFor(model => model.RoleDescription)
 			</dt>
 			<dd class="col-sm-10">
-				@Html.DisplayFor(model => model.RoleDescription) &nbsp;
+				@Html.DisplayFor(model => model.RoleDescription) 
 			</dd>
 			<dt class="col-sm-2">
+				<span class="bi-flag"></span>
 				@Html.DisplayNameFor(model => model.StatusFlag)
 			</dt>
 			<dd class="col-sm-10">
@@ -53,30 +56,34 @@
 				&nbsp;
 			</dd>
 			<dt class="col-sm-2">
+				<span class="bi-person-circle"></span>
 				@Html.DisplayNameFor(model => model.ModifiedBy)
 			</dt>
 			<dd class="col-sm-10">
-				@ViewBag.modifiedByName &nbsp;
+				@ViewBag.modifiedByName
 			</dd>
 			<dt class="col-sm-2">
+				<span class="bi-clock"></span>
 				@Html.DisplayNameFor(model => model.ModifiedDate)
 			</dt>
 			<dd class="col-sm-10">
-				@Html.DisplayFor(model => model.ModifiedDate) &nbsp;
+				@Html.DisplayFor(model => model.ModifiedDate)
 			</dd>
 		</dl>
 
-		<form asp-action="Undelete">
+		<form asp-action="Undelete" method="post">
 			<input type="hidden" asp-for="RoleId" />
-			<input type="submit" value="   Restore   " class="btn btn-primary" /> &nbsp;&nbsp; | &nbsp;&nbsp;
-			@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.ListDeleted))
-			{
-				<a asp-area="Identity" asp-controller="Role" asp-action="ListDeleted" style="text-decoration:none;" title="Back to Deleted List">Back to Deleted List</a> @Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;")
-			}
-			@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.List))
-			{
-				<a asp-action="Index">Back to List</a>
-			}
+			<input type="submit" value="   Restore   " class="btn btn-primary" />
+			<span style="margin: 5px 0 0 10px">
+				@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.ListDeleted))
+				{
+					@Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;") <a asp-action="ListDeleted">Back to Deleted List</a>
+				}
+				@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.List))
+				{
+					@Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;") <a asp-action="List">Back to List</a>
+				}
+			</span>
 		</form>
 	</div>
 </div>

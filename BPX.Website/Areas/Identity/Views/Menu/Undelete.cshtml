@@ -26,35 +26,35 @@
 				@Html.DisplayNameFor(model => model.MenuName)
 			</dt>
 			<dd class="col-sm-10">
-				@Html.DisplayFor(model => model.MenuName) &nbsp;
+				@Html.DisplayFor(model => model.MenuName) 
 			</dd>
 			<dt class="col-sm-2">
 				<span class="bi-card-text"></span>
 				@Html.DisplayNameFor(model => model.MenuDescription)
 			</dt>
 			<dd class="col-sm-10">
-				@Html.DisplayFor(model => model.MenuDescription) &nbsp;
+				@Html.DisplayFor(model => model.MenuDescription) 
 			</dd>
 			<dt class="col-sm-2">
 				<span class="bi-link"></span>
 				@Html.DisplayNameFor(model => model.MenuURL)
 			</dt>
 			<dd class="col-sm-10">
-				@Html.DisplayFor(model => model.MenuURL) &nbsp;
+				@Html.DisplayFor(model => model.MenuURL) 
 			</dd>
 			<dt class="col-sm-2">
 				<span class="bi-people"></span>
 				@Html.DisplayNameFor(model => model.ParentMenuId)
 			</dt>
 			<dd class="col-sm-10">
-				@Html.DisplayFor(model => model.ParentMenuId) &nbsp;
+				@Html.DisplayFor(model => model.ParentMenuId) 
 			</dd>
 			<dt class="col-sm-2">
 				<span class="bi-list-ol"></span>
 				@Html.DisplayNameFor(model => model.OrderNumber)
 			</dt>
 			<dd class="col-sm-10">
-				@Html.DisplayFor(model => model.OrderNumber) &nbsp;
+				@Html.DisplayFor(model => model.OrderNumber) 
 			</dd>
 			<dt class="col-sm-2">
 				<span class="bi-flag"></span>
@@ -71,39 +71,38 @@
 						if (Model.StatusFlag == item.GetRawConstantValue().ToString())
 						{
 							@Html.Raw("&nbsp;(" + @item.Name + ")");
-
 						}
 					}
 				}
 				&nbsp;
 			</dd>
 			<dt class="col-sm-2">
-				<span class="bi-person"></span>
+				<span class="bi-person-circle"></span>
 				@Html.DisplayNameFor(model => model.ModifiedBy)
 			</dt>
 			<dd class="col-sm-10">
-				@ViewBag.modifiedByName &nbsp;
+				@ViewBag.modifiedByName
 			</dd>
 			<dt class="col-sm-2">
 				<span class="bi-clock"></span>
 				@Html.DisplayNameFor(model => model.ModifiedDate)
 			</dt>
 			<dd class="col-sm-10">
-				@Html.DisplayFor(model => model.ModifiedDate) &nbsp;
+				@Html.DisplayFor(model => model.ModifiedDate)
 			</dd>
 		</dl>
 
-		<form asp-action="Undelete">
+		<form asp-action="Undelete" method="post">
 			<input type="hidden" asp-for="MenuId" />
 			<input type="submit" value="   Restore   " class="btn btn-primary" />
 			<span style="margin: 5px 0 0 10px">
 				@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.ListDeleted))
 				{
-					@Html.Raw("&nbsp; &nbsp; | &nbsp; &nbsp;"); <a asp-action="ListDeleted">Back to Deleted List</a>
+					@Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;") <a asp-action="ListDeleted">Back to Deleted List</a>
 				}
 				@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.List))
 				{
-					@Html.Raw("&nbsp; &nbsp; | &nbsp; &nbsp;"); <a asp-action="Index">Back to List</a>
+					@Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;") <a asp-action="List">Back to List</a>
 				}
 			</span>
 		</form>

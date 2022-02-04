@@ -1,6 +1,7 @@
 ﻿@model BPX.Domain.ViewModels.UserMiniViewModel
 
 @using System.Text.RegularExpressions
+@using BPX.Website.CustomCode.Authorize;
 
 @{
 	ViewData["Title"] = "User Roles";
@@ -17,7 +18,7 @@
 
 <div class="row">
 	<div class="col-md-12">
-		<form asp-action="Role">
+		<form asp-action="Role" method="post">
 			@*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
 			<input type="hidden" asp-for="UserId" />
 			<div class="row form-group">
@@ -60,15 +61,15 @@
 					</div>
 					<br />
 					<input type="submit" value="   Save   " class="btn btn-primary" />
+					<span style="margin: 5px 0 0 10px">
+						@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.User.List))
+						{
+							@Html.Raw("&nbsp; &nbsp; | &nbsp; &nbsp;"); <a asp-action="List">Back to List</a>
+						}
+					</span>
 				</div>
 			</div>
 		</form>
-	</div>
-</div>
-
-<div class="row">
-	<div class="col-md-12">
-		<a asp-action="Index">Back to List</a>
 	</div>
 </div>
 

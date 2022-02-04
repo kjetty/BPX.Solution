@@ -17,16 +17,17 @@
 
 <div class="row">
 	<div class="col-md-12">
-		<form asp-action="Update">
+		<form asp-action="Update" method="post">
 			@*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
 			<input type="hidden" asp-for="RoleId" />
+
 			<div class="row form-group">
 				<div class="col-md-2">
 					<label asp-for="RoleName" class="control-label"></label>
 				</div>
 				<div class="col-md-4 input-group">
 					<div class="input-group-prepend">
-						<span class="input-group-text"><i class="fa fa-role fa-fw"></i></span>
+						<span class="input-group-text"><i class="bi-at"></i></span>
 					</div>
 					<input asp-for="RoleName" class="form-control" />
 				</div>
@@ -41,7 +42,7 @@
 				</div>
 				<div class="col-md-4 input-group">
 					<div class="input-group-prepend">
-						<span class="input-group-text"><i class="fa fa-role fa-fw"></i></span>
+						<span class="input-group-text"><i class="bi-card-text"></i></span>
 					</div>
 					<input asp-for="RoleDescription" class="form-control" />
 				</div>
@@ -56,23 +57,18 @@
 				</div>
 				<div class="col-md-4 input-group">
 					<input type="submit" value="   Save   " class="btn btn-primary" />
+					<span style="margin: 5px 0 0 10px">
+						@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.List))
+						{
+							@Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;") <a asp-action="List">Back to List</a>
+						}
+					</span>
 				</div>
 				<div class="col-md-6">
 					&nbsp;
 				</div>
 			</div>
 		</form>
-	</div>
-</div>
-
-<p></p>
-
-<div class="row">
-	<div class="col-md-12">
-		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.List))
-		{
-			<a asp-action="Index">Back to List</a>
-		}
 	</div>
 </div>
 

@@ -137,7 +137,7 @@ namespace BPX.Service
 
 				foreach(var itemBreadcrumb in listBreadcrumb)
 				{
-					breadcrumb += $"<li class=\"breadcrumb-item\"><a href=\"{itemBreadcrumb.MenuURL}\">{itemBreadcrumb.MenuName}</a></li>";
+					breadcrumb += $"<li class=\"breadcrumb-item\"><a href=\"{itemBreadcrumb.MenuURL}\" class=\"text-decoration-none\">{itemBreadcrumb.MenuName}</a></li>";
 				}
 			}	
 			

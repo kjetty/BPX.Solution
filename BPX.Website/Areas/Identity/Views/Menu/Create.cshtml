@@ -17,9 +17,10 @@
 
 <div class="row">
 	<div class="col-md-12">
-		<form asp-action="Create">
+		<form asp-action="Create" method="post">
 			@*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
 			@*<input type="hidden" asp-for="MenuId" />*@
+			
 			<div class="row form-group">
 				<div class="col-md-2">
 					<label asp-for="MenuName" class="control-label"></label>
@@ -61,7 +62,6 @@
 					<span asp-validation-for="MenuURL" class="text-danger"></span>
 				</div>
 			</div>
-
 			<div class="row form-group">
 				<div class="col-md-2">
 					<label asp-for="ParentMenuId" class="control-label"></label>
@@ -101,7 +101,7 @@
 					<span style="margin: 5px 0 0 10px">
 						@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.List))
 						{
-							@Html.Raw("&nbsp; &nbsp; | &nbsp; &nbsp;"); <a asp-action="Index">Back to List</a>
+							@Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;") <a asp-action="List">Back to List</a>
 						}
 					</span>
 				</div>

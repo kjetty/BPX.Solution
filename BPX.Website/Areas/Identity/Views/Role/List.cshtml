@@ -6,7 +6,6 @@
 
 @{
 	ViewBag.Title = "List of Roles";
-
 	ViewBag.pageNumber = (ViewBag.pageNumber ?? 1);
 	ViewBag.pageSize = (ViewBag.pageSize ?? 10);
 	ViewBag.statusFlag = (ViewBag.statusFlag ?? string.Empty);
@@ -14,7 +13,7 @@
 	ViewBag.sortOrder = (ViewBag.sortOrder ?? string.Empty);
 	ViewBag.searchForString = (ViewBag.searchForString ?? string.Empty);
 
-	//local variables
+	// local variables
 	var localSortOrder = "";
 	var localSortIcon = "";
 }
@@ -32,7 +31,7 @@
 	<div class="col-md-9">
 		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.Create))
 		{
-			<a asp-area="Identity" asp-controller="Role" asp-action="Create" class="btn btn-primary fa-sm" title="Add Role"><i class="bi-plus-circle"></i> &nbsp; Add Role</a>
+			<a asp-action="Create" class="btn btn-primary fa-sm" title="Add Role"><i class="bi-plus-circle"></i> &nbsp; Add Role</a>
 		}
 	</div>
 	<div class="col-md-3">
@@ -132,19 +131,19 @@
 							<td class="text-center">
 								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.Read))
 								{
-									<a asp-area="Identity" asp-controller="Role" asp-action="Read" asp-route-id="@item.RoleId" title="view" class="bi-search" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+									<a asp-action="Read" asp-route-id="@item.RoleId" title="view" class="bi-search" style="text-decoration: none; color: darkslategray;"></a>
 								}
 								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.Update))
 								{
-									<a asp-area="Identity" asp-controller="Role" asp-action="Update" asp-route-id="@item.RoleId" title="edit" class="bi-pencil" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+									@Html.Raw("&nbsp;&nbsp;&nbsp;") <a asp-action="Update" asp-route-id="@item.RoleId" title="edit" class="bi-pencil" style="text-decoration: none; color: darkslategray;"></a>
 								}
 								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.Delete))
 								{
-									<a asp-area="Identity" asp-controller="Role" asp-action="Delete" asp-route-id="@item.RoleId" title="delete" class="bi-trash" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+									@Html.Raw("&nbsp;&nbsp;&nbsp;") <a asp-action="Delete" asp-route-id="@item.RoleId" title="delete" class="bi-trash" style="text-decoration: none; color: darkslategray;"></a>
 								}
 								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.RolePermit.CRUD))
 								{
-									@Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;") <a asp-area="Identity" asp-controller="Role" asp-action="Permit" asp-route-id="@item.RoleId" title="delete" class="far fa-address-card xbi-person-badge" style="text-decoration: none; color: darkslategray;"></a>
+									@Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;") <a asp-action="Permit" asp-route-id="@item.RoleId" title="delete" class="far fa-address-card xbi-person-badge" style="text-decoration: none; color: darkslategray;"></a>
 								}
 							</td>
 						</tr>
@@ -168,19 +167,19 @@
 			<option value="100" selected="@(ViewBag.pageSize == 100)">100</option>
 		</select>
 		Entries
-		<br />
+		<p></p>
 		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Role.ListDeleted))
 		{
-			<a asp-area="Identity" asp-controller="Role" asp-action="ListDeleted" style="text-decoration:none;" title="View deleted records">View deleted records</a>
+			<a asp-action="ListDeleted">View deleted records</a>
 		}
 	</div>
 	<div class="col-md-8 text-right" style="vertical-align:top;">
-		@Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+		@Html.PagedListPager(Model, page => Url.Action("List", new { page = page }), PagedListRenderOptions.ClassicPlusFirstAndLast)
 	</div>
 </div>
 
 <div>
-	<form id="formForPaging" action="/Identity/Role/List" method="post">
+	<form id="formForPaging" asp-action="List" method="post">
 		<input type="hidden" id="pageNumber" name="pageNumber" value="1" />
 		<input type="hidden" id="pageSize" name="pageSize" value="10" />
 		<input type="hidden" id="statusFlag" name="statusFlag" value="" />

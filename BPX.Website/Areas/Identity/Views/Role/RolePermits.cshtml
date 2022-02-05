@@ -28,6 +28,7 @@
 				{
 					string handleArea = "handle" + area;
 					string classArea = "class" + area;
+					int counter = 0;
 
 					<div class="card">
 						<div class="card-header">
@@ -54,29 +55,76 @@
 											string classAreaController = Regex.Replace("class" + area + currController, @"\s", "");
 
 											@Html.Raw("<tr>")
-											@Html.Raw("<td style=\"width:175px;\">")
+											if (counter.Equals(0))
+											{
+												@Html.Raw("<td style=\"width:175px; vertical-align: top;\">")
+											}
+											else
+											{
+												@Html.Raw("<td style=\"width:175px; vertical-align: top; padding-top: 16px;\">")
+											}
 											<input type="checkbox" id="@handlAreaController" style="box-shadow: 0 0 3px red;" />
 											@itemPermit.PermitController
 											@Html.Raw("</td>")
-											@Html.Raw("<td style=\"padding-left:25px;\">")
+											if (counter.Equals(0))
+											{
+												@Html.Raw("<td style=\"padding-left:25px;\">")
+											}
+											else
+											{
+												@Html.Raw("<td style=\"padding-left:25px; padding-top: 16px;\">")
+											}
+
+											counter++;
+											List<string> listGenericPermitNames = new List<string> { "INDEX", "CREATE", "DELETE", "FILTER", "LIST", "LISTDELETED", "READ", "UNDELETE", "UPDATE" };
+
+											// display generic permti names on the first line
 
 											foreach (var itemPermit2 in ViewBag.listPermits)
 											{
 												if (currController.ToUpper().Equals(itemPermit2.PermitController.ToString().ToUpper()))
 												{
-													if (((IList<int>)ViewBag.listRolePermitIds).Contains(itemPermit2.PermitId))
+													if (listGenericPermitNames.Contains(itemPermit2.PermitName.ToString().ToUpper()))
 													{
-														<input type="checkbox" class="@classAreaController @classArea" name="PermitIds" value="@itemPermit2.PermitId" checked="checked" />
-													}
-													else
-													{
-														<input type="checkbox" class="@classAreaController @classArea" name="PermitIds" value="@itemPermit2.PermitId" />
-													}
+														if (((IList<int>)ViewBag.listRolePermitIds).Contains(itemPermit2.PermitId))
+														{
+															<input type="checkbox" class="@classAreaController @classArea" name="PermitIds" value="@itemPermit2.PermitId" checked="checked" />
+														}
+														else
+														{
+															<input type="checkbox" class="@classAreaController @classArea" name="PermitIds" value="@itemPermit2.PermitId" />
+														}
 
-													@itemPermit2.PermitName
-													@Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;")
+														@itemPermit2.PermitName
+														@Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;")
+													}
 												}
 											}
+
+											// dispaly non-generic permit names on the second line
+											<br />
+
+											foreach (var itemPermit2 in ViewBag.listPermits)
+											{
+												if (currController.ToUpper().Equals(itemPermit2.PermitController.ToString().ToUpper()))
+												{
+													if (!listGenericPermitNames.Contains(itemPermit2.PermitName.ToString().ToUpper()))
+													{
+														if (((IList<int>)ViewBag.listRolePermitIds).Contains(itemPermit2.PermitId))
+														{
+															<input type="checkbox" class="@classAreaController @classArea" name="PermitIds" value="@itemPermit2.PermitId" checked="checked" />
+														}
+														else
+														{
+															<input type="checkbox" class="@classAreaController @classArea" name="PermitIds" value="@itemPermit2.PermitId" />
+														}
+
+														@itemPermit2.PermitName
+														@Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;")
+													}
+												}
+											}
+
 											@Html.Raw("</td>")
 											@Html.Raw("</tr>")
 										}

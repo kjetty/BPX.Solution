@@ -42,7 +42,7 @@
 							{
 								string prevController = string.Empty;
 								string currController = string.Empty;
-
+								
 								foreach (var itemPermit in ViewBag.listPermits)
 								{
 									if (itemPermit.PermitArea.ToString().ToUpper().Equals(area.ToString().ToUpper()))
@@ -88,11 +88,11 @@
 													{
 														if (((IList<int>)ViewBag.listRolePermitIds).Contains(itemPermit2.PermitId))
 														{
-															<input type="checkbox" class="@classAreaController @classArea" name="PermitIds" value="@itemPermit2.PermitId" checked="checked" />
+															<input type="checkbox" class="@classAreaController@itemPermit2.PermitName @classAreaController @classAreaController @classArea" name="PermitIds" value="@itemPermit2.PermitId" checked="checked" />
 														}
 														else
 														{
-															<input type="checkbox" class="@classAreaController @classArea" name="PermitIds" value="@itemPermit2.PermitId" />
+															<input type="checkbox" class="@classAreaController@itemPermit2.PermitName @classAreaController @classAreaController @classArea" name="PermitIds" value="@itemPermit2.PermitId" />
 														}
 
 														@itemPermit2.PermitName
@@ -112,11 +112,11 @@
 													{
 														if (((IList<int>)ViewBag.listRolePermitIds).Contains(itemPermit2.PermitId))
 														{
-															<input type="checkbox" class="@classAreaController @classArea" name="PermitIds" value="@itemPermit2.PermitId" checked="checked" />
+															<input type="checkbox" class="@classAreaController@itemPermit2.PermitName @classAreaController @classAreaController @classArea" name="PermitIds" value="@itemPermit2.PermitId" checked="checked" />
 														}
 														else
 														{
-															<input type="checkbox" class="@classAreaController @classArea" name="PermitIds" value="@itemPermit2.PermitId" />
+															<input type="checkbox" class="@classAreaController@itemPermit2.PermitName @classAreaController @classAreaController @classArea" name="PermitIds" value="@itemPermit2.PermitId" />
 														}
 
 														@itemPermit2.PermitName
@@ -163,9 +163,9 @@
 					string classArea = "class" + area;
 
 					@Html.Raw("$(\"#" + handleArea + "\").change(function () {\n")
-					@Html.Raw("\t$(\"." + classArea + "\").removeAttr('checked');\n")
+					@Html.Raw("\t$(\"." + classArea + "\").prop('checked', false);\n")
 					@Html.Raw("\tif (this.checked) {\n")
-					@Html.Raw("\t\t$(\"." + classArea + "\").attr('checked', 'checked');\n")
+					@Html.Raw("\t\t$(\"." + classArea + "\").prop('checked', true);\n")
 					@Html.Raw("\t}\n")
 					@Html.Raw("});\n\n")
 
@@ -186,9 +186,16 @@
 									string classAreaController = Regex.Replace("class" + area + currController, @"\s", "");
 
 									@Html.Raw("$(\"#" + handleAreaController + "\").change(function () {\n")
-									@Html.Raw("\t$(\"." + classAreaController + "\").removeAttr('checked');\n")
+									@Html.Raw("\t$(\"." + classAreaController + "\").prop('checked', false);\n")
 									@Html.Raw("\tif (this.checked) { \n")
-									@Html.Raw("\t\t$(\"." + classAreaController + "\").attr('checked', 'checked');\n")
+									@Html.Raw("\t\t$(\"." + classAreaController + "\").prop('checked', true);\n")
+									@Html.Raw("\t}\n")
+									@Html.Raw("});\n\n")
+
+
+									@Html.Raw("$(\"." + classAreaController + "\").change(function () {\n")
+									@Html.Raw("\tif ($(\"." + classAreaController + ":checkbox:checked\").length > 0) { \n")
+									@Html.Raw("\t\t$(\"." + classAreaController + "List\").prop('checked', true);\n")
 									@Html.Raw("\t}\n")
 									@Html.Raw("});\n\n")
 								}

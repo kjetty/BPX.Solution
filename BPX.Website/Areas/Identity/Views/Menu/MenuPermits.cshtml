@@ -163,9 +163,9 @@
 					string classArea = "class" + area;
 
 					@Html.Raw("$(\"#" + handleArea + "\").change(function () {\n")
-					@Html.Raw("\t$(\"." + classArea + "\").removeAttr('checked');\n")
+					@Html.Raw("\t$(\"." + classArea + "\").prop('checked', false);\n")
 					@Html.Raw("\tif (this.checked) {\n")
-					@Html.Raw("\t\t$(\"." + classArea + "\").attr('checked', 'checked');\n")
+					@Html.Raw("\t\t$(\"." + classArea + "\").prop('checked', true);\n")
 					@Html.Raw("\t}\n")
 					@Html.Raw("});\n\n")
 
@@ -186,9 +186,9 @@
 									string classAreaController = Regex.Replace("class" + area + currController, @"\s", "");
 
 									@Html.Raw("$(\"#" + handleAreaController + "\").change(function () {\n")
-									@Html.Raw("\t$(\"." + classAreaController + "\").removeAttr('checked');\n")
+									@Html.Raw("\t$(\"." + classAreaController + "\").prop('checked', false);\n")
 									@Html.Raw("\tif (this.checked) { \n")
-									@Html.Raw("\t\t$(\"." + classAreaController + "\").attr('checked', 'checked');\n")
+									@Html.Raw("\t\t$(\"." + classAreaController + "\").prop('checked', true);\n")
 									@Html.Raw("\t}\n")
 									@Html.Raw("});\n\n")
 								}

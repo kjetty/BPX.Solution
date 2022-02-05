@@ -47,7 +47,7 @@ namespace BPX.Service
 			distributedCache.Set(key, JsonSerializer.SerializeToUtf8Bytes(values), cacheOptions);
 
 			// handle cache :: add to cache, add key to the database	
-			CacheKey CacheKey = cacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.Equals(key)).SingleOrDefault();
+			CacheKey CacheKey = cacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.ToUpper().Equals(key.ToUpper())).SingleOrDefault();
 
 			if (CacheKey != null)
 			{

@@ -1,7 +1,7 @@
 ﻿@model BPX.Domain.ViewModels.PermitViewModel
 
-@using BPX.Utils;
 @using BPX.Website.CustomCode.Authorize;
+@using BPX.Utils;
 @using System.Reflection;
 
 @{
@@ -61,7 +61,7 @@
 
 					foreach (var item in recordStatus)
 					{
-						if (Model.StatusFlag == item.GetRawConstantValue().ToString())
+						if (Model.StatusFlag.Equals(item.GetRawConstantValue().ToString()))
 						{
 							@Html.Raw("&nbsp;(" + @item.Name + ")");
 						}

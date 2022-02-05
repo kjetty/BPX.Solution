@@ -29,34 +29,34 @@ namespace BPX.DAL.Repository
             // set defaults
             pageNumber = pageNumber <= 0 ? 1 : pageNumber;
             pageSize = pageSize <= 0 ? 1 : pageSize;
-            statusFlag = statusFlag.Length == 0 ? RecordStatus.Active : statusFlag;
-            sortByColumn = sortByColumn.Length == 0 ? "RoleId" : sortByColumn;
-            sortOrder = sortOrder.Length == 0 ? SortOrder.Ascending : sortOrder;
-            searchForString = searchForString.Length == 0 ? string.Empty : searchForString;
+            statusFlag = statusFlag.Length.Equals(0) ? RecordStatus.Active : statusFlag;
+            sortByColumn = sortByColumn.Length.Equals(0) ? "RoleId" : sortByColumn;
+            sortOrder = sortOrder.Length.Equals(0) ? SortOrder.Ascending : sortOrder;
+            searchForString = searchForString.Length.Equals(0) ? string.Empty : searchForString;
 
             // get model : IQueryable : apply statusFlag
-            var model = context.Roles.Where(c => c.StatusFlag == statusFlag);
+            var model = context.Roles.Where(c => c.StatusFlag.ToUpper().Equals(statusFlag.ToUpper()));
 
             // apply search
             if (searchForString.Length > 0)
             {
-                model = model.Where(c => c.RoleName.ToUpper().Contains(searchForString.Trim().ToUpper())
-                                || c.RoleDescription.ToUpper().Contains(searchForString.Trim().ToUpper()));
+                model = model.Where(c => c.RoleName.ToUpper().Contains(searchForString.ToUpper())
+                                || c.RoleDescription.ToUpper().Contains(searchForString.ToUpper()));
             }
 
             // apply sort by column, sort order
             switch (sortByColumn)
             {
                 case "FirstName":
-                    model = (sortOrder == SortOrder.Descending) ? model.OrderByDescending(c => c.RoleName) : model.OrderBy(c => c.RoleName);
+                    model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.RoleName) : model.OrderBy(c => c.RoleName);
                     break;
 
                 case "LastName":
-                    model = (sortOrder == SortOrder.Descending) ? model.OrderByDescending(c => c.RoleDescription) : model.OrderBy(c => c.RoleDescription);
+                    model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.RoleDescription) : model.OrderBy(c => c.RoleDescription);
                     break;
 
                 default:
-                    model = (sortOrder == SortOrder.Descending) ? model.OrderByDescending(c => c.RoleId) : model.OrderBy(c => c.RoleId);
+                    model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.RoleId) : model.OrderBy(c => c.RoleId);
                     break;
             }
 
@@ -66,7 +66,7 @@ namespace BPX.DAL.Repository
 
         public Role GetRecordById(int id)
         {
-            return context.Roles.Where(c => c.RoleId == id).SingleOrDefault();
+            return context.Roles.Where(c => c.RoleId.Equals(id)).SingleOrDefault();
         }
 
         public IQueryable<Role> GetRecordsByFilter(Expression<Func<Role, bool>> filter)

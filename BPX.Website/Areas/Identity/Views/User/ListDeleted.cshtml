@@ -1,6 +1,7 @@
 ﻿@model X.PagedList.IPagedList<BPX.Domain.ViewModels.UserMiniViewModel>
 
 @using BPX.Website.CustomCode.Authorize;
+@using BPX.Utils;
 @using X.PagedList.Mvc.Core;
 @using X.PagedList.Web.Common;
 
@@ -56,13 +57,13 @@
 						localSortOrder = "";
 						localSortIcon = "fa-sort";
 
-						if (ViewBag.sortByColumn == "UserId")
+						if (ViewBag.sortByColumn.Equals("UserId"))
 						{
 							localSortOrder = ViewBag.sortOrder;
 
-							if (localSortOrder == "asc")
+							if (localSortOrder.ToUpper().Equals(SortOrder.Ascending.ToUpper()))
 								localSortIcon += "-" + "up";
-							if (localSortOrder == "desc")
+							if (localSortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper()))
 								localSortIcon += "-" + "down";
 						}
 					}
@@ -71,13 +72,13 @@
 						localSortOrder = "";
 						localSortIcon = "fa-sort";
 
-						if (ViewBag.sortByColumn == "FirstName")
+						if (ViewBag.sortByColumn.Equals("FirstName"))
 						{
 							localSortOrder = ViewBag.sortOrder;
 
-							if (localSortOrder == "asc")
+							if (localSortOrder.ToUpper().Equals(SortOrder.Ascending.ToUpper()))
 								localSortIcon += "-" + "up";
-							if (localSortOrder == "desc")
+							if (localSortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper()))
 								localSortIcon += "-" + "down";
 						}
 					}
@@ -86,13 +87,13 @@
 						localSortOrder = "";
 						localSortIcon = "fa-sort";
 
-						if (ViewBag.sortByColumn == "LastName")
+						if (ViewBag.sortByColumn.Equals("LastName"))
 						{
 							localSortOrder = ViewBag.sortOrder;
 
-							if (localSortOrder == "asc")
+							if (localSortOrder.ToUpper().Equals(SortOrder.Ascending.ToUpper()))
 								localSortIcon += "-" + "up";
-							if (localSortOrder == "desc")
+							if (localSortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper()))
 								localSortIcon += "-" + "down";
 						}
 					}
@@ -101,13 +102,13 @@
 						localSortOrder = "";
 						localSortIcon = "fa-sort";
 
-						if (ViewBag.sortByColumn == "Email")
+						if (ViewBag.sortByColumn.Equals("Email"))
 						{
 							localSortOrder = ViewBag.sortOrder;
 
-							if (localSortOrder == "asc")
+							if (localSortOrder.ToUpper().Equals(SortOrder.Ascending.ToUpper()))
 								localSortIcon += "-" + "up";
-							if (localSortOrder == "desc")
+							if (localSortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper()))
 								localSortIcon += "-" + "down";
 						}
 					}
@@ -117,7 +118,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				@if (Model.Count == 0)
+				@if (Model.Count.Equals(0))
 				{
 					<tr>
 						<td colspan="6">
@@ -151,11 +152,11 @@
 										{
 											foreach (var itemUserRole in ViewBag.listUsersRoles)
 											{
-												if (itemUserRole.UserId == item.UserId)
+												if (itemUserRole.UserId.Equals(item.UserId))
 												{
 													foreach (var itemRole in ViewBag.listRoles)
 													{
-														if (itemUserRole.RoleId == itemRole.RoleId)
+														if (itemUserRole.RoleId.Equals(itemRole.RoleId))
 														{
 															counter++;
 															if (counter > 1)
@@ -192,10 +193,10 @@
 		&nbsp; | &nbsp;
 		Show
 		<select id="pageSizeInput">
-			<option value="10" selected="@(ViewBag.pageSize == 10)">10</option>
-			<option value="25" selected="@(ViewBag.pageSize == 25)">25</option>
-			<option value="50" selected="@(ViewBag.pageSize == 50)">50</option>
-			<option value="100" selected="@(ViewBag.pageSize == 100)">100</option>
+			<option value="10" selected="@(ViewBag.pageSize.Equals(10))">10</option>
+			<option value="25" selected="@(ViewBag.pageSize.Equals(25))">25</option>
+			<option value="50" selected="@(ViewBag.pageSize.Equals(50))">50</option>
+			<option value="100" selected="@(ViewBag.pageSize.Equals(100))">100</option>
 		</select>
 		Entries
 		<p></p>
@@ -280,7 +281,7 @@
 					sortOrder = "asc";
 				}
 				else {
-					if ($(this).attr("sortOrder") == "desc") {
+					if ($(this).attr("sortOrder").toLowerCase() == "desc") {
 						sortOrder = "asc";
 					}
 					else {

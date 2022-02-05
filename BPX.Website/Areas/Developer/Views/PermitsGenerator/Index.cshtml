@@ -1,0 +1,41 @@
+﻿@{
+	ViewData["Title"] = "Generate PermitConstants.cs CSharp file";
+}
+
+<div class="row">
+	<div class="col-md-12">
+		<h5>@ViewBag.Title</h5>
+	</div>
+</div>
+
+<p></p>
+<hr />
+
+<div class="row">
+	<div class="col-md-12">
+
+		<div class="card bg-light" style="width: 18rem;">
+			<div class="card-body">
+				<h5 class="card-title">Permits Generator</h5>
+				<p class="card-text">
+					This action will generate PermitConstants.cs file. 
+					<p></p>
+					Only a Developer is allowed to generate this file and that too using Localhost in Visual Studio and 
+					the code will need recompilation for release.
+				</p>
+				<form asp-action="Index" method="post">
+					<input type="submit" value="   Generate Permit Constants   " class="btn btn-primary" />
+				</form>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<p></p>
+
+<div class="row">
+	<div class="col-md-12">
+		<a asp-action="Index">Back to Index</a>
+	</div>
+</div>

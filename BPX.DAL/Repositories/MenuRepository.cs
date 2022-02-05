@@ -24,7 +24,7 @@ namespace BPX.DAL.Repository
 
         public Menu GetRecordById(int id)
         {
-            return context.Menus.Where(c => c.MenuId == id).SingleOrDefault();
+            return context.Menus.Where(c => c.MenuId.Equals(id)).SingleOrDefault();
         }
 
         public IQueryable<Menu> GetRecordsByFilter(Expression<Func<Menu, bool>> filter)
@@ -49,12 +49,12 @@ namespace BPX.DAL.Repository
             //(
             //    SELECT      MenuId, MenuName, MenuDescription, MenuURL, ParentMenuId, hLevel, OrderNumber, TreePath, StatusFlag, ModifiedBy, ModifiedDate
             //    FROM        Menus
-            //    WHERE       StatusFlag = 'A' AND MenuId = 15
+            //    WHERE       UPPER(StatusFlag) = 'A' AND MenuId = 15
             //    UNION ALL
             //    SELECT      m.MenuId, m.MenuName, m.MenuDescription, m.MenuURL, m.ParentMenuId, m.hLevel, m.OrderNumber, m.TreePath, m.StatusFlag, m.ModifiedBy, m.ModifiedDate
             //    FROM        Menus m
             //    INNER JOIN  CTE_breadcrumb cte ON cte.ParentMenuId = m.MenuId
-            //    WHERE       m.StatusFlag = 'A'
+            //    WHERE       UPPER(m.StatusFlag) = 'A'
             //)
             //SELECT    MenuId, MenuName, MenuDescription, MenuURL, ParentMenuId, hLevel, OrderNumber, TreePath, StatusFlag, ModifiedBy, ModifiedDate
             //FROM      CTE_breadcrumb
@@ -65,12 +65,12 @@ namespace BPX.DAL.Repository
             cteQuery += "( ";
             cteQuery += "    SELECT      MenuId, MenuName, MenuDescription, MenuURL, ParentMenuId, hLevel, OrderNumber, TreePath, StatusFlag, ModifiedBy, ModifiedDate ";
             cteQuery += "    FROM        Menus ";
-            cteQuery += "    WHERE       StatusFlag = '" + RecordStatus.Active + "' AND MenuId = " + Convert.ToInt32(menuId);
+            cteQuery += "    WHERE       UPPER(StatusFlag) = '" + RecordStatus.Active.ToUpper() + "' AND MenuId = " + Convert.ToInt32(menuId);
             cteQuery += "    UNION ALL ";
             cteQuery += "    SELECT      m.MenuId, m.MenuName, m.MenuDescription, m.MenuURL, m.ParentMenuId, m.hLevel, m.OrderNumber, m.TreePath, m.StatusFlag, m.ModifiedBy, m.ModifiedDate ";
             cteQuery += "    FROM        Menus m ";
             cteQuery += "    INNER JOIN  CTE_breadcrumb cte ON cte.ParentMenuId = m.MenuId ";
-            cteQuery += "    WHERE       m.StatusFlag = '" + RecordStatus.Active + "' ";
+            cteQuery += "    WHERE       UPPER(m.StatusFlag) = '" + RecordStatus.Active.ToUpper() + "' ";
             cteQuery += ") ";
             cteQuery += "SELECT    MenuId, MenuName, MenuDescription, MenuURL, ParentMenuId, hLevel, OrderNumber, TreePath, StatusFlag, ModifiedBy, ModifiedDate ";
             cteQuery += "FROM      CTE_breadcrumb ";
@@ -86,14 +86,14 @@ namespace BPX.DAL.Repository
             //    SELECT 	    MenuId, MenuName, MenuDescription, MenuURL, ParentMenuId, 1 AS hLevel, OrderNumber, 
             //                  CAST(MenuId AS VARCHAR(32)) AS TreePath, StatusFlag, ModifiedBy, ModifiedDate  
             //    FROM 		    Menus 
-            //    WHERE 	    StatusFlag = 'A' 
+            //    WHERE 	    UPPER(StatusFlag) = 'A' 
             //    AND 		    ParentMenuId = 0
             //    UNION ALL
             //    SELECT 	    m.MenuId, m.MenuName, m.MenuDescription, m.MenuURL, m.ParentMenuId, cte.hLevel + 1, m.OrderNumber, 
             //                  CAST(cte.TreePath + '.' + CAST(m.MenuId AS VARCHAR(32)) AS VARCHAR(32)) AS TreePath, m.StatusFlag, m.ModifiedBy, m.ModifiedDate 
             //    FROM 		    Menus m 
             //    INNER JOIN 	cte_menus cte ON cte.MenuId = m.ParentMenuId 
-            //    WHERE 	    m.StatusFlag = 'A'
+            //    WHERE 	    UPPER(m.StatusFlag) = 'A'
             //)
             //SELECT 	MenuId, MenuName, MenuDescription, MenuURL, ParentMenuId, hLevel, OrderNumber, 
             //          CAST('.' + TreePath + '.' AS VARCHAR(32)) AS TreePath, StatusFlag, ModifiedBy, ModifiedDate 
@@ -102,14 +102,14 @@ namespace BPX.DAL.Repository
 
             string cteStatusFlag = RecordStatus.Active;
 
-            if (statusFlag.Equals(RecordStatus.Inactive))
+            if (statusFlag.ToUpper().Equals(RecordStatus.Inactive.ToUpper()))
 			{
                 cteStatusFlag = RecordStatus.Inactive;
             }
 
             string cteOrderBy = "hLevel, OrderNumber";
 
-            if (orderBy.Trim().ToLower().Equals("url"))
+            if (orderBy.Trim().ToUpper().Equals("URL"))
 			{
                 cteOrderBy = "MenuURL";
             }
@@ -119,14 +119,14 @@ namespace BPX.DAL.Repository
             cteQuery += "	SELECT 		MenuId, MenuName, MenuDescription, MenuURL, ParentMenuId, 1 AS hLevel, OrderNumber, ";
             cteQuery += "				CAST(MenuId AS VARCHAR(32)) AS TreePath, StatusFlag, ModifiedBy, ModifiedDate  ";
             cteQuery += "	FROM 		Menus ";
-            cteQuery += "	WHERE 		StatusFlag = '" + cteStatusFlag + "'";
+            cteQuery += "	WHERE 		UPPER(StatusFlag) = '" + cteStatusFlag.ToUpper() + "'";
             cteQuery += "	AND 		ParentMenuId = 0";
             cteQuery += "	UNION ALL ";
             cteQuery += "	SELECT 		m.MenuId, m.MenuName, m.MenuDescription, m.MenuURL, m.ParentMenuId, cte.hLevel + 1, m.OrderNumber, ";
             cteQuery += "				CAST(cte.TreePath + '.' + CAST(m.MenuId AS VARCHAR(32)) AS VARCHAR(32)) AS TreePath, m.StatusFlag, m.ModifiedBy, m.ModifiedDate ";
             cteQuery += "	FROM 		Menus m ";
             cteQuery += "	INNER JOIN 	cte_menus cte ON cte.MenuId = m.ParentMenuId ";
-            cteQuery += "	WHERE 		m.StatusFlag = '" + cteStatusFlag + "'";
+            cteQuery += "	WHERE 		UPPER(m.StatusFlag) = '" + cteStatusFlag.ToUpper() + "'";
             cteQuery += ") ";
             cteQuery += "SELECT 		MenuId, MenuName, MenuDescription, MenuURL, ParentMenuId, hLevel, OrderNumber, ";
             cteQuery += "			CAST('.' + TreePath + '.' AS VARCHAR(32)) AS TreePath, StatusFlag, ModifiedBy, ModifiedDate ";

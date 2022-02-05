@@ -29,13 +29,13 @@ namespace BPX.DAL.Repository
             // set defaults
             pageNumber = pageNumber <= 0 ? 1 : pageNumber;
             pageSize = pageSize <= 0 ? 1 : pageSize;
-            statusFlag = statusFlag.Length == 0 ? RecordStatus.Active : statusFlag;
-            sortByColumn = sortByColumn.Length == 0 ? "PermitId" : sortByColumn;
-            sortOrder = sortOrder.Length == 0 ? SortOrder.Ascending : sortOrder;
-            searchForString = searchForString.Length == 0 ? string.Empty : searchForString;
+            statusFlag = statusFlag.Length.Equals(0) ? RecordStatus.Active : statusFlag;
+            sortByColumn = sortByColumn.Length.Equals(0) ? "PermitId" : sortByColumn;
+            sortOrder = sortOrder.Length.Equals(0) ? SortOrder.Ascending : sortOrder;
+            searchForString = searchForString.Length.Equals(0) ? string.Empty : searchForString;
 
             // get model : IQueryable : apply statusFlag
-            var model = context.Permits.Where(c => c.StatusFlag == statusFlag);
+            var model = context.Permits.Where(c => c.StatusFlag.ToUpper().Equals(statusFlag.ToUpper()));
 
             // apply search
             if (searchForString.Length > 0)
@@ -50,23 +50,23 @@ namespace BPX.DAL.Repository
             switch (sortByColumn)
             {
                 case "PermitArea":
-                    model = (sortOrder == SortOrder.Descending) ? model.OrderByDescending(c => c.PermitArea) : model.OrderBy(c => c.PermitArea);
+                    model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.PermitArea) : model.OrderBy(c => c.PermitArea);
                     break;
 
                 case "PermitController":
-                    model = (sortOrder == SortOrder.Descending) ? model.OrderByDescending(c => c.PermitController) : model.OrderBy(c => c.PermitController);
+                    model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.PermitController) : model.OrderBy(c => c.PermitController);
                     break;
 
                 case "PermitName":
-                    model = (sortOrder == SortOrder.Descending) ? model.OrderByDescending(c => c.PermitName) : model.OrderBy(c => c.PermitName);
+                    model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.PermitName) : model.OrderBy(c => c.PermitName);
                     break;
 
                 case "PermitEnum":
-                    model = (sortOrder == SortOrder.Descending) ? model.OrderByDescending(c => c.PermitEnum) : model.OrderBy(c => c.PermitEnum);
+                    model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.PermitEnum) : model.OrderBy(c => c.PermitEnum);
                     break;
 
                 default:
-                    model = (sortOrder == SortOrder.Descending) ? model.OrderByDescending(c => c.PermitId) : model.OrderBy(c => c.PermitId);
+                    model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.PermitId) : model.OrderBy(c => c.PermitId);
                     break;
             }
 
@@ -76,7 +76,7 @@ namespace BPX.DAL.Repository
 
         public Permit GetRecordById(int id)
         {
-            return context.Permits.Where(c => c.PermitId == id).SingleOrDefault();
+            return context.Permits.Where(c => c.PermitId.Equals(id)).SingleOrDefault();
         }
 
         public IQueryable<Permit> GetRecordsByFilter(Expression<Func<Permit, bool>> filter)

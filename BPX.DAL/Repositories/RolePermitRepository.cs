@@ -22,7 +22,7 @@ namespace BPX.DAL.Repository
 
         public RolePermit GetRecordById(int id)
         {
-            return context.RolePermits.Where(c => c.RolePermitId == id).SingleOrDefault();
+            return context.RolePermits.Where(c => c.RolePermitId.Equals(id)).SingleOrDefault();
         }
 
         public IQueryable<RolePermit> GetRecordsByFilter(Expression<Func<RolePermit, bool>> filter)

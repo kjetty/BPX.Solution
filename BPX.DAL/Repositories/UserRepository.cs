@@ -29,39 +29,39 @@ namespace BPX.DAL.Repository
             // set defaults
             pageNumber = pageNumber <= 0 ? 1 : pageNumber;
             pageSize = pageSize <= 0 ? 1 : pageSize;
-            statusFlag = statusFlag.Length == 0 ? RecordStatus.Active : statusFlag;
-            sortByColumn = sortByColumn.Length == 0 ? "UserId" : sortByColumn;
-            sortOrder = sortOrder.Length == 0 ? SortOrder.Ascending : sortOrder;
-            searchForString = searchForString.Length == 0 ? string.Empty : searchForString;
+            statusFlag = statusFlag.Length.Equals(0) ? RecordStatus.Active : statusFlag;
+            sortByColumn = sortByColumn.Length.Equals(0) ? "UserId" : sortByColumn;
+            sortOrder = sortOrder.Length.Equals(0) ? SortOrder.Ascending : sortOrder;
+            searchForString = searchForString.Length.Equals(0) ? string.Empty : searchForString;
 
             // get model : IQueryable : apply statusFlag
-            var model = context.Users.Where(c => c.StatusFlag == statusFlag);
+            var model = context.Users.Where(c => c.StatusFlag.ToUpper().Equals(statusFlag.ToUpper()));
 
             // apply search
             if (searchForString.Length > 0)
             {
-                model = model.Where(c => c.LastName.ToUpper().Contains(searchForString.Trim().ToUpper())
-                                || c.FirstName.ToUpper().Contains(searchForString.Trim().ToUpper())
-                                || c.Email.ToUpper().Contains(searchForString.Trim().ToUpper()));
+                model = model.Where(c => c.LastName.ToUpper().Contains(searchForString.ToUpper())
+                                || c.FirstName.ToUpper().Contains(searchForString.ToUpper())
+                                || c.Email.ToUpper().Contains(searchForString.ToUpper()));
             }
 
             // apply sort by column, sort order
             switch (sortByColumn)
             {
                 case "FirstName":
-                    model = (sortOrder == SortOrder.Descending) ? model.OrderByDescending(c => c.FirstName) : model.OrderBy(c => c.FirstName);
+                    model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.FirstName) : model.OrderBy(c => c.FirstName);
                     break;
 
                 case "LastName":
-                    model = (sortOrder == SortOrder.Descending) ? model.OrderByDescending(c => c.LastName) : model.OrderBy(c => c.LastName);
+                    model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.LastName) : model.OrderBy(c => c.LastName);
                     break;
 
                 case "Email":
-                    model = (sortOrder == SortOrder.Descending) ? model.OrderByDescending(c => c.Email) : model.OrderBy(c => c.Email);
+                    model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.Email) : model.OrderBy(c => c.Email);
                     break;
 
                 default:
-                    model = (sortOrder == SortOrder.Descending) ? model.OrderByDescending(c => c.UserId) : model.OrderBy(c => c.UserId);
+                    model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.UserId) : model.OrderBy(c => c.UserId);
                     break;
             }
 
@@ -71,7 +71,7 @@ namespace BPX.DAL.Repository
 
         public User GetRecordById(int id)
         {
-            return context.Users.Where(c => c.UserId == id).SingleOrDefault();
+            return context.Users.Where(c => c.UserId.Equals(id)).SingleOrDefault();
         }
 
         public IQueryable<User> GetRecordsByFilter(Expression<Func<User, bool>> filter)

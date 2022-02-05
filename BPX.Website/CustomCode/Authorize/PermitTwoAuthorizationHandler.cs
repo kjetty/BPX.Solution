@@ -51,9 +51,9 @@ namespace BPX.Website.CustomCode.Authorize
             {
                 //this is the passed in PermitId :: [Authorize(Roles = Permits.Identity.User.List)]
                 var permitListIds = requirement.AllowedRoles.Select(int.Parse).ToList();
-                var claimLoginId = context.User.Claims.FirstOrDefault(c => c.Type == "LoginId").Value;
-                var claimLoginToken = context.User.Claims.FirstOrDefault(c => c.Type == "LoginToken").Value;
-                var claimUserId = context.User.Claims.FirstOrDefault(c => c.Type == "UserId").Value;
+                var claimLoginId = context.User.Claims.FirstOrDefault(c => c.Type.Equals("LoginId")).Value;
+                var claimLoginToken = context.User.Claims.FirstOrDefault(c => c.Type.Equals("LoginToken")).Value;
+                var claimUserId = context.User.Claims.FirstOrDefault(c => c.Type.Equals("UserId")).Value;
                 int userId = Convert.ToInt32(claimUserId);
 
                 // get user (from DB)
@@ -63,13 +63,13 @@ namespace BPX.Website.CustomCode.Authorize
                 {
                     // verify if the current request is valid or not
                     // loginID and current SessionUUID must match
-                    if (claimLoginId.Equals(login.LoginToken) && claimLoginToken.Equals(login.LoginToken))
+                    if (claimLoginId.ToUpper().Equals(login.LoginId.ToUpper()) && claimLoginToken.Equals(login.LoginToken))
                     {
                         // get ROLES associates with the PERMIT (from DB)
-                        var permitRolesList = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && permitListIds.Contains(c.PermitId)).Select(c => c.RoleId).Distinct().ToList();
+                        var permitRolesList = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && permitListIds.Contains(c.PermitId)).Select(c => c.RoleId).Distinct().ToList();
 
                         // get ROLES associated with the USER (from CLAIM)
-                        var userRolesList = context.User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => Convert.ToInt32(c.Value)).ToList();
+                        var userRolesList = context.User.Claims.Where(c => c.Type.Equals(ClaimTypes.Role)).Select(c => Convert.ToInt32(c.Value)).ToList();
 
                         // intersect to check for any matching ROLES
                         if (userRolesList.Any(x => permitRolesList.Any(y => y == x)))

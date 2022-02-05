@@ -121,11 +121,15 @@
 			var parentMenuURL = "@ViewBag.parentMenu.MenuURL";
 			var tempMenuURL = "";
 
-			@Html.Raw("$(\"#MenuName" + "\").keyup(function () {\n")
-			@Html.Raw("     tempMenuURL = parentMenuURL + '/' + this.value;\n")
-			@*@Html.Raw("     alert(tempMenuURL);\n")*@
-			@Html.Raw("     $(\"#MenuURL" + "\").val(tempMenuURL);\n")
-			@Html.Raw("});\n\n")
+			$("#MenuName").keyup(function () {
+				tempMenuURL = parentMenuURL
+
+				if ($("#MenuName").val().length > 0) {
+					tempMenuURL = parentMenuURL + "/" + this.value;
+				}
+
+				$("#MenuURL").val(tempMenuURL);
+			});
 		});
 	</script>
 }

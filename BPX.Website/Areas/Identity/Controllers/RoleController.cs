@@ -49,9 +49,9 @@ namespace BPX.Website.Areas.Identity.Controllers
             pageNumber = (pageNumber <= 0) ? 1 : pageNumber;
             pageSize = (pageSize <= 0) ? bpxPageSize : pageSize;
             statusFlag = RecordStatus.Active;   //force set to Active records always
-            sortByColumn = (sortByColumn == null || sortByColumn.Trim().Length == 0) ? string.Empty : sortByColumn;
-            sortOrder = (sortOrder == null || sortOrder.Trim().Length == 0) ? SortOrder.Ascending : sortOrder;
-            searchForString = (searchForString == null || searchForString.Trim().Length == 0) ? string.Empty : searchForString;
+            sortByColumn = (sortByColumn == null || sortByColumn.Trim().Length.Equals(0)) ? string.Empty : sortByColumn;
+            sortOrder = (sortOrder == null || sortOrder.Trim().Length.Equals(0)) ? SortOrder.Ascending : sortOrder;
+            searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
 
             // fetch data
             var model = roleService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString).Select(c => (RoleMiniViewModel)c);
@@ -122,7 +122,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 string errorMessage = GetInnerExceptionMessage(ex);
 
                 // log
-                logger.Log(LogLevel.Error, ex, "RoleController.136");
+                logger.Log(LogLevel.Error, ex, "RoleController.125");
 
                 // set alert
                 ShowAlertBox(AlertType.Error, errorMessage);
@@ -175,11 +175,11 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // get existing data
                 var recordRole = roleService.GetRecordById(id);
 
-                if (recordRole.StatusFlag == RecordStatus.Active)
+                if (recordRole.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
                 {
                     // set core data
-                    recordRole.RoleName = collection.RoleName;
-                    recordRole.RoleDescription = collection.RoleDescription;
+                    recordRole.RoleName = collection.RoleName.Trim();
+                    recordRole.RoleDescription = collection.RoleDescription.Trim();
                     // set generic data
                     recordRole.StatusFlag = RecordStatus.Active;
                     recordRole.ModifiedBy = currUserMeta.UserId;
@@ -206,7 +206,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 string errorMessage = GetInnerExceptionMessage(ex);
 
                 // log
-                logger.Log(LogLevel.Error, ex, "RoleController.204");
+                logger.Log(LogLevel.Error, ex, "RoleController.209");
 
                 // set alert
                 ShowAlertBox(AlertType.Error, errorMessage);
@@ -251,7 +251,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // get existing data
                 var recordRole = roleService.GetRecordById(id);
 
-                if (recordRole.StatusFlag == RecordStatus.Active)
+                if (recordRole.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
                 {
                     // set generic data
                     recordRole.StatusFlag = RecordStatus.Inactive;
@@ -279,7 +279,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 string errorMessage = GetInnerExceptionMessage(ex);
 
                 // log
-                logger.Log(LogLevel.Error, ex, "RoleController.274");
+                logger.Log(LogLevel.Error, ex, "RoleController.282");
 
                 // set alert
                 ShowAlertBox(AlertType.Error, errorMessage);
@@ -297,9 +297,9 @@ namespace BPX.Website.Areas.Identity.Controllers
             pageNumber = (pageNumber <= 0) ? 1 : pageNumber;
             pageSize = (pageSize <= 0) ? bpxPageSize : pageSize;
             statusFlag = RecordStatus.Inactive;   //force set to Active records always
-            sortByColumn = (sortByColumn == null || sortByColumn.Trim().Length == 0) ? string.Empty : sortByColumn;
-            sortOrder = (sortOrder == null || sortOrder.Trim().Length == 0) ? SortOrder.Ascending : sortOrder;
-            searchForString = (searchForString == null || searchForString.Trim().Length == 0) ? string.Empty : searchForString;
+            sortByColumn = (sortByColumn == null || sortByColumn.Trim().Length.Equals(0)) ? string.Empty : sortByColumn;
+            sortOrder = (sortOrder == null || sortOrder.Trim().Length.Equals(0)) ? SortOrder.Ascending : sortOrder;
+            searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
 
             // fetch data
             var model = roleService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString).Select(c => (RoleMiniViewModel)c);
@@ -351,7 +351,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // get existing data
                 var recordRole = roleService.GetRecordById(id);
 
-                if (recordRole.StatusFlag == RecordStatus.Inactive)
+                if (recordRole.StatusFlag.Equals(RecordStatus.Inactive))
                 {
                     // set generic data
                     recordRole.StatusFlag = RecordStatus.Active;
@@ -379,7 +379,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 string errorMessage = GetInnerExceptionMessage(ex);
 
                 // log
-                logger.Log(LogLevel.Error, ex, "RoleController.378");
+                logger.Log(LogLevel.Error, ex, "RoleController.382");
 
                 // set alert
                 ShowAlertBox(AlertType.Error, errorMessage);
@@ -401,8 +401,8 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
 
             var role = roleService.GetRecordById(id);
-            var listPermits = permitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active)).OrderBy(c => c.PermitArea).ThenBy(c => c.PermitController).ThenBy(c => c.PermitName).ToList();     
-            var listRolePermitIds = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.RoleId.Equals(id)).OrderBy(c => c.PermitId).Select(c => c.PermitId).ToList();      
+            var listPermits = permitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).OrderBy(c => c.PermitArea).ThenBy(c => c.PermitController).ThenBy(c => c.PermitName).ToList();     
+            var listRolePermitIds = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.RoleId.Equals(id)).OrderBy(c => c.PermitId).Select(c => c.PermitId).ToList();      
             var listAreas = listPermits.OrderBy(c => c.PermitArea).Select(c => c.PermitArea).Distinct().ToList();
                          
             // set ViewBag
@@ -419,7 +419,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Role.RolePermits)]
         public ActionResult RolePermits(int id, List<int> permitIds)
         {
-            var listRolePermits = rolePermitService.GetRecordsByFilter(c => c.RoleId == id).ToList();
+            var listRolePermits = rolePermitService.GetRecordsByFilter(c => c.RoleId.Equals(id)).ToList();
 
             // delete all permits for the role
             foreach (var rolePermit in listRolePermits)
@@ -434,7 +434,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             // add or activate received permits for the role
             foreach (var permitID in permitIds)
             {
-                var existingRolePermit = rolePermitService.GetRecordsByFilter(c => c.RoleId == id && c.PermitId == permitID).FirstOrDefault();
+                var existingRolePermit = rolePermitService.GetRecordsByFilter(c => c.RoleId.Equals(id) && c.PermitId.Equals(permitID)).FirstOrDefault();
 
                 if (existingRolePermit != null)
                 {

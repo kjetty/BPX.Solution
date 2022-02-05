@@ -1,5 +1,6 @@
 ﻿@model X.PagedList.IPagedList<BPX.Domain.ViewModels.PermitMiniViewModel>
 
+@using BPX.Utils;
 @using BPX.Website.CustomCode.Authorize;
 @using X.PagedList.Mvc.Core;
 @using X.PagedList.Web.Common;
@@ -60,13 +61,13 @@
 						localSortOrder = "";
 						localSortIcon = "fa-sort";
 
-						if (ViewBag.sortByColumn == "PermitId")
+						if (ViewBag.sortByColumn.Equals("PermitId"))
 						{
 							localSortOrder = ViewBag.sortOrder;
 
-							if (localSortOrder == "asc")
+							if (localSortOrder.ToUpper().Equals(SortOrder.Ascending.ToUpper()))
 								localSortIcon += "-" + "up";
-							if (localSortOrder == "desc")
+							if (localSortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper()))
 								localSortIcon += "-" + "down";
 						}
 					}
@@ -75,13 +76,13 @@
 						localSortOrder = "";
 						localSortIcon = "fa-sort";
 
-						if (ViewBag.sortByColumn == "PermitArea")
+						if (ViewBag.sortByColumn.Equals("PermitArea"))
 						{
 							localSortOrder = ViewBag.sortOrder;
 
-							if (localSortOrder == "asc")
+							if (localSortOrder.ToUpper().Equals(SortOrder.Ascending.ToUpper()))
 								localSortIcon += "-" + "up";
-							if (localSortOrder == "desc")
+							if (localSortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper()))
 								localSortIcon += "-" + "down";
 						}
 					}
@@ -90,13 +91,13 @@
 						localSortOrder = "";
 						localSortIcon = "fa-sort";
 
-						if (ViewBag.sortByColumn == "PermitController")
+						if (ViewBag.sortByColumn.Equals("PermitController"))
 						{
 							localSortOrder = ViewBag.sortOrder;
 
-							if (localSortOrder == "asc")
+							if (localSortOrder.ToUpper().Equals(SortOrder.Ascending.ToUpper()))
 								localSortIcon += "-" + "up";
-							if (localSortOrder == "desc")
+							if (localSortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper()))
 								localSortIcon += "-" + "down";
 						}
 					}
@@ -105,13 +106,13 @@
 						localSortOrder = "";
 						localSortIcon = "fa-sort";
 
-						if (ViewBag.sortByColumn == "PermitName")
+						if (ViewBag.sortByColumn.Equals("PermitName"))
 						{
 							localSortOrder = ViewBag.sortOrder;
 
-							if (localSortOrder == "asc")
+							if (localSortOrder.ToUpper().Equals(SortOrder.Ascending.ToUpper()))
 								localSortIcon += "-" + "up";
-							if (localSortOrder == "desc")
+							if (localSortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper()))
 								localSortIcon += "-" + "down";
 						}
 					}
@@ -120,13 +121,13 @@
 						localSortOrder = "";
 						localSortIcon = "fa-sort";
 
-						if (ViewBag.sortByColumn == "PermitEnum")
+						if (ViewBag.sortByColumn.Equals("PermitEnum"))
 						{
 							localSortOrder = ViewBag.sortOrder;
 
-							if (localSortOrder == "asc")
+							if (localSortOrder.ToUpper().Equals(SortOrder.Ascending.ToUpper()))
 								localSortIcon += "-" + "up";
-							if (localSortOrder == "desc")
+							if (localSortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper()))
 								localSortIcon += "-" + "down";
 						}
 					}
@@ -196,10 +197,10 @@
 		&nbsp; | &nbsp;
 		Show
 		<select id="pageSizeInput">
-			<option value="10" selected="@(ViewBag.pageSize == 10)">10</option>
-			<option value="25" selected="@(ViewBag.pageSize == 25)">25</option>
-			<option value="50" selected="@(ViewBag.pageSize == 50)">50</option>
-			<option value="100" selected="@(ViewBag.pageSize == 100)">100</option>
+			<option value="10" selected="@(ViewBag.pageSize.Equals(10))">10</option>
+			<option value="25" selected="@(ViewBag.pageSize.Equals(25))">25</option>
+			<option value="50" selected="@(ViewBag.pageSize.Equals(50))">50</option>
+			<option value="100" selected="@(ViewBag.pageSize.Equals(100))">100</option>
 		</select>
 		Entries
 		<p></p>

@@ -32,7 +32,7 @@ namespace BPX.Website.CustomCode.Authorize
 			{
 				// any logged in user is allowed to access the resource
 				// for [Permit] attribute without the permit parameter
-				if (permitId == 0)
+				if (permitId.Equals(0))
 				{
 					success = true;
 				}

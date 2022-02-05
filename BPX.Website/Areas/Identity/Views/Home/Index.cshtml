@@ -1,7 +1,61 @@
-﻿
-@{
-    ViewData["Title"] = "Index";
+﻿@{
+	ViewData["Title"] = "Identity";
 }
 
-<h1>Index</h1>
+<div class="row">
+	<div class="col-md-12">
+		<h5>@ViewBag.Title</h5>
+	</div>
+</div>
+
+<p></p>
+<hr />
+
+<div class="row">
+	<div class="col-md-4">
+		<p></p>
+		<div class="card bg-light" style="width: 18rem;">
+			<div class="card-body">
+				<h5 class="card-title">Menu</h5>
+				<p class="card-text">Create Menu</p>
+				<a class="btn btn-primary" asp-area="Identity" asp-controller="Menu" asp-action="Index">Go to Menu</a>
+			</div>
+		</div>
+		<p></p>
+		<div class="card bg-light" style="width: 18rem;">
+			<div class="card-body">
+				<h5 class="card-title">User</h5>
+				<p class="card-text">Create Users</p>
+				<a class="btn btn-primary" asp-area="Identity" asp-controller="User" asp-action="Index">Go to User</a>
+			</div>
+		</div>
+		<p></p>
+	</div>
+	<div class="col-md-4">
+		<p></p>
+		<div class="card bg-light" style="width: 18rem;">
+			<div class="card-body">
+				<h5 class="card-title">Permit</h5>
+				<p class="card-text">Create Permits</p>
+				<a class="btn btn-primary" asp-area="Identity" asp-controller="Permit" asp-action="Index">Go to Permit</a>
+			</div>
+		</div>
+		<p></p>
+
+		<p></p>
+	</div>
+	<div class="col-md-4">
+		<p></p>
+		<div class="card bg-light" style="width: 18rem;">
+			<div class="card-body">
+				<h5 class="card-title">Role</h5>
+				<p class="card-text">Create Roles</p>
+				<a class="btn btn-primary" asp-area="Identity" asp-controller="Role" asp-action="Index">Go to Role</a>
+			</div>
+		</div>
+		<p></p>
+
+		<p></p>
+	</div>
+</div>
 

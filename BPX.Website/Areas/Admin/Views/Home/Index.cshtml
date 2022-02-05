@@ -1,7 +1,27 @@
-﻿
-@{
-    ViewData["Title"] = "Index";
+﻿@{
+	ViewData["Title"] = "Administrator";
 }
 
-<h1>Index</h1>
+<div class="row">
+	<div class="col-md-12">
+		<h5>@ViewBag.Title</h5>
+	</div>
+</div>
+
+<p></p>
+<hr />
+
+<div class="row">
+	<div class="col-md-12">
+
+		<div class="card bg-light" style="width: 18rem;">
+			<div class="card-body">
+				<h5 class="card-title">Error Logs</h5>
+				<p class="card-text">View Error Logs</p>
+				<a class="btn btn-primary" asp-area="Admin" asp-controller="ErrorLogs" asp-action="Index">Go to Error Logs</a>
+			</div>
+		</div>
+
+	</div>
+</div>
 

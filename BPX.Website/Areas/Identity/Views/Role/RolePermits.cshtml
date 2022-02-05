@@ -31,7 +31,7 @@
 
 					<div class="card">
 						<div class="card-header">
-							<input type="checkbox" id="@handleArea" style="box-shadow: 0 0 3px red;" />
+							@*<input type="checkbox" id="@handleArea" style="box-shadow: 0 0 3px red;" />*@
 							@area
 						</div>
 						<div class="card-body">
@@ -44,7 +44,7 @@
 
 								foreach (var itemPermit in ViewBag.listPermits)
 								{
-									if (itemPermit.PermitArea == area)
+									if (itemPermit.PermitArea.ToString().ToUpper().Equals(area.ToString().ToUpper()))
 									{
 										currController = itemPermit.PermitController;
 
@@ -62,7 +62,7 @@
 
 											foreach (var itemPermit2 in ViewBag.listPermits)
 											{
-												if (currController == itemPermit2.PermitController)
+												if (currController.ToUpper().Equals(itemPermit2.PermitController.ToString().ToUpper()))
 												{
 													if (((IList<int>)ViewBag.listRolePermitIds).Contains(itemPermit2.PermitId))
 													{
@@ -128,7 +128,7 @@
 
 						foreach (var itemPermit in ViewBag.listPermits)
 						{
-							if (itemPermit.PermitArea == area)
+							if (itemPermit.PermitArea.ToString().ToUpper().Equals(area.ToString().ToUpper()))
 							{
 								currController = itemPermit.PermitController;
 
@@ -143,7 +143,6 @@
 									@Html.Raw("\t\t$(\"." + classAreaController + "\").attr('checked', 'checked');\n")
 									@Html.Raw("\t}\n")
 									@Html.Raw("});\n\n")
-
 								}
 
 								prevController = currController;

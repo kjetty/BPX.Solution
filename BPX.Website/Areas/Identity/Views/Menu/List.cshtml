@@ -84,7 +84,15 @@
 									<a asp-action="Read" asp-route-id="@item.MenuId" title="read" class="bi-search" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
 									<a asp-action="Update" asp-route-id="@item.MenuId" title="update" class="bi-pencil" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
 									<a asp-action="Delete" asp-route-id="@item.MenuId" title="delete" class="bi-trash" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-									<a asp-action="MenuPermits" asp-route-id="@item.MenuId" title="menu permits" class="far fa-address-card" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+
+									if (item.HLevel <= 2)
+									{
+										<span class="bi-x"></span> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+									}
+									else
+									{
+										<a asp-action="MenuPermits" asp-route-id="@item.MenuId" title="menu permits" class="far fa-address-card" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+									}
 								}
 							}
 						</td>

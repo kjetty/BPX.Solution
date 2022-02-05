@@ -23,7 +23,7 @@ namespace BPX.DAL.Repository
 
         public MenuPermit GetRecordById(int id)
         {
-            return context.MenuPermits.Where(c => c.MenuPermitId == id).SingleOrDefault();
+            return context.MenuPermits.Where(c => c.MenuPermitId.Equals(id)).SingleOrDefault();
         }
 
         public IQueryable<MenuPermit> GetRecordsByFilter(Expression<Func<MenuPermit, bool>> filter)

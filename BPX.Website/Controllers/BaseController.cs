@@ -11,7 +11,6 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Diagnostics;
 using System.Linq;
 
@@ -27,14 +26,12 @@ namespace BPX.Website.Controllers
 		protected List<Menu> currMenuHierarchy;
 		protected string currBreadcrump;
 		protected string currMenuString;
-		protected TextInfo textInfo;
 		// private vars
 		private ICacheService cacheService;
 		private ICacheKeyService cacheKeyService;
 
 		public BaseController(ILogger<T> logger, ICoreService coreService)
 		{
-			this.textInfo = new CultureInfo("en-US", false).TextInfo;
 			this.logger = logger;
 			this.coreService = coreService;
 			this.bpxPageSize = Convert.ToInt32(coreService.GetConfiguration().GetSection("AppSettings").GetSection("PageSize").Value);
@@ -52,7 +49,7 @@ namespace BPX.Website.Controllers
 			{
 				if (ctx.HttpContext.User != null)
 			    {
-					var claimCurrLoginToken = ctx.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "currLoginToken");
+					var claimCurrLoginToken = ctx.HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("currLoginToken"));
 
 					if (claimCurrLoginToken != null)
 					{						
@@ -173,18 +170,14 @@ namespace BPX.Website.Controllers
 			string currAction = ctx.HttpContext.Request.RouteValues["action"] != null ? ctx.HttpContext.Request.RouteValues["action"].ToString() : string.Empty;
 			//string currId = ctx.HttpContext.Request.RouteValues["id"] != null ? ctx.HttpContext.Request.RouteValues["id"].ToString() : string.Empty;
 
-			currArea = textInfo.ToTitleCase(currArea);
-			currController = textInfo.ToTitleCase(currController);
-			currAction = textInfo.ToTitleCase(currAction);
+			string lookupURL = $"/{currArea}/{currController}".ToUpper();
 
-			string lookupURL = $"/{currArea}/{currController}".ToLower();
-
-			if (currController.Equals("Home"))
+			if (currController.ToUpper().Equals("HOME"))
 			{
-				lookupURL = lookupURL.Replace("/home", string.Empty);
+				lookupURL = lookupURL.Replace("/HOME", string.Empty);
 			}
 
-			int menuId = menuHierarchy.Where(c => c.MenuURL.ToLower().Equals(lookupURL)).Select(c => c.MenuId).SingleOrDefault();
+			int menuId = menuHierarchy.Where(c => c.MenuURL.ToUpper().Equals(lookupURL.ToUpper())).Select(c => c.MenuId).SingleOrDefault();
 
 			if (menuId < 0)
 			{
@@ -200,7 +193,7 @@ namespace BPX.Website.Controllers
 				cacheService.SetCache(breadcrumb, cacheKeyName, cacheKeyService);
 			}
 
-			if (!currAction.Equals("Index"))
+			if (!currAction.ToUpper().Equals("INDEX"))
 			{
 				breadcrumb += $"<li class=\"breadcrumb-item active\">{currAction}</li>";
 			}

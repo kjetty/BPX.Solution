@@ -44,7 +44,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 		[Permit(Permits.Identity.Menu.List)]
 		public IActionResult List()
 		{
-			var menuList = coreService.GetMenuHierarchy(RecordStatus.Active, "url");
+			var menuList = coreService.GetMenuHierarchy(RecordStatus.Active, "URL");
 
 			List<MenuMiniViewModel> model = new List<MenuMiniViewModel>();
 
@@ -90,9 +90,9 @@ namespace BPX.Website.Areas.Identity.Controllers
                 Menu recordMenu = new()
                 {
                     // set core data
-                    MenuName = collection.MenuName,
-                    MenuDescription = collection.MenuDescription,
-                    MenuURL = collection.MenuURL,
+                    MenuName = collection.MenuName.Trim(),
+                    MenuDescription = collection.MenuDescription.Trim(),
+                    MenuURL = collection.MenuURL.Trim(),
                     ParentMenuId = collection.ParentMenuId,
                     OrderNumber = collection.OrderNumber,
                     // set generic data
@@ -177,12 +177,12 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // get existing data
                 var recordMenu = menuService.GetRecordById(id);
 
-                if (recordMenu.StatusFlag == RecordStatus.Active)
+                if (recordMenu.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
                 {
                     // set core data
-                    recordMenu.MenuName = collection.MenuName;
-                    recordMenu.MenuDescription = collection.MenuDescription;
-                    recordMenu.MenuURL = collection.MenuURL;
+                    recordMenu.MenuName = collection.MenuName.Trim();
+                    recordMenu.MenuDescription = collection.MenuDescription.Trim();
+                    recordMenu.MenuURL = collection.MenuURL.Trim();
                     recordMenu.ParentMenuId = collection.ParentMenuId;
                     recordMenu.OrderNumber = collection.OrderNumber;
                     // set generic data
@@ -214,7 +214,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 string errorMessage = GetInnerExceptionMessage(ex);
 
                 // log
-                logger.Log(LogLevel.Error, ex, "MenuController.204");
+                logger.Log(LogLevel.Error, ex, "MenuController.217");
 
                 // set alert
                 ShowAlertBox(AlertType.Error, errorMessage);
@@ -259,7 +259,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // get existing data
                 var recordMenu = menuService.GetRecordById(id);
 
-                if (recordMenu.StatusFlag == RecordStatus.Active)
+                if (recordMenu.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
                 {
                     // set generic data
                     recordMenu.StatusFlag = RecordStatus.Inactive;
@@ -290,7 +290,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 string errorMessage = GetInnerExceptionMessage(ex);
 
                 // log
-                logger.Log(LogLevel.Error, ex, "MenuController.274");
+                logger.Log(LogLevel.Error, ex, "MenuController.293");
 
                 // set alert
                 ShowAlertBox(AlertType.Error, errorMessage);
@@ -303,7 +303,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Menu.ListDeleted)]
         public ActionResult ListDeleted(string temptemp)
         {
-            var menuList = coreService.GetMenuService().GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Inactive)).ToList();
+            var menuList = coreService.GetMenuService().GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Inactive.ToUpper())).ToList();
 
             List<MenuMiniViewModel> model = new List<MenuMiniViewModel>();
 
@@ -351,7 +351,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // get existing data
                 var recordMenu = menuService.GetRecordById(id);
 
-                if (recordMenu.StatusFlag == RecordStatus.Inactive)
+                if (recordMenu.StatusFlag.ToUpper().Equals(RecordStatus.Inactive.ToUpper()))
                 {
                     // set generic data
                     recordMenu.StatusFlag = RecordStatus.Active;
@@ -382,7 +382,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 string errorMessage = GetInnerExceptionMessage(ex);
 
                 // log
-                logger.Log(LogLevel.Error, ex, "MenuController.378");
+                logger.Log(LogLevel.Error, ex, "MenuController.385");
 
                 // set alert
                 ShowAlertBox(AlertType.Error, errorMessage);
@@ -404,8 +404,8 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
 
             var menu = menuService.GetRecordById(id);
-            var listPermits = permitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active)).OrderBy(c => c.PermitArea).ThenBy(c => c.PermitController).ThenBy(c => c.PermitName).ToList();
-            var listMenuPermitIds = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.MenuId.Equals(id)).OrderBy(c => c.PermitId).Select(c => c.PermitId).ToList();
+            var listPermits = permitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).OrderBy(c => c.PermitArea).ThenBy(c => c.PermitController).ThenBy(c => c.PermitName).ToList();
+            var listMenuPermitIds = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.MenuId.Equals(id)).OrderBy(c => c.PermitId).Select(c => c.PermitId).ToList();
             var listAreas = listPermits.OrderBy(c => c.PermitArea).Select(c => c.PermitArea).Distinct().ToList();
 
             // set ViewBag
@@ -422,7 +422,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Menu.MenuPermits)]
         public ActionResult MenuPermits(int id, List<int> permitIds)
         {
-			var listMenuPermits = menuPermitService.GetRecordsByFilter(c => c.MenuId == id).ToList();
+			var listMenuPermits = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.MenuId.Equals(id)).ToList();
 
 			// delete all permits for the menu
 			foreach (var menuPermit in listMenuPermits)
@@ -437,7 +437,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 			// add or activate received permits for the menu
 			foreach (var permitID in permitIds)
 			{
-				var existingMenuPermit = menuPermitService.GetRecordsByFilter(c => c.MenuId == id && c.PermitId == permitID).FirstOrDefault();
+				var existingMenuPermit = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.MenuId.Equals(id) && c.PermitId.Equals(permitID)).FirstOrDefault();
 
 				if (existingMenuPermit != null)
 				{
@@ -479,7 +479,7 @@ namespace BPX.Website.Areas.Identity.Controllers
     
         private void UpdateTreePath()
 		{
-            List<Menu> menuHierarchy = menuService.GetMenuHierarchy(RecordStatus.Active, "url");
+            List<Menu> menuHierarchy = menuService.GetMenuHierarchy(RecordStatus.Active, "URL");
 
             foreach (var itemMenu in menuHierarchy)
 			{

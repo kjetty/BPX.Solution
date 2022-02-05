@@ -22,7 +22,7 @@ namespace BPX.DAL.Repository
 
         public Login GetRecordById(int id)
         {
-            return context.Logins.Where(c => c.UserId == id).SingleOrDefault();
+            return context.Logins.Where(c => c.UserId.Equals(id)).SingleOrDefault();
         }
 
         public IQueryable<Login> GetRecordsByFilter(Expression<Func<Login, bool>> filter)

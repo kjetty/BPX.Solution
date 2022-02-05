@@ -53,9 +53,9 @@ namespace BPX.Website.Areas.Identity.Controllers
             pageNumber = (pageNumber <= 0) ? 1 : pageNumber;
             pageSize = (pageSize <= 0) ? bpxPageSize : pageSize;
             statusFlag = RecordStatus.Active;   //force set to Active records always
-            sortByColumn = (sortByColumn == null || sortByColumn.Trim().Length == 0) ? string.Empty : sortByColumn;
-            sortOrder = (sortOrder == null || sortOrder.Trim().Length == 0) ? SortOrder.Ascending : sortOrder;
-            searchForString = (searchForString == null || searchForString.Trim().Length == 0) ? string.Empty : searchForString;
+            sortByColumn = (sortByColumn == null || sortByColumn.Trim().Length.Equals(0)) ? string.Empty : sortByColumn;
+            sortOrder = (sortOrder == null || sortOrder.Trim().Length.Equals(0)) ? SortOrder.Ascending : sortOrder;
+            searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
 
             // fetch data
             var model = permitService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString).Select(c => (PermitMiniViewModel)c);
@@ -101,10 +101,10 @@ namespace BPX.Website.Areas.Identity.Controllers
                 Permit recordPermit = new()
                 {
                     // set core data
-                    PermitArea = collection.PermitArea,
-                    PermitController = collection.PermitController,
-                    PermitName = collection.PermitName,
-                    PermitEnum = collection.PermitEnum,
+                    PermitArea = collection.PermitArea.Trim(),
+                    PermitController = collection.PermitController.Trim(),
+                    PermitName = collection.PermitName.Trim(),
+                    PermitEnum = collection.PermitEnum.Trim(),
                     // set generic data
                     StatusFlag = RecordStatus.Active,
                     ModifiedBy = 1,
@@ -182,13 +182,13 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // get existing data
                 var recordPermit = permitService.GetRecordById(id);
 
-                if (recordPermit.StatusFlag == RecordStatus.Active)
+                if (recordPermit.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
                 {
                     // set core data
-                    recordPermit.PermitArea = collection.PermitArea;
-                    recordPermit.PermitController = collection.PermitController;
-                    recordPermit.PermitName = collection.PermitName;
-                    recordPermit.PermitEnum = collection.PermitEnum;
+                    recordPermit.PermitArea = collection.PermitArea.Trim();
+                    recordPermit.PermitController = collection.PermitController.Trim();
+                    recordPermit.PermitName = collection.PermitName.Trim();
+                    recordPermit.PermitEnum = collection.PermitEnum.Trim();
                     // set generic data
                     recordPermit.StatusFlag = RecordStatus.Active;
                     recordPermit.ModifiedBy = currUserMeta.UserId;
@@ -215,7 +215,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 string errorMessage = GetInnerExceptionMessage(ex);
 
                 // log
-                logger.Log(LogLevel.Error, ex, "PermitController.206");
+                logger.Log(LogLevel.Error, ex, "PermitController.218");
 
                 // set alert
                 ShowAlertBox(AlertType.Error, errorMessage);
@@ -260,7 +260,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // get existing data
                 var recordPermit = permitService.GetRecordById(id);
 
-                if (recordPermit.StatusFlag == RecordStatus.Active)
+                if (recordPermit.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
                 {
                     // set generic data
                     recordPermit.StatusFlag = RecordStatus.Inactive;
@@ -288,7 +288,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 string errorMessage = GetInnerExceptionMessage(ex);
 
                 // log
-                logger.Log(LogLevel.Error, ex, "PermitController.276");
+                logger.Log(LogLevel.Error, ex, "PermitController.291");
 
                 // set alert
                 ShowAlertBox(AlertType.Error, errorMessage);
@@ -305,9 +305,9 @@ namespace BPX.Website.Areas.Identity.Controllers
             pageNumber = (pageNumber <= 0) ? 1 : pageNumber;
             pageSize = (pageSize <= 0) ? bpxPageSize : pageSize;
             statusFlag = RecordStatus.Inactive;   //force set to Active records always
-            sortByColumn = (sortByColumn == null || sortByColumn.Trim().Length == 0) ? string.Empty : sortByColumn;
-            sortOrder = (sortOrder == null || sortOrder.Trim().Length == 0) ? SortOrder.Ascending : sortOrder;
-            searchForString = (searchForString == null || searchForString.Trim().Length == 0) ? string.Empty : searchForString;
+            sortByColumn = (sortByColumn == null || sortByColumn.Trim().Length.Equals(0)) ? string.Empty : sortByColumn;
+            sortOrder = (sortOrder == null || sortOrder.Trim().Length.Equals(0)) ? SortOrder.Ascending : sortOrder;
+            searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
 
             // fetch data
             var model = permitService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString).Select(c => (PermitMiniViewModel)c);
@@ -359,7 +359,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // get existing data
                 var recordPermit = permitService.GetRecordById(id);
 
-                if (recordPermit.StatusFlag == RecordStatus.Inactive)
+                if (recordPermit.StatusFlag.Equals(RecordStatus.Inactive))
                 {
                     // set generic data
                     recordPermit.StatusFlag = RecordStatus.Active;
@@ -387,7 +387,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 string errorMessage = GetInnerExceptionMessage(ex);
 
                 // log
-                logger.Log(LogLevel.Error, ex, "PermitController.380");
+                logger.Log(LogLevel.Error, ex, "PermitController.390");
 
                 // set alert
                 ShowAlertBox(AlertType.Error, errorMessage);
@@ -409,10 +409,10 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
 
             var permit = permitService.GetRecordById(id);
-            var listRoleIds = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.PermitId.Equals(id)).Select(c => c.RoleId).ToList();
-            var listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && listRoleIds.Contains(c.RoleId)).OrderBy(c => c.RoleName).ToList();
-            var listMenuIds = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.PermitId.Equals(id)).Select(c => c.MenuId).ToList();
-            var listMenus = menuService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && listMenuIds.Contains(c.MenuId)).OrderBy(c => c.MenuURL).ToList();
+            var listRoleIds = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PermitId.Equals(id)).Select(c => c.RoleId).ToList();
+            var listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && listRoleIds.Contains(c.RoleId)).OrderBy(c => c.RoleName).ToList();
+            var listMenuIds = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PermitId.Equals(id)).Select(c => c.MenuId).ToList();
+            var listMenus = menuService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && listMenuIds.Contains(c.MenuId)).OrderBy(c => c.MenuURL).ToList();
 
             // set ViewBag
             ViewBag.permit = permit;

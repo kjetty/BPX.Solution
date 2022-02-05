@@ -80,7 +80,7 @@ namespace BPX.Service
 
 		public int GetUserId(string loginToken)
 		{
-			var login = loginService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.LoginToken.Equals(loginToken)).SingleOrDefault();
+			var login = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.LoginToken.Equals(loginToken)).SingleOrDefault();
 
 			if (login != null)
 			{
@@ -108,17 +108,17 @@ namespace BPX.Service
 
 		public List<int> GetUserRoleIds(int userId)
 		{
-			return userRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.UserId == userId).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
+			return userRoleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.UserId.Equals(userId)).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
 		}
 
 		public List<int> GetUserPermitIds(List<int> userRoleIds)
 		{
-			return rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && userRoleIds.Contains(c.RoleId)).OrderBy(c => c.PermitId).Select(c => c.PermitId).Distinct().ToList();
+			return rolePermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && userRoleIds.Contains(c.RoleId)).OrderBy(c => c.PermitId).Select(c => c.PermitId).Distinct().ToList();
 		}
 
 		public List<int> GetPermitRoles(int permitId)
 		{
-			return rolePermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.PermitId == permitId).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
+			return rolePermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PermitId.Equals(permitId)).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
 		}
 
 		public List<Menu> GetMenuHierarchy(string statusFlag, string orderBy)
@@ -143,7 +143,7 @@ namespace BPX.Service
 					}
 					else
 					{
-						if (currController.Equals("Home"))
+						if (currController.ToUpper().Equals("HOME"))
 						{
 							breadcrumb += $"<li class=\"breadcrumb-item\">{itemBreadcrumb.MenuName}</li>";
 
@@ -162,8 +162,8 @@ namespace BPX.Service
 		public string GetMenuString(List<int> userPermitIds, List<Menu> menuHierarchy)
 		{
 			string menuString = string.Empty;
-			List<int> listMenuIds = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && userPermitIds.Contains(c.PermitId)).OrderBy(c => c.MenuId).Select(c => c.MenuId).Distinct().ToList();
-			List<Menu> listMenu = menuService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && listMenuIds.Contains(c.MenuId)).OrderBy(c => c.MenuURL).ToList();
+			List<int> listMenuIds = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && userPermitIds.Contains(c.PermitId)).OrderBy(c => c.MenuId).Select(c => c.MenuId).Distinct().ToList();
+			List<Menu> listMenu = menuService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && listMenuIds.Contains(c.MenuId)).OrderBy(c => c.MenuURL).ToList();
 
 			// generate the menuString
 			AddMenuItemsLevelOne(ref menuString, menuHierarchy, AddRoot(ref menuString, menuHierarchy), listMenu, userPermitIds);
@@ -194,7 +194,7 @@ namespace BPX.Service
 
 					foreach (var itemMenu22 in listMenu)
 					{
-						if (itemMenu22.TreePath.StartsWith(itemMenu.TreePath))
+						if (itemMenu22.TreePath.ToUpper().StartsWith(itemMenu.TreePath.ToUpper()))
 						{
 							foundLevelOneItem = true;
 							break;
@@ -240,7 +240,7 @@ namespace BPX.Service
 
 					foreach (var itemMenu22 in listMenu)
 					{
-						if (itemMenu22.TreePath.StartsWith(itemMenu.TreePath))
+						if (itemMenu22.TreePath.ToUpper().StartsWith(itemMenu.TreePath.ToUpper()))
 						{
 							foundLevelTwoItem = true;
 							break;
@@ -287,7 +287,7 @@ namespace BPX.Service
 
 					foreach (var itemMenu22 in listMenu)
 					{
-						if (itemMenu22.TreePath.StartsWith(itemMenu.TreePath))
+						if (itemMenu22.TreePath.ToUpper().StartsWith(itemMenu.TreePath.ToUpper()))
 						{
 							foundLevelThreeItem = true;
 							break;

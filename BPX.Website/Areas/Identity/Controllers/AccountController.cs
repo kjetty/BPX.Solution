@@ -47,7 +47,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         public ActionResult Login(BPXLoginViewModel model)
         {
 
-            var login = loginService.GetRecordsByFilter(c => c.StatusFlag == RecordStatus.Active && c.LoginId == model.LoginId).FirstOrDefault();
+            var login = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.LoginId.ToUpper().Equals(model.LoginId.ToUpper())).FirstOrDefault();
             bool passwordIsVerified = false;
 
             if (login == null)
@@ -117,7 +117,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
             // get user and userRoles
             var user = userService.GetRecordById(login.UserId);
-            var userRolesIds = userRoleService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.UserId.Equals(login.UserId)).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
+            var userRolesIds = userRoleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.UserId.Equals(login.UserId)).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
 
             string lastName = user.LastName ?? string.Empty;
 			string firstName = user.FirstName ?? string.Empty;
@@ -207,6 +207,15 @@ namespace BPX.Website.Areas.Identity.Controllers
                     return View(collection);
                 }
 
+                // trim the collection (only for user registration)
+                collection.LoginId = collection.LoginId.Trim();
+                collection.FirstName = collection.FirstName.Trim();
+                collection.LastName = collection.LastName.Trim();
+                collection.Email = collection.Email.Trim();
+                collection.CellPhone = collection.CellPhone.Trim();
+                collection.Password = collection.Password.Trim();
+                collection.ConfirmPassword = collection.ConfirmPassword.Trim();
+
                 // check if password and confirmPassword match
                 if (!collection.Password.Equals(collection.ConfirmPassword))
                 {
@@ -220,9 +229,9 @@ namespace BPX.Website.Areas.Identity.Controllers
                 }
 
                 // check if LoginId exists
-                var duplicateLoginList = loginService.GetRecordsByFilter(c => c.StatusFlag.Equals(RecordStatus.Active) && c.LoginId.ToUpper().Equals(collection.LoginId.Trim().ToUpper())).ToList();
+                var duplicateLoginList = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.LoginId.ToUpper().Equals(collection.LoginId.ToUpper())).ToList();
 
-                if (duplicateLoginList.Count == 0)
+                if (duplicateLoginList.Count.Equals(0))
                 {
                     User user = new()
                     {
@@ -281,7 +290,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 string errorMessage = GetInnerExceptionMessage(ex);
 
                 // log
-                logger.Log(LogLevel.Error, ex, "AccountController.280");
+                logger.Log(LogLevel.Error, ex, "AccountController.293");
 
                 // set alert
                 ShowAlertBox(AlertType.Error, errorMessage);
@@ -307,8 +316,6 @@ namespace BPX.Website.Areas.Identity.Controllers
         //[Permit(Permits.Identity.Login.ChangePassword)]
         public ActionResult ChangePassword(ChangePasswordViewModel collection)
         {
-            //collection.
-
             try
             {
                 // return if model is invalid
@@ -374,7 +381,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 string errorMessage = GetInnerExceptionMessage(ex);
 
                 // log
-                logger.Log(LogLevel.Error, ex, "AccountController.370");
+                logger.Log(LogLevel.Error, ex, "AccountController.384");
 
                 // set alert
                 ShowAlertBox(AlertType.Error, errorMessage);

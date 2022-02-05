@@ -60,7 +60,7 @@
 
 					foreach (var item in recordStatus)
 					{
-						if (Model.StatusFlag == item.GetRawConstantValue().ToString())
+						if (Model.StatusFlag.ToUpper().Equals(item.GetRawConstantValue().ToString().ToUpper()))
 						{
 							@Html.Raw("&nbsp;(" + @item.Name + ")");
 						}

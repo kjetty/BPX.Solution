@@ -28,7 +28,7 @@ namespace BPX.DAL.Repository
 
             // set defaults
             pageNumber = pageNumber <= 0 ? 1 : pageNumber;
-            pageSize = pageSize <= 0 ? 1 : pageSize;
+            pageSize = pageSize <= 0 ? 10 : pageSize;
             statusFlag = statusFlag.Length.Equals(0) ? RecordStatus.Active : statusFlag;
             sortByColumn = sortByColumn.Length.Equals(0) ? "RoleId" : sortByColumn;
             sortOrder = sortOrder.Length.Equals(0) ? SortOrder.Ascending : sortOrder;
@@ -45,13 +45,13 @@ namespace BPX.DAL.Repository
             }
 
             // apply sort by column, sort order
-            switch (sortByColumn)
+            switch (sortByColumn.ToUpper())
             {
-                case "FirstName":
+                case "FIRSTNAME":
                     model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.RoleName) : model.OrderBy(c => c.RoleName);
                     break;
 
-                case "LastName":
+                case "LASTNAME":
                     model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.RoleDescription) : model.OrderBy(c => c.RoleDescription);
                     break;
 

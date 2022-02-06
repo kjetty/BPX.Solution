@@ -28,12 +28,12 @@ namespace BPX.DAL.Repository
 
             // set defaults
             pageNumber = pageNumber <= 0 ? 1 : pageNumber;
-            pageSize = pageSize <= 0 ? 1 : pageSize;
+            pageSize = pageSize <= 0 ? 10 : pageSize;
             statusFlag = statusFlag.Length.Equals(0) ? RecordStatus.Active : statusFlag;
             sortByColumn = sortByColumn.Length.Equals(0) ? "UserId" : sortByColumn;
             sortOrder = sortOrder.Length.Equals(0) ? SortOrder.Ascending : sortOrder;
             searchForString = searchForString.Length.Equals(0) ? string.Empty : searchForString;
-
+            
             // get model : IQueryable : apply statusFlag
             var model = context.Users.Where(c => c.StatusFlag.ToUpper().Equals(statusFlag.ToUpper()));
 
@@ -46,17 +46,17 @@ namespace BPX.DAL.Repository
             }
 
             // apply sort by column, sort order
-            switch (sortByColumn)
+            switch (sortByColumn.ToUpper())
             {
-                case "FirstName":
+                case "FIRSTNAME":
                     model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.FirstName) : model.OrderBy(c => c.FirstName);
                     break;
 
-                case "LastName":
+                case "LASTNAME":
                     model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.LastName) : model.OrderBy(c => c.LastName);
                     break;
 
-                case "Email":
+                case "EMAIL":
                     model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.Email) : model.OrderBy(c => c.Email);
                     break;
 

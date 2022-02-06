@@ -28,7 +28,7 @@ namespace BPX.DAL.Repository
 
             // set defaults
             pageNumber = pageNumber <= 0 ? 1 : pageNumber;
-            pageSize = pageSize <= 0 ? 1 : pageSize;
+            pageSize = pageSize <= 0 ? 10 : pageSize;
             statusFlag = statusFlag.Length.Equals(0) ? RecordStatus.Active : statusFlag;
             sortByColumn = sortByColumn.Length.Equals(0) ? "PermitId" : sortByColumn;
             sortOrder = sortOrder.Length.Equals(0) ? SortOrder.Ascending : sortOrder;
@@ -47,21 +47,21 @@ namespace BPX.DAL.Repository
             }
 
             // apply sort by column, sort order
-            switch (sortByColumn)
+            switch (sortByColumn.ToUpper())
             {
-                case "PermitArea":
+                case "PERMITAREA":
                     model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.PermitArea) : model.OrderBy(c => c.PermitArea);
                     break;
 
-                case "PermitController":
+                case "PERMITCONTROLLER":
                     model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.PermitController) : model.OrderBy(c => c.PermitController);
                     break;
 
-                case "PermitName":
+                case "PERMITNAME":
                     model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.PermitName) : model.OrderBy(c => c.PermitName);
                     break;
 
-                case "PermitEnum":
+                case "PERMITENUM":
                     model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.PermitEnum) : model.OrderBy(c => c.PermitEnum);
                     break;
 

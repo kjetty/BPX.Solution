@@ -29,16 +29,16 @@ namespace BPX.Website.MiddleWare
 			//{
 			//	if (context.User != null)
 			//	{
-			//		var claimCurrLoginToken = context.User.Claims.FirstOrDefault(c => c.Type == "currLoginToken");
+			//		var currLoginToken = context.User.Claims.FirstOrDefault(c => c.Type == "BPXLoginToken");
 
-			//		if (claimCurrLoginToken != null)
+			//		if (currLoginToken != null)
 			//		{
 			//			// get current loginToken value
-			//			string loginToken = claimCurrLoginToken.Value;
+			//			string loginToken = currLoginToken.Value;
 
 			//			// get user data from the loginToken
 			//			// SECURITY - verify against the database for every request
-			//			int userId = coreService.GetUserId(claimCurrLoginToken.Value);
+			//			int userId = coreService.GetUserId(loginToken);
 
 			//			if (userId > 0)
 			//			{

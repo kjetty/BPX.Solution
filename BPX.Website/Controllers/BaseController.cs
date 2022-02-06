@@ -49,16 +49,16 @@ namespace BPX.Website.Controllers
 			{
 				if (ctx.HttpContext.User != null)
 			    {
-					var claimCurrLoginToken = ctx.HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("currLoginToken"));
+					var currLoginToken = ctx.HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("BPXLoginToken"));
 
-					if (claimCurrLoginToken != null)
+					if (currLoginToken != null)
 					{						
 						// get current loginToken value
-						string loginToken = claimCurrLoginToken.Value;
+						string loginToken = currLoginToken.Value;
 
 						// get user data from the loginToken
 						// SECURITY SECURITY SECURITY :: always verify against the database on every request
-						int userId = coreService.GetUserId(claimCurrLoginToken.Value);
+						int userId = coreService.GetUserId(loginToken);
 
 						if (userId > 0)
 						{

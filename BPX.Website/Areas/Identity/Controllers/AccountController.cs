@@ -126,7 +126,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 			//var claims = new List<Claim>
 			//{
 			//    //new Claim("LoginId", login.LoginId != null ? login.LoginId : "InvalidLoginId"),
-			//    new Claim("currLoginToken", login.LoginToken ?? "Invalid Login Token"),
+			//    new Claim("BPXLoginToken", login.LoginToken ?? "Invalid Login Token"),
 			//    //new Claim("UserId", user.UserId > 0 ? user.UserId.ToString() : "-999"),
 			//    new Claim("FullName", fullName),
 			//    new Claim("LastName", lastName),
@@ -140,7 +140,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 			
 			var claims = new List<Claim>
 			{
-                new Claim("currLoginToken", login.LoginToken ?? "Invalid BPX Login Token"),
+                new Claim("BPXLoginToken", login.LoginToken ?? "Invalid BPX Login Token"),
                 new Claim(ClaimTypes.Name, fullName),
             };
 

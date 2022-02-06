@@ -18,14 +18,14 @@ namespace BPX.Utils
 
     public static class RecordStatus
     {
-        // Variables for the record status
+        // variables for the record status
         public const string Active = "A";
         public const string Inactive = "I";
     }
 
     public static class SortOrder
     {
-        // Variables for the record status
+        // variables for the record status
         public const string Ascending = "asc";
         public const string Descending = "desc";
     }

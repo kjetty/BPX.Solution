@@ -62,12 +62,13 @@ namespace BPX.Website.CustomCode.Authorize
 
 			if (!success)
 			{
-				var claimCurrLoginToken = user.Claims.FirstOrDefault(c => c.Type == "currLoginToken");
+				var currLoginToken = user.Claims.FirstOrDefault(c => c.Type.Equals("BPXLoginToken"));
 
-				if (claimCurrLoginToken != null)
+				if (currLoginToken != null)
 				{
+					string loginToken = currLoginToken.Value;
 					var coreService = (ICoreService)context.HttpContext.RequestServices.GetService(typeof(ICoreService));
-					int userId = coreService.GetUserId(claimCurrLoginToken.Value);
+					int userId = coreService.GetUserId(loginToken);
 
 					if (userId > 0)
 					{	

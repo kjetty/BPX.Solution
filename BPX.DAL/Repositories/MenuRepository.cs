@@ -109,7 +109,7 @@ namespace BPX.DAL.Repository
 
             string cteOrderBy = "hLevel, OrderNumber";
 
-            if (orderBy.Trim().ToUpper().Equals("URL"))
+            if (orderBy.ToUpper().Equals("URL"))
 			{
                 cteOrderBy = "MenuURL";
             }

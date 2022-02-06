@@ -432,9 +432,9 @@ namespace BPX.Website.Areas.Identity.Controllers
             rolePermitService.SaveDBChanges();
 
             // add or activate received permits for the role
-            foreach (var permitID in permitIds)
+            foreach (var permitId in permitIds)
             {
-                var existingRolePermit = rolePermitService.GetRecordsByFilter(c => c.RoleId.Equals(id) && c.PermitId.Equals(permitID)).FirstOrDefault();
+                var existingRolePermit = rolePermitService.GetRecordsByFilter(c => c.RoleId.Equals(id) && c.PermitId.Equals(permitId)).FirstOrDefault();
 
                 if (existingRolePermit != null)
                 {
@@ -449,7 +449,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     RolePermit newRolePermit = new()
                     {
                         RoleId = id,
-                        PermitId = permitID,
+                        PermitId = permitId,
                         StatusFlag = RecordStatus.Active,
                         ModifiedBy = 1,
                         ModifiedDate = DateTime.Now

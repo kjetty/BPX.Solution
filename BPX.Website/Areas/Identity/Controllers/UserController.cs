@@ -136,10 +136,10 @@ namespace BPX.Website.Areas.Identity.Controllers
 				if (recordUser.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
 				{
 					// set core data
-					recordUser.FirstName = collection.FirstName.Trim();
-					recordUser.LastName = collection.LastName.Trim();
-					recordUser.Email = collection.Email.Trim();
-					recordUser.Mobile = collection.Mobile.Trim();
+					recordUser.FirstName = collection.FirstName;
+					recordUser.LastName = collection.LastName;
+					recordUser.Email = collection.Email;
+					recordUser.Mobile = collection.Mobile;
 					// set generic data
 					recordUser.StatusFlag = RecordStatus.Active;
 					recordUser.ModifiedBy = currUserMeta.UserId;

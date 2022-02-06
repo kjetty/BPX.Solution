@@ -90,9 +90,9 @@ namespace BPX.Website.Areas.Identity.Controllers
                 Menu recordMenu = new()
                 {
                     // set core data
-                    MenuName = collection.MenuName.Trim(),
-                    MenuDescription = collection.MenuDescription.Trim(),
-                    MenuURL = collection.MenuURL.Trim(),
+                    MenuName = collection.MenuName,
+                    MenuDescription = collection.MenuDescription,
+                    MenuURL = collection.MenuURL,
                     ParentMenuId = collection.ParentMenuId,
                     OrderNumber = collection.OrderNumber,
                     // set generic data
@@ -180,9 +180,9 @@ namespace BPX.Website.Areas.Identity.Controllers
                 if (recordMenu.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
                 {
                     // set core data
-                    recordMenu.MenuName = collection.MenuName.Trim();
-                    recordMenu.MenuDescription = collection.MenuDescription.Trim();
-                    recordMenu.MenuURL = collection.MenuURL.Trim();
+                    recordMenu.MenuName = collection.MenuName;
+                    recordMenu.MenuDescription = collection.MenuDescription;
+                    recordMenu.MenuURL = collection.MenuURL;
                     recordMenu.ParentMenuId = collection.ParentMenuId;
                     recordMenu.OrderNumber = collection.OrderNumber;
                     // set generic data
@@ -435,9 +435,9 @@ namespace BPX.Website.Areas.Identity.Controllers
 			menuPermitService.SaveDBChanges();
 
 			// add or activate received permits for the menu
-			foreach (var permitID in permitIds)
+			foreach (var permitId in permitIds)
 			{
-				var existingMenuPermit = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.MenuId.Equals(id) && c.PermitId.Equals(permitID)).FirstOrDefault();
+				var existingMenuPermit = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.MenuId.Equals(id) && c.PermitId.Equals(permitId)).FirstOrDefault();
 
 				if (existingMenuPermit != null)
 				{
@@ -452,7 +452,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 					MenuPermit newMenuPermit = new()
 					{
 						MenuId = id,
-						PermitId = permitID,
+						PermitId = permitId,
 						StatusFlag = RecordStatus.Active,
 						ModifiedBy = 1,
 						ModifiedDate = DateTime.Now

@@ -7,7 +7,7 @@ namespace BPX.Domain.ViewModels
     public class UserMiniViewModel
     {
         [Key]
-        [Display(Name = "User ID")]
+        [Display(Name = "User Id")]
         public int UserId { get; set; }
 
         [Required]

@@ -207,15 +207,6 @@ namespace BPX.Website.Areas.Identity.Controllers
                     return View(collection);
                 }
 
-                // trim the collection (only for user registration)
-                collection.LoginId = collection.LoginId.Trim();
-                collection.FirstName = collection.FirstName.Trim();
-                collection.LastName = collection.LastName.Trim();
-                collection.Email = collection.Email.Trim();
-                collection.CellPhone = collection.CellPhone.Trim();
-                collection.Password = collection.Password.Trim();
-                collection.ConfirmPassword = collection.ConfirmPassword.Trim();
-
                 // check if password and confirmPassword match
                 if (!collection.Password.Equals(collection.ConfirmPassword))
                 {
@@ -279,7 +270,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 else
                 {
                     // set alert box
-                    ShowAlertBox(AlertType.Warning, "Login ID is already taken. Please try another name.");
+                    ShowAlertBox(AlertType.Warning, "Login Id is already taken. Please try another name.");
 
                     return View(collection);
                 }

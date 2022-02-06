@@ -6,7 +6,7 @@ namespace BPX.Domain.ViewModels
     public class RoleMiniViewModel
     {
         [Key]
-        [Display(Name = "Role ID")]
+        [Display(Name = "Role Id")]
         public int RoleId { get; set; }
 
         [Required]

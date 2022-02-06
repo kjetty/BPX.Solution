@@ -101,10 +101,10 @@ namespace BPX.Website.Areas.Identity.Controllers
                 Permit recordPermit = new()
                 {
                     // set core data
-                    PermitArea = collection.PermitArea.Trim(),
-                    PermitController = collection.PermitController.Trim(),
-                    PermitName = collection.PermitName.Trim(),
-                    PermitEnum = collection.PermitEnum.Trim(),
+                    PermitArea = collection.PermitArea,
+                    PermitController = collection.PermitController,
+                    PermitName = collection.PermitName,
+                    PermitEnum = collection.PermitEnum,
                     // set generic data
                     StatusFlag = RecordStatus.Active,
                     ModifiedBy = 1,
@@ -185,10 +185,10 @@ namespace BPX.Website.Areas.Identity.Controllers
                 if (recordPermit.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
                 {
                     // set core data
-                    recordPermit.PermitArea = collection.PermitArea.Trim();
-                    recordPermit.PermitController = collection.PermitController.Trim();
-                    recordPermit.PermitName = collection.PermitName.Trim();
-                    recordPermit.PermitEnum = collection.PermitEnum.Trim();
+                    recordPermit.PermitArea = collection.PermitArea;
+                    recordPermit.PermitController = collection.PermitController;
+                    recordPermit.PermitName = collection.PermitName;
+                    recordPermit.PermitEnum = collection.PermitEnum;
                     // set generic data
                     recordPermit.StatusFlag = RecordStatus.Active;
                     recordPermit.ModifiedBy = currUserMeta.UserId;

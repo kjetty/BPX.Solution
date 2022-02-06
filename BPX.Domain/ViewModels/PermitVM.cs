@@ -6,7 +6,7 @@ namespace BPX.Domain.ViewModels
     public class PermitMiniViewModel
     {
         [Key]
-        [Display(Name = "Permit ID")]
+        [Display(Name = "Permit Id")]
         public int PermitId { get; set; }
 
         [Required]

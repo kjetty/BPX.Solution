@@ -1,6 +1,4 @@
-﻿@{
-	ViewData["Title"] = "Generate PermitConstants.cs CSharp file";
-}
+﻿@{ ViewData["Title"] = "Generate PermitConstants.cs CSharp file"; }
 
 <div class="row">
 	<div class="col-md-12">
@@ -14,25 +12,27 @@
 <div class="row">
 	<div class="col-md-12">
 
-		<div class="card bg-light" style="width: 18rem;">
-			<div class="card-body">
-				<h5 class="card-title">Permits Generator</h5>
-				<p class="card-text">
-					This action will generate PermitConstants.cs file. 
-					<p></p>
-					Only a Developer is allowed to generate this file and that too using Localhost in Visual Studio and 
-					the code will need recompilation for release.
-				</p>
-				<form asp-action="Index" method="post">
-					<input type="submit" value="   Generate Permit Constants   " class="btn btn-primary" />
-				</form>
-			</div>
-		</div>
+		<h5>Permits Generator</h5>
+		<p></p>
+		This action will generate PermitConstants.cs file.
+		<p></p>
+		Only a Developer is allowed to generate this file and that too on a Developers machine (localhost) in Visual Studio.
+		<p></p>
+		This process this generate a latest PermitConstants CSharp file at c:\temp 
+		<p></p>
+		This generated file should to be copied to the /CustomCode/Authorize folder and the application recompiled for release.
+		<p></p>
+		<form asp-action="Index" method="post">
+			<input type="submit" value="   Generate Permit Constants   " class="btn btn-primary" />
+		</form>
 
 	</div>
 </div>
 
 <p></p>
+<br />
+<br />
+<br />
 
 <div class="row">
 	<div class="col-md-12">

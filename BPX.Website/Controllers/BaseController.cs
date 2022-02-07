@@ -70,25 +70,17 @@ namespace BPX.Website.Controllers
 
 							if (currUserMeta != null)
 							{
-								// apply loginToken
-								currUserMeta.LoginToken = loginToken;
+								// populate userMeta
+								currUserMeta.LoginToken = loginToken;												// apply loginToken
+								currUserMeta.UserRoleIds = GetUserRoleIds(userId);									// apply userRoleIds
+								currUserMeta.UserPermitIds = GetUserPermitIds(userId, currUserMeta.UserRoleIds);	// apply userPermitIds
 
-								// get and apply userRoleIds
-								currUserMeta.UserRoleIds = GetUserRoleIds(userId);								
+								// get menu and breadcrumb
+								currMenuHierarchy = GetMenuHierarchy(RecordStatus.Active, "URL");
+								currMenuString = GetMenuString(currUserMeta.UserRoleIds, currUserMeta.UserPermitIds, currMenuHierarchy);	// get menuString
+								currBreadcrump = GetBreadCrumb(ctx, currMenuHierarchy);														// get breadcrumb
 
-								// get and apply userPermitIds
-								currUserMeta.UserPermitIds = GetUserPermitIds(userId, currUserMeta.UserRoleIds);
-
-								// get menuHierarchy
-								currMenuHierarchy = GetMenuHierarchy(RecordStatus.Active, "url");
-
-								// get menuString
-								currMenuString = GetMenuString(currUserMeta.UserRoleIds, currUserMeta.UserPermitIds, currMenuHierarchy);
-
-								// get breadcrumb
-								currBreadcrump = GetBreadCrumb(ctx, currMenuHierarchy);
-
-								// populate ViewBag
+								// populate ViewBag with menu and breadcrumb
 								ViewBag.currMenuString = currMenuString;
 								ViewBag.currBreadcrump = currBreadcrump;
 								ViewBag.currUserPermitIds = currUserMeta.UserPermitIds;
@@ -179,7 +171,7 @@ namespace BPX.Website.Controllers
 
 			int menuId = menuHierarchy.Where(c => c.MenuURL.ToUpper().Equals(lookupURL.ToUpper())).Select(c => c.MenuId).SingleOrDefault();
 
-			if (menuId < 0)
+			if (menuId <= 0)
 			{
 				return "<li class=\"breadcrumb-item\">cannot</li><li class=\"breadcrumb-item\">generate</li><li class=\"breadcrumb-item\">breadcrumb</li>";
 			}

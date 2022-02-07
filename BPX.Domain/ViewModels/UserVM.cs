@@ -17,7 +17,7 @@ namespace BPX.Domain.ViewModels
 
         [Required]
         [StringLength(32)]
-        [MinLength(8, ErrorMessage = "Minimum input length is 8 characters")]
+        //[MinLength(8, ErrorMessage = "Minimum input length is 8 characters")]
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
@@ -27,12 +27,9 @@ namespace BPX.Domain.ViewModels
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-		[Display(Name = "Mobile")]
+        [StringLength(16)]
+        [Display(Name = "Mobile")]
 		public string Mobile { get; set; }
-
-		[Display(Name = "User Roles")]
-        //public int[] UserRoleIds { get; set; }
-
 
         public static explicit operator UserMiniViewModel(User dm)
         {
@@ -47,7 +44,6 @@ namespace BPX.Domain.ViewModels
                 LastName = dm.LastName,
                 Email = dm.Email,
                 Mobile = dm.Mobile
-                //UserRoleIds = { }
             };
         }
 
@@ -96,7 +92,6 @@ namespace BPX.Domain.ViewModels
                 LastName = dm.LastName,
                 Email = dm.Email,
                 Mobile = dm.Mobile,
-                //UserRoleIds = { },
                 // set generic data
                 StatusFlag = dm.StatusFlag,
                 ModifiedBy = dm.ModifiedBy,

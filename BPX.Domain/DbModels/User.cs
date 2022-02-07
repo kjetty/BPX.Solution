@@ -26,7 +26,7 @@ namespace BPX.Domain.DbModels
         [StringLength(64)]
         public string Email { get; set; }
 
-        [StringLength(32)]
+        [StringLength(16)]
         public string Mobile { get; set; }
 
         [Required]

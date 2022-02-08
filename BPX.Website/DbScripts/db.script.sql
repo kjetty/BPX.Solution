@@ -85,7 +85,6 @@ CREATE TABLE Users (
 
 CREATE TABLE Logins (
     LoginId                 varchar(32)         NOT NULL,
-    PasswordSalt            varchar(32)         NOT NULL,
     PasswordHash            varchar(128)        NOT NULL,
     UserId                  int                 NOT NULL,
     LoginToken              varchar(128)        NULL,
@@ -237,15 +236,15 @@ insert into Users (FirstName,LastName,Email,Mobile,StatusFlag,ModifiedBy,Modifie
 insert into Users (FirstName,LastName,Email,Mobile,StatusFlag,ModifiedBy,ModifiedDate) VALUES ('fn099','ln099','em099@test.com',NULL,'A','1',GetDate()); 
 
 --logins
-insert into Logins (UserId,LoginId,PasswordSalt,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values (1,'one','one','AQAAAAEAACcQAAAAEJZUbWun++BJlFSiC352oPAgJ9UKJRXkKX4lD3hbjIsMSx6X+4qVUxkCIqTibouCkg==','A',1,getDate()); --test1111
-insert into Logins (UserId,LoginId,PasswordSalt,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values (2,'two','two','AQAAAAEAACcQAAAAEB9JDwdihl7mM0l+TriHpUJ1RMwMBCPEcZyzx0I3jr76qDSCk4BrMXTw04I41QECsA==','A',1,getDate()); --test2222
-insert into Logins (UserId,LoginId,PasswordSalt,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values (3,'three','three','AQAAAAEAACcQAAAAEEWfT9/y2LjqdjMDTjtpL6/atZbp0W35CU16ho4ZPc941tdMwWkQkjKmTG2CLpVNWw==','A',1,getDate()); --test3333
-insert into Logins (UserId,LoginId,PasswordSalt,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values (4,'four','four','AQAAAAEAACcQAAAAEORU4xK4/14Hif4n9GskVGf0sARqO1Imofs0/hF8petfwQvJIatWXHFttl7fu9JMQw==','A',1,getDate());
-insert into Logins (UserId,LoginId,PasswordSalt,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values (5,'five','five','AQAAAAEAACcQAAAAEIqxBmeAMdu7VCHVUHdhWwE2gVFMMwAnj4gluKD3jH/7km5lCH24t0UmvVIV6Xldvg==','A',1,getDate());
-insert into Logins (UserId,LoginId,PasswordSalt,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values (6,'six','six','AQAAAAEAACcQAAAAEE0lGYLrUerJtuTesTovq5x0dYjJbXuHNoWxqc8fplpUatp+ZVGDK5tBO3fdv/KsBQ==','A',1,getDate());
-insert into Logins (UserId,LoginId,PasswordSalt,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values (7,'seven','seven','AQAAAAEAACcQAAAAEGsbNHvJSb009T7pSeRxBrYvOKFrdNhO6eWrMjp6fxw/+eS9Iq7iFKhXW1LubkefEg==','A',1,getDate());
-insert into Logins (UserId,LoginId,PasswordSalt,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values (8,'eight','eight','AQAAAAEAACcQAAAAEEfP/rkD26DdWFjUnEQ/IWyi/6kN8RAZGNcP0n6D+IHgfLX0y37Tm/FrxRX5RaiphQ==','A',1,getDate());
-insert into Logins (UserId,LoginId,PasswordSalt,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values (9,'nine','nine','AQAAAAEAACcQAAAAEO6wAj4iqxtW6XZW7iCdKmKw3eWaT9nlla1BCdzFd4WfzPeJFyxJga8gBGPrFKXiRg==','A',1,getDate());
+insert into Logins (UserId,LoginId,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values (1,'one','AQAAAAEAACcQAAAAEJZUbWun++BJlFSiC352oPAgJ9UKJRXkKX4lD3hbjIsMSx6X+4qVUxkCIqTibouCkg==','A',1,getDate()); --test1111
+insert into Logins (UserId,LoginId,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values (2,'two','AQAAAAEAACcQAAAAEB9JDwdihl7mM0l+TriHpUJ1RMwMBCPEcZyzx0I3jr76qDSCk4BrMXTw04I41QECsA==','A',1,getDate()); --test2222
+insert into Logins (UserId,LoginId,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values (3,'three','AQAAAAEAACcQAAAAEEWfT9/y2LjqdjMDTjtpL6/atZbp0W35CU16ho4ZPc941tdMwWkQkjKmTG2CLpVNWw==','A',1,getDate()); --test3333
+insert into Logins (UserId,LoginId,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values (4,'four','AQAAAAEAACcQAAAAEORU4xK4/14Hif4n9GskVGf0sARqO1Imofs0/hF8petfwQvJIatWXHFttl7fu9JMQw==','A',1,getDate());
+insert into Logins (UserId,LoginId,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values (5,'five','AQAAAAEAACcQAAAAEIqxBmeAMdu7VCHVUHdhWwE2gVFMMwAnj4gluKD3jH/7km5lCH24t0UmvVIV6Xldvg==','A',1,getDate());
+insert into Logins (UserId,LoginId,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values (6,'six','AQAAAAEAACcQAAAAEE0lGYLrUerJtuTesTovq5x0dYjJbXuHNoWxqc8fplpUatp+ZVGDK5tBO3fdv/KsBQ==','A',1,getDate());
+insert into Logins (UserId,LoginId,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values (7,'seven','AQAAAAEAACcQAAAAEGsbNHvJSb009T7pSeRxBrYvOKFrdNhO6eWrMjp6fxw/+eS9Iq7iFKhXW1LubkefEg==','A',1,getDate());
+insert into Logins (UserId,LoginId,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values (8,'eight','AQAAAAEAACcQAAAAEEfP/rkD26DdWFjUnEQ/IWyi/6kN8RAZGNcP0n6D+IHgfLX0y37Tm/FrxRX5RaiphQ==','A',1,getDate());
+insert into Logins (UserId,LoginId,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values (9,'nine','AQAAAAEAACcQAAAAEO6wAj4iqxtW6XZW7iCdKmKw3eWaT9nlla1BCdzFd4WfzPeJFyxJga8gBGPrFKXiRg==','A',1,getDate());
 
 --roles
 insert into Roles (RoleName,RoleDescription,StatusFlag,ModifiedBy,ModifiedDate) values ('Developer','Developer','A',1,getDate());

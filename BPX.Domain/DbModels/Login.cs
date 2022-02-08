@@ -9,10 +9,6 @@ namespace BPX.Domain.DbModels
         public string LoginId { get; set; }
 
         [Required]
-        [StringLength(32)]
-        public string PasswordSalt { get; set; }
-
-        [Required]
         [StringLength(128)]
         public string PasswordHash { get; set; }
 

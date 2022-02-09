@@ -33,7 +33,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
         // GET: /Identity/Account/Login
         [AllowAnonymous]
-        public ActionResult Login(string returnUrl)
+        public IActionResult Login(string returnUrl)
         {
             ViewBag.returnUrl = returnUrl;
 
@@ -44,7 +44,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(BPXLoginViewModel model)
+        public IActionResult Login(BPXLoginViewModel model)
         {
 
             var login = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.LoginId.ToUpper().Equals(model.LoginId.ToUpper())).FirstOrDefault();
@@ -175,14 +175,14 @@ namespace BPX.Website.Areas.Identity.Controllers
 
         // GET: /Identity/Account/Denied
         [AllowAnonymous]
-        public ActionResult Denied()
+        public IActionResult Denied()
         {
             return View();
         }
 
         // GET: /Identity/Account/Register
         [AllowAnonymous]
-        public ActionResult Register()
+        public IActionResult Register()
         {
             return View();
         }
@@ -191,7 +191,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Register(RegisterViewModel collection)
+        public IActionResult Register(RegisterViewModel collection)
         {
             try
             {
@@ -293,7 +293,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         // GET: /Identity/Account/ChangePassword
         [AllowAnonymous]
         //[Permit(Permits.Identity.Login.ChangePassword)]
-        public ActionResult ChangePassword()
+        public IActionResult ChangePassword()
         {
             ChangePasswordViewModel model = new();
 
@@ -305,7 +305,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         //[Permit(Permits.Identity.Login.ChangePassword)]
-        public ActionResult ChangePassword(ChangePasswordViewModel collection)
+        public IActionResult ChangePassword(ChangePasswordViewModel collection)
         {
             try
             {
@@ -383,7 +383,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         }
 
         // POST: /Identity/Account/LogOff
-        public ActionResult LogOff()
+        public IActionResult LogOff()
         {
             if (currUserMeta.UserId > 0)
             {

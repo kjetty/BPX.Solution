@@ -40,14 +40,14 @@ namespace BPX.Website.Areas.Identity.Controllers
 
         // GET: /Identity/Permit
         [Permit(Permits.Identity.Permit.List)]
-        public ActionResult Index()
+        public IActionResult Index()
         {
             return RedirectToAction("List");
         }
 
         // Get: /Identity/Permit/List
         [Permit(Permits.Identity.Permit.List)]
-        public ActionResult List(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
+        public IActionResult List(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
         {
             // check input and set defaults
             pageNumber = (pageNumber <= 0) ? 1 : pageNumber;
@@ -73,7 +73,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
         // GET: /Identity/Permit/Create
         [Permit(Permits.Identity.Permit.Create)]
-        public ActionResult Create()
+        public IActionResult Create()
         {
             return View();
         }
@@ -82,7 +82,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Permit(Permits.Identity.Permit.Create)]
-        public ActionResult Create(PermitMiniViewModel collection)
+        public IActionResult Create(PermitMiniViewModel collection)
         {
             try
             {
@@ -139,7 +139,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
         // GET: /Identity/Permit/Read/5
         [Permit(Permits.Identity.Permit.Read)]
-        public ActionResult Read(int id)
+        public IActionResult Read(int id)
         {
             var model = (PermitViewModel)permitService.GetRecordById(id);
             var modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
@@ -152,7 +152,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
         // GET: /Identity/Permit/Update/5
         [Permit(Permits.Identity.Permit.Update)]
-        public ActionResult Update(int id)
+        public IActionResult Update(int id)
         {
             var model = (PermitMiniViewModel)permitService.GetRecordById(id);
 
@@ -163,7 +163,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Permit(Permits.Identity.Permit.Update)]
-        public ActionResult Update(int id, PermitMiniViewModel collection)
+        public IActionResult Update(int id, PermitMiniViewModel collection)
         {
             try
             {
@@ -226,7 +226,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
         // GET: /Identity/Permit/Delete/5
         [Permit(Permits.Identity.Permit.Delete)]
-        public ActionResult Delete(int id)
+        public IActionResult Delete(int id)
         {
             var model = (PermitViewModel)permitService.GetRecordById(id);
             var modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
@@ -241,7 +241,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Permit(Permits.Identity.Permit.Delete)]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public IActionResult Delete(int id, IFormCollection collection)
         {
             try
             {
@@ -299,7 +299,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
         // GET + POST: /Identity/Permit/ListDeleted
         [Permit(Permits.Identity.Permit.ListDeleted)]
-        public ActionResult ListDeleted(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
+        public IActionResult ListDeleted(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
         {
             // check input and set defaults
             pageNumber = (pageNumber <= 0) ? 1 : pageNumber;
@@ -325,7 +325,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
         // GET: /Identity/Permit/Undelete/5
         [Permit(Permits.Identity.Permit.Undelete)]
-        public ActionResult Undelete(int id)
+        public IActionResult Undelete(int id)
         {
             var model = (PermitViewModel)permitService.GetRecordById(id);
             var modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
@@ -340,7 +340,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Permit(Permits.Identity.Permit.Undelete)]
-        public ActionResult Undelete(int id, IFormCollection collection)
+        public IActionResult Undelete(int id, IFormCollection collection)
         {
             try
             {
@@ -398,7 +398,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
         // GET: /Identity/Permit/RolesAndMenus/5
         [Permit(Permits.Identity.Permit.Read)]
-        public ActionResult PermitRolesMenus(int id)
+        public IActionResult PermitRolesMenus(int id)
         {
             if (id <= 0)
             {

@@ -22,7 +22,7 @@ namespace BPX.Website.Areas.Admin.Controllers
 		// GET or POST: /ErrorLogs
 		// GET or POST: /ErrorLogs/Index
 		[Permit(Permits.Admin.ErrorLogs.Index)]
-		public ActionResult Index(string logDateString, string logAction)
+		public IActionResult Index(string logDateString, string logAction)
 		{
 			DateTime logDate = DateTime.Now;
 
@@ -63,7 +63,7 @@ namespace BPX.Website.Areas.Admin.Controllers
 		// POST: /ErrorLogs/DownloadLog
 		[HttpPost]
 		[Permit(Permits.Admin.ErrorLogs.DownloadLog)]
-		public ActionResult DownloadLog(string logDateString, string logAction)
+		public IActionResult DownloadLog(string logDateString, string logAction)
 		{
 			string pathErrorLogs = coreService.GetConfiguration().GetSection("AppSettings").GetSection("PathErrorLogs").Value;
 			string logFile = pathErrorLogs + "\\BPXErrorlog-" + logDateString + ".log";

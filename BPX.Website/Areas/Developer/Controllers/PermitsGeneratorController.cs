@@ -16,17 +16,21 @@ namespace BPX.Website.Areas.Developer.Controllers
 	{
         private readonly IPermitService permitService;
         private readonly IRoleService roleService;
+        private string pathPermitConstants;
 
         public PermitsGeneratorController(ILogger<PermitsGeneratorController> logger, ICoreService coreService, IPermitService permitService, IRoleService roleService) : base(logger, coreService)
 		{
             this.permitService = permitService;
             this.roleService = roleService;
+            this.pathPermitConstants = coreService.GetConfiguration().GetSection("AppSettings").GetSection("PathPermitConstants").Value;
         }
 
         [HttpGet]
         [Permit(Permits.Developer.PermitsGenerator.Index)]
         public IActionResult Index()
         {
+            ViewBag.pathPermitConstants = pathPermitConstants;
+
             return View();
         }
 
@@ -35,16 +39,16 @@ namespace BPX.Website.Areas.Developer.Controllers
         public IActionResult Index(int id)
         {
 			GeneratePermitConstants();
-
-			// set alert
-			ShowAlertBox(AlertType.Success, "PermitConstans.cs  is successfully generated at c:\\temp");
+           
+            // set alert
+            ShowAlertBox(AlertType.Success, "PermitConstans.cs  is successfully generated at " + pathPermitConstants);
 
 			return View();
         }
 
         private void GeneratePermitConstants()
         {
-            string path = "c:\\temp";
+            string path = pathPermitConstants;
             string fileName = "PermitConstants.cs";
             string tempString = string.Empty;
 
@@ -87,7 +91,6 @@ namespace BPX.Website.Areas.Developer.Controllers
 
             WriteToFile(path, fileName, tempString);
 
-            //ShowAlertBox(AlertType.Success, "PermitConstans.cs  is successfully generated at C:\\temp");
         }
 
         private static void WriteToFile(string path, string fileName, string fileData)

@@ -67,7 +67,7 @@ namespace BPX.Website.CustomCode.Authorize
 					success = true;
 				}
 
-				if (permitId > 0 && !success)
+				if (permitId > 0)
 				{
 					var currLoginToken = user.Claims.FirstOrDefault(c => c.Type.Equals("BPXLoginToken"));
 

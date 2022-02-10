@@ -45,33 +45,33 @@ namespace BPX.Website.Controllers
 			{
 				if (ctx.HttpContext.User != null)
 			    {
-					var currLoginToken = ctx.HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("BPXLoginToken"));
+					var currLoginTokenClaim = ctx.HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("BPXLoginToken"));
 
-					if (currLoginToken != null)
+					if (currLoginTokenClaim != null)
 					{						
 						// get current loginToken value
-						string loginToken = currLoginToken.Value;
+						string currLoginToken = currLoginTokenClaim.Value;
 
 						// get user data from the loginToken
 						// SECURITY SECURITY SECURITY :: always verify against the database on every request
-						int userId = coreService.GetUserId(loginToken);
+						int currUserId = coreService.GetUserId(currLoginToken);
 
-						if (userId > 0)
+						if (currUserId > 0)
 						{
 							//var watch = new System.Diagnostics.Stopwatch();
 							//watch.Start();
 
 							// get userMeta
-							currUserMeta = GetUserMeta(userId);
+							currUserMeta = GetUserMeta(currUserId);
 
 							if (currUserMeta != null)
 							{
 								// get userRoles, userPermits, menu, breadcrumb data
-								var currUserRoleIds = GetUserRoleIds(userId);												// get userRoleIds
-								var currUserPermitIds = GetUserPermitIds(userId, currUserRoleIds);							// get userPermitIds
-								var currMenuHierarchy = GetMenuHierarchy(RecordStatus.Active, "URL");						// get menuHierarchy :: full menu
-								var currMenuString = GetMenuString(currUserRoleIds, currUserPermitIds, currMenuHierarchy);	// get menuString
-								var currBreadcrump = GetBreadCrumb(ctx, currMenuHierarchy);                                 // get breadcrumb
+								var currUserRoleIds = GetUserRoleIds(currUserId);											// userRoleIds
+								var currUserPermitIds = GetUserPermitIds(currUserId, currUserRoleIds);						// userPermitIds
+								var currMenuHierarchy = GetMenuHierarchy(RecordStatus.Active, "URL");						// menuHierarchy
+								var currMenuString = GetMenuString(currUserRoleIds, currUserPermitIds, currMenuHierarchy);	// menuString
+								var currBreadcrump = GetBreadCrumb(ctx, currMenuHierarchy);                                 // breadcrumb
 
 								// populate ViewBag with userMeta, userRoles, userPermits, menu, breadcrumb data
 								ViewBag.currUserMeta = currUserMeta;

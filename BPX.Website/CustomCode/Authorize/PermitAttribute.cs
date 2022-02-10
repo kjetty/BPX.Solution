@@ -69,32 +69,34 @@ namespace BPX.Website.CustomCode.Authorize
 
 				if (permitId > 0)
 				{
-					var currLoginToken = user.Claims.FirstOrDefault(c => c.Type.Equals("BPXLoginToken"));
+					var currLoginTokenClaim = user.Claims.FirstOrDefault(c => c.Type.Equals("BPXLoginToken"));
 
-					if (currLoginToken != null)
+					if (currLoginTokenClaim != null)
 					{
-						string loginToken = currLoginToken.Value;
 						var coreService = (ICoreService)context.HttpContext.RequestServices.GetService(typeof(ICoreService));
-						int userId = coreService.GetUserId(loginToken);
 
-						if (userId > 0)
+						// get loginToken and associated userId
+						string currLoginToken = currLoginTokenClaim.Value;
+						int currUserId = coreService.GetUserId(currLoginToken);
+
+						if (currUserId > 0)
 						{
 							string cacheKeyName = string.Empty;
 							var cacheService = coreService.GetCacheService();
 							var cacheKeyService = coreService.GetCacheKeyService();
 
 							// userRoleIds
-							cacheKeyName = $"user:{userId}:roles";
+							cacheKeyName = $"user:{currUserId}:roles";
 							var userRoleIds = cacheService.GetCache<List<int>>(cacheKeyName);
 
 							if (userRoleIds == null)
 							{
-								userRoleIds = coreService.GetUserRoleIds(userId);
+								userRoleIds = coreService.GetUserRoleIds(currUserId);
 								cacheService.SetCache(userRoleIds, cacheKeyName, cacheKeyService);
 							}
 
 							// userPermitIds
-							cacheKeyName = $"user:{userId}:permits";
+							cacheKeyName = $"user:{currUserId}:permits";
 							List<int> userPermitIds = cacheService.GetCache<List<int>>(cacheKeyName);
 
 							if (userPermitIds == null)

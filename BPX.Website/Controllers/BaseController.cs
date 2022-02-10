@@ -23,9 +23,6 @@ namespace BPX.Website.Controllers
 		protected readonly ICoreService coreService;
 		protected int bpxPageSize;
 		protected UserMeta currUserMeta;
-		protected List<Menu> currMenuHierarchy;
-		protected string currBreadcrump;
-		protected string currMenuString;
 		// private vars
 		private ICacheService cacheService;
 		private ICacheKeyService cacheKeyService;
@@ -36,7 +33,6 @@ namespace BPX.Website.Controllers
 			this.coreService = coreService;
 			this.bpxPageSize = Convert.ToInt32(coreService.GetConfiguration().GetSection("AppSettings").GetSection("PageSize").Value);
 			this.currUserMeta = new UserMeta();
-			this.currMenuString = string.Empty;
 			this.cacheService = coreService.GetCacheService();
 			this.cacheKeyService = coreService.GetCacheKeyService();
 		}
@@ -70,21 +66,20 @@ namespace BPX.Website.Controllers
 
 							if (currUserMeta != null)
 							{
-								// populate userMeta
-								currUserMeta.LoginToken = loginToken;												// apply loginToken
-								currUserMeta.UserRoleIds = GetUserRoleIds(userId);									// apply userRoleIds
-								currUserMeta.UserPermitIds = GetUserPermitIds(userId, currUserMeta.UserRoleIds);	// apply userPermitIds
+								// get userRoles, userPermits, menu, breadcrumb data
+								var currUserRoleIds = GetUserRoleIds(userId);												// get userRoleIds
+								var currUserPermitIds = GetUserPermitIds(userId, currUserRoleIds);							// get userPermitIds
+								var currMenuHierarchy = GetMenuHierarchy(RecordStatus.Active, "URL");						// get menuHierarchy :: full menu
+								var currMenuString = GetMenuString(currUserRoleIds, currUserPermitIds, currMenuHierarchy);	// get menuString
+								var currBreadcrump = GetBreadCrumb(ctx, currMenuHierarchy);                                 // get breadcrumb
 
-								// get menu and breadcrumb
-								currMenuHierarchy = GetMenuHierarchy(RecordStatus.Active, "URL");
-								currMenuString = GetMenuString(currUserMeta.UserRoleIds, currUserMeta.UserPermitIds, currMenuHierarchy);	// get menuString
-								currBreadcrump = GetBreadCrumb(ctx, currMenuHierarchy);														// get breadcrumb
-
-								// populate ViewBag with menu and breadcrumb
+								// populate ViewBag with userMeta, userRoles, userPermits, menu, breadcrumb data
+								ViewBag.currUserMeta = currUserMeta;
+								ViewBag.currUserRoleIds = currUserRoleIds;
+								ViewBag.currUserPermitIds = currUserPermitIds;
 								ViewBag.currMenuString = currMenuString;
 								ViewBag.currBreadcrump = currBreadcrump;
-								ViewBag.currUserPermitIds = currUserMeta.UserPermitIds;
-
+								
 								////// Developer Override for Permits - BaseController (Part A) + PermitAttribute (PartB)
 								////// OverrideOverrideOverride 
 								////// use for testing only
@@ -101,12 +96,13 @@ namespace BPX.Website.Controllers
 								//	ViewBag.currUserPermitIds = currUserMeta.UserPermitIds;
 								//}
 								////// END
-
-								//watch.Stop();
-								//double elapsedTime = (double)watch.ElapsedTicks / (double)Stopwatch.Frequency;
-								//string executionTime = (elapsedTime * 1000000).ToString("F2") + " microseconds";
-								//ShowAlertBox(AlertType.Info, $"Execution Time: {executionTime}");
 							}
+
+							//watch.Stop();
+							//string executionTime = "[milli: " + watch.ElapsedMilliseconds.ToString() + " ms]  .......... ";
+							//double elapsedTime = (double)watch.ElapsedTicks / (double)Stopwatch.Frequency;
+							//executionTime += "[micro: " + (elapsedTime * 1000000).ToString("F2") + " us]";	
+							//ShowAlertBox(AlertType.Info, $"Execution Time: .......... {executionTime}");
 						}
 					}
 				}
@@ -185,10 +181,7 @@ namespace BPX.Website.Controllers
 				cacheService.SetCache(breadcrumb, cacheKeyName, cacheKeyService);
 			}
 
-			//if (!currAction.ToUpper().Equals("INDEX"))
-			{
-				breadcrumb += $"<li class=\"breadcrumb-item active\">{currAction}</li>";
-			}
+			breadcrumb += $"<li class=\"breadcrumb-item active\">{currAction}</li>";
 
 			return breadcrumb;
 		}

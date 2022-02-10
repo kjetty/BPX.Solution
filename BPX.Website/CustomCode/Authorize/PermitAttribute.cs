@@ -90,21 +90,21 @@ namespace BPX.Website.CustomCode.Authorize
 							if (userRoleIds == null)
 							{
 								userRoleIds = coreService.GetUserRoleIds(userId);
-								coreService.GetCacheService().SetCache(userRoleIds, cacheKeyName, cacheKeyService);
+								cacheService.SetCache(userRoleIds, cacheKeyName, cacheKeyService);
 							}
 
-							// permitRoleIds
-							cacheKeyName = $"permit:{permitId}:roles";
-							var permitRoleIds = cacheService.GetCache<List<int>>(cacheKeyName);
+							// userPermitIds
+							cacheKeyName = $"user:{userId}:permits";
+							List<int> userPermitIds = cacheService.GetCache<List<int>>(cacheKeyName);
 
-							if (permitRoleIds == null)
+							if (userPermitIds == null)
 							{
-								permitRoleIds = coreService.GetPermitRoles(permitId);
-								coreService.GetCacheService().SetCache(permitRoleIds, cacheKeyName, cacheKeyService);
+								userPermitIds = coreService.GetUserPermitIds(userRoleIds);
+								cacheService.SetCache(userPermitIds, cacheKeyName, cacheKeyService);
 							}
 
-							// intersect to check for any matching ROLES
-							if (permitRoleIds.Any(x => userRoleIds.Any(y => y == x)))
+							// check if user has the permit
+							if (userPermitIds.Contains(permitId))
 							{
 								success = true;
 							}

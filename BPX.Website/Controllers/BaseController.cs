@@ -185,7 +185,7 @@ namespace BPX.Website.Controllers
 				cacheService.SetCache(breadcrumb, cacheKeyName, cacheKeyService);
 			}
 
-			if (!currAction.ToUpper().Equals("INDEX"))
+			//if (!currAction.ToUpper().Equals("INDEX"))
 			{
 				breadcrumb += $"<li class=\"breadcrumb-item active\">{currAction}</li>";
 			}

@@ -28,16 +28,14 @@ namespace BPX.Website.CustomCode.Authorize
 			var user = context.HttpContext.User;
 			var host = context.HttpContext.Request.Host.ToString().ToLower().Trim();
 
-			if (user != null && user.Identity.IsAuthenticated)
+			if (user == null)
 			{
-				// any logged in user is allowed to access the resource
-				// for [Permit] attribute without the permit parameter
-				if (permitId.Equals(0))
-				{
-					success = true;
-				}
+				// redirect to forbidden page
+				context.Result = new ForbidResult();
+				return;
 			}
-			else
+
+			if (!user.Identity.IsAuthenticated)
 			{
 				// redirect to forbidden page
 				context.Result = new ForbidResult();
@@ -60,46 +58,56 @@ namespace BPX.Website.CustomCode.Authorize
 			//}
 			////// END
 
-			if (!success)
+			if (user.Identity.IsAuthenticated)
 			{
-				var currLoginToken = user.Claims.FirstOrDefault(c => c.Type.Equals("BPXLoginToken"));
-
-				if (currLoginToken != null)
+				if (permitId.Equals(0))
 				{
-					string loginToken = currLoginToken.Value;
-					var coreService = (ICoreService)context.HttpContext.RequestServices.GetService(typeof(ICoreService));
-					int userId = coreService.GetUserId(loginToken);
+					// to handle [Permit] attribute without the permit parameter
+					// any logged in user is allowed to access the resource
+					success = true;
+				}
 
-					if (userId > 0)
-					{	
-						string cacheKeyName = string.Empty;
-						var cacheService = coreService.GetCacheService();
-						var cacheKeyService = coreService.GetCacheKeyService();
+				if (permitId > 0 && !success)
+				{
+					var currLoginToken = user.Claims.FirstOrDefault(c => c.Type.Equals("BPXLoginToken"));
 
-						// userRoleIds
-						cacheKeyName = $"user:{userId}:roles";
-						var userRoleIds = cacheService.GetCache<List<int>>(cacheKeyName);
+					if (currLoginToken != null)
+					{
+						string loginToken = currLoginToken.Value;
+						var coreService = (ICoreService)context.HttpContext.RequestServices.GetService(typeof(ICoreService));
+						int userId = coreService.GetUserId(loginToken);
 
-						if (userRoleIds == null)
+						if (userId > 0)
 						{
-							userRoleIds = coreService.GetUserRoleIds(userId);
-							coreService.GetCacheService().SetCache(userRoleIds, cacheKeyName, cacheKeyService);
-						}
+							string cacheKeyName = string.Empty;
+							var cacheService = coreService.GetCacheService();
+							var cacheKeyService = coreService.GetCacheKeyService();
 
-						// permitRoleIds
-						cacheKeyName = $"permit:{permitId}:roles";
-						var permitRoleIds = cacheService.GetCache<List<int>>(cacheKeyName);
+							// userRoleIds
+							cacheKeyName = $"user:{userId}:roles";
+							var userRoleIds = cacheService.GetCache<List<int>>(cacheKeyName);
 
-						if (permitRoleIds == null)
-						{
-							permitRoleIds = coreService.GetPermitRoles(permitId);
-							coreService.GetCacheService().SetCache(permitRoleIds, cacheKeyName, cacheKeyService);
-						}
+							if (userRoleIds == null)
+							{
+								userRoleIds = coreService.GetUserRoleIds(userId);
+								coreService.GetCacheService().SetCache(userRoleIds, cacheKeyName, cacheKeyService);
+							}
 
-						// intersect to check for any matching ROLES
-						if (permitRoleIds.Any(x => userRoleIds.Any(y => y == x)))
-						{
-							success = true;
+							// permitRoleIds
+							cacheKeyName = $"permit:{permitId}:roles";
+							var permitRoleIds = cacheService.GetCache<List<int>>(cacheKeyName);
+
+							if (permitRoleIds == null)
+							{
+								permitRoleIds = coreService.GetPermitRoles(permitId);
+								coreService.GetCacheService().SetCache(permitRoleIds, cacheKeyName, cacheKeyService);
+							}
+
+							// intersect to check for any matching ROLES
+							if (permitRoleIds.Any(x => userRoleIds.Any(y => y == x)))
+							{
+								success = true;
+							}
 						}
 					}
 				}

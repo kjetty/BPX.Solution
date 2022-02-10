@@ -122,21 +122,6 @@ namespace BPX.Website.Areas.Identity.Controllers
             string lastName = user.LastName ?? string.Empty;
 			string firstName = user.FirstName ?? string.Empty;
 			string fullName = firstName + " " + lastName;
-
-			//var claims = new List<Claim>
-			//{
-			//    //new Claim("LoginId", login.LoginId != null ? login.LoginId : "InvalidLoginId"),
-			//    new Claim("BPXLoginToken", login.LoginToken ?? "Invalid Login Token"),
-			//    //new Claim("UserId", user.UserId > 0 ? user.UserId.ToString() : "-999"),
-			//    new Claim("FullName", fullName),
-			//    new Claim("LastName", lastName),
-			//    new Claim("FirstName", firstName),
-			//    new Claim("Email", user.Email ?? string.Empty),
-			//    new Claim("Mobile", user.Mobile ?? string.Empty),
-			//    new Claim(ClaimTypes.Name, fullName),
-			//    new Claim(ClaimTypes.Email, user.Email ?? string.Empty),
-			//    //new Claim(ClaimTypes.Sid, login.LoginId ?? "InvalidLoginId")
-			//};
 			
 			var claims = new List<Claim>
 			{
@@ -144,10 +129,10 @@ namespace BPX.Website.Areas.Identity.Controllers
                 new Claim(ClaimTypes.Name, fullName),
             };
 
-			foreach (var userRoleId in userRolesIds)
-			{
-				claims.Add(new Claim(ClaimTypes.Role, userRoleId.ToString()));
-			}
+			//foreach (var userRoleId in userRolesIds)
+			//{
+			//	claims.Add(new Claim(ClaimTypes.Role, userRoleId.ToString()));
+			//}
 
 			var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 

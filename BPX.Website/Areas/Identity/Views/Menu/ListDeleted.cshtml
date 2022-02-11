@@ -67,7 +67,7 @@
 							@Html.DisplayFor(modelItem => item.TreePath)
 						</td>
 						<td style="padding-left: 1em; padding-right:1em;">
-							@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.User.Undelete))
+							@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.Undelete))
 							{
 								<a asp-action="Undelete" asp-route-id="@item.MenuId" title="restore" class="bi-plug" style="text-decoration: none; color: darkslategray;"></a>
 							}

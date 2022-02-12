@@ -57,8 +57,8 @@ namespace BPX.Website.Controllers
 
 						if (currUserId > 0)
 						{
-							var watch = new System.Diagnostics.Stopwatch();
-							watch.Start();
+							//var watch = new System.Diagnostics.Stopwatch();
+							//watch.Start();
 
 							// get userMeta
 							currUserMeta = GetUserMeta(currUserId);
@@ -105,11 +105,11 @@ namespace BPX.Website.Controllers
 								}
 							}
 
-							watch.Stop();
-							string executionTime = "[milli: " + watch.ElapsedMilliseconds.ToString() + " ms]  .......... ";
-							double elapsedTime = (double)watch.ElapsedTicks / (double)Stopwatch.Frequency;
-							executionTime += "[micro: " + (elapsedTime * 1000000).ToString("F2") + " us]";
-							ShowAlertBox(AlertType.Info, $"Execution Time: .......... {executionTime}");
+							//watch.Stop();
+							//string executionTime = "[milli: " + watch.ElapsedMilliseconds.ToString() + " ms]  .......... ";
+							//double elapsedTime = (double)watch.ElapsedTicks / (double)Stopwatch.Frequency;
+							//executionTime += "[micro: " + (elapsedTime * 1000000).ToString("F2") + " us]";
+							//ShowAlertBox(AlertType.Info, $"Execution Time: .......... {executionTime}");
 						}
 					}
 				}

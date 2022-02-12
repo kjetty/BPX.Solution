@@ -81,34 +81,45 @@ namespace BPX.Website.CustomCode.Authorize
 
 						if (currUserId > 0)
 						{
-							string cacheKeyName = string.Empty;
-							var cacheService = coreService.GetCacheService();
-							var cacheKeyService = coreService.GetCacheKeyService();
+							var currUserMeta = coreService.GetUserMeta(currUserId);
 
-							// userRoleIds
-							cacheKeyName = $"user:{currUserId}:roles";
-							var userRoleIds = cacheService.GetCache<List<int>>(cacheKeyName);
-
-							if (userRoleIds == null)
+							if (currUserMeta != null)
 							{
-								userRoleIds = coreService.GetUserRoleIds(currUserId);
-								cacheService.SetCache(userRoleIds, cacheKeyName, cacheKeyService);
-							}
+								// reconstruct nekotNigol
+								string nekotNigol = new string(currLoginToken.ToCharArray().Reverse().ToArray()) + ":" + currUserId;
 
-							// userPermitIds
-							cacheKeyName = $"user:{currUserId}:permits";
-							List<int> userPermitIds = cacheService.GetCache<List<int>>(cacheKeyName);
+								if (currUserMeta.NekotNigol.Equals(nekotNigol))
+								{
+									string cacheKeyName = string.Empty;
+									var cacheService = coreService.GetCacheService();
+									var cacheKeyService = coreService.GetCacheKeyService();
 
-							if (userPermitIds == null)
-							{
-								userPermitIds = coreService.GetUserPermitIds(userRoleIds);
-								cacheService.SetCache(userPermitIds, cacheKeyName, cacheKeyService);
-							}
+									// userRoleIds
+									cacheKeyName = $"user:{currUserId}:roles";
+									var userRoleIds = cacheService.GetCache<List<int>>(cacheKeyName);
 
-							// check if user has the permit
-							if (userPermitIds.Contains(permitId))
-							{
-								success = true;
+									if (userRoleIds == null)
+									{
+										userRoleIds = coreService.GetUserRoleIds(currUserId);
+										cacheService.SetCache(userRoleIds, cacheKeyName, cacheKeyService);
+									}
+
+									// userPermitIds
+									cacheKeyName = $"user:{currUserId}:permits";
+									List<int> userPermitIds = cacheService.GetCache<List<int>>(cacheKeyName);
+
+									if (userPermitIds == null)
+									{
+										userPermitIds = coreService.GetUserPermitIds(userRoleIds);
+										cacheService.SetCache(userPermitIds, cacheKeyName, cacheKeyService);
+									}
+
+									// check if user has the permit
+									if (userPermitIds.Contains(permitId))
+									{
+										success = true;
+									}
+								}
 							}
 						}
 					}

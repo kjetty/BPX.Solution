@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Transactions;
 
 namespace BPX.Website.Areas.Identity.Controllers
 {
@@ -54,7 +55,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             {
                 // set alert
                 ShowAlertBox(AlertType.Warning, "Login failed. Please try again. ");
-
+                
                 return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
 
@@ -62,7 +63,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             {
                 // set alert
                 ShowAlertBox(AlertType.Warning, "Login failed. Try again.");
-
+                
                 return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
 
@@ -80,7 +81,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 string errorMessage = GetInnerExceptionMessage(ex);
 
                 // log
-                logger.Log(LogLevel.Error, ex, "AccountController.082");
+                logger.Log(LogLevel.Error, ex, "AccountController.082" + errorMessage);
             }
 
             ////// Developer Override for Password
@@ -101,23 +102,40 @@ namespace BPX.Website.Areas.Identity.Controllers
             {
                 // set alert
                 ShowAlertBox(AlertType.Warning, "Login failed. Try again.");
-
                 return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
 
+            // get user
+            var user = userService.GetRecordById(login.UserId);
+
+            if (user.UserId <= 0)
+			{
+                ShowAlertBox(AlertType.Warning, "Login failed. Try again.");
+                return RedirectToAction("Login", "Account", new { area = "Identity" });
+            }
+
+            string loginToken = Guid.NewGuid().ToString();
+            string nekotNigol = new string(loginToken.ToCharArray().Reverse().ToArray()) + ":" + user.UserId;
+
             // generate new LoginToken on every login
-            login.LoginToken = Guid.NewGuid().ToString();
+            login.LoginToken = loginToken;
             login.LastLoginDate = DateTime.Now;
-            // set generic data
-            //login.ModifiedBy = 1; //TODO ??? think
+            login.ModifiedBy = 1; 
             login.ModifiedDate = DateTime.Now;
 
             // save changes
-            loginService.SaveDBChanges();
+            user.NekotNigol = nekotNigol;
 
-            // get user and userRoles
-            var user = userService.GetRecordById(login.UserId);
-            var userRolesIds = userRoleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.UserId.Equals(login.UserId)).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
+            using (TransactionScope scope = new TransactionScope())
+			{
+                loginService.UpdateRecord(login);
+                loginService.SaveDBChanges();
+
+                userService.UpdateRecord(user);
+                userService.SaveDBChanges();
+
+                scope.Complete();
+            }
 
             string lastName = user.LastName ?? string.Empty;
 			string firstName = user.FirstName ?? string.Empty;
@@ -129,12 +147,13 @@ namespace BPX.Website.Areas.Identity.Controllers
                 new Claim(ClaimTypes.Name, fullName),
             };
 
-			//foreach (var userRoleId in userRolesIds)
-			//{
-			//	claims.Add(new Claim(ClaimTypes.Role, userRoleId.ToString()));
-			//}
+            //var userRolesIds = userRoleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.UserId.Equals(login.UserId)).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
+            //foreach (var userRoleId in userRolesIds)
+            //{
+            //	claims.Add(new Claim(ClaimTypes.Role, userRoleId.ToString()));
+            //}
 
-			var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
             var authProperties = new AuthenticationProperties
             {
@@ -216,6 +235,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                         LastName = collection.FirstName,
                         Email = collection.FirstName,
                         Mobile = collection.FirstName,
+                        NekotNigol = Guid.NewGuid().ToString(),
                         // set generic data
                         StatusFlag = RecordStatus.Active,
                         ModifiedBy = 1,

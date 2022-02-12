@@ -1,9 +1,7 @@
 ﻿using BPX.Domain.CustomModels;
 using BPX.Domain.DbModels;
-using BPX.Domain.ViewModels;
 using BPX.Service;
 using BPX.Utils;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -11,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace BPX.Website.Controllers
@@ -66,42 +63,47 @@ namespace BPX.Website.Controllers
 
 							if (currUserMeta != null)
 							{
-								// get userRoles, userPermits, menu, breadcrumb data
-								var currUserRoleIds = GetUserRoleIds(currUserId);											// userRoleIds
-								var currUserPermitIds = GetUserPermitIds(currUserId, currUserRoleIds);						// userPermitIds
-								var currMenuHierarchy = GetMenuHierarchy(RecordStatus.Active, "URL");						// menuHierarchy
-								var currMenuString = GetMenuString(currUserRoleIds, currUserPermitIds, currMenuHierarchy);	// menuString
-								var currBreadcrump = GetBreadCrumb(ctx, currMenuHierarchy);                                 // breadcrumb
+								// reconstruct nekotNigol
+								string nekotNigol = new string(currLoginToken.ToCharArray().Reverse().ToArray()) + ":" + currUserId;
 
-								// populate ViewBag with userMeta, userRoles, userPermits, menu, breadcrumb data
-								ViewBag.currUserMeta = currUserMeta;
-								ViewBag.currUserRoleIds = currUserRoleIds;
-								ViewBag.currUserPermitIds = currUserPermitIds;
-								ViewBag.currMenuString = currMenuString;
-								ViewBag.currBreadcrump = currBreadcrump;
-								
-								////// Developer Override for Permits - BaseController (Part A) + PermitAttribute (PartB)
-								////// OverrideOverrideOverride 
-								////// use for testing only
-								////// comment before publishing
-								////// START
-								//if (ctx.HttpContext.Request.Host.Value.Contains("localhost"))
-								//{
-								//	List<int> tempUserPermitIds = new List<int>();
-								//	for (int i = 0; i < 10000; i++)
-								//	{
-								//		tempUserPermitIds.Add(i);
-								//	}
-								//	currUserMeta.UserPermitIds = tempUserPermitIds;
-								//	ViewBag.currUserPermitIds = currUserMeta.UserPermitIds;
-								//}
-								////// END
+								if (currUserMeta.NekotNigol.Equals(nekotNigol))
+								{
+									// get userRoles, userPermits, menu, breadcrumb data
+									var currUserRoleIds = GetUserRoleIds(currUserId);                                           // userRoleIds
+									var currUserPermitIds = GetUserPermitIds(currUserId, currUserRoleIds);                      // userPermitIds
+									var currMenuHierarchy = GetMenuHierarchy(RecordStatus.Active, "URL");                       // menuHierarchy
+									var currMenuString = GetMenuString(currUserRoleIds, currUserPermitIds, currMenuHierarchy);  // menuString
+									var currBreadcrump = GetBreadCrumb(ctx, currMenuHierarchy);                                 // breadcrumb
+
+									// populate ViewBag with userMeta, userRoles, userPermits, menu, breadcrumb data
+									ViewBag.currUserMeta = currUserMeta;
+									ViewBag.currUserRoleIds = currUserRoleIds;
+									ViewBag.currUserPermitIds = currUserPermitIds;
+									ViewBag.currMenuString = currMenuString;
+									ViewBag.currBreadcrump = currBreadcrump;
+
+									////// Developer Override for Permits - BaseController (Part A) + PermitAttribute (PartB)
+									////// OverrideOverrideOverride 
+									////// use for testing only
+									////// comment before publishing
+									////// START
+									//if (ctx.HttpContext.Request.Host.Value.Contains("localhost"))
+									//{
+									//	List<int> tempUserPermitIds = new List<int>();
+									//	for (int i = 0; i < 10000; i++)
+									//	{
+									//		tempUserPermitIds.Add(i);
+									//	}
+									//	ViewBag.currUserPermitIds = tempUserPermitIds;
+									//}
+									////// END
+								}
 							}
 
 							//watch.Stop();
 							//string executionTime = "[milli: " + watch.ElapsedMilliseconds.ToString() + " ms]  .......... ";
 							//double elapsedTime = (double)watch.ElapsedTicks / (double)Stopwatch.Frequency;
-							//executionTime += "[micro: " + (elapsedTime * 1000000).ToString("F2") + " us]";	
+							//executionTime += "[micro: " + (elapsedTime * 1000000).ToString("F2") + " us]";
 							//ShowAlertBox(AlertType.Info, $"Execution Time: .......... {executionTime}");
 						}
 					}

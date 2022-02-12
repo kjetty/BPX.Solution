@@ -75,8 +75,12 @@ namespace BPX.Website.CustomCode.Authorize
 					{
 						var coreService = (ICoreService)context.HttpContext.RequestServices.GetService(typeof(ICoreService));
 
-						// get loginToken and associated userId
+						// get current loginToken value from claims
 						string currLoginToken = currLoginTokenClaim.Value;
+
+						// SECURITY SECURITY SECURITY
+						// primary verification agaist the [logins] table on every request
+						// verifies if an userId is found for the current loginToken
 						int currUserId = coreService.GetUserId(currLoginToken);
 
 						if (currUserId > 0)
@@ -85,9 +89,12 @@ namespace BPX.Website.CustomCode.Authorize
 
 							if (currUserMeta != null)
 							{
-								// reconstruct nekotNigol
+								/// reconstruct nekotNigol from the claim loginToken
 								string nekotNigol = new string(currLoginToken.ToCharArray().Reverse().ToArray()) + ":" + currUserId;
 
+								// SECURITY SECURITY SECURITY
+								// secondary verification agaist the [users] table on every request
+								// verifies if the userId and current loginToken (reversed) combo is found
 								if (currUserMeta.NekotNigol.Equals(nekotNigol))
 								{
 									string cacheKeyName = string.Empty;

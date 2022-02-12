@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace BPX.Website.Controllers
@@ -46,26 +47,30 @@ namespace BPX.Website.Controllers
 
 					if (currLoginTokenClaim != null)
 					{						
-						// get current loginToken value
+						// get current loginToken value from claims
 						string currLoginToken = currLoginTokenClaim.Value;
 
-						// get user data from the loginToken
-						// SECURITY SECURITY SECURITY :: always verify against the database on every request
+						// SECURITY SECURITY SECURITY
+						// primary verification agaist the [logins] table on every request
+						// verifies if an userId is found for the current loginToken
 						int currUserId = coreService.GetUserId(currLoginToken);
 
 						if (currUserId > 0)
 						{
-							//var watch = new System.Diagnostics.Stopwatch();
-							//watch.Start();
+							var watch = new System.Diagnostics.Stopwatch();
+							watch.Start();
 
 							// get userMeta
 							currUserMeta = GetUserMeta(currUserId);
 
 							if (currUserMeta != null)
 							{
-								// reconstruct nekotNigol
+								// reconstruct nekotNigol from the claim loginToken
 								string nekotNigol = new string(currLoginToken.ToCharArray().Reverse().ToArray()) + ":" + currUserId;
 
+								// SECURITY SECURITY SECURITY
+								// secondary verification agaist the [users] table on every request
+								// verifies if the userId and current loginToken (reversed) combo is found
 								if (currUserMeta.NekotNigol.Equals(nekotNigol))
 								{
 									// get userRoles, userPermits, menu, breadcrumb data
@@ -100,11 +105,11 @@ namespace BPX.Website.Controllers
 								}
 							}
 
-							//watch.Stop();
-							//string executionTime = "[milli: " + watch.ElapsedMilliseconds.ToString() + " ms]  .......... ";
-							//double elapsedTime = (double)watch.ElapsedTicks / (double)Stopwatch.Frequency;
-							//executionTime += "[micro: " + (elapsedTime * 1000000).ToString("F2") + " us]";
-							//ShowAlertBox(AlertType.Info, $"Execution Time: .......... {executionTime}");
+							watch.Stop();
+							string executionTime = "[milli: " + watch.ElapsedMilliseconds.ToString() + " ms]  .......... ";
+							double elapsedTime = (double)watch.ElapsedTicks / (double)Stopwatch.Frequency;
+							executionTime += "[micro: " + (elapsedTime * 1000000).ToString("F2") + " us]";
+							ShowAlertBox(AlertType.Info, $"Execution Time: .......... {executionTime}");
 						}
 					}
 				}

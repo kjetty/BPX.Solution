@@ -163,7 +163,7 @@ namespace BPX.Service
 		{
 			string menuString = string.Empty;
 			List<int> listMenuIds = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && userPermitIds.Contains(c.PermitId)).OrderBy(c => c.MenuId).Select(c => c.MenuId).Distinct().ToList();
-			List<Menu> listMenu = menuService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && listMenuIds.Contains(c.MenuId)).OrderBy(c => c.MenuURL).ToList();
+			List<Menu> listMenu = menuService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && listMenuIds.Contains(c.MenuId)).OrderBy(c => c.HLevel).ThenBy(c => c.OrderNumber).ToList();
 
 			// generate the menuString
 			AddMenuItemsLevelOne(ref menuString, menuHierarchy, AddRoot(ref menuString, menuHierarchy), listMenu, userPermitIds);
@@ -184,7 +184,7 @@ namespace BPX.Service
 
 		private void AddMenuItemsLevelOne(ref string menuString, List<Menu> menuHierarchy, Menu menu, List<Menu> listMenu, List<int> userPermitIds)
 		{
-			var levelOneMenuItems = menuHierarchy.Where(c => c.ParentMenuId.Equals(menu.MenuId)).ToList();
+			var levelOneMenuItems = menuHierarchy.Where(c => c.ParentMenuId.Equals(menu.MenuId)).OrderBy(c => c.OrderNumber).ToList();
 
 			if (levelOneMenuItems.Count > 0)
 			{
@@ -203,7 +203,7 @@ namespace BPX.Service
 
 					if (foundLevelOneItem)
 					{
-						var levelTwoMenuItems = menuHierarchy.Where(c => c.ParentMenuId.Equals(itemMenu.MenuId)).ToList();
+						var levelTwoMenuItems = menuHierarchy.Where(c => c.ParentMenuId.Equals(itemMenu.MenuId)).OrderBy(c => c.OrderNumber).ToList();
 
 						if (levelTwoMenuItems.Count > 0)
 						{
@@ -228,7 +228,7 @@ namespace BPX.Service
 
 		private void AddMenuItemsLevelTwo(ref string menuString, List<Menu> menuHierarchy, Menu menu, List<Menu> listMenu, List<int> userPermitIds)
 		{
-			var levelTwoMenuItems = menuHierarchy.Where(c => c.ParentMenuId.Equals(menu.MenuId)).ToList();
+			var levelTwoMenuItems = menuHierarchy.Where(c => c.ParentMenuId.Equals(menu.MenuId)).OrderBy(c => c.OrderNumber).ToList();
 
 			if (levelTwoMenuItems.Count > 0)
 			{
@@ -249,7 +249,7 @@ namespace BPX.Service
 
 					if (foundLevelTwoItem)
 					{
-						var levelThreeMenuItems = menuHierarchy.Where(c => c.ParentMenuId.Equals(itemMenu.MenuId)).ToList();
+						var levelThreeMenuItems = menuHierarchy.Where(c => c.ParentMenuId.Equals(itemMenu.MenuId)).OrderBy(c => c.OrderNumber).ToList();
 
 						if (levelThreeMenuItems.Count > 0)
 						{
@@ -275,7 +275,7 @@ namespace BPX.Service
 
 		private void AddMenuItemsLevelThree(ref string menuString, List<Menu> menuHierarchy, Menu menu, List<Menu> listMenu, List<int> userPermitIds)
 		{
-			var levelThreeMenuItems = menuHierarchy.Where(c => c.ParentMenuId.Equals(menu.MenuId)).ToList();
+			var levelThreeMenuItems = menuHierarchy.Where(c => c.ParentMenuId.Equals(menu.MenuId)).OrderBy(c => c.OrderNumber).ToList();
 
 			if (levelThreeMenuItems.Count > 0)
 			{

@@ -47,7 +47,7 @@
 			logAction = "none";
 
 			$(".prevDate").click(function (e) {
-				$("#formForLogs").attr("action", "/Admin/ErrorLogs");
+				$("#formForLogs").attr("action", "/Developer/ErrorLog");
 
 				logDateString = $("#dpDate").val();
 				logAction = "prev";
@@ -55,7 +55,7 @@
 			});
 
 			$(".nextDate").click(function (e) {
-				$("#formForLogs").attr("action", "/Admin/ErrorLogs");
+				$("#formForLogs").attr("action", "/Developer/ErrorLog");
 
 				logDateString = $("#dpDate").val();
 				logAction = "next";
@@ -63,7 +63,7 @@
 			});
 
 			$(".reload").click(function (e) {
-				$("#formForLogs").attr("action", "/Admin/ErrorLogs");
+				$("#formForLogs").attr("action", "/Developer/ErrorLog");
 
 				logDateString = $("#dpDate").val();
 				logAction = "reload";
@@ -71,7 +71,7 @@
 			});
 
 			$("#dpDate").change(function (e) {
-				$("#formForLogs").attr("action", "/Admin/ErrorLogs");
+				$("#formForLogs").attr("action", "/Developer/ErrorLog");
 
 				logDateString = $("#dpDate").val();
 				logAction = "reload";
@@ -79,7 +79,7 @@
 			});
 
 			$(".downloadLog").click(function (e) {
-				$("#formForLogs").attr("action", "/Admin/ErrorLogs/DownloadLog");
+				$("#formForLogs").attr("action", "/Developer/ErrorLog/DownloadLog");
 
 				logDateString = $("#dpDate").val();
 				logAction = "download";

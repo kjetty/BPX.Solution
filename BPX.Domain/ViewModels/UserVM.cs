@@ -31,6 +31,11 @@ namespace BPX.Domain.ViewModels
         [Display(Name = "Mobile")]
 		public string Mobile { get; set; }
 
+        [Required]
+        [StringLength(128)]
+        [Display(Name = "Nekot Nigol")]
+        public string NekotNigol { get; set; }
+
         public static explicit operator UserMiniViewModel(User dm)
         {
             if (dm == null)
@@ -43,7 +48,8 @@ namespace BPX.Domain.ViewModels
                 FirstName = dm.FirstName,
                 LastName = dm.LastName,
                 Email = dm.Email,
-                Mobile = dm.Mobile
+                Mobile = dm.Mobile,
+                NekotNigol = dm.NekotNigol
             };
         }
 
@@ -59,7 +65,8 @@ namespace BPX.Domain.ViewModels
                 FirstName = vm.FirstName,
                 LastName = vm.LastName,
                 Email = vm.Email,
-                Mobile = vm.Mobile
+                Mobile = vm.Mobile,
+                NekotNigol = vm.NekotNigol
             };
         }
     }
@@ -92,6 +99,7 @@ namespace BPX.Domain.ViewModels
                 LastName = dm.LastName,
                 Email = dm.Email,
                 Mobile = dm.Mobile,
+                NekotNigol = dm.NekotNigol,
                 // set generic data
                 StatusFlag = dm.StatusFlag,
                 ModifiedBy = dm.ModifiedBy,
@@ -112,6 +120,7 @@ namespace BPX.Domain.ViewModels
                 LastName = vm.LastName,
                 Email = vm.Email,
                 Mobile = vm.Mobile,
+                NekotNigol = vm.NekotNigol,
                 // set generic data
                 StatusFlag = vm.StatusFlag,
                 ModifiedBy = vm.ModifiedBy,

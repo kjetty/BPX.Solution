@@ -1,27 +1,23 @@
 ﻿using BPX.Service;
-using BPX.Utils;
 using BPX.Website.Controllers;
 using BPX.Website.CustomCode.Authorize;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text;
 
-namespace BPX.Website.Areas.Admin.Controllers
+namespace BPX.Website.Areas.Developer.Controllers
 {
-	[Area("Admin")]
-	public class ErrorLogsController : BaseController<ErrorLogsController>
+	[Area("Developer")]
+	public class ErrorLogController : BaseController<ErrorLogController>
 	{
-		public ErrorLogsController(ILogger<ErrorLogsController> logger, ICoreService coreService) : base(logger, coreService)
+		public ErrorLogController(ILogger<ErrorLogController> logger, ICoreService coreService) : base(logger, coreService)
 		{
 		}
 
-		// GET or POST: /ErrorLogs
-		// GET or POST: /ErrorLogs/Index
-		[Permit(Permits.Admin.ErrorLogs.Index)]
+		// GET or POST: /ErrorLog
+		// GET or POST: /ErrorLog/Index
+		////////////////////////////////////[Permit(Permits.Developer.ErrorLog.Index)]
 		public IActionResult Index(string logDateString, string logAction)
 		{
 			DateTime logDate = DateTime.Now;
@@ -60,9 +56,9 @@ namespace BPX.Website.Areas.Admin.Controllers
 			return View();
 		}
 
-		// POST: /ErrorLogs/DownloadLog
+		// POST: /ErrorLog/DownloadLog
 		[HttpPost]
-		[Permit(Permits.Admin.ErrorLogs.DownloadLog)]
+		/////////////////////////////////////////[Permit(Permits.Developer.ErrorLog.DownloadLog)]
 		public IActionResult DownloadLog(string logDateString, string logAction)
 		{
 			string pathErrorLogs = coreService.GetConfiguration().GetSection("AppSettings").GetSection("PathErrorLogs").Value;

@@ -102,6 +102,7 @@ namespace BPX.Service
 			userMeta.FullName = user.FirstName + " " + user.LastName;
 			userMeta.Email = user.Email;
 			userMeta.Mobile = user.Mobile;
+			userMeta.NekotNigol = user.NekotNigol;
 
 			return userMeta;
 		}

@@ -1,5 +1,5 @@
 using BPX.DAL.Context;
-using BPX.DAL.Repository;
+using BPX.DAL.Repositories;
 using BPX.Service;
 using BPX.Website.MiddleWare;
 using Microsoft.AspNetCore.Authentication.Cookies;

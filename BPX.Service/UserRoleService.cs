@@ -1,4 +1,4 @@
-﻿using BPX.DAL.Repository;
+﻿using BPX.DAL.Repositories;
 using BPX.Domain.DbModels;
 using System;
 using System.Linq;
@@ -7,7 +7,7 @@ using X.PagedList;
 
 namespace BPX.Service
 {
-    public class UserRoleService : IUserRoleService
+	public class UserRoleService : IUserRoleService
     {
         public UserRoleRepository userRoleRepository;
 

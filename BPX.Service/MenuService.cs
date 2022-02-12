@@ -1,4 +1,4 @@
-﻿using BPX.DAL.Repository;
+﻿using BPX.DAL.Repositories;
 using BPX.Domain.DbModels;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using X.PagedList;
 
 namespace BPX.Service
 {
-    public class MenuService : IMenuService
+	public class MenuService : IMenuService
     {
         public MenuRepository menuRepository;
 

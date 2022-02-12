@@ -1,5 +1,4 @@
 ﻿using BPX.DAL.Context;
-using BPX.DAL.Repositories;
 using BPX.Domain.DbModels;
 using BPX.Utils;
 using Microsoft.EntityFrameworkCore;
@@ -9,9 +8,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using X.PagedList;
 
-namespace BPX.DAL.Repository
+namespace BPX.DAL.Repositories
 {
-    public class MenuRepository : BaseRepository, IMenuRepository
+	public class MenuRepository : BaseRepository, IMenuRepository
     {
         public MenuRepository(BPXDbContext context) : base(context)
         {

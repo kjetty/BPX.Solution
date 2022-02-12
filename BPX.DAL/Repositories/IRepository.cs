@@ -3,7 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using X.PagedList;
 
-namespace BPX.DAL.Repository
+namespace BPX.DAL.Repositories
 {
     public interface IRepository<T> where T : class
     {

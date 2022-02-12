@@ -1,5 +1,4 @@
 ﻿using BPX.DAL.Context;
-using BPX.DAL.Repositories;
 using BPX.Domain.DbModels;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -7,9 +6,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using X.PagedList;
 
-namespace BPX.DAL.Repository
+namespace BPX.DAL.Repositories
 {
-    public class RolePermitRepository : BaseRepository, IRolePermitRepository
+	public class RolePermitRepository : BaseRepository, IRolePermitRepository
     {
         public RolePermitRepository(BPXDbContext context) : base(context)
         {

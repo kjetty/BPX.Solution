@@ -1,20 +1,16 @@
-//This file is auto generated on 2/9/2022 3:02:48 PM
+//This file is auto generated on 2/14/2022 12:03:52 PM
 namespace BPX.Website.CustomCode.Authorize
 { 
 	public static class Permits
 	{ 
-		public static class Admin
-		{ 
-			public static class ErrorLogs
-			{ 
-				public const int DownloadLog = 3; 			 //Admin.ErrorLogs.DownloadLog
-				public const int Index = 2; 			 //Admin.ErrorLogs.Index
-			} 
-
-		} 
-
 		public static class Developer
 		{ 
+			public static class ErrorLog
+			{ 
+				public const int DownloadLog = 3; 			 //Developer.ErrorLog.DownloadLog
+				public const int Index = 2; 			 //Developer.ErrorLog.Index
+			} 
+
 			public static class PermitsGenerator
 			{ 
 				public const int Index = 1; 			 //Developer.Home.Index

@@ -54,8 +54,17 @@ namespace BPX.Website.Areas.Identity.Controllers
             if (login == null)
             {
                 // set alert
-                ShowAlertBox(AlertType.Warning, "Login failed. Please try again. ");
+                ShowAlertBox(AlertType.Warning, "Login failed. Please try again.");
                 
+                return RedirectToAction("Login", "Account", new { area = "Identity" });
+            }
+
+            if (!login.LoginType.ToUpper().Equals(LoginCategory.Username.ToUpper()))
+            {
+
+                // set alert
+                ShowAlertBox(AlertType.Warning, "Login failed. You account is not set up to login using username. Please contact the Administrator. ");
+
                 return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
 
@@ -254,7 +263,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     {
                         LoginUUId = loginUUId,
                         LoginName = collection.LoginName,
-                        LoginType = LoginType.Username,
+                        LoginType = LoginCategory.Username,
                         LastLoginDate = DateTime.Now,
                         RToken = Guid.NewGuid().ToString(),
                         // set generic data

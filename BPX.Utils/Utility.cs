@@ -58,7 +58,7 @@ namespace BPX.Utils
         public const string Descending = "desc";
     }
 
-    public static class LoginType
+    public static class LoginCategory
     {
         // variables for the record status
         public const string Username = "U";

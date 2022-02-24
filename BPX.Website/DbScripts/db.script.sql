@@ -330,6 +330,7 @@ insert into MenuPermits (MenuId,PermitId,StatusFlag,ModifiedBy,ModifiedDate) val
 insert into MenuPermits (MenuId,PermitId,StatusFlag,ModifiedBy,ModifiedDate) values (6,39,'A',1,getDate());
 insert into MenuPermits (MenuId,PermitId,StatusFlag,ModifiedBy,ModifiedDate) values (6,34,'A',1,getDate());
 insert into MenuPermits (MenuId,PermitId,StatusFlag,ModifiedBy,ModifiedDate) values (6,40,'A',1,getDate());
+insert into MenuPermits (MenuId,PermitId,StatusFlag,ModifiedBy,ModifiedDate) values (6,41,'A',1,getDate());
 insert into MenuPermits (MenuId,PermitId,StatusFlag,ModifiedBy,ModifiedDate) values (7,23,'A',1,getDate());
 insert into MenuPermits (MenuId,PermitId,StatusFlag,ModifiedBy,ModifiedDate) values (7,26,'A',1,getDate());
 insert into MenuPermits (MenuId,PermitId,StatusFlag,ModifiedBy,ModifiedDate) values (7,28,'A',1,getDate());

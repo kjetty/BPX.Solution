@@ -396,10 +396,10 @@ namespace BPX.Website.Areas.Identity.Controllers
 
             // set ViewBag
             ViewBag.menu = menu;
-            ViewBag.listAreas = listAreas;
             ViewBag.listPermits = listPermits;
             ViewBag.listMenuPermitIds = listMenuPermitIds;
-
+            ViewBag.listAreas = listAreas;
+            
             return View();
         }
 

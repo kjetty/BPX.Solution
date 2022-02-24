@@ -38,12 +38,12 @@
 						<div class="card-body">
 							@Html.Raw("<table>")
 
-							@if (ViewBag.listMenuPermitIds != null)
+							@if (ViewBag.listPermits != null)
 							{
 								string prevController = string.Empty;
 								string currController = string.Empty;
 
-								foreach (var itemPermit in ViewBag.listMenuPermitIds)
+								foreach (var itemPermit in ViewBag.listPermits)
 								{
 									if (itemPermit.PermitArea.ToString().ToUpper().Equals(area.ToString().ToUpper()))
 									{
@@ -80,13 +80,13 @@
 
 											// display generic permti names on the first line
 
-											foreach (var itemPermit2 in ViewBag.listMenuPermitIds)
+											foreach (var itemPermit2 in ViewBag.listPermits)
 											{
 												if (currController.ToUpper().Equals(itemPermit2.PermitController.ToString().ToUpper()))
 												{
 													if (listGenericPermitNames.Contains(itemPermit2.PermitName.ToString().ToUpper()))
 													{
-														if (((IList<int>)ViewBag.listMenuPermits).Contains(itemPermit2.PermitId))
+														if (((IList<int>)ViewBag.listMenuPermitIds).Contains(itemPermit2.PermitId))
 														{
 															<input type="checkbox" class="@classAreaController @classArea" name="PermitIds" value="@itemPermit2.PermitId" checked="checked" />
 														}
@@ -104,13 +104,13 @@
 											// dispaly non-generic permit names on the second line
 											<br />
 
-											foreach (var itemPermit2 in ViewBag.listMenuPermitIds)
+											foreach (var itemPermit2 in ViewBag.listPermits)
 											{
 												if (currController.ToUpper().Equals(itemPermit2.PermitController.ToString().ToUpper()))
 												{
 													if (!listGenericPermitNames.Contains(itemPermit2.PermitName.ToString().ToUpper()))
 													{
-														if (((IList<int>)ViewBag.listMenuPermits).Contains(itemPermit2.PermitId))
+														if (((IList<int>)ViewBag.listMenuPermitIds).Contains(itemPermit2.PermitId))
 														{
 															<input type="checkbox" class="@classAreaController @classArea" name="PermitIds" value="@itemPermit2.PermitId" checked="checked" />
 														}
@@ -169,12 +169,12 @@
 					@Html.Raw("\t}\n")
 					@Html.Raw("});\n\n")
 
-					@if (ViewBag.listMenuPermitIds != null)
+					@if (ViewBag.listPermits != null)
 					{
 						string prevController = string.Empty;
 						string currController = string.Empty;
 
-						foreach (var itemPermit in ViewBag.listMenuPermitIds)
+						foreach (var itemPermit in ViewBag.listPermits)
 						{
 							if (itemPermit.PermitArea.ToString().ToUpper().Equals(area.ToString().ToUpper()))
 							{

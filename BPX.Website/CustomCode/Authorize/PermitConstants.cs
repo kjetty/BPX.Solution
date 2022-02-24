@@ -1,4 +1,4 @@
-//This file is auto generated on 2/14/2022 12:03:52 PM
+//This file is auto generated on 2/24/2022 10:46:09 AM
 namespace BPX.Website.CustomCode.Authorize
 { 
 	public static class Permits
@@ -22,15 +22,16 @@ namespace BPX.Website.CustomCode.Authorize
 		{ 
 			public static class Menu
 			{ 
-				public const int Create = 32; 			 //Root.Menu.Create
-				public const int Delete = 35; 			 //Root.Menu.Delete
-				public const int Filter = 37; 			 //Root.Menu.Filter
-				public const int List = 36; 			 //Root.Menu.List
-				public const int ListDeleted = 38; 			 //Root.Menu.ListDeleted
-				public const int MenuPermits = 40; 			 //Root.Menu.MenuPermits
-				public const int Read = 33; 			 //Root.Menu.Read
-				public const int Undelete = 39; 			 //Root.Menu.Undelete
-				public const int Update = 34; 			 //Root.Menu.Update
+				public const int Create = 32; 			 //Identity.Menu.Create
+				public const int Delete = 35; 			 //Identity.Menu.Delete
+				public const int Filter = 37; 			 //Identity.Menu.Filter
+				public const int List = 36; 			 //Identity.Menu.List
+				public const int ListDeleted = 38; 			 //Identity.Menu.ListDeleted
+				public const int MenuPermits = 40; 			 //Identity.Menu.MenuPermits
+				public const int Read = 33; 			 //Identity.Menu.Read
+				public const int TreePath = 41; 			 //Identity.Menu.TreePath
+				public const int Undelete = 39; 			 //Identity.Menu.Undelete
+				public const int Update = 34; 			 //Identity.Menu.Update
 			} 
 
 			public static class Permit

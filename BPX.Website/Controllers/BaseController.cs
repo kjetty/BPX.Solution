@@ -45,7 +45,7 @@ namespace BPX.Website.Controllers
 			{
 				if (ctx.HttpContext.User != null)
 			    {
-					var currPTokenClaim = ctx.HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("PToken"));
+					var currPTokenClaim = ctx.HttpContext.User.Claims.SingleOrDefault(c => c.Type.Equals("PToken"));
 
 					if (currPTokenClaim != null)
 					{

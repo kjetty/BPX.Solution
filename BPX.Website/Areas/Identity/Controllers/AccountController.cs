@@ -146,7 +146,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             // login
             login.RToken = rToken;
             login.LastLoginDate = DateTime.Now;
-            login.ModifiedBy = 1; 
+            login.ModifiedBy = user.UserId; 
             login.ModifiedDate = DateTime.Now;
 
             using (TransactionScope scope = new TransactionScope())
@@ -400,7 +400,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
                 login.PasswordHash = hashedPassword;
                 // set generic data
-                login.ModifiedBy = 1;
+                login.ModifiedBy = currUser.UserId;
                 login.ModifiedDate = DateTime.Now;
 
                 loginService.SaveDBChanges();
@@ -446,7 +446,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
                 login.RToken = Guid.NewGuid().ToString();
                 // set generic data
-                login.ModifiedBy = 1;
+                login.ModifiedBy = currUser.UserId;
                 login.ModifiedDate = DateTime.Now;
 
                 loginService.UpdateRecord(login);

@@ -101,7 +101,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     RoleDescription = collection.RoleDescription,
                     // set generic data
                     StatusFlag = RecordStatus.Active.ToUpper(),
-                    ModifiedBy = 1,
+                    ModifiedBy = currUser.UserId,
                     ModifiedDate = DateTime.Now
                 };
 
@@ -288,7 +288,6 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
         }
 
-
         // GET + POST: /Identity/Role/ListDeleted
         [Permit(Permits.Identity.Role.ListDeleted)]
         public IActionResult ListDeleted(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
@@ -419,14 +418,17 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Role.RolePermits)]
         public IActionResult RolePermits(int id, List<int> permitIds)
         {
-            var listRolePermits = rolePermitService.GetRecordsByFilter(c => c.RoleId.Equals(id)).ToList();
+            // get all existing active permits for the role
+            var listRolePermits = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.RoleId.Equals(id)).ToList();
 
-            // delete all permits for the role
+            // delete all existing active permits for the role
             foreach (var rolePermit in listRolePermits)
             {
                 rolePermit.StatusFlag = RecordStatus.Inactive.ToUpper();
                 rolePermit.ModifiedBy = currUser.UserId;
                 rolePermit.ModifiedDate = DateTime.Now;
+
+                rolePermitService.UpdateRecord(rolePermit);
             }
 
             rolePermitService.SaveDBChanges();
@@ -434,7 +436,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             // add or activate received permits for the role
             foreach (var permitId in permitIds)
             {
-                var existingRolePermit = rolePermitService.GetRecordsByFilter(c => c.RoleId.Equals(id) && c.PermitId.Equals(permitId)).FirstOrDefault();
+                var existingRolePermit = rolePermitService.GetRecordsByFilter(c => c.RoleId.Equals(id) && c.PermitId.Equals(permitId)).SingleOrDefault();
 
                 if (existingRolePermit != null)
                 {
@@ -451,7 +453,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                         RoleId = id,
                         PermitId = permitId,
                         StatusFlag = RecordStatus.Active.ToUpper(),
-                        ModifiedBy = 1,
+                        ModifiedBy = currUser.UserId,
                         ModifiedDate = DateTime.Now
                     };
 
@@ -475,7 +477,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         {
             //// cache :: remove following :: 
             //// ALL
-            var listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.ModifiedDate >= DateTime.Now.AddMinutes(-240)).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
+            var listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.ModifiedDate >= DateTime.Now.AddDays(-999)).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
 
 			foreach (var itemCacheKeyName in listCacheKeyNames)
 			{

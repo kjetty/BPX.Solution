@@ -70,7 +70,7 @@ namespace BPX.Website.CustomCode.Authorize
 
 				if (permitId > 0)
 				{
-					var currPTokenClaim = user.Claims.FirstOrDefault(c => c.Type.Equals("PToken"));
+					var currPTokenClaim = user.Claims.SingleOrDefault(c => c.Type.Equals("PToken"));
 
 					if (currPTokenClaim != null)
 					{

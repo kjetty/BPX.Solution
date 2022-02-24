@@ -131,8 +131,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
 				// get existing data
 				var recordUser = userService.GetRecordById(id);
-				//var listUserRoles = userRoleService.GetRecordsByFilter(c => id.Equals(c.UserId) && c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()));
-
+				
 				if (recordUser.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
 				{
 					// set core data
@@ -214,8 +213,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
 				// get existing data
 				var recordUser = userService.GetRecordById(id);
-				var listUserRoles = userRoleService.GetRecordsByFilter(c => c.UserId.Equals(id) && c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()));
-
+				
 				if (recordUser.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
 				{
 					// set generic data
@@ -325,8 +323,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
 				// get existing data
 				var recordUser = userService.GetRecordById(id);
-				var listUserRoles = userRoleService.GetRecordsByFilter(c => c.UserId.Equals(id) && c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()));
-
+				
 				if (recordUser.StatusFlag.Equals(RecordStatus.Inactive.ToUpper()))
 				{
 					// set generic data
@@ -393,14 +390,17 @@ namespace BPX.Website.Areas.Identity.Controllers
 		[Permit(Permits.Identity.User.UserRoles)]
 		public IActionResult UserRoles(int id, List<int> roleIds)
 		{
-			var listUserRoles = userRoleService.GetRecordsByFilter(c => c.UserId.Equals(id)).ToList();
+			// get all existing active roles for the user
+			var listUserRoles = userRoleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.UserId.Equals(id)).ToList();
 
-			// delete all roles for the user
+			// delete all existing active roles for the user
 			foreach (var userRole in listUserRoles)
 			{
 				userRole.StatusFlag = RecordStatus.Inactive.ToUpper();
 				userRole.ModifiedBy = currUser.UserId;
 				userRole.ModifiedDate = DateTime.Now;
+
+				userRoleService.UpdateRecord(userRole);
 			}
 
 			userRoleService.SaveDBChanges();
@@ -408,7 +408,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 			// add or activate received roles for the user
 			foreach (var roleId in roleIds)
 			{
-				var existingUserRole = userRoleService.GetRecordsByFilter(c => c.UserId.Equals(id) && c.RoleId.Equals(roleId)).FirstOrDefault();
+				var existingUserRole = userRoleService.GetRecordsByFilter(c => c.UserId.Equals(id) && c.RoleId.Equals(roleId)).SingleOrDefault();
 
 				if (existingUserRole != null)
 				{
@@ -425,7 +425,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 						UserId = id,
 						RoleId = roleId,
 						StatusFlag = RecordStatus.Active.ToUpper(),
-						ModifiedBy = 1,
+						ModifiedBy = currUser.UserId,
 						ModifiedDate = DateTime.Now
 					};
 
@@ -451,7 +451,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 			// $"user:{userId}:roles";
 			// $"user:{userId}:permits";
 
-			var listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.Contains($"user:{id}:") && c.ModifiedDate >= DateTime.Now.AddMinutes(-240)).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
+			var listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.Contains($"user:{id}:") && c.ModifiedDate >= DateTime.Now.AddDays(-999)).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
 
 			foreach (var itemCacheKeyName in listCacheKeyNames)
 			{

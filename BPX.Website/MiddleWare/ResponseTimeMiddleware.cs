@@ -29,7 +29,7 @@ namespace BPX.Website.MiddleWare
 			//{
 			//	if (context.User != null)
 			//	{
-			//		var currPToken = context.User.Claims.FirstOrDefault(c => c.Type == "BPXPToken");
+			//		var currPToken = context.User.Claims.SingleOrDefault(c => c.Type == "BPXPToken");
 
 			//		if (currPToken != null)
 			//		{

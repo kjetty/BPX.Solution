@@ -1,5 +1,7 @@
 ﻿@{ ViewData["Title"] = "Error Logs"; }
 
+@using BPX.Website.CustomCode.Authorize;
+
 <div class="row">
 	<div class="col-md-4">
 		<h5>@ViewBag.Title</h5>
@@ -13,7 +15,10 @@
 			<input type="date" id="dpDate" name="dpDate" value="@ViewBag.logDateString">
 			<span class="bi-arrow-right-circle float-left nextDate"></span>
 			<span class="bi-arrow-clockwise reload"></span>
-			<span class="bi-arrow-down downloadLog"></span>
+			@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Developer.ErrorLog.DownloadLog))
+			{
+				<span class="bi-arrow-down downloadLog"></span>
+			}
 		</div>
 	</div>
 </div>

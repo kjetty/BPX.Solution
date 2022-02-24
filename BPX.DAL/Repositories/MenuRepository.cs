@@ -79,7 +79,6 @@ namespace BPX.DAL.Repositories
     
         public List<Menu> GetMenuHierarchy(string statusFlag, string orderBy)
 		{
-
             ////cte (common time execution) recursive hierarchy query
             //WITH cte_menus AS (
             //    SELECT 	    MenuId, MenuName, MenuDescription, MenuURL, ParentMenuId, 1 AS hLevel, OrderNumber, 
@@ -118,21 +117,23 @@ namespace BPX.DAL.Repositories
             cteQuery += "	SELECT 		MenuId, MenuName, MenuDescription, MenuURL, ParentMenuId, 1 AS hLevel, OrderNumber, ";
             cteQuery += "				CAST(MenuId AS VARCHAR(32)) AS TreePath, StatusFlag, ModifiedBy, ModifiedDate  ";
             cteQuery += "	FROM 		Menus ";
-            cteQuery += "	WHERE 		UPPER(StatusFlag) = '" + cteStatusFlag.ToUpper() + "'";
+            cteQuery += "	WHERE 		UPPER(StatusFlag) = '" + cteStatusFlag + "'";
             cteQuery += "	AND 		ParentMenuId = 0";
             cteQuery += "	UNION ALL ";
             cteQuery += "	SELECT 		m.MenuId, m.MenuName, m.MenuDescription, m.MenuURL, m.ParentMenuId, cte.hLevel + 1, m.OrderNumber, ";
             cteQuery += "				CAST(cte.TreePath + '.' + CAST(m.MenuId AS VARCHAR(32)) AS VARCHAR(32)) AS TreePath, m.StatusFlag, m.ModifiedBy, m.ModifiedDate ";
             cteQuery += "	FROM 		Menus m ";
             cteQuery += "	INNER JOIN 	cte_menus cte ON cte.MenuId = m.ParentMenuId ";
-            cteQuery += "	WHERE 		UPPER(m.StatusFlag) = '" + cteStatusFlag.ToUpper() + "'";
+            cteQuery += "	WHERE 		UPPER(m.StatusFlag) = '" + cteStatusFlag + "'";
             cteQuery += ") ";
-            cteQuery += "SELECT 		MenuId, MenuName, MenuDescription, MenuURL, ParentMenuId, hLevel, OrderNumber, ";
+            cteQuery += "SELECT 	MenuId, MenuName, MenuDescription, MenuURL, ParentMenuId, hLevel, OrderNumber, ";
             cteQuery += "			CAST('.' + TreePath + '.' AS VARCHAR(32)) AS TreePath, StatusFlag, ModifiedBy, ModifiedDate ";
             cteQuery += "FROM 		cte_menus ";
             cteQuery += "ORDER BY " + cteOrderBy;
 
-            return context.Menus.FromSqlRaw(cteQuery).ToList();
+            List<Menu> listMenu = context.Menus.FromSqlRaw(cteQuery).ToList();
+
+            return listMenu;
         }
     }
 

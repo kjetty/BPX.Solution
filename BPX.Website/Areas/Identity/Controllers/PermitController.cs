@@ -25,7 +25,6 @@ namespace BPX.Website.Areas.Identity.Controllers
         private readonly IRolePermitService rolePermitService;
         private readonly IMenuPermitService menuPermitService;
 
-
         public PermitController(ILogger<PermitController> logger, ICoreService coreService, IPermitService permitService, IRoleService roleService) : base(logger, coreService)
         {
             this.cacheService = coreService.GetCacheService();
@@ -107,7 +106,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     PermitEnum = collection.PermitEnum,
                     // set generic data
                     StatusFlag = RecordStatus.Active.ToUpper(),
-                    ModifiedBy = 1,
+                    ModifiedBy = currUser.UserId,
                     ModifiedDate = DateTime.Now
                 };
 
@@ -428,7 +427,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         {
             //// cache :: remove following :: 
             //// ALL
-            var listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.ModifiedDate >= DateTime.Now.AddMinutes(-240)).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
+            var listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.ModifiedDate >= DateTime.Now.AddDays(-999)).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
 
             foreach (var itemCacheKeyName in listCacheKeyNames)
             {

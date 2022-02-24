@@ -51,9 +51,9 @@ namespace BPX.Website.CustomCode.Authorize
             {
                 //this is the passed in PermitId :: [Authorize(Roles = Permits.Identity.User.List)]
                 var permitListIds = requirement.AllowedRoles.Select(int.Parse).ToList();
-                var claimLoginId = context.User.Claims.FirstOrDefault(c => c.Type.Equals("LoginId")).Value;
-                var claimPToken = context.User.Claims.FirstOrDefault(c => c.Type.Equals("PToken")).Value;
-                var claimUserId = context.User.Claims.FirstOrDefault(c => c.Type.Equals("UserId")).Value;
+                var claimLoginId = context.User.Claims.SingleOrDefault(c => c.Type.Equals("LoginId")).Value;
+                var claimPToken = context.User.Claims.SingleOrDefault(c => c.Type.Equals("PToken")).Value;
+                var claimUserId = context.User.Claims.SingleOrDefault(c => c.Type.Equals("UserId")).Value;
                 int userId = Convert.ToInt32(claimUserId);
 
                 // get user (from DB)

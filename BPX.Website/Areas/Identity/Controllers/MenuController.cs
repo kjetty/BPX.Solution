@@ -44,16 +44,16 @@ namespace BPX.Website.Areas.Identity.Controllers
 		[Permit(Permits.Identity.Menu.List)]
 		public IActionResult List()
 		{
-			var menuList = coreService.GetMenuHierarchy(RecordStatus.Active.ToUpper(), "URL");
+            var listMenu = coreService.GetMenuHierarchy(RecordStatus.Active.ToUpper(), "URL");
 
-			List<MenuMiniViewModel> model = new List<MenuMiniViewModel>();
+            List<MenuMiniViewModel> model = new List<MenuMiniViewModel>();
 
-			foreach (var itemMenu in menuList)
-			{
-				model.Add((MenuMiniViewModel)itemMenu);
-			}
+            foreach (var itemMenu in listMenu)
+            {
+                model.Add((MenuMiniViewModel)itemMenu);
+            }
 
-			return View(model);
+            return View(model);
 		}
 
         // GET: /Identity/Menu/Create
@@ -97,7 +97,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     OrderNumber = collection.OrderNumber,
                     // set generic data
                     StatusFlag = RecordStatus.Active.ToUpper(),
-                    ModifiedBy = 1,
+                    ModifiedBy = currUser.UserId,
                     ModifiedDate = DateTime.Now
                 };
 
@@ -107,11 +107,8 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // commit changes to database
                 menuService.SaveDBChanges();
 
-                // update treePath and hLevel
-                UpdateTreePath();
-
                 // reset cache
-                ResetCache();
+                ResetCache();              
 
                 // set alert
                 ShowAlertBox(AlertType.Success, "Menu is successfully created.");
@@ -197,11 +194,8 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // commit changes to database
                 menuService.SaveDBChanges();
 
-                // update treePath and hLevel
-                UpdateTreePath();
-
                 // reset cache
-                ResetCache();
+                ResetCache();            
 
                 // set alert
                 ShowAlertBox(AlertType.Success, "Menu is successfully updated.");
@@ -273,11 +267,8 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // commit changes to database
                 menuService.SaveDBChanges();
 
-                // update treePath and hLevel
-                UpdateTreePath();
-
                 // reset cache
-                ResetCache();
+                ResetCache();             
 
                 // set alert
                 ShowAlertBox(AlertType.Success, "Menu is successfully deleted.");
@@ -301,13 +292,13 @@ namespace BPX.Website.Areas.Identity.Controllers
 
         // POST: /Identity/Menu/ListDeleted
         [Permit(Permits.Identity.Menu.ListDeleted)]
-        public IActionResult ListDeleted(string temptemp)
+        public IActionResult ListDeleted()
         {
-            var menuList = coreService.GetMenuService().GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Inactive.ToUpper())).ToList();
+            var listMenu = coreService.GetMenuService().GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Inactive.ToUpper())).ToList();
 
             List<MenuMiniViewModel> model = new List<MenuMiniViewModel>();
 
-            foreach (var itemMenu in menuList)
+            foreach (var itemMenu in listMenu)
             {
                 model.Add((MenuMiniViewModel)itemMenu);
             }
@@ -363,10 +354,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 }
 
                 // commit changes to database
-                menuService.SaveDBChanges();
-
-                // update treePath and hLevel
-                UpdateTreePath();
+                menuService.SaveDBChanges();                
 
                 // reset cache
                 ResetCache();
@@ -422,22 +410,25 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Menu.MenuPermits)]
         public IActionResult MenuPermits(int id, List<int> permitIds)
         {
+            // get all exisiting active permits for the menu
 			var listMenuPermits = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.MenuId.Equals(id)).ToList();
 
-			// delete all permits for the menu
-			foreach (var menuPermit in listMenuPermits)
+            // delete all existing active permits for the menu
+            foreach (var menuPermit in listMenuPermits)
 			{
 				menuPermit.StatusFlag = RecordStatus.Inactive.ToUpper();
 				menuPermit.ModifiedBy = currUser.UserId;
 				menuPermit.ModifiedDate = DateTime.Now;
-			}
 
-			menuPermitService.SaveDBChanges();
+                menuPermitService.UpdateRecord(menuPermit);
+            }           
+
+            menuPermitService.SaveDBChanges();
 
 			// add or activate received permits for the menu
 			foreach (var permitId in permitIds)
 			{
-				var existingMenuPermit = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.MenuId.Equals(id) && c.PermitId.Equals(permitId)).FirstOrDefault();
+				var existingMenuPermit = menuPermitService.GetRecordsByFilter(c => c.MenuId.Equals(id) && c.PermitId.Equals(permitId)).SingleOrDefault();
 
 				if (existingMenuPermit != null)
 				{
@@ -454,7 +445,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 						MenuId = id,
 						PermitId = permitId,
 						StatusFlag = RecordStatus.Active.ToUpper(),
-						ModifiedBy = 1,
+						ModifiedBy = currUser.UserId,
 						ModifiedDate = DateTime.Now
 					};
 
@@ -462,10 +453,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 				}
 			}
 
-			menuPermitService.SaveDBChanges();
-
-            // update treePath and hLevel
-            UpdateTreePath();
+			menuPermitService.SaveDBChanges();          
 
             // reset cache
             ResetCache();
@@ -476,12 +464,14 @@ namespace BPX.Website.Areas.Identity.Controllers
             //return Permit(id);
             return RedirectToAction(nameof(Index));
         }
-    
-        private void UpdateTreePath()
-		{
-            List<Menu> menuHierarchy = menuService.GetMenuHierarchy(RecordStatus.Active.ToUpper(), "URL");
 
-            foreach (var itemMenu in menuHierarchy)
+        // GET: /Identity/Menu/TreePath
+        [Permit(Permits.Identity.Menu.TreePath)]
+        public IActionResult TreePath()
+		{
+            List<Menu> listMenu = menuService.GetMenuHierarchy(RecordStatus.Active.ToUpper(), "URL");
+
+            foreach (var itemMenu in listMenu)
 			{
                 var recordMenu = menuService.GetRecordById(itemMenu.MenuId);
 
@@ -492,13 +482,18 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
 
             menuService.SaveDBChanges();
+
+            // set alert
+            ShowAlertBox(AlertType.Success, "Menu TreePath is successfully updated.");
+
+            return RedirectToAction(nameof(List));
         }
 
         private void ResetCache()
         {
             //// cache :: remove following :: 
             //// ALL
-            var listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.ModifiedDate >= DateTime.Now.AddMinutes(-240)).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
+            var listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.ModifiedDate >= DateTime.Now.AddDays(-999)).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
 
             foreach (var itemCacheKeyName in listCacheKeyNames)
             {

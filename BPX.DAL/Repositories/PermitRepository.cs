@@ -34,7 +34,7 @@ namespace BPX.DAL.Repositories
             searchForString = searchForString.Length.Equals(0) ? string.Empty : searchForString;
 
             // get model : IQueryable : apply statusFlag
-            var model = context.Permits.Where(c => c.StatusFlag.ToUpper().Equals(statusFlag.ToUpper()));
+            IQueryable<Permit> model = context.Permits.Where(c => c.StatusFlag.ToUpper().Equals(statusFlag.ToUpper()));
 
             // apply search
             if (searchForString.Length > 0)

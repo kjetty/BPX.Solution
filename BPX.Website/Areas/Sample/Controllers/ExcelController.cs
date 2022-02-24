@@ -243,7 +243,7 @@ namespace BPX.Website.Areas.Sample.Controllers
             ms.Seek(0, SeekOrigin.Begin);
 
             // return the file stream
-            var rslt = new FileStreamResult(ms, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            FileStreamResult rslt = new FileStreamResult(ms, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
             // back to the browser
             return rslt;

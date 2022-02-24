@@ -32,9 +32,9 @@ namespace BPX.DAL.Repositories
             sortByColumn = sortByColumn.Length.Equals(0) ? "UserId" : sortByColumn;
             sortOrder = sortOrder.Length.Equals(0) ? SortOrder.Ascending : sortOrder;
             searchForString = searchForString.Length.Equals(0) ? string.Empty : searchForString;
-            
+
             // get model : IQueryable : apply statusFlag
-            var model = context.Users.Where(c => c.StatusFlag.ToUpper().Equals(statusFlag.ToUpper()));
+            IQueryable<User> model = context.Users.Where(c => c.StatusFlag.ToUpper().Equals(statusFlag.ToUpper()));
 
             // apply search
             if (searchForString.Length > 0)

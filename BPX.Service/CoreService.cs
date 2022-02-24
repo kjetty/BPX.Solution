@@ -113,7 +113,7 @@ namespace BPX.Service
 			{
 				listBreadcrumb.Reverse();
 
-				foreach (var itemBreadcrumb in listBreadcrumb)
+				foreach (Menu itemBreadcrumb in listBreadcrumb)
 				{
 					if (itemBreadcrumb.MenuURL.Equals("/"))
 					{
@@ -151,7 +151,7 @@ namespace BPX.Service
 
 		private Menu AddRoot(ref string menuString, List<Menu> menuHierarchy)
 		{
-			var root = menuHierarchy.Where(c => c.ParentMenuId.Equals(0)).SingleOrDefault();
+			Menu root = menuHierarchy.Where(c => c.ParentMenuId.Equals(0)).SingleOrDefault();
 
 			//menuString += "<li>";
 			//menuString += $"<a class=\"nav-link\" href=\"{root.MenuURL}\">{root.MenuName}</a>";
@@ -162,15 +162,15 @@ namespace BPX.Service
 
 		private void AddMenuItemsLevelOne(ref string menuString, List<Menu> menuHierarchy, Menu menu, List<Menu> listMenu, List<int> userPermitIds)
 		{
-			var levelOneMenuItems = menuHierarchy.Where(c => c.ParentMenuId.Equals(menu.MenuId)).OrderBy(c => c.OrderNumber).ToList();
+			List<Menu> listLevelOneMenu = menuHierarchy.Where(c => c.ParentMenuId.Equals(menu.MenuId)).OrderBy(c => c.OrderNumber).ToList();
 
-			if (levelOneMenuItems.Count > 0)
+			if (listLevelOneMenu.Count > 0)
 			{
-				foreach (var itemMenu in levelOneMenuItems)
+				foreach (Menu itemMenu in listLevelOneMenu)
 				{
 					bool foundLevelOneItem = false;
 
-					foreach (var itemMenu22 in listMenu)
+					foreach (Menu itemMenu22 in listMenu)
 					{
 						if (itemMenu22.TreePath.ToUpper().StartsWith(itemMenu.TreePath.ToUpper()))
 						{
@@ -181,9 +181,9 @@ namespace BPX.Service
 
 					if (foundLevelOneItem)
 					{
-						var levelTwoMenuItems = menuHierarchy.Where(c => c.ParentMenuId.Equals(itemMenu.MenuId)).OrderBy(c => c.OrderNumber).ToList();
+						List<Menu> listLevelTwoMenu = menuHierarchy.Where(c => c.ParentMenuId.Equals(itemMenu.MenuId)).OrderBy(c => c.OrderNumber).ToList();
 
-						if (levelTwoMenuItems.Count > 0)
+						if (listLevelTwoMenu.Count > 0)
 						{
 							menuString += "<li class=\"dropdown\">";
 							menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName} <i class=\"fa fa-angle-down\"></i></a>";
@@ -206,17 +206,17 @@ namespace BPX.Service
 
 		private void AddMenuItemsLevelTwo(ref string menuString, List<Menu> menuHierarchy, Menu menu, List<Menu> listMenu, List<int> userPermitIds)
 		{
-			var levelTwoMenuItems = menuHierarchy.Where(c => c.ParentMenuId.Equals(menu.MenuId)).OrderBy(c => c.OrderNumber).ToList();
+			List<Menu> listLevelTwoMenu = menuHierarchy.Where(c => c.ParentMenuId.Equals(menu.MenuId)).OrderBy(c => c.OrderNumber).ToList();
 
-			if (levelTwoMenuItems.Count > 0)
+			if (listLevelTwoMenu.Count > 0)
 			{
 				menuString += "<ul>";
 
-				foreach (var itemMenu in levelTwoMenuItems)
+				foreach (Menu itemMenu in listLevelTwoMenu)
 				{
 					bool foundLevelTwoItem = false;
 
-					foreach (var itemMenu22 in listMenu)
+					foreach (Menu itemMenu22 in listMenu)
 					{
 						if (itemMenu22.TreePath.ToUpper().StartsWith(itemMenu.TreePath.ToUpper()))
 						{
@@ -227,9 +227,9 @@ namespace BPX.Service
 
 					if (foundLevelTwoItem)
 					{
-						var levelThreeMenuItems = menuHierarchy.Where(c => c.ParentMenuId.Equals(itemMenu.MenuId)).OrderBy(c => c.OrderNumber).ToList();
+						List<Menu> listLevelThreeMenu = menuHierarchy.Where(c => c.ParentMenuId.Equals(itemMenu.MenuId)).OrderBy(c => c.OrderNumber).ToList();
 
-						if (levelThreeMenuItems.Count > 0)
+						if (listLevelThreeMenu.Count > 0)
 						{
 							menuString += "<li class=\"dropdown\">";
 							menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName} <i class=\"fa fa-angle-right\"></i></a>";
@@ -253,17 +253,17 @@ namespace BPX.Service
 
 		private void AddMenuItemsLevelThree(ref string menuString, List<Menu> menuHierarchy, Menu menu, List<Menu> listMenu, List<int> userPermitIds)
 		{
-			var levelThreeMenuItems = menuHierarchy.Where(c => c.ParentMenuId.Equals(menu.MenuId)).OrderBy(c => c.OrderNumber).ToList();
+			List<Menu> listLevelThreeMenu = menuHierarchy.Where(c => c.ParentMenuId.Equals(menu.MenuId)).OrderBy(c => c.OrderNumber).ToList();
 
-			if (levelThreeMenuItems.Count > 0)
+			if (listLevelThreeMenu.Count > 0)
 			{
 				menuString += "<ul>";
 
-				foreach (var itemMenu in levelThreeMenuItems)
+				foreach (Menu itemMenu in listLevelThreeMenu)
 				{
 					bool foundLevelThreeItem = false;
 
-					foreach (var itemMenu22 in listMenu)
+					foreach (Menu itemMenu22 in listMenu)
 					{
 						if (itemMenu22.TreePath.ToUpper().StartsWith(itemMenu.TreePath.ToUpper()))
 						{

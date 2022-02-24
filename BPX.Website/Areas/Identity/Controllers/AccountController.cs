@@ -48,7 +48,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Login(BPXLoginViewModel model)
         {
-            var login = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.LoginName.Equals(model.LoginName)).SingleOrDefault();
+            Login login = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.LoginName.Equals(model.LoginName)).SingleOrDefault();
             bool passwordIsVerified = false;
 
             if (login == null)
@@ -71,7 +71,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             try
             {
                 // verify password
-                var result = new PasswordHasher<Login>().VerifyHashedPassword(login, login.PasswordHash, model.Password);
+                PasswordVerificationResult result = new PasswordHasher<Login>().VerifyHashedPassword(login, login.PasswordHash, model.Password);
                 if (result == PasswordVerificationResult.Success) passwordIsVerified = true;
                 else if (result == PasswordVerificationResult.SuccessRehashNeeded) passwordIsVerified = true;
                 else if (result == PasswordVerificationResult.Failed) passwordIsVerified = false;
@@ -108,7 +108,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
 
             // get user
-            var user = userService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.LoginUUId.Equals(login.LoginUUId)).SingleOrDefault();
+            User user = userService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.LoginUUId.Equals(login.LoginUUId)).SingleOrDefault();
 
             if (user == null)
             {
@@ -125,7 +125,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
 
-            var portal = portalService.GetRecordsByFilter(c => c.PortalUUId.Equals(user.PortalUUId)).SingleOrDefault();
+            Portal portal = portalService.GetRecordsByFilter(c => c.PortalUUId.Equals(user.PortalUUId)).SingleOrDefault();
 
             if (portal == null)
             {
@@ -162,21 +162,21 @@ namespace BPX.Website.Areas.Identity.Controllers
 
 			string fullName = user.LastName ?? string.Empty + " " + user.FirstName ?? string.Empty;
 			
-			var claims = new List<Claim>
+			List<Claim> listClaim = new List<Claim>
 			{
                 new Claim("PToken", portal.PToken ?? "Invalid PToken"),
                 new Claim(ClaimTypes.Name, fullName),
             };
 
-            //var userRolesIds = userRoleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.UserId.Equals(login.UserId)).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
-            //foreach (var userRoleId in userRolesIds)
+            //List<int> listUserRolesIds = userRoleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.UserId.Equals(login.UserId)).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
+            //foreach (int userRoleId in listUserRolesIds)
             //{
             //	claims.Add(new Claim(ClaimTypes.Role, userRoleId.ToString()));
             //}
 
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(listClaim, CookieAuthenticationDefaults.AuthenticationScheme);
 
-            var authProperties = new AuthenticationProperties
+            AuthenticationProperties authProperties = new AuthenticationProperties
             {
                 // AllowRefresh = true,
                 // IssuedUtc = <DateTimeOffset>,
@@ -245,9 +245,9 @@ namespace BPX.Website.Areas.Identity.Controllers
                 }
 
                 // check if loginId exists
-                var duplicateLoginList = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.LoginName.Equals(collection.LoginName)).ToList();
+                List<Login> listDuplicateLogin = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.LoginName.Equals(collection.LoginName)).ToList();
 
-                if (duplicateLoginList.Count.Equals(0))
+                if (listDuplicateLogin.Count.Equals(0))
                 {
                     string portalUUId = Utility.GetUUID(24);
                     string loginUUId = Utility.GetUUID(24);
@@ -288,7 +288,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     };
 
                     // hash the password
-                    var passwordHasher = new PasswordHasher<Login>();
+                    PasswordHasher<Login> passwordHasher = new PasswordHasher<Login>();
                     string hashedPassword = passwordHasher.HashPassword(login, collection.Password);
 
                     login.PasswordHash = hashedPassword;
@@ -392,10 +392,10 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // todo :: verify old password
 
                 // get user
-                var login = loginService.GetRecordById(currUser.UserId);
+                Login login = loginService.GetRecordById(currUser.UserId);
 
-				// hash the password
-				var passwordHasher = new PasswordHasher<Login>();
+                // hash the password
+                PasswordHasher<Login> passwordHasher = new PasswordHasher<Login>();
 				string hashedPassword = passwordHasher.HashPassword(login, collection.NewPassword);
 
                 login.PasswordHash = hashedPassword;
@@ -433,7 +433,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             if (currUser.UserId > 0)
             {
                 // scramble PToken
-                var portal = portalService.GetRecordsByFilter(c => c.PortalUUId.Equals(currUser.PortalUUId)).SingleOrDefault();
+                Portal portal = portalService.GetRecordsByFilter(c => c.PortalUUId.Equals(currUser.PortalUUId)).SingleOrDefault();
 
                 portal.PToken = Guid.NewGuid().ToString();
                 portal.LastAccessTime = DateTime.Now.AddMinutes(-60);
@@ -442,7 +442,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 portalService.SaveDBChanges();
 
                 // scramble RToken
-                var login = loginService.GetRecordsByFilter(c => c.LoginUUId.Equals(currUser.LoginUUId)).SingleOrDefault();
+                Login login = loginService.GetRecordsByFilter(c => c.LoginUUId.Equals(currUser.LoginUUId)).SingleOrDefault();
 
                 login.RToken = Guid.NewGuid().ToString();
                 // set generic data

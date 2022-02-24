@@ -57,9 +57,9 @@ namespace BPX.Website.Areas.Sample.Controllers
 
             using (ms = new MemoryStream())
             {
-                var writer = new PdfWriter(ms);
-                var pdf = new PdfDocument(writer);
-                var document = new iText.Layout.Document(pdf);
+                PdfWriter writer = new PdfWriter(ms);
+                PdfDocument pdf = new PdfDocument(writer);
+                DocumentIText document = new iText.Layout.Document(pdf);
 
                 document.Add(new ParagraphIText("Hello world! "));
 

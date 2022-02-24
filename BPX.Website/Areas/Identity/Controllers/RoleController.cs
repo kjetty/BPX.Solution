@@ -54,7 +54,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
 
             // fetch data
-            var model = roleService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString).Select(c => (RoleMiniViewModel)c);
+            IPagedList<RoleMiniViewModel> model = roleService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString).Select(c => (RoleMiniViewModel)c);
 
             // set pagination data
             ViewBag.pageNumber = pageNumber;
@@ -134,8 +134,8 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Role.Read)]
         public IActionResult Read(int id)
         {
-            var model = (RoleViewModel)roleService.GetRecordById(id);
-            var modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
+            RoleViewModel model = (RoleViewModel)roleService.GetRecordById(id);
+            User modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
 
             // set ViewBag
             ViewBag.modifiedByName = modelModifiedBy.FirstName + " " + modelModifiedBy.LastName;
@@ -147,7 +147,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Role.Update)]
         public IActionResult Update(int id)
         {
-            var model = (RoleMiniViewModel)roleService.GetRecordById(id);
+            RoleMiniViewModel model = (RoleMiniViewModel)roleService.GetRecordById(id);
 
             return View(model);
         }
@@ -173,7 +173,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 }
 
                 // get existing data
-                var recordRole = roleService.GetRecordById(id);
+                Role recordRole = roleService.GetRecordById(id);
 
                 if (recordRole.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
                 {
@@ -219,8 +219,8 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Role.Delete)]
         public IActionResult Delete(int id)
         {
-            var model = (RoleViewModel)roleService.GetRecordById(id);
-            var modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
+            RoleViewModel model = (RoleViewModel)roleService.GetRecordById(id);
+            User modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
 
             // set ViewBag
             ViewBag.modifiedByName = modelModifiedBy.FirstName + " " + modelModifiedBy.LastName;
@@ -249,7 +249,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 }
 
                 // get existing data
-                var recordRole = roleService.GetRecordById(id);
+                Role recordRole = roleService.GetRecordById(id);
 
                 if (recordRole.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
                 {
@@ -301,7 +301,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
 
             // fetch data
-            var model = roleService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString).Select(c => (RoleMiniViewModel)c);
+            IPagedList<RoleMiniViewModel> model = roleService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString).Select(c => (RoleMiniViewModel)c);
 
             // set pagination data
             ViewBag.pageNumber = pageNumber;
@@ -318,8 +318,8 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Role.Undelete)]
         public IActionResult Undelete(int id)
         {
-            var model = (RoleViewModel)roleService.GetRecordById(id);
-            var modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
+            RoleViewModel model = (RoleViewModel)roleService.GetRecordById(id);
+            User modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
 
             // set ViewBag
             ViewBag.modifiedByName = modelModifiedBy.FirstName + " " + modelModifiedBy.LastName;
@@ -348,7 +348,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 }
 
                 // get existing data
-                var recordRole = roleService.GetRecordById(id);
+                Role recordRole = roleService.GetRecordById(id);
 
                 if (recordRole.StatusFlag.Equals(RecordStatus.Inactive.ToUpper()))
                 {
@@ -399,10 +399,10 @@ namespace BPX.Website.Areas.Identity.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var role = roleService.GetRecordById(id);
-            var listPermits = permitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).OrderBy(c => c.PermitArea).ThenBy(c => c.PermitController).ThenBy(c => c.PermitName).ToList();     
-            var listRolePermitIds = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.RoleId.Equals(id)).OrderBy(c => c.PermitId).Select(c => c.PermitId).ToList();      
-            var listAreas = listPermits.OrderBy(c => c.PermitArea).Select(c => c.PermitArea).Distinct().ToList();
+            Role role = roleService.GetRecordById(id);
+            List<Permit> listPermits = permitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).OrderBy(c => c.PermitArea).ThenBy(c => c.PermitController).ThenBy(c => c.PermitName).ToList();
+            List<int> listRolePermitIds = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.RoleId.Equals(id)).OrderBy(c => c.PermitId).Select(c => c.PermitId).ToList();
+            List<string> listAreas = listPermits.OrderBy(c => c.PermitArea).Select(c => c.PermitArea).Distinct().ToList();
                          
             // set ViewBag
             ViewBag.role = role;
@@ -419,10 +419,10 @@ namespace BPX.Website.Areas.Identity.Controllers
         public IActionResult RolePermits(int id, List<int> permitIds)
         {
             // get all existing active permits for the role
-            var listRolePermits = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.RoleId.Equals(id)).ToList();
+            List<RolePermit> listRolePermits = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.RoleId.Equals(id)).ToList();
 
             // delete all existing active permits for the role
-            foreach (var rolePermit in listRolePermits)
+            foreach (RolePermit rolePermit in listRolePermits)
             {
                 rolePermit.StatusFlag = RecordStatus.Inactive.ToUpper();
                 rolePermit.ModifiedBy = currUser.UserId;
@@ -434,9 +434,9 @@ namespace BPX.Website.Areas.Identity.Controllers
             rolePermitService.SaveDBChanges();
 
             // add or activate received permits for the role
-            foreach (var permitId in permitIds)
+            foreach (int permitId in permitIds)
             {
-                var existingRolePermit = rolePermitService.GetRecordsByFilter(c => c.RoleId.Equals(id) && c.PermitId.Equals(permitId)).SingleOrDefault();
+                RolePermit existingRolePermit = rolePermitService.GetRecordsByFilter(c => c.RoleId.Equals(id) && c.PermitId.Equals(permitId)).SingleOrDefault();
 
                 if (existingRolePermit != null)
                 {
@@ -477,9 +477,9 @@ namespace BPX.Website.Areas.Identity.Controllers
         {
             //// cache :: remove following :: 
             //// ALL
-            var listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.ModifiedDate >= DateTime.Now.AddDays(-999)).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
+            List<string> listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.ModifiedDate >= DateTime.Now.AddDays(-999)).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
 
-			foreach (var itemCacheKeyName in listCacheKeyNames)
+			foreach (string itemCacheKeyName in listCacheKeyNames)
 			{
 				cacheService.RemoveCache(itemCacheKeyName.ToString());
 			}

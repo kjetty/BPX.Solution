@@ -75,7 +75,7 @@ namespace BPX.Website.Areas.Sample.Controllers
             //ms.Seek(0, SeekOrigin.Begin);
 
             //// return the file stream
-            //var rslt = new FileStreamResult(ms, "application/vnd.openxmlformats-officedocument.wordprocessingml.document") { FileDownloadName = "dyndoc.docx" };
+            //FileStreamResult rslt = new FileStreamResult(ms, "application/vnd.openxmlformats-officedocument.wordprocessingml.document") { FileDownloadName = "dyndoc.docx" };
 
             //// back to the browser
             //return rslt;
@@ -143,7 +143,7 @@ namespace BPX.Website.Areas.Sample.Controllers
             //ms.Seek(0, SeekOrigin.Begin);
 
             //// return the file stream
-            //var rslt = new FileStreamResult(ms, "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+            //FileStreamResult rslt = new FileStreamResult(ms, "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
 
             //// back to the browser
             //return rslt;

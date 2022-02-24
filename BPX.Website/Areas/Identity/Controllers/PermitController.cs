@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using X.PagedList;
 
@@ -57,7 +58,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
 
             // fetch data
-            var model = permitService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString).Select(c => (PermitMiniViewModel)c);
+            IPagedList<PermitMiniViewModel> model = permitService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString).Select(c => (PermitMiniViewModel)c);
 
             // set pagination data
             ViewBag.pageNumber = pageNumber;
@@ -140,8 +141,8 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Permit.Read)]
         public IActionResult Read(int id)
         {
-            var model = (PermitViewModel)permitService.GetRecordById(id);
-            var modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
+            PermitViewModel model = (PermitViewModel)permitService.GetRecordById(id);
+            User modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
 
             // set ViewBag
             ViewBag.modifiedByName = modelModifiedBy.FirstName + " " + modelModifiedBy.LastName;
@@ -153,7 +154,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Permit.Update)]
         public IActionResult Update(int id)
         {
-            var model = (PermitMiniViewModel)permitService.GetRecordById(id);
+            PermitMiniViewModel model = (PermitMiniViewModel)permitService.GetRecordById(id);
 
             return View(model);
         }
@@ -179,7 +180,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 }
 
                 // get existing data
-                var recordPermit = permitService.GetRecordById(id);
+                Permit recordPermit = permitService.GetRecordById(id);
 
                 if (recordPermit.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
                 {
@@ -227,8 +228,8 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Permit.Delete)]
         public IActionResult Delete(int id)
         {
-            var model = (PermitViewModel)permitService.GetRecordById(id);
-            var modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
+            PermitViewModel model = (PermitViewModel)permitService.GetRecordById(id);
+            User modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
 
             // set ViewBag
             ViewBag.modifiedByName = modelModifiedBy.FirstName + " " + modelModifiedBy.LastName;
@@ -257,7 +258,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 }
 
                 // get existing data
-                var recordPermit = permitService.GetRecordById(id);
+                Permit recordPermit = permitService.GetRecordById(id);
 
                 if (recordPermit.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
                 {
@@ -309,7 +310,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
 
             // fetch data
-            var model = permitService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString).Select(c => (PermitMiniViewModel)c);
+            IPagedList<PermitMiniViewModel> model = permitService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString).Select(c => (PermitMiniViewModel)c);
 
             // set pagination data
             ViewBag.pageNumber = pageNumber;
@@ -326,8 +327,8 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Permit.Undelete)]
         public IActionResult Undelete(int id)
         {
-            var model = (PermitViewModel)permitService.GetRecordById(id);
-            var modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
+            PermitViewModel model = (PermitViewModel)permitService.GetRecordById(id);
+            User modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
 
             // set ViewBag
             ViewBag.modifiedByName = modelModifiedBy.FirstName + " " + modelModifiedBy.LastName;
@@ -356,7 +357,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 }
 
                 // get existing data
-                var recordPermit = permitService.GetRecordById(id);
+                Permit recordPermit = permitService.GetRecordById(id);
 
                 if (recordPermit.StatusFlag.Equals(RecordStatus.Inactive.ToUpper()))
                 {
@@ -407,11 +408,11 @@ namespace BPX.Website.Areas.Identity.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var permit = permitService.GetRecordById(id);
-            var listRoleIds = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PermitId.Equals(id)).Select(c => c.RoleId).ToList();
-            var listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && listRoleIds.Contains(c.RoleId)).OrderBy(c => c.RoleName).ToList();
-            var listMenuIds = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PermitId.Equals(id)).Select(c => c.MenuId).ToList();
-            var listMenus = menuService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && listMenuIds.Contains(c.MenuId)).OrderBy(c => c.MenuURL).ToList();
+            Permit permit = permitService.GetRecordById(id);
+            List<int> listRoleIds = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PermitId.Equals(id)).Select(c => c.RoleId).ToList();
+            List<Role> listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && listRoleIds.Contains(c.RoleId)).OrderBy(c => c.RoleName).ToList();
+            List<int> listMenuIds = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PermitId.Equals(id)).Select(c => c.MenuId).ToList();
+            List<Menu> listMenus = menuService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && listMenuIds.Contains(c.MenuId)).OrderBy(c => c.MenuURL).ToList();
 
             // set ViewBag
             ViewBag.permit = permit;
@@ -427,9 +428,9 @@ namespace BPX.Website.Areas.Identity.Controllers
         {
             //// cache :: remove following :: 
             //// ALL
-            var listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.ModifiedDate >= DateTime.Now.AddDays(-999)).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
+            List<string> listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.ModifiedDate >= DateTime.Now.AddDays(-999)).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
 
-            foreach (var itemCacheKeyName in listCacheKeyNames)
+            foreach (string itemCacheKeyName in listCacheKeyNames)
             {
                 cacheService.RemoveCache(itemCacheKeyName.ToString());
             }

@@ -54,10 +54,10 @@ namespace BPX.Website.Areas.Identity.Controllers
 			searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
 
 			// fetch data
-			var model = userService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString).Select(c => (UserMiniViewModel)c);
-			var listUserId = model.Select(c => c.UserId).ToList();
-			var listUsersRoles = userRoleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && listUserId.Contains(c.UserId));
-			var listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()));
+			IPagedList<UserMiniViewModel> model = userService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString).Select(c => (UserMiniViewModel)c);
+			List<int> listUserId = model.Select(c => c.UserId).ToList();
+			List<UserRole> listUsersRoles = userRoleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && listUserId.Contains(c.UserId)).ToList();
+			List<Role> listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).ToList();
 
 			// set ViewBag
 			ViewBag.listUsersRoles = listUsersRoles;
@@ -81,10 +81,10 @@ namespace BPX.Website.Areas.Identity.Controllers
 			//todo
 			//restrict details view to current user and user with .List permit
 
-			var model = (UserViewModel)userService.GetRecordById(id);
-			var listUsersRoles = userRoleService.GetRecordsByFilter(c => c.UserId.Equals(id) && c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()));
-			var listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()));
-			var modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
+			UserViewModel model = (UserViewModel)userService.GetRecordById(id);
+			List<UserRole> listUsersRoles = userRoleService.GetRecordsByFilter(c => c.UserId.Equals(id) && c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).ToList();
+			List<Role> listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).ToList();
+			User modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
 
 			// set ViewBag
 			ViewBag.listUsersRoles = listUsersRoles;
@@ -98,10 +98,9 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.User.Update)]
         public IActionResult Update(int id)
         {
-			var model = (UserMiniViewModel)userService.GetRecordById(id);
-
-			var listUsersRoles = userRoleService.GetRecordsByFilter(c => id.Equals(c.UserId) && c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()));
-			var listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()));
+			UserMiniViewModel model = (UserMiniViewModel)userService.GetRecordById(id);
+            List<UserRole> listUsersRoles = userRoleService.GetRecordsByFilter(c => id.Equals(c.UserId) && c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).ToList();
+            List<Role> listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).ToList();
 
 			ViewBag.listUsersRoles = listUsersRoles;
 			ViewBag.listRoles = listRoles;
@@ -129,8 +128,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 					return View(collection);
 				}
 
-				// get existing data
-				var recordUser = userService.GetRecordById(id);
+                // get existing data
+                User recordUser = userService.GetRecordById(id);
 				
 				if (recordUser.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
 				{
@@ -178,10 +177,10 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.User.Delete)]
         public IActionResult Delete(int id)
         {
-			var model = (UserViewModel)userService.GetRecordById(id);
-			var listUsersRoles = userRoleService.GetRecordsByFilter(c => c.UserId.Equals(id) && c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()));
-			var listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()));
-			var modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
+            UserViewModel model = (UserViewModel)userService.GetRecordById(id);
+            List<UserRole> listUsersRoles = userRoleService.GetRecordsByFilter(c => c.UserId.Equals(id) && c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).ToList();
+            List<Role> listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).ToList();
+			User modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
 
 			// set ViewBag
 			ViewBag.listUsersRoles = listUsersRoles;
@@ -211,8 +210,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 					return View(collection);
 				}
 
-				// get existing data
-				var recordUser = userService.GetRecordById(id);
+                // get existing data
+                User recordUser = userService.GetRecordById(id);
 				
 				if (recordUser.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
 				{
@@ -263,11 +262,11 @@ namespace BPX.Website.Areas.Identity.Controllers
 			sortOrder = (sortOrder == null || sortOrder.Trim().Length.Equals(0)) ? SortOrder.Ascending : sortOrder;
 			searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
 
-			// fetch data
-			var model = userService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString).Select(c => (UserMiniViewModel)c);
-			var listUserId = model.Select(c => c.UserId).ToList();
-			var listUsersRoles = userRoleService.GetRecordsByFilter(c => listUserId.Contains(c.UserId) && c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()));
-			var listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()));
+            // fetch data
+            IPagedList<UserMiniViewModel> model = userService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString).Select(c => (UserMiniViewModel)c);
+            List<int> listUserId = model.Select(c => c.UserId).ToList();
+            List<UserRole> listUsersRoles = userRoleService.GetRecordsByFilter(c => listUserId.Contains(c.UserId) && c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).ToList();
+            List<Role> listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).ToList();
 
 			// set ViewBag
 			ViewBag.listUsersRoles = listUsersRoles;
@@ -288,10 +287,10 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.User.Undelete)]
         public IActionResult Undelete(int id)
         {
-			var model = (UserViewModel)userService.GetRecordById(id);
-			var listUsersRoles = userRoleService.GetRecordsByFilter(c => c.UserId.Equals(id) && c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()));
-			var listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()));
-			var modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
+            UserViewModel model = (UserViewModel)userService.GetRecordById(id);
+            List<UserRole> listUsersRoles = userRoleService.GetRecordsByFilter(c => c.UserId.Equals(id) && c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).ToList();
+            List<Role> listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).ToList();
+			User modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
 
 			// set ViewBag
 			ViewBag.listUsersRoles = listUsersRoles;
@@ -321,8 +320,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 					return View(collection);
 				}
 
-				// get existing data
-				var recordUser = userService.GetRecordById(id);
+                // get existing data
+                User recordUser = userService.GetRecordById(id);
 				
 				if (recordUser.StatusFlag.Equals(RecordStatus.Inactive.ToUpper()))
 				{
@@ -373,9 +372,9 @@ namespace BPX.Website.Areas.Identity.Controllers
 				return RedirectToAction(nameof(Index));
 			}
 
-			var user = userService.GetRecordById(id);
-			var listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).OrderBy(c => c.RoleName).ToList();
-			var listUserRoleIds = userRoleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.UserId.Equals(id)).OrderBy(c => c.RoleId).Select(c => c.RoleId).ToList();
+            User user = userService.GetRecordById(id);
+            List<Role> listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).OrderBy(c => c.RoleName).ToList();
+            List<int> listUserRoleIds = userRoleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.UserId.Equals(id)).OrderBy(c => c.RoleId).Select(c => c.RoleId).ToList();
 			
 			// set ViewBag
 			ViewBag.user = user;
@@ -390,11 +389,11 @@ namespace BPX.Website.Areas.Identity.Controllers
 		[Permit(Permits.Identity.User.UserRoles)]
 		public IActionResult UserRoles(int id, List<int> roleIds)
 		{
-			// get all existing active roles for the user
-			var listUserRoles = userRoleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.UserId.Equals(id)).ToList();
+            // get all existing active roles for the user
+            List<UserRole> listUserRoles = userRoleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.UserId.Equals(id)).ToList();
 
 			// delete all existing active roles for the user
-			foreach (var userRole in listUserRoles)
+			foreach (UserRole userRole in listUserRoles)
 			{
 				userRole.StatusFlag = RecordStatus.Inactive.ToUpper();
 				userRole.ModifiedBy = currUser.UserId;
@@ -406,9 +405,9 @@ namespace BPX.Website.Areas.Identity.Controllers
 			userRoleService.SaveDBChanges();
 
 			// add or activate received roles for the user
-			foreach (var roleId in roleIds)
+			foreach (int roleId in roleIds)
 			{
-				var existingUserRole = userRoleService.GetRecordsByFilter(c => c.UserId.Equals(id) && c.RoleId.Equals(roleId)).SingleOrDefault();
+                UserRole existingUserRole = userRoleService.GetRecordsByFilter(c => c.UserId.Equals(id) && c.RoleId.Equals(roleId)).SingleOrDefault();
 
 				if (existingUserRole != null)
 				{
@@ -446,14 +445,14 @@ namespace BPX.Website.Areas.Identity.Controllers
 	
 		private void ResetCache(int id)
 		{
-			//// cache :: remove following :: 
-			// $"user:{userId}:meta";
-			// $"user:{userId}:roles";
-			// $"user:{userId}:permits";
+            //// cache :: remove following :: 
+            // $"user:{userId}:meta";
+            // $"user:{userId}:roles";
+            // $"user:{userId}:permits";
 
-			var listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.Contains($"user:{id}:") && c.ModifiedDate >= DateTime.Now.AddDays(-999)).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
+            List<string> listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.Contains($"user:{id}:") && c.ModifiedDate >= DateTime.Now.AddDays(-999)).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
 
-			foreach (var itemCacheKeyName in listCacheKeyNames)
+			foreach (string itemCacheKeyName in listCacheKeyNames)
 			{
 				cacheService.RemoveCache(itemCacheKeyName.ToString());
 			}

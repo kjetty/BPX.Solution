@@ -44,11 +44,10 @@ namespace BPX.Website.Areas.Identity.Controllers
 		[Permit(Permits.Identity.Menu.List)]
 		public IActionResult List()
 		{
-            var listMenu = coreService.GetMenuHierarchy(RecordStatus.Active.ToUpper(), "URL");
-
+            List<Menu> listMenu = coreService.GetMenuHierarchy(RecordStatus.Active.ToUpper(), "URL");
             List<MenuMiniViewModel> model = new List<MenuMiniViewModel>();
 
-            foreach (var itemMenu in listMenu)
+            foreach (Menu itemMenu in listMenu)
             {
                 model.Add((MenuMiniViewModel)itemMenu);
             }
@@ -61,7 +60,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         public IActionResult Create(int id)
         {
             //get parentMenu detail
-            var parentMenu = menuService.GetRecordById(id);
+            Menu parentMenu = menuService.GetRecordById(id);
             ViewBag.parentMenu = parentMenu;
 
             return View();
@@ -133,8 +132,8 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Menu.Read)]
         public IActionResult Read(int id)
         {
-            var model = (MenuViewModel)menuService.GetRecordById(id);
-            var modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
+            MenuViewModel model = (MenuViewModel)menuService.GetRecordById(id);
+            User modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
 
             // set ViewBag
             ViewBag.modifiedByName = modelModifiedBy.FirstName + " " + modelModifiedBy.LastName;
@@ -146,7 +145,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Menu.Update)]
         public IActionResult Update(int id)
         {
-            var model = (MenuMiniViewModel)menuService.GetRecordById(id);
+            MenuMiniViewModel model = (MenuMiniViewModel)menuService.GetRecordById(id);
 
             return View(model);
         }
@@ -172,7 +171,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 }
 
                 // get existing data
-                var recordMenu = menuService.GetRecordById(id);
+                Menu recordMenu = menuService.GetRecordById(id);
 
                 if (recordMenu.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
                 {
@@ -221,8 +220,8 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Menu.Delete)]
         public IActionResult Delete(int id)
         {
-            var model = (MenuViewModel)menuService.GetRecordById(id);
-            var modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
+            MenuViewModel model = (MenuViewModel)menuService.GetRecordById(id);
+            User modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
 
             // set ViewBag
             ViewBag.modifiedByName = modelModifiedBy.FirstName + " " + modelModifiedBy.LastName;
@@ -251,7 +250,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 }
 
                 // get existing data
-                var recordMenu = menuService.GetRecordById(id);
+                Menu recordMenu = menuService.GetRecordById(id);
 
                 if (recordMenu.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
                 {
@@ -294,11 +293,10 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Menu.ListDeleted)]
         public IActionResult ListDeleted()
         {
-            var listMenu = coreService.GetMenuService().GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Inactive.ToUpper())).ToList();
-
+            List<Menu> listMenu = coreService.GetMenuService().GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Inactive.ToUpper())).ToList();
             List<MenuMiniViewModel> model = new List<MenuMiniViewModel>();
 
-            foreach (var itemMenu in listMenu)
+            foreach (Menu itemMenu in listMenu)
             {
                 model.Add((MenuMiniViewModel)itemMenu);
             }
@@ -310,8 +308,8 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Menu.Undelete)]
         public IActionResult Undelete(int id)
         {
-            var model = (MenuViewModel)menuService.GetRecordById(id);
-            var modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
+            MenuViewModel model = (MenuViewModel)menuService.GetRecordById(id);
+            User modelModifiedBy = userService.GetRecordById(model.ModifiedBy);
 
             // set ViewBag
             ViewBag.modifiedByName = modelModifiedBy.FirstName + " " + modelModifiedBy.LastName;
@@ -340,7 +338,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 }
 
                 // get existing data
-                var recordMenu = menuService.GetRecordById(id);
+                Menu recordMenu = menuService.GetRecordById(id);
 
                 if (recordMenu.StatusFlag.ToUpper().Equals(RecordStatus.Inactive.ToUpper()))
                 {
@@ -391,10 +389,10 @@ namespace BPX.Website.Areas.Identity.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var menu = menuService.GetRecordById(id);
-            var listPermits = permitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).OrderBy(c => c.PermitArea).ThenBy(c => c.PermitController).ThenBy(c => c.PermitName).ToList();
-            var listMenuPermitIds = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.MenuId.Equals(id)).OrderBy(c => c.PermitId).Select(c => c.PermitId).ToList();
-            var listAreas = listPermits.OrderBy(c => c.PermitArea).Select(c => c.PermitArea).Distinct().ToList();
+            Menu menu = menuService.GetRecordById(id);
+            List<Permit> listPermits = permitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).OrderBy(c => c.PermitArea).ThenBy(c => c.PermitController).ThenBy(c => c.PermitName).ToList();
+            List<int> listMenuPermitIds = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.MenuId.Equals(id)).OrderBy(c => c.PermitId).Select(c => c.PermitId).ToList();
+            List<string> listAreas = listPermits.OrderBy(c => c.PermitArea).Select(c => c.PermitArea).Distinct().ToList();
 
             // set ViewBag
             ViewBag.menu = menu;
@@ -411,10 +409,10 @@ namespace BPX.Website.Areas.Identity.Controllers
         public IActionResult MenuPermits(int id, List<int> permitIds)
         {
             // get all exisiting active permits for the menu
-			var listMenuPermits = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.MenuId.Equals(id)).ToList();
+			List<MenuPermit> listMenuPermits = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.MenuId.Equals(id)).ToList();
 
             // delete all existing active permits for the menu
-            foreach (var menuPermit in listMenuPermits)
+            foreach (MenuPermit menuPermit in listMenuPermits)
 			{
 				menuPermit.StatusFlag = RecordStatus.Inactive.ToUpper();
 				menuPermit.ModifiedBy = currUser.UserId;
@@ -426,9 +424,9 @@ namespace BPX.Website.Areas.Identity.Controllers
             menuPermitService.SaveDBChanges();
 
 			// add or activate received permits for the menu
-			foreach (var permitId in permitIds)
+			foreach (int permitId in permitIds)
 			{
-				var existingMenuPermit = menuPermitService.GetRecordsByFilter(c => c.MenuId.Equals(id) && c.PermitId.Equals(permitId)).SingleOrDefault();
+				MenuPermit existingMenuPermit = menuPermitService.GetRecordsByFilter(c => c.MenuId.Equals(id) && c.PermitId.Equals(permitId)).SingleOrDefault();
 
 				if (existingMenuPermit != null)
 				{
@@ -471,9 +469,9 @@ namespace BPX.Website.Areas.Identity.Controllers
 		{
             List<Menu> listMenu = menuService.GetMenuHierarchy(RecordStatus.Active.ToUpper(), "URL");
 
-            foreach (var itemMenu in listMenu)
+            foreach (Menu itemMenu in listMenu)
 			{
-                var recordMenu = menuService.GetRecordById(itemMenu.MenuId);
+                Menu recordMenu = menuService.GetRecordById(itemMenu.MenuId);
 
                 recordMenu.HLevel = itemMenu.HLevel;
                 recordMenu.TreePath = itemMenu.TreePath;
@@ -493,9 +491,9 @@ namespace BPX.Website.Areas.Identity.Controllers
         {
             //// cache :: remove following :: 
             //// ALL
-            var listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.ModifiedDate >= DateTime.Now.AddDays(-999)).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
+            List<string> listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.ModifiedDate >= DateTime.Now.AddDays(-999)).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
 
-            foreach (var itemCacheKeyName in listCacheKeyNames)
+            foreach (string itemCacheKeyName in listCacheKeyNames)
             {
                 cacheService.RemoveCache(itemCacheKeyName.ToString());
             }

@@ -22,38 +22,13 @@ namespace BPX.Website.MiddleWare
 
 		public Task InvokeAsync(HttpContext context, ICoreService coreService)
 		{
-			var watch = new Stopwatch();
+            Stopwatch watch = new Stopwatch();
 			watch.Start();
-
-			//if (context != null)
-			//{
-			//	if (context.User != null)
-			//	{
-			//		var currPToken = context.User.Claims.SingleOrDefault(c => c.Type == "BPXPToken");
-
-			//		if (currPToken != null)
-			//		{
-			//			// get current loginToken value
-			//			string loginToken = currPToken.Value;
-
-			//			// get user data from the loginToken
-			//			// SECURITY - verify against the database for every request
-			//			int userId = coreService.GetUserId(loginToken);
-
-			//			if (userId > 0)
-			//			{
-			//				context.Response.Clear();
-			//				context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-			//				return Task.CompletedTask;
-			//			}
-			//		}
-			//	}
-			//}
 
 			context.Response.OnStarting(() => {
 				watch.Stop();
 
-				var elapsedTime = watch.ElapsedMilliseconds;
+                long elapsedTime = watch.ElapsedMilliseconds;
 
 				// add the Response time information in the Response headers.   
 				context.Response.Headers[RESPONSE_HEADER_RESPONSE_TIME] = elapsedTime.ToString();

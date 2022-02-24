@@ -1,4 +1,5 @@
-﻿using BPX.Service;
+﻿using BPX.Domain.DbModels;
+using BPX.Service;
 using BPX.Utils;
 using BPX.Website.Controllers;
 using BPX.Website.CustomCode.Authorize;
@@ -52,32 +53,32 @@ namespace BPX.Website.Areas.Developer.Controllers
             string fileName = "PermitConstants.cs";
             string tempString = string.Empty;
 
-            var permitAreaList = permitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).OrderBy(c => c.PermitArea).Select(c => c.PermitArea).Distinct().ToList();
+            List<string> listPermitArea = permitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).OrderBy(c => c.PermitArea).Select(c => c.PermitArea).Distinct().ToList();
 
             tempString += "namespace BPX.Website.CustomCode.Authorize" + Environment.NewLine;
             tempString += "{ " + Environment.NewLine;
             tempString += "\t" + "public static class Permits" + Environment.NewLine;
             tempString += "\t" + "{ " + Environment.NewLine;
 
-            foreach (string itemPermitArea in permitAreaList)
+            foreach (string itemPermitArea in listPermitArea)
             {
                 tempString += "\t" + "\t" + "public static class " + itemPermitArea + Environment.NewLine;
                 tempString += "\t" + "\t" + "{ " + Environment.NewLine;
 
                 // db call
-                var permitControllerList = permitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PermitArea.ToUpper().Equals(itemPermitArea.ToUpper())).OrderBy(c => c.PermitController).Select(c => c.PermitController).Distinct().ToList();
+                List<string> listPermitController = permitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PermitArea.ToUpper().Equals(itemPermitArea.ToUpper())).OrderBy(c => c.PermitController).Select(c => c.PermitController).Distinct().ToList();
 
-                foreach (string itemPermitController in permitControllerList)
+                foreach (string itemPermitController in listPermitController)
                 {
                     tempString += "\t" + "\t" + "\t" + "public static class " + itemPermitController + Environment.NewLine;
                     tempString += "\t" + "\t" + "\t" + "{ " + Environment.NewLine;
 
                     // db call
-                    var permitObjList = permitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PermitArea.ToUpper().Equals(itemPermitArea.ToUpper()) && c.PermitController.ToUpper().Equals(itemPermitController.ToUpper())).OrderBy(c => c.PermitName).Select(c => new { c.PermitId, c.PermitName, c.PermitEnum }).OrderBy(c => c.PermitName).ToList();
+                    List<Permit> listPermit = permitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PermitArea.ToUpper().Equals(itemPermitArea.ToUpper()) && c.PermitController.ToUpper().Equals(itemPermitController.ToUpper())).OrderBy(c => c.PermitName).OrderBy(c => c.PermitName).ToList();
 
-                    foreach (var itemPermitObj in permitObjList)
+                    foreach (Permit itemPermit in listPermit)
                     {
-                        tempString += "\t" + "\t" + "\t" + "\t" + "public const int " + itemPermitObj.PermitName + " = " + itemPermitObj.PermitId + "; \t\t\t //" + itemPermitObj.PermitEnum + Environment.NewLine;
+                        tempString += "\t" + "\t" + "\t" + "\t" + "public const int " + itemPermit.PermitName + " = " + itemPermit.PermitId + "; \t\t\t //" + itemPermit.PermitEnum + Environment.NewLine;
                     }
 
                     tempString += "\t" + "\t" + "\t" + "} " + Environment.NewLine + Environment.NewLine;

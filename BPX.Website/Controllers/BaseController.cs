@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 
 namespace BPX.Website.Controllers
 {
@@ -34,18 +35,18 @@ namespace BPX.Website.Controllers
 			this.cacheKeyService = coreService.GetCacheKeyService();
 		}
 
-        public override void OnActionExecuting(ActionExecutingContext ctx)
-        {
+		public override void OnActionExecuting(ActionExecutingContext ctx)
+		{
 			ViewBag.currLoginMenuString = GetLoginMenuString(null);
 
-            //var watch = new System.Diagnostics.Stopwatch();
-            //watch.Start();
+			//Stopwatch watch = new System.Diagnostics.Stopwatch();
+			//watch.Start();
 
-            if (ctx.HttpContext != null)
+			if (ctx.HttpContext != null)
 			{
 				if (ctx.HttpContext.User != null)
-			    {
-					var currPTokenClaim = ctx.HttpContext.User.Claims.SingleOrDefault(c => c.Type.Equals("PToken"));
+				{
+					Claim currPTokenClaim = ctx.HttpContext.User.Claims.SingleOrDefault(c => c.Type.Equals("PToken"));
 
 					if (currPTokenClaim != null)
 					{
@@ -54,17 +55,17 @@ namespace BPX.Website.Controllers
 						string currRToken = new string(currPToken.ToCharArray().Reverse().ToArray());
 
 						// get portal details
-						var portalService = coreService.GetPortalService();
-						var portal = portalService.GetRecordsByFilter(c => c.PToken.Equals(currPToken)).SingleOrDefault();
+						IPortalService portalService = coreService.GetPortalService();
+						Portal portal = portalService.GetRecordsByFilter(c => c.PToken.Equals(currPToken)).SingleOrDefault();
 
 						// get login details
-						var loginService = coreService.GetLoginService();
-						var login = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.RToken.Equals(currRToken)).SingleOrDefault();
+						ILoginService loginService = coreService.GetLoginService();
+						Login login = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.RToken.Equals(currRToken)).SingleOrDefault();
 
 						if (portal != null && login != null)
 						{
 							// get user details
-							var userService = coreService.GetUserService();
+							IUserService userService = coreService.GetUserService();
 							currUser = userService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PortalUUId.Equals(portal.PortalUUId) && c.LoginUUId.Equals(login.LoginUUId)).SingleOrDefault();
 
 							if (currUser != null)
@@ -73,13 +74,13 @@ namespace BPX.Website.Controllers
 								// verify the user :: portal :: login chain using currPToken on every request
 								int currUserId = currUser.UserId;
 
-								// get userRoles, userPermits, menu, breadcrumb data
-								var currUserRoleIds = GetUserRoleIds(currUserId);                                           // userRoleIds
-								var currUserPermitIds = GetUserPermitIds(currUserId, currUserRoleIds);                      // userPermitIds
-								var currLoginMenuString = GetLoginMenuString(currUser);										// loginMenuString
-								var currMenuHierarchy = GetMenuHierarchy(RecordStatus.Active.ToUpper(), "URL");				// menuHierarchy                   // menuHierarchy
-								var currMenuString = GetMenuString(currUserRoleIds, currUserPermitIds, currMenuHierarchy);  // menuString
-								var currBreadcrump = GetBreadCrumb(ctx, currMenuHierarchy);                                 // breadcrumb
+                                // get userRoles, userPermits, menu, breadcrumb data
+                                List<int> currUserRoleIds = GetUserRoleIds(currUserId);                                           // userRoleIds
+                                List<int> currUserPermitIds = GetUserPermitIds(currUserId, currUserRoleIds);                      // userPermitIds
+                                string currLoginMenuString = GetLoginMenuString(currUser);                                     // loginMenuString
+                                List<Menu> currMenuHierarchy = GetMenuHierarchy(RecordStatus.Active.ToUpper(), "URL");             // menuHierarchy                   // menuHierarchy
+                                string currMenuString = GetMenuString(currUserRoleIds, currUserPermitIds, currMenuHierarchy);  // menuString
+                                string currBreadcrump = GetBreadCrumb(ctx, currMenuHierarchy);                                 // breadcrumb
 
 								// populate ViewBag with user, userRoles, userPermits, menu, breadcrumb data
 								ViewBag.currUser = currUser;
@@ -110,7 +111,7 @@ namespace BPX.Website.Controllers
 								//	ViewBag.currUserPermitIds = tempUserPermitIds;
 								//}
 								////// END
-							}						
+							}
 						}
 					}
 				}
@@ -125,7 +126,7 @@ namespace BPX.Website.Controllers
             base.OnActionExecuting(ctx);
 		}
 
-        private List<int> GetUserRoleIds(int userId)
+		private List<int> GetUserRoleIds(int userId)
 		{
 			string cacheKeyName = $"user:{userId}:roles";
 			List<int> userRoleIds = cacheService.GetCache<List<int>>(cacheKeyName);
@@ -229,31 +230,31 @@ namespace BPX.Website.Controllers
 		}
 
 		protected void ShowAlertBox(AlertType alertType, string alertMessage)
-        {
+		{
 			string tempMessage = string.Empty;
 			tempMessage += " " + (alertMessage ?? string.Empty);
 
-            //// set alert
-            //ViewBag.alertBox = new AlertBox(alertType, tempMessage);
+			//// set alert
+			//ViewBag.alertBox = new AlertBox(alertType, tempMessage);
 
-            // set alert
-            TempData["alertBox"] = JsonConvert.SerializeObject(new AlertBox(alertType, tempMessage));
-        }
+			// set alert
+			TempData["alertBox"] = JsonConvert.SerializeObject(new AlertBox(alertType, tempMessage));
+		}
 
-        protected string GetModelErrorMessage(ModelStateDictionary modelState)
-        {
-            return string.Join(" ", modelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
-        }
-		
+		protected string GetModelErrorMessage(ModelStateDictionary modelState)
+		{
+			return string.Join(" ", modelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
+		}
+
 		protected string GetInnerExceptionMessage(Exception ex)
-        {
+		{
 			Exception exception = ex;
 
-            //get the message from the innermost exception
-            while (exception.InnerException != null)
-                exception = exception.InnerException;
+			//get the message from the innermost exception
+			while (exception.InnerException != null)
+				exception = exception.InnerException;
 
-            return exception.Message;
-        }
-    }
+			return exception.Message;
+		}
+	}
 }

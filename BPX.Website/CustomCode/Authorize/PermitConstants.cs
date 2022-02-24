@@ -1,4 +1,4 @@
-//This file is auto generated on 2/24/2022 10:46:09 AM
+//This file is auto generated on 2/24/2022 2:18:59 PM
 namespace BPX.Website.CustomCode.Authorize
 { 
 	public static class Permits

@@ -162,19 +162,13 @@ namespace BPX.Website.Areas.Identity.Controllers
 
 			string fullName = user.LastName ?? string.Empty + " " + user.FirstName ?? string.Empty;
 			
-			List<Claim> listClaim = new List<Claim>
+			List<Claim> listClaims = new List<Claim>
 			{
                 new Claim("PToken", portal.PToken ?? "Invalid PToken"),
                 new Claim(ClaimTypes.Name, fullName),
             };
 
-            //List<int> listUserRolesIds = userRoleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.UserId.Equals(login.UserId)).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
-            //foreach (int userRoleId in listUserRolesIds)
-            //{
-            //	claims.Add(new Claim(ClaimTypes.Role, userRoleId.ToString()));
-            //}
-
-            ClaimsIdentity claimsIdentity = new ClaimsIdentity(listClaim, CookieAuthenticationDefaults.AuthenticationScheme);
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(listClaims, CookieAuthenticationDefaults.AuthenticationScheme);
 
             AuthenticationProperties authProperties = new AuthenticationProperties
             {
@@ -245,9 +239,9 @@ namespace BPX.Website.Areas.Identity.Controllers
                 }
 
                 // check if loginId exists
-                List<Login> listDuplicateLogin = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.LoginName.Equals(collection.LoginName)).ToList();
+                List<Login> listDuplicateLogins = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.LoginName.Equals(collection.LoginName)).ToList();
 
-                if (listDuplicateLogin.Count.Equals(0))
+                if (listDuplicateLogins.Count.Equals(0))
                 {
                     string portalUUId = Utility.GetUUID(24);
                     string loginUUId = Utility.GetUUID(24);

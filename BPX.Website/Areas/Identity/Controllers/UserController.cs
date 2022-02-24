@@ -55,8 +55,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 
 			// fetch data
 			IPagedList<UserMiniViewModel> model = userService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString).Select(c => (UserMiniViewModel)c);
-			List<int> listUserId = model.Select(c => c.UserId).ToList();
-			List<UserRole> listUsersRoles = userRoleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && listUserId.Contains(c.UserId)).ToList();
+			List<int> listUserIds = model.Select(c => c.UserId).ToList();
+			List<UserRole> listUsersRoles = userRoleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && listUserIds.Contains(c.UserId)).ToList();
 			List<Role> listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).ToList();
 
 			// set ViewBag
@@ -264,8 +264,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 
             // fetch data
             IPagedList<UserMiniViewModel> model = userService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString).Select(c => (UserMiniViewModel)c);
-            List<int> listUserId = model.Select(c => c.UserId).ToList();
-            List<UserRole> listUsersRoles = userRoleService.GetRecordsByFilter(c => listUserId.Contains(c.UserId) && c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).ToList();
+            List<int> listUserIds = model.Select(c => c.UserId).ToList();
+            List<UserRole> listUsersRoles = userRoleService.GetRecordsByFilter(c => listUserIds.Contains(c.UserId) && c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).ToList();
             List<Role> listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).ToList();
 
 			// set ViewBag

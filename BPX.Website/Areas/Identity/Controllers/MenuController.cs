@@ -44,10 +44,10 @@ namespace BPX.Website.Areas.Identity.Controllers
 		[Permit(Permits.Identity.Menu.List)]
 		public IActionResult List()
 		{
-            List<Menu> listMenu = coreService.GetMenuHierarchy(RecordStatus.Active.ToUpper(), "URL");
+            List<Menu> listMenus = coreService.GetMenuHierarchy(RecordStatus.Active.ToUpper(), "URL");
             List<MenuMiniViewModel> model = new List<MenuMiniViewModel>();
 
-            foreach (Menu itemMenu in listMenu)
+            foreach (Menu itemMenu in listMenus)
             {
                 model.Add((MenuMiniViewModel)itemMenu);
             }
@@ -293,10 +293,10 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Menu.ListDeleted)]
         public IActionResult ListDeleted()
         {
-            List<Menu> listMenu = coreService.GetMenuService().GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Inactive.ToUpper())).ToList();
+            List<Menu> listMenus = coreService.GetMenuService().GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Inactive.ToUpper())).ToList();
             List<MenuMiniViewModel> model = new List<MenuMiniViewModel>();
 
-            foreach (Menu itemMenu in listMenu)
+            foreach (Menu itemMenu in listMenus)
             {
                 model.Add((MenuMiniViewModel)itemMenu);
             }
@@ -467,9 +467,9 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.Menu.TreePath)]
         public IActionResult TreePath()
 		{
-            List<Menu> listMenu = menuService.GetMenuHierarchy(RecordStatus.Active.ToUpper(), "URL");
+            List<Menu> listMenus = menuService.GetMenuHierarchy(RecordStatus.Active.ToUpper(), "URL");
 
-            foreach (Menu itemMenu in listMenu)
+            foreach (Menu itemMenu in listMenus)
 			{
                 Menu recordMenu = menuService.GetRecordById(itemMenu.MenuId);
 

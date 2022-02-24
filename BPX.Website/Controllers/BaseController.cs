@@ -1,5 +1,4 @@
-﻿using BPX.Domain.CustomModels;
-using BPX.Domain.DbModels;
+﻿using BPX.Domain.DbModels;
 using BPX.Service;
 using BPX.Utils;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +19,7 @@ namespace BPX.Website.Controllers
 		protected readonly ILogger<T> logger;
 		protected readonly ICoreService coreService;
 		protected int bpxPageSize;
-		protected UserMeta currUserMeta;
+		protected User currUser;
 		// private vars
 		private ICacheService cacheService;
 		private ICacheKeyService cacheKeyService;
@@ -30,107 +29,103 @@ namespace BPX.Website.Controllers
 			this.logger = logger;
 			this.coreService = coreService;
 			this.bpxPageSize = Convert.ToInt32(coreService.GetConfiguration().GetSection("AppSettings").GetSection("PageSize").Value);
-			this.currUserMeta = new UserMeta();
+			this.currUser = new User();
 			this.cacheService = coreService.GetCacheService();
 			this.cacheKeyService = coreService.GetCacheKeyService();
 		}
 
         public override void OnActionExecuting(ActionExecutingContext ctx)
         {
-            base.OnActionExecuting(ctx);
+			ViewBag.currLoginMenuString = GetLoginMenuString(null);
 
-			if (ctx.HttpContext != null)
+            //var watch = new System.Diagnostics.Stopwatch();
+            //watch.Start();
+
+            if (ctx.HttpContext != null)
 			{
 				if (ctx.HttpContext.User != null)
 			    {
-					var currLoginTokenClaim = ctx.HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("BPXLoginToken"));
+					var currPTokenClaim = ctx.HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("PToken"));
 
-					if (currLoginTokenClaim != null)
-					{						
-						// get current loginToken value from claims
-						string currLoginToken = currLoginTokenClaim.Value;
+					if (currPTokenClaim != null)
+					{
+						// get current PToken value from claims
+						string currPToken = currPTokenClaim.Value;
+						string currRToken = new string(currPToken.ToCharArray().Reverse().ToArray());
 
-						// SECURITY SECURITY SECURITY
-						// primary verification agaist the [logins] table on every request
-						// verifies if an userId is found for the current loginToken
-						int currUserId = coreService.GetUserId(currLoginToken);
+						// get portal details
+						var portalService = coreService.GetPortalService();
+						var portal = portalService.GetRecordsByFilter(c => c.PToken.Equals(currPToken)).SingleOrDefault();
 
-						if (currUserId > 0)
+						// get login details
+						var loginService = coreService.GetLoginService();
+						var login = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.RToken.Equals(currRToken)).SingleOrDefault();
+
+						if (portal != null && login != null)
 						{
-							//var watch = new System.Diagnostics.Stopwatch();
-							//watch.Start();
+							// get user details
+							var userService = coreService.GetUserService();
+							currUser = userService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PortalUUId.Equals(portal.PortalUUId) && c.LoginUUId.Equals(login.LoginUUId)).SingleOrDefault();
 
-							// get userMeta
-							currUserMeta = GetUserMeta(currUserId);
-
-							if (currUserMeta != null)
+							if (currUser != null)
 							{
-								// reconstruct nekotNigol from the claim loginToken
-								string nekotNigol = new string(currLoginToken.ToCharArray().Reverse().ToArray()) + ":" + currUserId;
-
 								// SECURITY SECURITY SECURITY
-								// secondary verification agaist the [users] table on every request
-								// verifies if the userId and current loginToken (reversed) combo is found
-								if (currUserMeta.NekotNigol.Equals(nekotNigol))
-								{
-									// get userRoles, userPermits, menu, breadcrumb data
-									var currUserRoleIds = GetUserRoleIds(currUserId);                                           // userRoleIds
-									var currUserPermitIds = GetUserPermitIds(currUserId, currUserRoleIds);                      // userPermitIds
-									var currMenuHierarchy = GetMenuHierarchy(RecordStatus.Active, "URL");                       // menuHierarchy
-									var currMenuString = GetMenuString(currUserRoleIds, currUserPermitIds, currMenuHierarchy);  // menuString
-									var currBreadcrump = GetBreadCrumb(ctx, currMenuHierarchy);                                 // breadcrumb
+								// verify the user :: portal :: login chain using currPToken on every request
+								int currUserId = currUser.UserId;
 
-									// populate ViewBag with userMeta, userRoles, userPermits, menu, breadcrumb data
-									ViewBag.currUserMeta = currUserMeta;
-									ViewBag.currUserRoleIds = currUserRoleIds;
-									ViewBag.currUserPermitIds = currUserPermitIds;
-									ViewBag.currMenuString = currMenuString;
-									ViewBag.currBreadcrump = currBreadcrump;
+								// get userRoles, userPermits, menu, breadcrumb data
+								var currUserRoleIds = GetUserRoleIds(currUserId);                                           // userRoleIds
+								var currUserPermitIds = GetUserPermitIds(currUserId, currUserRoleIds);                      // userPermitIds
+								var currLoginMenuString = GetLoginMenuString(currUser);										// loginMenuString
+								var currMenuHierarchy = GetMenuHierarchy(RecordStatus.Active.ToUpper(), "URL");				// menuHierarchy                   // menuHierarchy
+								var currMenuString = GetMenuString(currUserRoleIds, currUserPermitIds, currMenuHierarchy);  // menuString
+								var currBreadcrump = GetBreadCrumb(ctx, currMenuHierarchy);                                 // breadcrumb
 
-									////// Developer Override for Permits - BaseController (Part A) + PermitAttribute (PartB)
-									////// OverrideOverrideOverride 
-									////// use for testing only
-									////// comment before publishing
-									////// START
-									//if (ctx.HttpContext.Request.Host.Value.Contains("localhost"))
-									//{
-									//	List<int> tempUserPermitIds = new List<int>();
-									//	for (int i = 0; i < 10000; i++)
-									//	{
-									//		tempUserPermitIds.Add(i);
-									//	}
-									//	ViewBag.currUserPermitIds = tempUserPermitIds;
-									//}
-									////// END
-								}
-							}
+								// populate ViewBag with user, userRoles, userPermits, menu, breadcrumb data
+								ViewBag.currUser = currUser;
+								ViewBag.currUserRoleIds = currUserRoleIds;
+								ViewBag.currUserPermitIds = currUserPermitIds;
+								ViewBag.currLoginMenuString = currLoginMenuString;
+								ViewBag.currMenuString = currMenuString;
+								ViewBag.currBreadcrump = currBreadcrump;
 
-							//watch.Stop();
-							//string executionTime = "[milli: " + watch.ElapsedMilliseconds.ToString() + " ms]  .......... ";
-							//double elapsedTime = (double)watch.ElapsedTicks / (double)Stopwatch.Frequency;
-							//executionTime += "[micro: " + (elapsedTime * 1000000).ToString("F2") + " us]";
-							//ShowAlertBox(AlertType.Info, $"Execution Time: .......... {executionTime}");
+								// update the lastAccessTime in portal
+								portal.LastAccessTime = DateTime.Now;
+
+								portalService.UpdateRecord(portal);
+								portalService.SaveDBChanges();
+
+								////// Developer Override for Permits - BaseController (Part A) + PermitAttribute (PartB)
+								////// OverrideOverrideOverride 
+								////// use for testing only
+								////// comment before publishing
+								////// START
+								//if (ctx.HttpContext.Request.Host.Value.Contains("localhost"))
+								//{
+								//	List<int> tempUserPermitIds = new List<int>();
+								//	for (int i = 0; i < 10000; i++)
+								//	{
+								//		tempUserPermitIds.Add(i);
+								//	}
+								//	ViewBag.currUserPermitIds = tempUserPermitIds;
+								//}
+								////// END
+							}						
 						}
 					}
 				}
 			}
+
+            //watch.Stop();
+            //string executionTime = "[milli: " + watch.ElapsedMilliseconds.ToString() + " ms] ......... ";
+            //double elapsedTime = (double)watch.ElapsedTicks / (double)Stopwatch.Frequency;
+            //executionTime += "[micro: " + (elapsedTime * 1000000).ToString("F2") + " us]";
+            //ShowAlertBox(AlertType.Info, $"Execution Time: ......... {executionTime}");
+
+            base.OnActionExecuting(ctx);
 		}
 
-		private UserMeta GetUserMeta(int userId)
-		{
-			string cacheKeyName = $"user:{userId}:meta";
-			UserMeta userMeta = cacheService.GetCache<UserMeta>(cacheKeyName);
-
-			if (userMeta == null)
-			{
-				userMeta = coreService.GetUserMeta(userId);
-				cacheService.SetCache(userMeta, cacheKeyName, cacheKeyService);
-			}
-
-			return userMeta;
-		}
-
-		private List<int> GetUserRoleIds(int userId)
+        private List<int> GetUserRoleIds(int userId)
 		{
 			string cacheKeyName = $"user:{userId}:roles";
 			List<int> userRoleIds = cacheService.GetCache<List<int>>(cacheKeyName);
@@ -191,6 +186,18 @@ namespace BPX.Website.Controllers
 			breadcrumb += $"<li class=\"breadcrumb-item active\">{currAction}</li>";
 
 			return breadcrumb;
+		}
+
+		private string GetLoginMenuString(User user)
+		{
+			if (user == null)
+			{
+				return "<li><a class=\"nav-link\" href=\"/Identity/Account/Register\">Register</a></li><li><a class=\"nav-link\" href=\"/Identity/Account/Login\">Login</a></li>";
+			}
+			else
+			{
+				return $"<li><a class=\"nav-link\" href=\"/Identity/Account/ChangePassword\">Hello {user.FirstName} {user.LastName}!</a></li><li><a class=\"nav-link\" href=\"/Identity/Account/LogOff\">Logout</a></li>";
+			}
 		}
 
 		private string GetMenuString(List<int> userRoleIds, List<int> userPermitIds, List<Menu> menuHierarchy)

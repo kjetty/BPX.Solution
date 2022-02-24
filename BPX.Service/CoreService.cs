@@ -1,5 +1,4 @@
-﻿using BPX.Domain.CustomModels;
-using BPX.Domain.DbModels;
+﻿using BPX.Domain.DbModels;
 using BPX.Utils;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -13,6 +12,7 @@ namespace BPX.Service
 		private readonly IConfiguration configuration;
 		private readonly ICacheService cacheService; 
 		private readonly ICacheKeyService cacheKeyService;
+		private readonly IPortalService portalService;
 		private readonly ILoginService loginService;
 		private readonly IUserService userService;
 		private readonly IUserRoleService userRoleService;
@@ -20,11 +20,12 @@ namespace BPX.Service
 		private readonly IMenuService menuService;
 		private readonly IMenuPermitService menuPermitService;
 
-		public CoreService(IConfiguration configuration, ICacheService cacheService, ICacheKeyService cacheKeyService, ILoginService loginService, IUserService userService, IUserRoleService userRoleService, IRolePermitService rolePermitService, IMenuService menuService, IMenuPermitService menuPermitService)
+		public CoreService(IConfiguration configuration, ICacheService cacheService, ICacheKeyService cacheKeyService, IPortalService portalService, ILoginService loginService, IUserService userService, IUserRoleService userRoleService, IRolePermitService rolePermitService, IMenuService menuService, IMenuPermitService menuPermitService)
 		{
 			this.configuration = configuration;
 			this.cacheService = cacheService;
 			this.cacheKeyService = cacheKeyService;
+			this.portalService = portalService;
 			this.loginService = loginService;
 			this.userService = userService;
 			this.userRoleService = userRoleService;
@@ -46,6 +47,11 @@ namespace BPX.Service
 		public ICacheKeyService GetCacheKeyService()
 		{
 			return cacheKeyService;
+		}
+
+		public IPortalService GetPortalService()
+		{
+			return portalService;
 		}
 
 		public ILoginService GetLoginService()
@@ -76,35 +82,6 @@ namespace BPX.Service
 		public IMenuPermitService GetMenuPermitService()
 		{
 			return menuPermitService;
-		}
-
-		public int GetUserId(string loginToken)
-		{
-			var login = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.LoginToken.Equals(loginToken)).SingleOrDefault();
-
-			if (login != null)
-			{
-				return login.UserId;
-			}
-
-			return 0;
-		}
-
-		public UserMeta GetUserMeta(int userId)
-		{
-			UserMeta userMeta = new UserMeta();
-
-			var user = userService.GetRecordById(userId);
-
-			userMeta.UserId = userId;
-			userMeta.FirstName = user.FirstName;
-			userMeta.LastName = user.LastName;
-			userMeta.FullName = user.FirstName + " " + user.LastName;
-			userMeta.Email = user.Email;
-			userMeta.Mobile = user.Mobile;
-			userMeta.NekotNigol = user.NekotNigol;
-
-			return userMeta;
 		}
 
 		public List<int> GetUserRoleIds(int userId)
@@ -313,6 +290,7 @@ namespace BPX.Service
 		IConfiguration GetConfiguration();
 		ICacheService GetCacheService();
 		ICacheKeyService GetCacheKeyService();
+		IPortalService GetPortalService();
 		ILoginService GetLoginService();
 		IUserService GetUserService();
 		IUserRoleService GetUserRoleService();
@@ -320,8 +298,6 @@ namespace BPX.Service
 		string GetBreadcrumb(int menuId, string currController);
 		IMenuService GetMenuService();
 		IMenuPermitService GetMenuPermitService();
-		int GetUserId(string loginToken);
-		UserMeta GetUserMeta(int userId);
 		List<int> GetUserRoleIds(int userId);
 		List<int> GetUserPermitIds(List<int> userRoleIds);
 		List<int> GetPermitRoles(int permitId);

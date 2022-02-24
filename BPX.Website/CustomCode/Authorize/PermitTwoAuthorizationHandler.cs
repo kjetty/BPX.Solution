@@ -52,7 +52,7 @@ namespace BPX.Website.CustomCode.Authorize
                 //this is the passed in PermitId :: [Authorize(Roles = Permits.Identity.User.List)]
                 var permitListIds = requirement.AllowedRoles.Select(int.Parse).ToList();
                 var claimLoginId = context.User.Claims.FirstOrDefault(c => c.Type.Equals("LoginId")).Value;
-                var claimLoginToken = context.User.Claims.FirstOrDefault(c => c.Type.Equals("LoginToken")).Value;
+                var claimPToken = context.User.Claims.FirstOrDefault(c => c.Type.Equals("PToken")).Value;
                 var claimUserId = context.User.Claims.FirstOrDefault(c => c.Type.Equals("UserId")).Value;
                 int userId = Convert.ToInt32(claimUserId);
 
@@ -63,7 +63,7 @@ namespace BPX.Website.CustomCode.Authorize
                 {
                     // verify if the current request is valid or not
                     // loginID and current SessionUUID must match
-                    if (claimLoginId.ToUpper().Equals(login.LoginId.ToUpper()) && claimLoginToken.Equals(login.LoginToken))
+                    //if (claimLoginId.ToUpper().Equals(login.LoginId.ToUpper()) && claimPToken.Equals(login.PToken))
                     {
                         // get ROLES associates with the PERMIT (from DB)
                         var permitRolesList = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && permitListIds.Contains(c.PermitId)).Select(c => c.RoleId).Distinct().ToList();

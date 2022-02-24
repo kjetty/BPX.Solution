@@ -44,7 +44,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 		[Permit(Permits.Identity.Menu.List)]
 		public IActionResult List()
 		{
-			var menuList = coreService.GetMenuHierarchy(RecordStatus.Active, "URL");
+			var menuList = coreService.GetMenuHierarchy(RecordStatus.Active.ToUpper(), "URL");
 
 			List<MenuMiniViewModel> model = new List<MenuMiniViewModel>();
 
@@ -96,7 +96,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     ParentMenuId = collection.ParentMenuId,
                     OrderNumber = collection.OrderNumber,
                     // set generic data
-                    StatusFlag = RecordStatus.Active,
+                    StatusFlag = RecordStatus.Active.ToUpper(),
                     ModifiedBy = 1,
                     ModifiedDate = DateTime.Now
                 };
@@ -186,8 +186,8 @@ namespace BPX.Website.Areas.Identity.Controllers
                     recordMenu.ParentMenuId = collection.ParentMenuId;
                     recordMenu.OrderNumber = collection.OrderNumber;
                     // set generic data
-                    recordMenu.StatusFlag = RecordStatus.Active;
-                    recordMenu.ModifiedBy = currUserMeta.UserId;
+                    recordMenu.StatusFlag = RecordStatus.Active.ToUpper();
+                    recordMenu.ModifiedBy = currUser.UserId;
                     recordMenu.ModifiedDate = DateTime.Now;
 
                     // edit record
@@ -262,8 +262,8 @@ namespace BPX.Website.Areas.Identity.Controllers
                 if (recordMenu.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
                 {
                     // set generic data
-                    recordMenu.StatusFlag = RecordStatus.Inactive;
-                    recordMenu.ModifiedBy = currUserMeta.UserId;
+                    recordMenu.StatusFlag = RecordStatus.Inactive.ToUpper();
+                    recordMenu.ModifiedBy = currUser.UserId;
                     recordMenu.ModifiedDate = DateTime.Now;
 
                     // edit record
@@ -354,8 +354,8 @@ namespace BPX.Website.Areas.Identity.Controllers
                 if (recordMenu.StatusFlag.ToUpper().Equals(RecordStatus.Inactive.ToUpper()))
                 {
                     // set generic data
-                    recordMenu.StatusFlag = RecordStatus.Active;
-                    recordMenu.ModifiedBy = currUserMeta.UserId;
+                    recordMenu.StatusFlag = RecordStatus.Active.ToUpper();
+                    recordMenu.ModifiedBy = currUser.UserId;
                     recordMenu.ModifiedDate = DateTime.Now;
 
                     // edit record
@@ -427,8 +427,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 			// delete all permits for the menu
 			foreach (var menuPermit in listMenuPermits)
 			{
-				menuPermit.StatusFlag = RecordStatus.Inactive;
-				menuPermit.ModifiedBy = currUserMeta.UserId;
+				menuPermit.StatusFlag = RecordStatus.Inactive.ToUpper();
+				menuPermit.ModifiedBy = currUser.UserId;
 				menuPermit.ModifiedDate = DateTime.Now;
 			}
 
@@ -441,8 +441,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 
 				if (existingMenuPermit != null)
 				{
-					existingMenuPermit.StatusFlag = RecordStatus.Active;
-					existingMenuPermit.ModifiedBy = currUserMeta.UserId;
+					existingMenuPermit.StatusFlag = RecordStatus.Active.ToUpper();
+					existingMenuPermit.ModifiedBy = currUser.UserId;
 					existingMenuPermit.ModifiedDate = DateTime.Now;
 
 					menuPermitService.UpdateRecord(existingMenuPermit);
@@ -453,7 +453,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 					{
 						MenuId = id,
 						PermitId = permitId,
-						StatusFlag = RecordStatus.Active,
+						StatusFlag = RecordStatus.Active.ToUpper(),
 						ModifiedBy = 1,
 						ModifiedDate = DateTime.Now
 					};
@@ -479,7 +479,7 @@ namespace BPX.Website.Areas.Identity.Controllers
     
         private void UpdateTreePath()
 		{
-            List<Menu> menuHierarchy = menuService.GetMenuHierarchy(RecordStatus.Active, "URL");
+            List<Menu> menuHierarchy = menuService.GetMenuHierarchy(RecordStatus.Active.ToUpper(), "URL");
 
             foreach (var itemMenu in menuHierarchy)
 			{

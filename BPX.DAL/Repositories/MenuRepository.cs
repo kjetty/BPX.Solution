@@ -99,11 +99,11 @@ namespace BPX.DAL.Repositories
             //FROM 		cte_menus 
             //ORDER BY 	hLevel, OrderNumber
 
-            string cteStatusFlag = RecordStatus.Active;
+            string cteStatusFlag = RecordStatus.Active.ToUpper();
 
             if (statusFlag.ToUpper().Equals(RecordStatus.Inactive.ToUpper()))
 			{
-                cteStatusFlag = RecordStatus.Inactive;
+                cteStatusFlag = RecordStatus.Inactive.ToUpper();
             }
 
             string cteOrderBy = "hLevel, OrderNumber";

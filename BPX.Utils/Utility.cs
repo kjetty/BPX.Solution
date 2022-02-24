@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace BPX.Utils
 {
@@ -14,6 +17,31 @@ namespace BPX.Utils
 
             return exception.Message;
         }
+
+        public static string RemoveSpecialCharacters(string inputString)
+        {
+            return Regex.Replace(inputString, @"[\W-[_]]+", string.Empty).Trim();
+        }
+
+        public static string GetUUID(int size)
+        {
+            StringBuilder sb = new StringBuilder(size);
+
+            char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".ToCharArray();
+            byte[] bytes = new byte[size];
+
+            using (RNGCryptoServiceProvider crypto = new RNGCryptoServiceProvider())
+            {
+                crypto.GetBytes(bytes);
+            }
+
+            foreach (byte b in bytes)
+            {
+                sb.Append(chars[b % (chars.Length)]);
+            }
+
+            return sb.ToString();
+        }
     }
 
     public static class RecordStatus
@@ -28,5 +56,12 @@ namespace BPX.Utils
         // variables for the record status
         public const string Ascending = "asc";
         public const string Descending = "desc";
+    }
+
+    public static class LoginType
+    {
+        // variables for the record status
+        public const string Username = "U";
+        public const string PIV = "P";
     }
 }

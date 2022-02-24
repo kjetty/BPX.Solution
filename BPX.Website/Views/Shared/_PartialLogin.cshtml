@@ -1,4 +1,4 @@
-﻿@if (Context.User.Identity.Name != null)
+﻿@*@if (Context.User.Identity.Name != null)
 {
 	<li>
 		<a class="nav-link" href="/Identity/Account/ChangePassword">Hello @Context.User.Identity.Name!</a>
@@ -15,4 +15,6 @@ else
 	<li>
 		<a class="nav-link" href="/Identity/Account/Login">Login</a>
 	</li>
-}
+}*@
+
+@Html.Raw(ViewBag.currLoginMenuString)

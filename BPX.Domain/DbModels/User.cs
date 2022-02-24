@@ -29,8 +29,13 @@ namespace BPX.Domain.DbModels
         [StringLength(16)]
         public string Mobile { get; set; }
 
-        [StringLength(128)]
-        public string NekotNigol { get; set; }
+        [Required]
+        [StringLength(24)]
+        public string PortalUUId { get; set; }
+
+        [Required]
+        [StringLength(24)]
+        public string LoginUUId { get; set; }
 
         [Required]
         [StringLength(1)]

@@ -1,5 +1,4 @@
-﻿using BPX.Domain.CustomModels;
-using BPX.Domain.DbModels;
+﻿using BPX.Domain.DbModels;
 using BPX.Domain.ViewModels;
 using BPX.Service;
 using BPX.Utils;
@@ -21,12 +20,14 @@ namespace BPX.Website.Areas.Identity.Controllers
 	[Area("Identity")]
     public class AccountController : BaseController<AccountController>
     {
+        private readonly IPortalService portalService;
         private readonly ILoginService loginService;
         private readonly IUserService userService;
         private readonly IUserRoleService userRoleService;
 
         public AccountController(ILogger<AccountController> logger, ICoreService coreService) : base(logger, coreService)
         {
+            this.portalService = coreService.GetPortalService();
             this.loginService = coreService.GetLoginService();
             this.userService = coreService.GetUserService();
             this.userRoleService = coreService.GetUserRoleService();
@@ -47,22 +48,13 @@ namespace BPX.Website.Areas.Identity.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Login(BPXLoginViewModel model)
         {
-
-            var login = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.LoginId.ToUpper().Equals(model.LoginId.ToUpper())).FirstOrDefault();
+            var login = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.LoginName.Equals(model.LoginName)).SingleOrDefault();
             bool passwordIsVerified = false;
 
             if (login == null)
             {
                 // set alert
                 ShowAlertBox(AlertType.Warning, "Login failed. Please try again. ");
-                
-                return RedirectToAction("Login", "Account", new { area = "Identity" });
-            }
-
-            if (login.UserId <= 0)
-            {
-                // set alert
-                ShowAlertBox(AlertType.Warning, "Login failed. Try again.");
                 
                 return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
@@ -102,48 +94,68 @@ namespace BPX.Website.Areas.Identity.Controllers
             {
                 // set alert
                 ShowAlertBox(AlertType.Warning, "Login failed. Try again.");
+
                 return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
 
             // get user
-            var user = userService.GetRecordById(login.UserId);
+            var user = userService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.LoginUUId.Equals(login.LoginUUId)).SingleOrDefault();
+
+            if (user == null)
+            {
+                // set alert
+                ShowAlertBox(AlertType.Warning, "Login failed. Please try again. ");
+
+                return RedirectToAction("Login", "Account", new { area = "Identity" });
+            }
 
             if (user.UserId <= 0)
 			{
                 ShowAlertBox(AlertType.Warning, "Login failed. Try again.");
+
                 return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
 
-            string loginToken = Guid.NewGuid().ToString();
-            string nekotNigol = new string(loginToken.ToCharArray().Reverse().ToArray()) + ":" + user.UserId;
+            var portal = portalService.GetRecordsByFilter(c => c.PortalUUId.Equals(user.PortalUUId)).SingleOrDefault();
 
-            // generate new LoginToken on every login
-            login.LoginToken = loginToken;
+            if (portal == null)
+            {
+                // set alert
+                ShowAlertBox(AlertType.Warning, "Login failed. Please try again. ");
+
+                return RedirectToAction("Login", "Account", new { area = "Identity" });
+            }
+
+            // generate new pToken on every login
+            string pToken = Guid.NewGuid().ToString();
+            string rToken = new string(pToken.ToCharArray().Reverse().ToArray());
+
+            // portal
+            portal.PToken = pToken;
+            portal.LastAccessTime = DateTime.Now;
+
+            // login
+            login.RToken = rToken;
             login.LastLoginDate = DateTime.Now;
             login.ModifiedBy = 1; 
             login.ModifiedDate = DateTime.Now;
-
-            // save changes
-            user.NekotNigol = nekotNigol;
 
             using (TransactionScope scope = new TransactionScope())
 			{
                 loginService.UpdateRecord(login);
                 loginService.SaveDBChanges();
 
-                userService.UpdateRecord(user);
-                userService.SaveDBChanges();
+                portalService.UpdateRecord(portal);
+                portalService.SaveDBChanges();
 
                 scope.Complete();
             }
 
-            string lastName = user.LastName ?? string.Empty;
-			string firstName = user.FirstName ?? string.Empty;
-			string fullName = firstName + " " + lastName;
+			string fullName = user.LastName ?? string.Empty + " " + user.FirstName ?? string.Empty;
 			
 			var claims = new List<Claim>
 			{
-                new Claim("BPXLoginToken", login.LoginToken ?? "Invalid BPX Login Token"),
+                new Claim("PToken", portal.PToken ?? "Invalid PToken"),
                 new Claim(ClaimTypes.Name, fullName),
             };
 
@@ -223,11 +235,34 @@ namespace BPX.Website.Areas.Identity.Controllers
                     return View(collection);
                 }
 
-                // check if LoginId exists
-                var duplicateLoginList = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.LoginId.ToUpper().Equals(collection.LoginId.ToUpper())).ToList();
+                // check if loginId exists
+                var duplicateLoginList = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.LoginName.Equals(collection.LoginName)).ToList();
 
                 if (duplicateLoginList.Count.Equals(0))
                 {
+                    string portalUUId = Utility.GetUUID(24);
+                    string loginUUId = Utility.GetUUID(24);
+
+                    Portal portal = new()
+                    {
+                        PortalUUId = portalUUId,
+                        PToken = Guid.NewGuid().ToString(),
+                        LastAccessTime = DateTime.Now
+                    };
+
+                    Login login = new()
+                    {
+                        LoginUUId = loginUUId,
+                        LoginName = collection.LoginName,
+                        LoginType = LoginType.Username,
+                        LastLoginDate = DateTime.Now,
+                        RToken = Guid.NewGuid().ToString(),
+                        // set generic data
+                        StatusFlag = RecordStatus.Active.ToUpper(),
+                        ModifiedBy = 1,
+                        ModifiedDate = DateTime.Now
+                    };
+
                     User user = new()
                     {
                         // set core data
@@ -235,21 +270,12 @@ namespace BPX.Website.Areas.Identity.Controllers
                         LastName = collection.FirstName,
                         Email = collection.FirstName,
                         Mobile = collection.FirstName,
-                        NekotNigol = Guid.NewGuid().ToString(),
+                        PortalUUId = portalUUId,
+                        LoginUUId = loginUUId,
                         // set generic data
-                        StatusFlag = RecordStatus.Active,
+                        StatusFlag = RecordStatus.Active.ToUpper(),
                         ModifiedBy = 1,
                         ModifiedDate = DateTime.Now
-                    };
-
-                    userService.InsertRecord(user);
-                    userService.SaveDBChanges();
-
-                    Login login = new()
-                    {
-                        // set core data
-                        UserId = user.UserId,
-                        LoginId = collection.LoginId
                     };
 
                     // hash the password
@@ -257,18 +283,23 @@ namespace BPX.Website.Areas.Identity.Controllers
                     string hashedPassword = passwordHasher.HashPassword(login, collection.Password);
 
                     login.PasswordHash = hashedPassword;
-                    login.LoginToken = Guid.NewGuid().ToString();
-                    login.LastLoginDate = DateTime.Now.AddMinutes(-60);
-                    // set generic data
-                    login.StatusFlag = RecordStatus.Active;
-                    login.ModifiedBy = 1;
-                    login.ModifiedDate = DateTime.Now;
 
-                    loginService.InsertRecord(login);
-                    loginService.SaveDBChanges();
+                    using (TransactionScope scope = new TransactionScope())
+                    {
+                        portalService.InsertRecord(portal);
+                        portalService.SaveDBChanges();
+
+                        loginService.InsertRecord(login);
+                        loginService.SaveDBChanges();
+
+                        userService.InsertRecord(user);
+                        userService.SaveDBChanges();
+                    
+                        scope.Complete();
+                    }
 
                     // set alert
-                    ShowAlertBox(AlertType.Success, "Login is successfully created.");
+                    ShowAlertBox(AlertType.Success, "Registration is successfully complete.");
 
                     return RedirectToAction(nameof(Login), new { controller = "Account" });
                 }
@@ -286,7 +317,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 string errorMessage = GetInnerExceptionMessage(ex);
 
                 // log
-                logger.Log(LogLevel.Error, ex, "AccountController.293");
+                logger.Log(LogLevel.Error, ex, "AccountController.293 " + errorMessage);
 
                 // set alert
                 ShowAlertBox(AlertType.Error, errorMessage);
@@ -338,7 +369,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     return View(collection);
                 }
 
-                if (currUserMeta.UserId != collection.UserId)
+                if (currUser.UserId != collection.UserId)
 				{
                     string errorMessage = "Invalid user";
                     ModelState.AddModelError("", errorMessage);
@@ -352,7 +383,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // todo :: verify old password
 
                 // get user
-                var login = loginService.GetRecordById(currUserMeta.UserId);
+                var login = loginService.GetRecordById(currUser.UserId);
 
 				// hash the password
 				var passwordHasher = new PasswordHasher<Login>();
@@ -390,22 +421,34 @@ namespace BPX.Website.Areas.Identity.Controllers
         // POST: /Identity/Account/LogOff
         public IActionResult LogOff()
         {
-            if (currUserMeta.UserId > 0)
+            if (currUser.UserId > 0)
             {
-                var login = loginService.GetRecordById(currUserMeta.UserId);
+                // scramble PToken
+                var portal = portalService.GetRecordsByFilter(c => c.PortalUUId.Equals(currUser.PortalUUId)).SingleOrDefault();
 
-                login.LoginToken = Guid.NewGuid().ToString();
-                login.LastLoginDate = DateTime.Now;
+                portal.PToken = Guid.NewGuid().ToString();
+                portal.LastAccessTime = DateTime.Now.AddMinutes(-60);
+
+                portalService.UpdateRecord(portal);
+                portalService.SaveDBChanges();
+
+                // scramble RToken
+                var login = loginService.GetRecordsByFilter(c => c.LoginUUId.Equals(currUser.LoginUUId)).SingleOrDefault();
+
+                login.RToken = Guid.NewGuid().ToString();
                 // set generic data
                 login.ModifiedBy = 1;
                 login.ModifiedDate = DateTime.Now;
 
+                loginService.UpdateRecord(login);
                 loginService.SaveDBChanges();
+
+                //note: no need for Transaction Scoping the above transaction changes, even if one passes we are good
             }
 
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            if (currUserMeta.UserId > 0)
+            if (currUser.UserId > 0)
             {
                 // set alert
                 ShowAlertBox(AlertType.Info, "User is successfully logged off.");

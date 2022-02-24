@@ -6,20 +6,28 @@ namespace BPX.Domain.DbModels
     public partial class Login
     {
         [Key]
-        public string LoginId { get; set; }
+        [StringLength(24)]
+        public string LoginUUId { get; set; }
 
-        [Required]
+        [StringLength(32)]
+        public string LoginName { get; set; }
+
         [StringLength(128)]
         public string PasswordHash { get; set; }
 
+        [StringLength(16)]
+        public string PIVId { get; set; }
+
         [Required]
-        public int UserId { get; set; }
+        [StringLength(1)]
+        public string LoginType { get; set; }
 
+        [Required]
+        [StringLength(40)]
+        public string RToken { get; set; }
 
-        [StringLength(128)]
-        public string LoginToken { get; set; }
-
-        public DateTime? LastLoginDate { get; set; }
+        [Required]
+        public DateTime LastLoginDate { get; set; }
 
         [Required]
         [StringLength(1)]

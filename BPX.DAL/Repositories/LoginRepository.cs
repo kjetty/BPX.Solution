@@ -21,7 +21,7 @@ namespace BPX.DAL.Repositories
 
         public Login GetRecordById(int id)
         {
-            return context.Logins.Where(c => c.UserId.Equals(id)).SingleOrDefault();
+            throw new NotImplementedException();
         }
 
         public IQueryable<Login> GetRecordsByFilter(Expression<Func<Login, bool>> filter)

@@ -52,7 +52,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             // check input and set defaults
             pageNumber = (pageNumber <= 0) ? 1 : pageNumber;
             pageSize = (pageSize <= 0) ? bpxPageSize : pageSize;
-            statusFlag = RecordStatus.Active;   //force set to Active records always
+            statusFlag = RecordStatus.Active.ToUpper();   //force set to Active records always
             sortByColumn = (sortByColumn == null || sortByColumn.Trim().Length.Equals(0)) ? string.Empty : sortByColumn;
             sortOrder = (sortOrder == null || sortOrder.Trim().Length.Equals(0)) ? SortOrder.Ascending : sortOrder;
             searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
@@ -106,7 +106,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     PermitName = collection.PermitName,
                     PermitEnum = collection.PermitEnum,
                     // set generic data
-                    StatusFlag = RecordStatus.Active,
+                    StatusFlag = RecordStatus.Active.ToUpper(),
                     ModifiedBy = 1,
                     ModifiedDate = DateTime.Now
                 };
@@ -190,8 +190,8 @@ namespace BPX.Website.Areas.Identity.Controllers
                     recordPermit.PermitName = collection.PermitName;
                     recordPermit.PermitEnum = collection.PermitEnum;
                     // set generic data
-                    recordPermit.StatusFlag = RecordStatus.Active;
-                    recordPermit.ModifiedBy = currUserMeta.UserId;
+                    recordPermit.StatusFlag = RecordStatus.Active.ToUpper();
+                    recordPermit.ModifiedBy = currUser.UserId;
                     recordPermit.ModifiedDate = DateTime.Now;
 
                     // edit record
@@ -263,8 +263,8 @@ namespace BPX.Website.Areas.Identity.Controllers
                 if (recordPermit.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
                 {
                     // set generic data
-                    recordPermit.StatusFlag = RecordStatus.Inactive;
-                    recordPermit.ModifiedBy = currUserMeta.UserId;
+                    recordPermit.StatusFlag = RecordStatus.Inactive.ToUpper();
+                    recordPermit.ModifiedBy = currUser.UserId;
                     recordPermit.ModifiedDate = DateTime.Now;
 
                     // edit record
@@ -304,7 +304,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             // check input and set defaults
             pageNumber = (pageNumber <= 0) ? 1 : pageNumber;
             pageSize = (pageSize <= 0) ? bpxPageSize : pageSize;
-            statusFlag = RecordStatus.Inactive;   //force set to Active records always
+            statusFlag = RecordStatus.Inactive.ToUpper();   //force set to Active records always
             sortByColumn = (sortByColumn == null || sortByColumn.Trim().Length.Equals(0)) ? string.Empty : sortByColumn;
             sortOrder = (sortOrder == null || sortOrder.Trim().Length.Equals(0)) ? SortOrder.Ascending : sortOrder;
             searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
@@ -359,11 +359,11 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // get existing data
                 var recordPermit = permitService.GetRecordById(id);
 
-                if (recordPermit.StatusFlag.Equals(RecordStatus.Inactive))
+                if (recordPermit.StatusFlag.Equals(RecordStatus.Inactive.ToUpper()))
                 {
                     // set generic data
-                    recordPermit.StatusFlag = RecordStatus.Active;
-                    recordPermit.ModifiedBy = currUserMeta.UserId;
+                    recordPermit.StatusFlag = RecordStatus.Active.ToUpper();
+                    recordPermit.ModifiedBy = currUser.UserId;
                     recordPermit.ModifiedDate = DateTime.Now;
 
                     // edit record

@@ -48,7 +48,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             // check input and set defaults
             pageNumber = (pageNumber <= 0) ? 1 : pageNumber;
             pageSize = (pageSize <= 0) ? bpxPageSize : pageSize;
-            statusFlag = RecordStatus.Active;   //force set to Active records always
+            statusFlag = RecordStatus.Active.ToUpper();   //force set to Active records always
             sortByColumn = (sortByColumn == null || sortByColumn.Trim().Length.Equals(0)) ? string.Empty : sortByColumn;
             sortOrder = (sortOrder == null || sortOrder.Trim().Length.Equals(0)) ? SortOrder.Ascending : sortOrder;
             searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
@@ -100,7 +100,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     RoleName = collection.RoleName,
                     RoleDescription = collection.RoleDescription,
                     // set generic data
-                    StatusFlag = RecordStatus.Active,
+                    StatusFlag = RecordStatus.Active.ToUpper(),
                     ModifiedBy = 1,
                     ModifiedDate = DateTime.Now
                 };
@@ -181,8 +181,8 @@ namespace BPX.Website.Areas.Identity.Controllers
                     recordRole.RoleName = collection.RoleName.Trim();
                     recordRole.RoleDescription = collection.RoleDescription.Trim();
                     // set generic data
-                    recordRole.StatusFlag = RecordStatus.Active;
-                    recordRole.ModifiedBy = currUserMeta.UserId;
+                    recordRole.StatusFlag = RecordStatus.Active.ToUpper();
+                    recordRole.ModifiedBy = currUser.UserId;
                     recordRole.ModifiedDate = DateTime.Now;
 
                     // edit record
@@ -254,8 +254,8 @@ namespace BPX.Website.Areas.Identity.Controllers
                 if (recordRole.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
                 {
                     // set generic data
-                    recordRole.StatusFlag = RecordStatus.Inactive;
-                    recordRole.ModifiedBy = currUserMeta.UserId;
+                    recordRole.StatusFlag = RecordStatus.Inactive.ToUpper();
+                    recordRole.ModifiedBy = currUser.UserId;
                     recordRole.ModifiedDate = DateTime.Now;
 
                     // edit record
@@ -296,7 +296,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             // check input and set defaults
             pageNumber = (pageNumber <= 0) ? 1 : pageNumber;
             pageSize = (pageSize <= 0) ? bpxPageSize : pageSize;
-            statusFlag = RecordStatus.Inactive;   //force set to Active records always
+            statusFlag = RecordStatus.Inactive.ToUpper();   //force set to Active records always
             sortByColumn = (sortByColumn == null || sortByColumn.Trim().Length.Equals(0)) ? string.Empty : sortByColumn;
             sortOrder = (sortOrder == null || sortOrder.Trim().Length.Equals(0)) ? SortOrder.Ascending : sortOrder;
             searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
@@ -351,11 +351,11 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // get existing data
                 var recordRole = roleService.GetRecordById(id);
 
-                if (recordRole.StatusFlag.Equals(RecordStatus.Inactive))
+                if (recordRole.StatusFlag.Equals(RecordStatus.Inactive.ToUpper()))
                 {
                     // set generic data
-                    recordRole.StatusFlag = RecordStatus.Active;
-                    recordRole.ModifiedBy = currUserMeta.UserId;
+                    recordRole.StatusFlag = RecordStatus.Active.ToUpper();
+                    recordRole.ModifiedBy = currUser.UserId;
                     recordRole.ModifiedDate = DateTime.Now;
 
                     // edit record
@@ -424,8 +424,8 @@ namespace BPX.Website.Areas.Identity.Controllers
             // delete all permits for the role
             foreach (var rolePermit in listRolePermits)
             {
-                rolePermit.StatusFlag = RecordStatus.Inactive;
-                rolePermit.ModifiedBy = currUserMeta.UserId;
+                rolePermit.StatusFlag = RecordStatus.Inactive.ToUpper();
+                rolePermit.ModifiedBy = currUser.UserId;
                 rolePermit.ModifiedDate = DateTime.Now;
             }
 
@@ -438,8 +438,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 
                 if (existingRolePermit != null)
                 {
-                    existingRolePermit.StatusFlag = RecordStatus.Active;
-                    existingRolePermit.ModifiedBy = currUserMeta.UserId;
+                    existingRolePermit.StatusFlag = RecordStatus.Active.ToUpper();
+                    existingRolePermit.ModifiedBy = currUser.UserId;
                     existingRolePermit.ModifiedDate = DateTime.Now;
 
                     rolePermitService.UpdateRecord(existingRolePermit);
@@ -450,7 +450,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                     {
                         RoleId = id,
                         PermitId = permitId,
-                        StatusFlag = RecordStatus.Active,
+                        StatusFlag = RecordStatus.Active.ToUpper(),
                         ModifiedBy = 1,
                         ModifiedDate = DateTime.Now
                     };

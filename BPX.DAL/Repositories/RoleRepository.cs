@@ -28,7 +28,7 @@ namespace BPX.DAL.Repositories
             // set defaults
             pageNumber = pageNumber <= 0 ? 1 : pageNumber;
             pageSize = pageSize <= 0 ? 10 : pageSize;
-            statusFlag = statusFlag.Length.Equals(0) ? RecordStatus.Active : statusFlag;
+            statusFlag = statusFlag.Length.Equals(0) ? RecordStatus.Active.ToUpper() : statusFlag;
             sortByColumn = sortByColumn.Length.Equals(0) ? "RoleId" : sortByColumn;
             sortOrder = sortOrder.Length.Equals(0) ? SortOrder.Ascending : sortOrder;
             searchForString = searchForString.Length.Equals(0) ? string.Empty : searchForString;

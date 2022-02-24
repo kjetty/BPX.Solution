@@ -32,9 +32,14 @@ namespace BPX.Domain.ViewModels
 		public string Mobile { get; set; }
 
         [Required]
-        [StringLength(128)]
-        [Display(Name = "Nekot Nigol")]
-        public string NekotNigol { get; set; }
+        [StringLength(40)]
+        [Display(Name = "PortalUUId")]
+        public string PortalUUId { get; set; }
+
+        [Required]
+        [StringLength(40)]
+        [Display(Name = "LoginUUId")]
+        public string LoginUUId { get; set; }
 
         public static explicit operator UserMiniViewModel(User dm)
         {
@@ -49,7 +54,8 @@ namespace BPX.Domain.ViewModels
                 LastName = dm.LastName,
                 Email = dm.Email,
                 Mobile = dm.Mobile,
-                NekotNigol = dm.NekotNigol
+                PortalUUId = dm.PortalUUId,
+                LoginUUId = dm.LoginUUId
             };
         }
 
@@ -66,7 +72,8 @@ namespace BPX.Domain.ViewModels
                 LastName = vm.LastName,
                 Email = vm.Email,
                 Mobile = vm.Mobile,
-                NekotNigol = vm.NekotNigol
+                PortalUUId = vm.PortalUUId,
+                LoginUUId = vm.LoginUUId
             };
         }
     }
@@ -99,7 +106,8 @@ namespace BPX.Domain.ViewModels
                 LastName = dm.LastName,
                 Email = dm.Email,
                 Mobile = dm.Mobile,
-                NekotNigol = dm.NekotNigol,
+                PortalUUId = dm.PortalUUId,
+                LoginUUId = dm.LoginUUId,
                 // set generic data
                 StatusFlag = dm.StatusFlag,
                 ModifiedBy = dm.ModifiedBy,
@@ -120,7 +128,8 @@ namespace BPX.Domain.ViewModels
                 LastName = vm.LastName,
                 Email = vm.Email,
                 Mobile = vm.Mobile,
-                NekotNigol = vm.NekotNigol,
+                PortalUUId = vm.PortalUUId,
+                LoginUUId = vm.LoginUUId,
                 // set generic data
                 StatusFlag = vm.StatusFlag,
                 ModifiedBy = vm.ModifiedBy,

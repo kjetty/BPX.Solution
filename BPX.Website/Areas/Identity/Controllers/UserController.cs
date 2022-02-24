@@ -48,7 +48,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 			// check input and set defaults
 			pageNumber = (pageNumber <= 0) ? 1 : pageNumber;
 			pageSize = (pageSize <= 0) ? bpxPageSize : pageSize;
-			statusFlag = RecordStatus.Active;   //force set to Active records always
+			statusFlag = RecordStatus.Active.ToUpper();   //force set to Active records always
 			sortByColumn = (sortByColumn == null || sortByColumn.Trim().Length.Equals(0)) ? string.Empty : sortByColumn;
 			sortOrder = (sortOrder == null || sortOrder.Trim().Length.Equals(0)) ? SortOrder.Ascending : sortOrder;
 			searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
@@ -141,8 +141,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 					recordUser.Email = collection.Email;
 					recordUser.Mobile = collection.Mobile;
 					// set generic data
-					recordUser.StatusFlag = RecordStatus.Active;
-					recordUser.ModifiedBy = currUserMeta.UserId;
+					recordUser.StatusFlag = RecordStatus.Active.ToUpper();
+					recordUser.ModifiedBy = currUser.UserId;
 					recordUser.ModifiedDate = DateTime.Now;
 
 					// edit record
@@ -219,8 +219,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 				if (recordUser.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
 				{
 					// set generic data
-					recordUser.StatusFlag = RecordStatus.Inactive;
-					recordUser.ModifiedBy = currUserMeta.UserId;
+					recordUser.StatusFlag = RecordStatus.Inactive.ToUpper();
+					recordUser.ModifiedBy = currUser.UserId;
 					recordUser.ModifiedDate = DateTime.Now;
 
 					// edit record
@@ -260,7 +260,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 			// check input and set defaults
 			pageNumber = (pageNumber <= 0) ? 1 : pageNumber;
 			pageSize = (pageSize <= 0) ? bpxPageSize : pageSize;
-			statusFlag = RecordStatus.Inactive;   //force set to Active records always
+			statusFlag = RecordStatus.Inactive.ToUpper();   //force set to Active records always
 			sortByColumn = (sortByColumn == null || sortByColumn.Trim().Length.Equals(0)) ? string.Empty : sortByColumn;
 			sortOrder = (sortOrder == null || sortOrder.Trim().Length.Equals(0)) ? SortOrder.Ascending : sortOrder;
 			searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
@@ -327,11 +327,11 @@ namespace BPX.Website.Areas.Identity.Controllers
 				var recordUser = userService.GetRecordById(id);
 				var listUserRoles = userRoleService.GetRecordsByFilter(c => c.UserId.Equals(id) && c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()));
 
-				if (recordUser.StatusFlag.Equals(RecordStatus.Inactive))
+				if (recordUser.StatusFlag.Equals(RecordStatus.Inactive.ToUpper()))
 				{
 					// set generic data
-					recordUser.StatusFlag = RecordStatus.Active;
-					recordUser.ModifiedBy = currUserMeta.UserId;
+					recordUser.StatusFlag = RecordStatus.Active.ToUpper();
+					recordUser.ModifiedBy = currUser.UserId;
 					recordUser.ModifiedDate = DateTime.Now;
 
 					// edit record
@@ -398,8 +398,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 			// delete all roles for the user
 			foreach (var userRole in listUserRoles)
 			{
-				userRole.StatusFlag = RecordStatus.Inactive;
-				userRole.ModifiedBy = currUserMeta.UserId;
+				userRole.StatusFlag = RecordStatus.Inactive.ToUpper();
+				userRole.ModifiedBy = currUser.UserId;
 				userRole.ModifiedDate = DateTime.Now;
 			}
 
@@ -412,8 +412,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 
 				if (existingUserRole != null)
 				{
-					existingUserRole.StatusFlag = RecordStatus.Active;
-					existingUserRole.ModifiedBy = currUserMeta.UserId;
+					existingUserRole.StatusFlag = RecordStatus.Active.ToUpper();
+					existingUserRole.ModifiedBy = currUser.UserId;
 					existingUserRole.ModifiedDate = DateTime.Now;
 
 					userRoleService.UpdateRecord(existingUserRole);
@@ -424,7 +424,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 					{
 						UserId = id,
 						RoleId = roleId,
-						StatusFlag = RecordStatus.Active,
+						StatusFlag = RecordStatus.Active.ToUpper(),
 						ModifiedBy = 1,
 						ModifiedDate = DateTime.Now
 					};

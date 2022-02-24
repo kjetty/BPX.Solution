@@ -7,20 +7,35 @@ namespace BPX.Domain.ViewModels
     public class LoginMiniViewModel
     {
         [Key]
-        [Display(Name = "Login Name")]
-        public string LoginId { get; set; }
+        [Display(Name = "Login UUId")]
+        [StringLength(40)]
+        public string LoginUUId { get; set; }
 
-        [Required]
-        [StringLength(128)]
+        [Display(Name = "Login Name")]
+        [StringLength(32)]
+        public string LoginName { get; set; }
+
+        
         [Display(Name = "Password")]
+        [StringLength(128)]
         public string PasswordHash { get; set; }
 
+        [Display(Name = "PIV Id")]
+        [StringLength(32)]
+        public string PIVId { get; set; }
+
         [Required]
-        public int UserId { get; set; }
+        [Display(Name = "Login Type")]
+        [StringLength(1)]
+        public string LoginType { get; set; }
 
-        [StringLength(128)]
-        public string LoginToken { get; set; }
+        [Required]
+        [Display(Name = "RToken")]
+        [StringLength(40)]
+        public string RToken { get; set; }
 
+        [Required]
+        [Display(Name = "Last Login Date")]
         public DateTime LastLoginDate { get; set; }
 
         public static explicit operator LoginMiniViewModel(Login dm)
@@ -31,11 +46,13 @@ namespace BPX.Domain.ViewModels
             return new LoginViewModel
             {
                 // set core data
-                LoginId = dm.LoginId,
+                LoginUUId = dm.LoginUUId,
+                LoginName = dm.LoginName,
                 PasswordHash = dm.PasswordHash,
-                UserId = dm.UserId,
-                LoginToken = dm.LoginToken,
-                LastLoginDate = (DateTime) dm.LastLoginDate                
+                PIVId = dm.PIVId,
+                LoginType = dm.LoginType,
+                RToken = dm.RToken,
+                LastLoginDate = dm.LastLoginDate                
             };
         }
 
@@ -47,11 +64,13 @@ namespace BPX.Domain.ViewModels
             return new Login
             {
                 // set core data
-                LoginId = vm.LoginId,
+                LoginUUId = vm.LoginUUId,
+                LoginName = vm.LoginName,
                 PasswordHash = vm.PasswordHash,
-                LoginToken = vm.LoginToken,
-                LastLoginDate = vm.LastLoginDate,
-                UserId = vm.UserId,
+                PIVId = vm.PIVId,
+                LoginType = vm.LoginType,
+                RToken = vm.RToken,
+                LastLoginDate = vm.LastLoginDate
             };
         }
     }
@@ -79,11 +98,13 @@ namespace BPX.Domain.ViewModels
             return new LoginViewModel
             {
                 // set core data
-                LoginId = dm.LoginId,
+                LoginUUId = dm.LoginUUId,
+                LoginName = dm.LoginName,
                 PasswordHash = dm.PasswordHash,
-                UserId = dm.UserId,
-                LoginToken = dm.LoginToken,
-                LastLoginDate = (DateTime) dm.LastLoginDate,
+                PIVId = dm.PIVId,
+                LoginType = dm.LoginType,
+                RToken = dm.RToken,
+                LastLoginDate = dm.LastLoginDate,
                 // set generic data
                 StatusFlag = dm.StatusFlag,
                 ModifiedBy = dm.ModifiedBy,
@@ -99,10 +120,12 @@ namespace BPX.Domain.ViewModels
             return new Login
             {
                 // set core data
-                LoginId = vm.LoginId,
+                LoginUUId = vm.LoginUUId,
+                LoginName = vm.LoginName,
                 PasswordHash = vm.PasswordHash,
-                UserId = vm.UserId,
-                LoginToken = vm.LoginToken,
+                PIVId = vm.PIVId,
+                LoginType = vm.LoginType,
+                RToken = vm.RToken,
                 LastLoginDate = vm.LastLoginDate,
                 // set generic data
                 StatusFlag = vm.StatusFlag,
@@ -134,8 +157,8 @@ namespace BPX.Domain.ViewModels
 	public class BPXLoginViewModel
 	{
 		[Required]
-		[Display(Name = "Login Id")]
-		public string LoginId { get; set; }
+		[Display(Name = "Login Name")]
+		public string LoginName { get; set; }
 
 		[Required]
 		[DataType(DataType.Password)]
@@ -169,7 +192,7 @@ namespace BPX.Domain.ViewModels
 
         [Required]
         [Display(Name = "Login Id")]
-        public string LoginId { get; set; }
+        public string LoginName   { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]

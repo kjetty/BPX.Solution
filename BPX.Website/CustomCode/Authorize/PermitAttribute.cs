@@ -1,4 +1,5 @@
-﻿using BPX.Service;
+﻿using BPX.Domain.DbModels;
+using BPX.Service;
 using BPX.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -69,38 +70,51 @@ namespace BPX.Website.CustomCode.Authorize
 
 				if (permitId > 0)
 				{
-					var currLoginTokenClaim = user.Claims.FirstOrDefault(c => c.Type.Equals("BPXLoginToken"));
+					var currPTokenClaim = user.Claims.FirstOrDefault(c => c.Type.Equals("PToken"));
 
-					if (currLoginTokenClaim != null)
+					if (currPTokenClaim != null)
 					{
+						string currPToken = currPTokenClaim.Value;
+						string currRToken = new string(currPToken.ToCharArray().Reverse().ToArray());
+
 						var coreService = (ICoreService)context.HttpContext.RequestServices.GetService(typeof(ICoreService));
+						int sessionCookieTimeout= Convert.ToInt32(coreService.GetConfiguration().GetSection("AppSettings").GetSection("SessionCookieTimeout").Value);
 
-						// get current loginToken value from claims
-						string currLoginToken = currLoginTokenClaim.Value;
+						// get portal details
+						var portalService = coreService.GetPortalService();
+						var portal = portalService.GetRecordsByFilter(c => c.PToken.Equals(currPToken)).SingleOrDefault();
 
-						// SECURITY SECURITY SECURITY
-						// primary verification agaist the [logins] table on every request
-						// verifies if an userId is found for the current loginToken
-						int currUserId = coreService.GetUserId(currLoginToken);
+						// get login details
+						var loginService = coreService.GetLoginService();
+						var login = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.RToken.Equals(currRToken)).SingleOrDefault();
 
-						if (currUserId > 0)
+						if (portal != null && login != null)
 						{
-							var currUserMeta = coreService.GetUserMeta(currUserId);
-
-							if (currUserMeta != null)
+							if (portal.LastAccessTime < DateTime.Now.AddMinutes(-sessionCookieTimeout))
 							{
-								/// reconstruct nekotNigol from the claim loginToken
-								string nekotNigol = new string(currLoginToken.ToCharArray().Reverse().ToArray()) + ":" + currUserId;
+								// force logout
+								portal.PToken = Guid.NewGuid().ToString();
 
-								// SECURITY SECURITY SECURITY
-								// secondary verification agaist the [users] table on every request
-								// verifies if the userId and current loginToken (reversed) combo is found
-								if (currUserMeta.NekotNigol.Equals(nekotNigol))
-								{
-									string cacheKeyName = string.Empty;
+								portalService.UpdateRecord(portal);
+								portalService.SaveDBChanges();
+							}
+							else
+							{
+								// get user details
+								var userService = coreService.GetUserService();
+								var currUser = userService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PortalUUId.Equals(portal.PortalUUId) && c.LoginUUId.Equals(login.LoginUUId)).SingleOrDefault();
+
+								if (currUser != null)
+								{                   
+									// SECURITY SECURITY SECURITY
+									// verify the user :: portal :: login chain using currPToken on every request
+									int currUserId = currUser.UserId;
+
 									var cacheService = coreService.GetCacheService();
 									var cacheKeyService = coreService.GetCacheKeyService();
 
+									string cacheKeyName = string.Empty;
+									
 									// userRoleIds
 									cacheKeyName = $"user:{currUserId}:roles";
 									var userRoleIds = cacheService.GetCache<List<int>>(cacheKeyName);

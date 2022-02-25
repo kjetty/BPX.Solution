@@ -20,6 +20,7 @@ namespace BPX.Website.Controllers
 		protected readonly ILogger<T> logger;
 		protected readonly ICoreService coreService;
 		protected int bpxPageSize;
+		protected int sessionCookieTimeout;
 		protected User currUser;
 		// private vars
 		private ICacheService cacheService;
@@ -30,6 +31,7 @@ namespace BPX.Website.Controllers
 			this.logger = logger;
 			this.coreService = coreService;
 			this.bpxPageSize = Convert.ToInt32(coreService.GetConfiguration().GetSection("AppSettings").GetSection("PageSize").Value);
+			this.sessionCookieTimeout = Convert.ToInt32(coreService.GetConfiguration().GetSection("AppSettings").GetSection("SessionCookieTimeout").Value);
 			this.currUser = new User();
 			this.cacheService = coreService.GetCacheService();
 			this.cacheKeyService = coreService.GetCacheKeyService();
@@ -64,53 +66,64 @@ namespace BPX.Website.Controllers
 
 						if (portal != null && login != null)
 						{
-							// get user details
-							IUserService userService = coreService.GetUserService();
-							currUser = userService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PortalUUId.Equals(portal.PortalUUId) && c.LoginUUId.Equals(login.LoginUUId)).SingleOrDefault();
-
-							if (currUser != null)
+							if (portal.LastAccessTime < DateTime.Now.AddMinutes(-sessionCookieTimeout))
 							{
-								// SECURITY SECURITY SECURITY
-								// verify the user :: portal :: login chain using currPToken on every request
-								int currUserId = currUser.UserId;
-
-                                // get userRoles, userPermits, menu, breadcrumb data
-                                List<int> currUserRoleIds = GetUserRoleIds(currUserId);												// userRoleIds
-                                List<int> currUserPermitIds = GetUserPermitIds(currUserId, currUserRoleIds);						// userPermitIds
-                                string currLoginMenuString = GetLoginMenuString(currUser);											// loginMenuString
-                                List<Menu> currMenuHierarchy = GetMenuHierarchy(RecordStatus.Active.ToUpper(), "URL");				// menuHierarchy
-                                string currMenuString = GetMenuString(currUserRoleIds, currUserPermitIds, currMenuHierarchy);		// menuString
-                                string currBreadcrump = GetBreadCrumb(ctx, currMenuHierarchy);										// breadcrumb
-
-								// populate ViewBag with user, userRoles, userPermits, menu, breadcrumb data
-								ViewBag.currUser = currUser;
-								ViewBag.currUserRoleIds = currUserRoleIds;
-								ViewBag.currUserPermitIds = currUserPermitIds;
-								ViewBag.currLoginMenuString = currLoginMenuString;
-								ViewBag.currMenuString = currMenuString;
-								ViewBag.currBreadcrump = currBreadcrump;
-
-								// update the lastAccessTime in portal
-								portal.LastAccessTime = DateTime.Now;
+								// force logout
+								portal.PToken = Guid.NewGuid().ToString();
 
 								portalService.UpdateRecord(portal);
 								portalService.SaveDBChanges();
+							}
+							else
+							{
+								// get user details
+								IUserService userService = coreService.GetUserService();
+								currUser = userService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PortalUUId.Equals(portal.PortalUUId) && c.LoginUUId.Equals(login.LoginUUId)).SingleOrDefault();
 
-								////// Developer Override for Permits - BaseController (Part A) + PermitAttribute (PartB)
-								////// OverrideOverrideOverride 
-								////// use for testing only
-								////// comment before publishing
-								////// START
-								//if (ctx.HttpContext.Request.Host.Value.Contains("localhost"))
-								//{
-								//	List<int> tempUserPermitIds = new List<int>();
-								//	for (int i = 0; i < 10000; i++)
-								//	{
-								//		tempUserPermitIds.Add(i);
-								//	}
-								//	ViewBag.currUserPermitIds = tempUserPermitIds;
-								//}
-								////// END
+								if (currUser != null)
+								{
+									// SECURITY SECURITY SECURITY
+									// verify the user :: portal :: login chain using currPToken on every request
+									int currUserId = currUser.UserId;
+
+									// get userRoles, userPermits, menu, breadcrumb data
+									List<int> currUserRoleIds = GetUserRoleIds(currUserId);                                             // userRoleIds
+									List<int> currUserPermitIds = GetUserPermitIds(currUserId, currUserRoleIds);                        // userPermitIds
+									string currLoginMenuString = GetLoginMenuString(currUser);                                          // loginMenuString
+									List<Menu> currMenuHierarchy = GetMenuHierarchy(RecordStatus.Active.ToUpper(), "URL");              // menuHierarchy
+									string currMenuString = GetMenuString(currUserRoleIds, currUserPermitIds, currMenuHierarchy);       // menuString
+									string currBreadcrump = GetBreadCrumb(ctx, currMenuHierarchy);                                      // breadcrumb
+
+									// populate ViewBag with user, userRoles, userPermits, menu, breadcrumb data
+									ViewBag.currUser = currUser;
+									ViewBag.currUserRoleIds = currUserRoleIds;
+									ViewBag.currUserPermitIds = currUserPermitIds;
+									ViewBag.currLoginMenuString = currLoginMenuString;
+									ViewBag.currMenuString = currMenuString;
+									ViewBag.currBreadcrump = currBreadcrump;
+
+									// update the lastAccessTime in portal
+									portal.LastAccessTime = DateTime.Now;
+
+									portalService.UpdateRecord(portal);
+									portalService.SaveDBChanges();
+
+									////// Developer Override for Permits - BaseController (Part A) + PermitAttribute (PartB)
+									////// OverrideOverrideOverride 
+									////// use for testing only
+									////// comment before publishing
+									////// START
+									//if (ctx.HttpContext.Request.Host.Value.Contains("localhost"))
+									//{
+									//	List<int> tempUserPermitIds = new List<int>();
+									//	for (int i = 0; i < 10000; i++)
+									//	{
+									//		tempUserPermitIds.Add(i);
+									//	}
+									//	ViewBag.currUserPermitIds = tempUserPermitIds;
+									//}
+									////// END
+								}
 							}
 						}
 					}

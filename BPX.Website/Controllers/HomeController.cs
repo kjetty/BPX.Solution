@@ -1,10 +1,12 @@
 ﻿using BPX.Domain.ViewModels;
 using BPX.Service;
+using BPX.Utils;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace BPX.Website.Controllers
@@ -24,6 +26,24 @@ namespace BPX.Website.Controllers
 
 			//int i = 0;
 			//int j = 42 / i;
+
+			//[80]	sBgT-X1hxxmh0-zljO-e17m-JFge
+
+
+			List<string> listUUIds = new List<string>();
+
+			for (int i=0; i < 100; i++)
+            {
+				string temp = Utility.GetUUID(20);
+				string temp16 = temp.Insert(16, "-");
+				string temp12 = temp16.Insert(12, "-");
+				string temp8 = temp12.Insert(8, "-");
+				string temp4 = temp8.Insert(4, "-");
+
+				listUUIds.Add(temp4.Trim());
+            }
+
+			// abcd-efgh-ijkl-mnop-qrst
 
 			return View();
 		}

@@ -243,9 +243,9 @@ namespace BPX.Website.Areas.Identity.Controllers
 
                 if (listDuplicateLogins.Count.Equals(0))
                 {
-                    string userUUId = Utility.GetUUID(24);
-                    string portalUUId = Utility.GetUUID(24);
-                    string loginUUId = Utility.GetUUID(24);
+                    string userUUId = Utility.GetUUID(20);
+                    string portalUUId = Utility.GetUUID(20);
+                    string loginUUId = Utility.GetUUID(20);
 
                     Portal portal = new()
                     {

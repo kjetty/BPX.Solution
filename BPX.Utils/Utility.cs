@@ -27,7 +27,7 @@ namespace BPX.Utils
         {
             StringBuilder sb = new StringBuilder(size);
 
-            char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".ToCharArray();
+            char[] chars = "abcdefghijklmnopqrstuvwxyz1234567890".ToCharArray();
             byte[] bytes = new byte[size];
 
             using (RNGCryptoServiceProvider crypto = new RNGCryptoServiceProvider())
@@ -40,7 +40,13 @@ namespace BPX.Utils
                 sb.Append(chars[b % (chars.Length)]);
             }
 
-            return sb.ToString();
+            string temp = sb.ToString();
+            string temp16 = temp.Insert(16, "-");
+            string temp12 = temp16.Insert(12, "-");
+            string temp8 = temp12.Insert(8, "-");
+            string temp4 = temp8.Insert(4, "-");
+
+            return temp4;
         }
     }
 
@@ -54,8 +60,8 @@ namespace BPX.Utils
     public static class SortOrder
     {
         // variables for the record status
-        public const string Ascending = "asc";
-        public const string Descending = "desc";
+        public const string Ascending = "ASC";
+        public const string Descending = "DESC";
     }
 
     public static class LoginCategory

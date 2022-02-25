@@ -8,14 +8,13 @@ namespace BPX.Domain.ViewModels
     {
         [Key]
         [Display(Name = "Login UUId")]
-        [StringLength(40)]
+        [StringLength(24)]
         public string LoginUUId { get; set; }
 
         [Display(Name = "Login Name")]
         [StringLength(32)]
         public string LoginName { get; set; }
 
-        
         [Display(Name = "Password")]
         [StringLength(128)]
         public string PasswordHash { get; set; }
@@ -38,6 +37,10 @@ namespace BPX.Domain.ViewModels
         [Display(Name = "Last Login Date")]
         public DateTime LastLoginDate { get; set; }
 
+        [Display(Name = "Transient UUId")]
+        [StringLength(24)]
+        public string TransientUUId { get; set; }
+
         public static explicit operator LoginMiniViewModel(Login dm)
         {
             if (dm == null)
@@ -52,7 +55,8 @@ namespace BPX.Domain.ViewModels
                 PIVId = dm.PIVId,
                 LoginType = dm.LoginType,
                 RToken = dm.RToken,
-                LastLoginDate = dm.LastLoginDate                
+                LastLoginDate = dm.LastLoginDate,
+                TransientUUId = dm.TransientUUId
             };
         }
 
@@ -70,7 +74,8 @@ namespace BPX.Domain.ViewModels
                 PIVId = vm.PIVId,
                 LoginType = vm.LoginType,
                 RToken = vm.RToken,
-                LastLoginDate = vm.LastLoginDate
+                LastLoginDate = vm.LastLoginDate,
+                TransientUUId = vm.TransientUUId
             };
         }
     }
@@ -105,6 +110,7 @@ namespace BPX.Domain.ViewModels
                 LoginType = dm.LoginType,
                 RToken = dm.RToken,
                 LastLoginDate = dm.LastLoginDate,
+                TransientUUId = dm.TransientUUId,
                 // set generic data
                 StatusFlag = dm.StatusFlag,
                 ModifiedBy = dm.ModifiedBy,
@@ -127,6 +133,7 @@ namespace BPX.Domain.ViewModels
                 LoginType = vm.LoginType,
                 RToken = vm.RToken,
                 LastLoginDate = vm.LastLoginDate,
+                TransientUUId = vm.TransientUUId,
                 // set generic data
                 StatusFlag = vm.StatusFlag,
                 ModifiedBy = vm.ModifiedBy,

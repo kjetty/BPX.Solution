@@ -146,6 +146,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             // login
             login.RToken = rToken;
             login.LastLoginDate = DateTime.Now;
+            login.TransientUUId = user.UserUUId;
             login.ModifiedBy = user.UserId; 
             login.ModifiedDate = DateTime.Now;
 
@@ -441,6 +442,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 Login login = loginService.GetRecordsByFilter(c => c.LoginUUId.Equals(currUser.LoginUUId)).SingleOrDefault();
 
                 login.RToken = Guid.NewGuid().ToString();
+                login.TransientUUId = String.Empty;
                 // set generic data
                 login.ModifiedBy = currUser.UserId;
                 login.ModifiedDate = DateTime.Now;

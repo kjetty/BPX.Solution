@@ -23,11 +23,14 @@ namespace BPX.Domain.DbModels
         public string LoginType { get; set; }
 
         [Required]
-        [StringLength(64)]
+        [StringLength(40)]
         public string RToken { get; set; }
 
         [Required]
         public DateTime LastLoginDate { get; set; }
+
+        [StringLength(24)]
+        public string TransientUUId { get; set; }
 
         [Required]
         [StringLength(1)]

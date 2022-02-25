@@ -32,15 +32,21 @@ namespace BPX.Domain.ViewModels
 		public string Mobile { get; set; }
 
         [Required]
-        [StringLength(40)]
+        [StringLength(24)]
+        [Display(Name = "UserUUId")]
+        public string UserUUId { get; set; }
+        
+        [Required]
+        [StringLength(24)]
+        [Display(Name = "LoginUUId")]
+        public string LoginUUId { get; set; }
+        
+        [Required]
+        [StringLength(24)]
         [Display(Name = "PortalUUId")]
         public string PortalUUId { get; set; }
 
-        [Required]
-        [StringLength(40)]
-        [Display(Name = "LoginUUId")]
-        public string LoginUUId { get; set; }
-
+        
         public static explicit operator UserMiniViewModel(User dm)
         {
             if (dm == null)
@@ -54,8 +60,9 @@ namespace BPX.Domain.ViewModels
                 LastName = dm.LastName,
                 Email = dm.Email,
                 Mobile = dm.Mobile,
-                PortalUUId = dm.PortalUUId,
-                LoginUUId = dm.LoginUUId
+                UserUUId = dm.UserUUId,
+                LoginUUId = dm.LoginUUId,
+                PortalUUId = dm.PortalUUId
             };
         }
 
@@ -72,8 +79,9 @@ namespace BPX.Domain.ViewModels
                 LastName = vm.LastName,
                 Email = vm.Email,
                 Mobile = vm.Mobile,
-                PortalUUId = vm.PortalUUId,
-                LoginUUId = vm.LoginUUId
+                UserUUId = vm.UserUUId,
+                LoginUUId = vm.LoginUUId,
+                PortalUUId = vm.PortalUUId
             };
         }
     }
@@ -106,8 +114,9 @@ namespace BPX.Domain.ViewModels
                 LastName = dm.LastName,
                 Email = dm.Email,
                 Mobile = dm.Mobile,
-                PortalUUId = dm.PortalUUId,
+                UserUUId = dm.UserUUId,
                 LoginUUId = dm.LoginUUId,
+                PortalUUId = dm.PortalUUId,
                 // set generic data
                 StatusFlag = dm.StatusFlag,
                 ModifiedBy = dm.ModifiedBy,
@@ -128,8 +137,9 @@ namespace BPX.Domain.ViewModels
                 LastName = vm.LastName,
                 Email = vm.Email,
                 Mobile = vm.Mobile,
-                PortalUUId = vm.PortalUUId,
+                UserUUId = vm.UserUUId,
                 LoginUUId = vm.LoginUUId,
+                PortalUUId = vm.PortalUUId,
                 // set generic data
                 StatusFlag = vm.StatusFlag,
                 ModifiedBy = vm.ModifiedBy,

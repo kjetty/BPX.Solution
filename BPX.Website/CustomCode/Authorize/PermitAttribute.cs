@@ -27,17 +27,17 @@ namespace BPX.Website.CustomCode.Authorize
 		public void OnAuthorization(AuthorizationFilterContext context)
 		{
             bool success = false;
-            ClaimsPrincipal user = context.HttpContext.User;
+            ClaimsPrincipal principalUser = context.HttpContext.User;
             string host = context.HttpContext.Request.Host.ToString().ToLower().Trim();
 
-			if (user == null)
+			if (principalUser == null)
 			{
 				// redirect to forbidden page
 				context.Result = new ForbidResult();
 				return;
 			}
 
-			if (!user.Identity.IsAuthenticated)
+			if (!principalUser.Identity.IsAuthenticated)
 			{
 				// redirect to forbidden page
 				context.Result = new ForbidResult();
@@ -60,7 +60,7 @@ namespace BPX.Website.CustomCode.Authorize
 			//}
 			////// END
 
-			if (user.Identity.IsAuthenticated)
+			if (principalUser.Identity.IsAuthenticated)
 			{
 				if (permitId.Equals(0))
 				{
@@ -71,7 +71,7 @@ namespace BPX.Website.CustomCode.Authorize
 
 				if (permitId > 0)
 				{
-                    Claim currPTokenClaim = user.Claims.SingleOrDefault(c => c.Type.Equals("PToken"));
+                    Claim currPTokenClaim = principalUser.Claims.SingleOrDefault(c => c.Type.Equals("PToken"));
 
 					if (currPTokenClaim != null)
 					{
@@ -81,12 +81,12 @@ namespace BPX.Website.CustomCode.Authorize
                         ICoreService coreService = (ICoreService)context.HttpContext.RequestServices.GetService(typeof(ICoreService));
 						int sessionCookieTimeout= Convert.ToInt32(coreService.GetConfiguration().GetSection("AppSettings").GetSection("SessionCookieTimeout").Value);
 
-                        // get portal details
-                        IPortalService portalService = coreService.GetPortalService();
+						// get portal details :: using PToken
+						IPortalService portalService = coreService.GetPortalService();
                         Portal portal = portalService.GetRecordsByFilter(c => c.PToken.Equals(currPToken)).SingleOrDefault();
 
-                        // get login details
-                        ILoginService loginService = coreService.GetLoginService();
+						// get login details :: using RToken
+						ILoginService loginService = coreService.GetLoginService();
                         Login login = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.RToken.Equals(currRToken)).SingleOrDefault();
 
 						if (portal != null && login != null)
@@ -101,9 +101,9 @@ namespace BPX.Website.CustomCode.Authorize
 							}
 							else
 							{
-                                // get user details
-                                IUserService userService = coreService.GetUserService();
-                                User currUser = userService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PortalUUId.Equals(portal.PortalUUId) && c.LoginUUId.Equals(login.LoginUUId)).SingleOrDefault();
+								// get user details :: uisng (PToken) PortalUUId :: using (RToken) LoginUUId + UserUUId
+								IUserService userService = coreService.GetUserService();
+								User currUser = userService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PortalUUId.Equals(portal.PortalUUId) && c.LoginUUId.Equals(login.LoginUUId) && c.UserUUId.Equals(login.TransientUUId)).SingleOrDefault();
 
 								if (currUser != null)
 								{                   

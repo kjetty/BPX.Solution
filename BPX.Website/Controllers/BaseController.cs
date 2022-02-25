@@ -75,12 +75,12 @@ namespace BPX.Website.Controllers
 								int currUserId = currUser.UserId;
 
                                 // get userRoles, userPermits, menu, breadcrumb data
-                                List<int> currUserRoleIds = GetUserRoleIds(currUserId);                                           // userRoleIds
-                                List<int> currUserPermitIds = GetUserPermitIds(currUserId, currUserRoleIds);                      // userPermitIds
-                                string currLoginMenuString = GetLoginMenuString(currUser);                                     // loginMenuString
-                                List<Menu> currMenuHierarchy = GetMenuHierarchy(RecordStatus.Active.ToUpper(), "URL");             // menuHierarchy                   // menuHierarchy
-                                string currMenuString = GetMenuString(currUserRoleIds, currUserPermitIds, currMenuHierarchy);  // menuString
-                                string currBreadcrump = GetBreadCrumb(ctx, currMenuHierarchy);                                 // breadcrumb
+                                List<int> currUserRoleIds = GetUserRoleIds(currUserId);												// userRoleIds
+                                List<int> currUserPermitIds = GetUserPermitIds(currUserId, currUserRoleIds);						// userPermitIds
+                                string currLoginMenuString = GetLoginMenuString(currUser);											// loginMenuString
+                                List<Menu> currMenuHierarchy = GetMenuHierarchy(RecordStatus.Active.ToUpper(), "URL");				// menuHierarchy
+                                string currMenuString = GetMenuString(currUserRoleIds, currUserPermitIds, currMenuHierarchy);		// menuString
+                                string currBreadcrump = GetBreadCrumb(ctx, currMenuHierarchy);										// breadcrumb
 
 								// populate ViewBag with user, userRoles, userPermits, menu, breadcrumb data
 								ViewBag.currUser = currUser;

@@ -31,12 +31,16 @@ namespace BPX.Domain.DbModels
 
         [Required]
         [StringLength(24)]
-        public string PortalUUId { get; set; }
+        public string UserUUId { get; set; }
 
         [Required]
         [StringLength(24)]
         public string LoginUUId { get; set; }
-
+        
+        [Required]
+        [StringLength(24)]
+        public string PortalUUId { get; set; }
+                
         [Required]
         [StringLength(1)]
         public string StatusFlag { get; set; }

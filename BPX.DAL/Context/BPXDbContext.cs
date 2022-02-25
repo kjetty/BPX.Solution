@@ -16,8 +16,8 @@ namespace BPX.DAL.Context
         public virtual DbSet<UserRole> UserRoles { get; set; }
         public virtual DbSet<Permit> Permits { get; set; }
         public virtual DbSet<RolePermit> RolePermits { get; set; }
-        public virtual DbSet<CacheKey> CacheKeys { get; set; }
         public virtual DbSet<Menu> Menus { get; set; }
         public virtual DbSet<MenuPermit> MenuPermits { get; set; }
+        public virtual DbSet<CacheKey> CacheKeys { get; set; }
     }
 }

@@ -54,7 +54,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             pageSize = (pageSize <= 0) ? bpxPageSize : pageSize;
             statusFlag = RecordStatus.Active.ToUpper();   //force set to Active records always
             sortByColumn = (sortByColumn == null || sortByColumn.Trim().Length.Equals(0)) ? string.Empty : sortByColumn;
-            sortOrder = (sortOrder == null || sortOrder.Trim().Length.Equals(0)) ? SortOrder.Ascending : sortOrder;
+            sortOrder = (sortOrder == null || sortOrder.Trim().Length.Equals(0)) ? SortOrder.Ascending.ToUpper() : sortOrder;
             searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
 
             // fetch data
@@ -306,7 +306,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             pageSize = (pageSize <= 0) ? bpxPageSize : pageSize;
             statusFlag = RecordStatus.Inactive.ToUpper();   //force set to Active records always
             sortByColumn = (sortByColumn == null || sortByColumn.Trim().Length.Equals(0)) ? string.Empty : sortByColumn;
-            sortOrder = (sortOrder == null || sortOrder.Trim().Length.Equals(0)) ? SortOrder.Ascending : sortOrder;
+            sortOrder = (sortOrder == null || sortOrder.Trim().Length.Equals(0)) ? SortOrder.Ascending.ToUpper() : sortOrder;
             searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
 
             // fetch data

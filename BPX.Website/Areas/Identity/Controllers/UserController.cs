@@ -50,7 +50,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 			pageSize = (pageSize <= 0) ? bpxPageSize : pageSize;
 			statusFlag = RecordStatus.Active.ToUpper();   //force set to Active records always
 			sortByColumn = (sortByColumn == null || sortByColumn.Trim().Length.Equals(0)) ? string.Empty : sortByColumn;
-			sortOrder = (sortOrder == null || sortOrder.Trim().Length.Equals(0)) ? SortOrder.Ascending : sortOrder;
+			sortOrder = (sortOrder == null || sortOrder.Trim().Length.Equals(0)) ? SortOrder.Ascending.ToUpper() : sortOrder;
 			searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
 
 			// fetch data
@@ -78,9 +78,6 @@ namespace BPX.Website.Areas.Identity.Controllers
         [Permit(Permits.Identity.User.Read)]
         public IActionResult Read(int id)
         {
-			//todo
-			//restrict details view to current user and user with .List permit
-
 			UserViewModel model = (UserViewModel)userService.GetRecordById(id);
 			List<UserRole> listUsersRoles = userRoleService.GetRecordsByFilter(c => c.UserId.Equals(id) && c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).ToList();
 			List<Role> listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).ToList();
@@ -259,7 +256,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 			pageSize = (pageSize <= 0) ? bpxPageSize : pageSize;
 			statusFlag = RecordStatus.Inactive.ToUpper();   //force set to Active records always
 			sortByColumn = (sortByColumn == null || sortByColumn.Trim().Length.Equals(0)) ? string.Empty : sortByColumn;
-			sortOrder = (sortOrder == null || sortOrder.Trim().Length.Equals(0)) ? SortOrder.Ascending : sortOrder;
+			sortOrder = (sortOrder == null || sortOrder.Trim().Length.Equals(0)) ? SortOrder.Ascending.ToUpper() : sortOrder;
 			searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
 
             // fetch data

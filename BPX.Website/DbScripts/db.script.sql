@@ -1,4 +1,12 @@
-﻿--delete foreign key constraints
+﻿----------------------------------------------------------------------------------------
+-- ensure -T272 is added in the Startup parameters to avoid the identity to jump to 1001
+----------------------------------------------------------------------------------------
+
+--drop triggers
+drop trigger TRG_Users_I;
+drop trigger TRG_PLUMaster_UD;
+
+--delete foreign key constraints
 alter table RolePermits drop constraint FK_RolePermits_RoleId;
 alter table RolePermits drop constraint FK_RolePermits_PermitId;
 alter table UserRoles drop constraint FK_UserRoles_UserId;
@@ -12,11 +20,14 @@ alter table Users drop constraint FK_Users_LoginUUId;
 alter table Permits drop constraint UC_Permits_PermitEnum;
 alter table Roles drop constraint UC_Roles_RoleName;
 alter table Users drop constraint UC_Users_Email;
+alter table Users drop constraint UC_Users_UserUUId
 alter table Users drop constraint UC_Users_PortalUUId;
 alter table Users drop constraint UC_Users_LoginUUId;
 alter table Logins drop constraint UC_Logins_LoginName_PIVId;
 alter table Logins drop constraint UC_Logins_RToken;
 alter table Portals drop constraint UC_Portals_PToken;
+
+GO
 
 --drop tables
 DROP TABLE RolePermits;
@@ -25,10 +36,13 @@ DROP TABLE MenuPermits;
 DROP TABLE Permits;
 DROP TABLE Roles;
 DROP TABLE Users;
-DROP TABLE Portals;
 DROP TABLE Logins;
+DROP TABLE Portals;
+DROP TABLE PLUMaster;
 DROP TABLE Menus;
 DROP TABLE CacheKeys;
+
+GO
 
 --create tables
 CREATE TABLE CacheKeys (
@@ -92,7 +106,7 @@ CREATE TABLE Logins (
     PasswordHash            varchar(128)        NULL,
     PIVId                   varchar(16)         NULL,
     LoginType               char(1)             NOT NULL,
-    RToken                  varchar(40)         NOT NULL,
+    RToken                  varchar(64)         NOT NULL,
     LastLoginDate           datetime            NOT NULL,
     StatusFlag              char(1)             NOT NULL,
     ModifiedBy              int                 NOT NULL,
@@ -112,21 +126,32 @@ CREATE TABLE Users (
     LastName            varchar(32)         NOT NULL,
     Email               varchar(64)         NOT NULL,
     Mobile              varchar(16)         NULL,
+    UserUUId			varchar(24)			NOT NULL,
+	LoginUUId           varchar(24)         NOT NULL,
     PortalUUId          varchar(24)         NOT NULL,
-    LoginUUId           varchar(24)         NOT NULL,
     StatusFlag          char(1)             NOT NULL,       -- A (active), I (inactive), D (deleted), L (locked), R (archived)
     ModifiedBy          int                 NOT NULL,
     ModifiedDate        datetime            NOT NULL,
     PRIMARY KEY CLUSTERED (UserId ASC),
 	CONSTRAINT UC_Users_Email UNIQUE (Email),
+    CONSTRAINT UC_Users_UserUUId UNIQUE (UserUUId),
     CONSTRAINT UC_Users_PortalUUId UNIQUE (PortalUUId),
     CONSTRAINT UC_Users_LoginUUId UNIQUE (LoginUUId),
     CONSTRAINT FK_Users_PortalUUId FOREIGN KEY (PortalUUId) REFERENCES Portals (PortalUUId),
     CONSTRAINT FK_Users_LoginUUId FOREIGN KEY (LoginUUId) REFERENCES Logins (LoginUUId)
 );
 
+CREATE INDEX IDX_Users_UserUUId ON Users (UserUUId);
 CREATE INDEX IDX_Users_PortalUUId ON Users (PortalUUId);
 CREATE INDEX IDX_Users_LoginUUId ON Users (LoginUUId);
+
+CREATE TABLE PLUMaster (
+    UserId				int					NOT NULL,
+    UserUUId			varchar(24)			NOT NULL,
+	LoginUUId           varchar(24)         NOT NULL,
+    PortalUUId          varchar(24)         NOT NULL,
+    CreatedDate         datetime            NOT NULL
+);
 
 CREATE TABLE RolePermits (
     RolePermitId	    int IDENTITY(1,1)   NOT NULL,
@@ -164,6 +189,31 @@ CREATE TABLE MenuPermits (
     CONSTRAINT FK_MenuPermits_PermitId FOREIGN KEY (PermitId) REFERENCES Permits (PermitId)
 );
 
+GO
+
+--create triggers
+CREATE TRIGGER TRG_Users_I
+ON Users
+AFTER INSERT
+AS 
+BEGIN   
+    SET NOCOUNT ON;
+    INSERT INTO PLUMaster (UserId, UserUUId, LoginUUId, PortalUUID, CreatedDate)
+	SELECT ins.UserId, ins.UserUUId, ins.LoginUUId, ins.PortalUUId, ins.ModifiedDate FROM inserted ins
+END;
+
+GO
+
+CREATE TRIGGER TRG_PLUMaster_UD ON PLUMaster
+INSTEAD OF UPDATE, DELETE
+AS
+BEGIN
+    RAISERROR( 'PLUMaster is read only.', 16, 1 )
+    ROLLBACK TRANSACTION
+END
+
+GO
+
 --portals
 insert into Portals (PortalUUId,PToken,LastAccessTime) values ('PortalUUId001','PToken001',getDate());
 insert into Portals (PortalUUId,PToken,LastAccessTime) values ('PortalUUId002','PToken002',getDate());
@@ -196,15 +246,15 @@ insert into Logins (LoginUUId,LoginName,PasswordHash,PIVId,LoginType,Rtoken,Last
 -- password is: test9999
 
 --users
-insert into Users (FirstName,LastName,Email,Mobile,PortalUUId,LoginUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('System','sysln','system.email@bpx.com','123-123-1234','PortalUUId001','LoginUUId001','A',1,getDate());
-insert into Users (FirstName,LastName,Email,Mobile,PortalUUId,LoginUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('Developer','devln','developer.email@bpx.com','123-123-1234','PortalUUId002','LoginUUId002','A',1,getDate());
-insert into Users (FirstName,LastName,Email,Mobile,PortalUUId,LoginUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('QualityAnalyst','qaln','qualityanalyst.email@bpx.com','123-123-1234','PortalUUId003','LoginUUId003','A',1,getDate());
-insert into Users (FirstName,LastName,Email,Mobile,PortalUUId,LoginUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('Superuser','superuserln','superuser.email@bpx.com','123-123-1234','PortalUUId004','LoginUUId004','A',1,getDate());
-insert into Users (FirstName,LastName,Email,Mobile,PortalUUId,LoginUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('Admin','admln','admin.email@bpx.com','123-123-1234','PortalUUId005','LoginUUId005','A',1,getDate());
-insert into Users (FirstName,LastName,Email,Mobile,PortalUUId,LoginUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('Manager','mgrln','manager.email@bpx.com','123-123-1234','PortalUUId006','LoginUUId006','A',1,getDate());
-insert into Users (FirstName,LastName,Email,Mobile,PortalUUId,LoginUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('fn07','07LN','entity07.email@bpx.com','123-123-1234','PortalUUId007','LoginUUId007','A',1,getDate());
-insert into Users (FirstName,LastName,Email,Mobile,PortalUUId,LoginUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('fn08','08LN','entity08.email@bpx.com','123-123-1234','PortalUUId008','LoginUUId008','A',1,getDate());
-insert into Users (FirstName,LastName,Email,Mobile,PortalUUId,LoginUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('fn09','09LN','entity09.email@bpx.com','123-123-1234','PortalUUId009','LoginUUId009','A',1,getDate());
+insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('System','sysln','system.email@bpx.com','123-123-1234','UserUUId001','LoginUUId001','PortalUUId001','A',1,getDate());
+insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('Developer','devln','developer.email@bpx.com','123-123-1234','UserUUId002','LoginUUId002','PortalUUId002','A',1,getDate());
+insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('QualityAnalyst','qaln','qualityanalyst.email@bpx.com','123-123-1234','UserUUId003','LoginUUId003','PortalUUId003','A',1,getDate());
+insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('Superuser','superuserln','superuser.email@bpx.com','123-123-1234','UserUUId004','LoginUUId004','PortalUUId004','A',1,getDate());
+insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('Admin','admln','admin.email@bpx.com','123-123-1234','UserUUId005','LoginUUId005','PortalUUId005','A',1,getDate());
+insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('Manager','mgrln','manager.email@bpx.com','123-123-1234','UserUUId006','LoginUUId006','PortalUUId006','A',1,getDate());
+insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('fn07','07LN','entity07.email@bpx.com','123-123-1234','UserUUId007','LoginUUId007','PortalUUId007','A',1,getDate());
+insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('fn08','08LN','entity08.email@bpx.com','123-123-1234','UserUUId008','LoginUUId008','PortalUUId008','A',1,getDate());
+insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('fn09','09LN','entity09.email@bpx.com','123-123-1234','UserUUId009','LoginUUId009','PortalUUId009','A',1,getDate());
 
 --roles
 insert into Roles (RoleName,RoleDescription,StatusFlag,ModifiedBy,ModifiedDate) values ('Developer','Developer','A',1,getDate());
@@ -369,4 +419,4 @@ insert into MenuPermits (MenuId,PermitId,StatusFlag,ModifiedBy,ModifiedDate) val
 --	FROM Menus m INNER JOIN cte_menus cte ON cte.MenuId = m.ParentMenuId WHERE m.StatusFlag = 'A'
 --)
 --SELECT MenuId, MenuName, MenuDescription, MenuURL, ParentMenuId, hLevel, OrderNumber, CAST('.' + TreePath + '.' AS VARCHAR(32)) AS TreePath, StatusFlag, ModifiedBy, ModifiedDate FROM cte_menus 
---ORDER BY MenuURL
+--ORDER BY MenuURL]

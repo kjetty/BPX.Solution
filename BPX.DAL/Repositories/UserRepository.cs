@@ -30,7 +30,7 @@ namespace BPX.DAL.Repositories
             pageSize = pageSize <= 0 ? 10 : pageSize;
             statusFlag = statusFlag.Length.Equals(0) ? RecordStatus.Active.ToUpper() : statusFlag;
             sortByColumn = sortByColumn.Length.Equals(0) ? "UserId" : sortByColumn;
-            sortOrder = sortOrder.Length.Equals(0) ? SortOrder.Ascending : sortOrder;
+            sortOrder = sortOrder.Length.Equals(0) ? SortOrder.Ascending.ToUpper() : sortOrder;
             searchForString = searchForString.Length.Equals(0) ? string.Empty : searchForString;
 
             // get model : IQueryable : apply statusFlag

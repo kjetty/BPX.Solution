@@ -243,6 +243,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
                 if (listDuplicateLogins.Count.Equals(0))
                 {
+                    string userUUId = Utility.GetUUID(24);
                     string portalUUId = Utility.GetUUID(24);
                     string loginUUId = Utility.GetUUID(24);
 
@@ -273,6 +274,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                         LastName = collection.FirstName,
                         Email = collection.FirstName,
                         Mobile = collection.FirstName,
+                        UserUUId = userUUId,
                         PortalUUId = portalUUId,
                         LoginUUId = loginUUId,
                         // set generic data

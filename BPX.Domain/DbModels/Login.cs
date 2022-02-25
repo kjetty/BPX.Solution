@@ -23,7 +23,7 @@ namespace BPX.Domain.DbModels
         public string LoginType { get; set; }
 
         [Required]
-        [StringLength(40)]
+        [StringLength(64)]
         public string RToken { get; set; }
 
         [Required]

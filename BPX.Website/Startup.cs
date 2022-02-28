@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace BPX.Website
 {
@@ -66,7 +67,12 @@ namespace BPX.Website
 			.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {
-                options.Cookie.HttpOnly = true;
+				//options.Cookie.Domain = "KetanJetty.com";
+				//options.ExpireTimeSpan = DateTime.Now.AddMinutes(30);
+				//options.Cookie.SameSite = SameSiteMode.Strict;
+
+				options.SlidingExpiration = true;
+				options.Cookie.HttpOnly = true;
                 options.AccessDeniedPath = "/Identity/Account/Denied";
                 options.LoginPath = "/Identity/Account/Login";
             });

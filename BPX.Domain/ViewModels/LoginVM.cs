@@ -202,7 +202,7 @@ namespace BPX.Domain.ViewModels
         public string LoginName   { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [RegularExpression(@"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,15}$", ErrorMessage = "Minimum 8 Max 15 characters at least one digit, one uppercase character, one special symbol and avoid space")]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }

@@ -61,7 +61,6 @@ namespace BPX.Website.Areas.Identity.Controllers
 
             if (!login.LoginType.ToUpper().Equals(LoginCategory.Username.ToUpper()))
             {
-
                 // set alert
                 ShowAlertBox(AlertType.Warning, "Login failed. You account is not set up to login using username. Please contact the Administrator. ");
 

@@ -3,6 +3,7 @@ using BPX.Service;
 using BPX.Utils;
 using BPX.Website.Controllers;
 using BPX.Website.CustomCode.Authorize;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -15,12 +16,14 @@ namespace BPX.Website.Areas.Developer.Controllers
     [Area("Developer")]
     public class PermitsGeneratorController : BaseController<PermitsGeneratorController>
 	{
+        private readonly IWebHostEnvironment webHostEnvironment;
         private readonly IPermitService permitService;
         private readonly IRoleService roleService;
         private string pathPermitConstants;
 
-        public PermitsGeneratorController(ILogger<PermitsGeneratorController> logger, ICoreService coreService, IPermitService permitService, IRoleService roleService) : base(logger, coreService)
+        public PermitsGeneratorController(ILogger<PermitsGeneratorController> logger, IWebHostEnvironment webHostEnvironment, ICoreService coreService, IPermitService permitService, IRoleService roleService) : base(logger, coreService)
 		{
+            this.webHostEnvironment = webHostEnvironment;
             this.permitService = permitService;
             this.roleService = roleService;
             this.pathPermitConstants = coreService.GetConfiguration().GetSection("AppSettings").GetSection("PathPermitConstants").Value;
@@ -31,6 +34,8 @@ namespace BPX.Website.Areas.Developer.Controllers
         public IActionResult Index()
         {
             ViewBag.pathPermitConstants = pathPermitConstants;
+            ViewBag.wwwPath = webHostEnvironment.WebRootPath;
+            ViewBag.contentPath = webHostEnvironment.ContentRootPath;
 
             return View();
         }

@@ -47,7 +47,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
         // Get: /Identity/Permit/List
         [Permit(Permits.Identity.Permit.List)]
-        public IActionResult List(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
+        public IActionResult List(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString, string filterJson)
         {
             // check input and set defaults
             pageNumber = (pageNumber <= 0) ? 1 : pageNumber;
@@ -58,7 +58,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
 
             // fetch data
-            IPagedList<PermitMiniViewModel> model = permitService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString).Select(c => (PermitMiniViewModel)c);
+            IPagedList<PermitMiniViewModel> model = permitService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString, filterJson).Select(c => (PermitMiniViewModel)c);
 
             // set pagination data
             ViewBag.pageNumber = pageNumber;
@@ -299,7 +299,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
         // GET + POST: /Identity/Permit/ListDeleted
         [Permit(Permits.Identity.Permit.ListDeleted)]
-        public IActionResult ListDeleted(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
+        public IActionResult ListDeleted(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString, string filterJson)
         {
             // check input and set defaults
             pageNumber = (pageNumber <= 0) ? 1 : pageNumber;
@@ -310,7 +310,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
 
             // fetch data
-            IPagedList<PermitMiniViewModel> model = permitService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString).Select(c => (PermitMiniViewModel)c);
+            IPagedList<PermitMiniViewModel> model = permitService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString, filterJson).Select(c => (PermitMiniViewModel)c);
 
             // set pagination data
             ViewBag.pageNumber = pageNumber;

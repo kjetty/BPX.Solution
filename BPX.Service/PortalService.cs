@@ -16,7 +16,7 @@ namespace BPX.Service
             this.portalRepository = (PortalRepository)portalRepository;
         }
 
-        public IPagedList<Portal> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
+        public IPagedList<Portal> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString, string filterJson)
         {
            throw new NotImplementedException();
         }
@@ -53,9 +53,15 @@ namespace BPX.Service
 		{
             portalRepository.SaveDBChanges();
         }
-	}
+
+        public void DetachEntity(Portal entity)
+        {
+            portalRepository.DetachEntity(entity);
+        }
+    }
 
     public interface IPortalService : IGenericService<Portal>
     {
+        void DetachEntity(Portal entity);
     }
 }

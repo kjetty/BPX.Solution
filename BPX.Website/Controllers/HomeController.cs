@@ -6,48 +6,29 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace BPX.Website.Controllers
 {
 	public class HomeController : BaseController<HomeController>
 	{
-
 		private UserService _userService;
+		private ArrayList _printList;
 
 		public HomeController(ILogger<HomeController> logger, ICoreService coreService, IUserService userService) : base(logger, coreService)
 		{
 			_userService = (UserService)userService;
+			_printList = new ArrayList();
 		}
 
 		public IActionResult Index()
 		{
 
-			//int i = 0;
-			//int j = 42 / i;
-
-			//[80]	sBgT-X1hxxmh0-zljO-e17m-JFge
-
-
-			List<string> listUUIds = new List<string>();
-
-			for (int i=0; i < 100; i++)
-            {
-				string temp = Utility.GetUUID(20);
-				string temp16 = temp.Insert(16, "-");
-				string temp12 = temp16.Insert(12, "-");
-				string temp8 = temp12.Insert(8, "-");
-				string temp4 = temp8.Insert(4, "-");
-
-				listUUIds.Add(temp4.Trim());
-            }
-
-			// abcd-efgh-ijkl-mnop-qrst
-
 			return View();
 		}
-
 		public IActionResult Privacy()
 		{
 			return View();
@@ -56,7 +37,7 @@ namespace BPX.Website.Controllers
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Error()
 		{
-            IExceptionHandlerPathFeature exceptionFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+			IExceptionHandlerPathFeature exceptionFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
 
 			if (exceptionFeature != null)
 			{
@@ -69,5 +50,7 @@ namespace BPX.Website.Controllers
 
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 		}
+
+
 	}
 }

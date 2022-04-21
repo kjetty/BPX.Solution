@@ -14,12 +14,12 @@ namespace BPX.Website.CustomCode.Authorize
 {
 	public class PermitTwoAuthorizationHandler : AuthorizationHandler<RolesAuthorizationRequirement>, IAuthorizationHandler
     {
-        private readonly BPXDbContext dbContext;
+        private readonly EFContext dbContext;
         private ILoginService loginService;
         private IUserService userService;
         private IRolePermitService rolePermitService;
 
-        public PermitTwoAuthorizationHandler(BPXDbContext dbContext, ILoginService loginService, IUserService userService, IRolePermitService rolePermitService)
+        public PermitTwoAuthorizationHandler(EFContext dbContext, ILoginService loginService, IUserService userService, IRolePermitService rolePermitService)
         {
             this.dbContext = dbContext;
             this.loginService = loginService;

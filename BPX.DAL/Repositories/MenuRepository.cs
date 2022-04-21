@@ -12,33 +12,33 @@ namespace BPX.DAL.Repositories
 {
 	public class MenuRepository : BaseRepository, IMenuRepository
     {
-        public MenuRepository(BPXDbContext context) : base(context)
+        public MenuRepository(EFContext efContext) : base(efContext)
         {
         }
 
-        public IPagedList<Menu> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
+        public IPagedList<Menu> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString, string filterJson)
         {
             throw new NotImplementedException();
         }
 
         public Menu GetRecordById(int id)
         {
-            return context.Menus.Where(c => c.MenuId.Equals(id)).SingleOrDefault();
+            return efContext.Menus.Where(c => c.MenuId.Equals(id)).SingleOrDefault();
         }
 
         public IQueryable<Menu> GetRecordsByFilter(Expression<Func<Menu, bool>> filter)
         {
-            return context.Menus.Where(filter);
+            return efContext.Menus.Where(filter);
         }
 
         public void InsertRecord(Menu entity)
         {
-            context.Menus.Add(entity);
+            efContext.Menus.Add(entity);
         }
 
         public void UpdateRecord(Menu entity)
         {
-            context.Entry(entity).State = EntityState.Modified;
+            efContext.Entry(entity).State = EntityState.Modified;
         }
 
         public List<Menu> GetBreadCrumb(int menuId)
@@ -74,7 +74,7 @@ namespace BPX.DAL.Repositories
             cteQuery += "SELECT    MenuId, MenuName, MenuDescription, MenuURL, ParentMenuId, hLevel, OrderNumber, TreePath, StatusFlag, ModifiedBy, ModifiedDate ";
             cteQuery += "FROM      CTE_breadcrumb ";
 
-            return context.Menus.FromSqlRaw(cteQuery).ToList();
+            return efContext.Menus.FromSqlRaw(cteQuery).ToList();
         }
     
         public List<Menu> GetMenuHierarchy(string statusFlag, string orderBy)
@@ -131,7 +131,7 @@ namespace BPX.DAL.Repositories
             cteQuery += "FROM 		cte_menus ";
             cteQuery += "ORDER BY " + cteOrderBy;
 
-            List<Menu> listMenu = context.Menus.FromSqlRaw(cteQuery).ToList();
+            List<Menu> listMenu = efContext.Menus.FromSqlRaw(cteQuery).ToList();
 
             return listMenu;
         }

@@ -10,11 +10,11 @@ namespace BPX.DAL.Repositories
 {
 	public class CacheKeyRepository : BaseRepository, ICacheKeyRepository
     {
-        public CacheKeyRepository(BPXDbContext context) : base(context)
+        public CacheKeyRepository(EFContext efContext) : base(efContext)
         {
         }
 
-        public IPagedList<CacheKey> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
+        public IPagedList<CacheKey> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString, string filterJson)
         {
             throw new NotImplementedException();
         }
@@ -26,17 +26,17 @@ namespace BPX.DAL.Repositories
 
         public IQueryable<CacheKey> GetRecordsByFilter(Expression<Func<CacheKey, bool>> filter)
         {
-            return context.CacheKeys.Where(filter);
+            return efContext.CacheKeys.Where(filter);
         }
 
         public void InsertRecord(CacheKey entity)
         {
-            context.CacheKeys.Add(entity);
+            efContext.CacheKeys.Add(entity);
         }
 
         public void UpdateRecord(CacheKey entity)
         {
-            context.Entry(entity).State = EntityState.Modified;
+            efContext.Entry(entity).State = EntityState.Modified;
         }
     }
 

@@ -6,16 +6,21 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using X.PagedList;
+using Dapper;
+using System.Diagnostics;
 
 namespace BPX.DAL.Repositories
 {
 	public class UserRepository : BaseRepository, IUserRepository
     {
-        public UserRepository(BPXDbContext context) : base(context)
-        {
-        }
+        private readonly DPContext dapperContext;
 
-        public IPagedList<User> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
+        public UserRepository(EFContext efContext, DPContext dapperContext) : base(efContext)
+        {
+            this.dapperContext = dapperContext;
+    }
+
+        public IPagedList<User> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString, string filterJson)
         {
             // trim received data
             pageNumber = Convert.ToInt32(pageNumber);
@@ -34,7 +39,7 @@ namespace BPX.DAL.Repositories
             searchForString = searchForString.Length.Equals(0) ? string.Empty : searchForString;
 
             // get model : IQueryable : apply statusFlag
-            IQueryable<User> model = context.Users.Where(c => c.StatusFlag.ToUpper().Equals(statusFlag.ToUpper()));
+            IQueryable<User> model = efContext.Users.Where(c => c.StatusFlag.ToUpper().Equals(statusFlag.ToUpper()));
 
             // apply search
             if (searchForString.Length > 0)
@@ -70,22 +75,56 @@ namespace BPX.DAL.Repositories
 
         public User GetRecordById(int id)
         {
-            return context.Users.Where(c => c.UserId.Equals(id)).SingleOrDefault();
+            User user = null;
+
+            Stopwatch watch1 = new System.Diagnostics.Stopwatch();             
+            Stopwatch watch2 = new System.Diagnostics.Stopwatch();
+
+            watch1.Start();
+
+            for (int i = 0; i < 1000; i++)
+            {
+                var abc = efContext.Users.Where(c => c.UserId.Equals(id)).SingleOrDefault();
+                //return efContext.Users.Where(c => c.UserId.Equals(id)).SingleOrDefault();
+            }
+
+            watch1.Stop();
+            string executionTime1 = "[milli: " + watch1.ElapsedMilliseconds.ToString() + " ms]";
+
+            watch2.Start();
+
+            for (int i = 0; i < 1000; i++)
+            {
+                var query = $"SELECT * FROM Users WHERE 1 = 1 AND UserId = {id}";
+
+                using (var connection = dapperContext.CreateConnection())
+                {
+                   user = connection.QuerySingleOrDefault<User>(query);
+
+                    //return user;
+                }
+            }
+
+            watch2.Stop();
+            string executionTime2 = "[milli: " + watch2.ElapsedMilliseconds.ToString() + " ms]";
+
+            return user;
         }
+
 
         public IQueryable<User> GetRecordsByFilter(Expression<Func<User, bool>> filter)
         {
-            return context.Users.Where(filter);
+            return efContext.Users.Where(filter);
         }
 
         public void InsertRecord(User entity)
         {
-            context.Users.Add(entity);
+            efContext.Users.Add(entity);
         }
 
         public void UpdateRecord(User entity)
         {
-            context.Entry(entity).State = EntityState.Modified;
+            efContext.Entry(entity).State = EntityState.Modified;
         }
     }
 

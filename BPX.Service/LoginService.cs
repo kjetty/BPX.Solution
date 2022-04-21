@@ -16,7 +16,7 @@ namespace BPX.Service
 			this.loginRepository = (LoginRepository)loginRepository;
 		}
 
-		public IPagedList<Login> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
+		public IPagedList<Login> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString, string filterJson)
 		{
 			throw new NotImplementedException();
 		}

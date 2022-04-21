@@ -16,7 +16,7 @@ namespace BPX.Service
             this.menuPermitRepository = (MenuPermitRepository)menuPermitRepository;
         }
 
-        public IPagedList<MenuPermit> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
+        public IPagedList<MenuPermit> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString, string filterJson)
         {
             throw new NotImplementedException();
         }

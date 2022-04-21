@@ -10,33 +10,33 @@ namespace BPX.DAL.Repositories
 {
 	public class UserRoleRepository : BaseRepository, IUserRoleRepository
     {
-        public UserRoleRepository(BPXDbContext context) : base(context)
+        public UserRoleRepository(EFContext efContext) : base(efContext)
         {
         }
 
-        public IPagedList<UserRole> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
+        public IPagedList<UserRole> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString, string filterJson)
         {
             throw new NotImplementedException();
         }
 
         public UserRole GetRecordById(int id)
         {
-            return context.UserRoles.Where(c => c.UserRoleId.Equals(id)).SingleOrDefault();
+            return efContext.UserRoles.Where(c => c.UserRoleId.Equals(id)).SingleOrDefault();
         }
 
         public IQueryable<UserRole> GetRecordsByFilter(Expression<Func<UserRole, bool>> filter)
         {
-            return context.UserRoles.Where(filter);
+            return efContext.UserRoles.Where(filter);
         }
 
         public void InsertRecord(UserRole entity)
         {
-            context.UserRoles.Add(entity);
+            efContext.UserRoles.Add(entity);
         }
 
         public void UpdateRecord(UserRole entity)
         {
-            context.Entry(entity).State = EntityState.Modified;
+            efContext.Entry(entity).State = EntityState.Modified;
         }
     }
 

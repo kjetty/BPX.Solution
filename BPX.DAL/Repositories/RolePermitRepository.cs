@@ -10,33 +10,33 @@ namespace BPX.DAL.Repositories
 {
 	public class RolePermitRepository : BaseRepository, IRolePermitRepository
     {
-        public RolePermitRepository(BPXDbContext context) : base(context)
+        public RolePermitRepository(EFContext efContext) : base(efContext)
         {
         }
 
-        public IPagedList<RolePermit> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
+        public IPagedList<RolePermit> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString, string filterJson)
         {
             throw new NotImplementedException();
         }
 
         public RolePermit GetRecordById(int id)
         {
-            return context.RolePermits.Where(c => c.RolePermitId.Equals(id)).SingleOrDefault();
+            return efContext.RolePermits.Where(c => c.RolePermitId.Equals(id)).SingleOrDefault();
         }
 
         public IQueryable<RolePermit> GetRecordsByFilter(Expression<Func<RolePermit, bool>> filter)
         {
-            return context.RolePermits.Where(filter);
+            return efContext.RolePermits.Where(filter);
         }
 
         public void InsertRecord(RolePermit entity)
         {
-            context.RolePermits.Add(entity);
+            efContext.RolePermits.Add(entity);
         }
 
         public void UpdateRecord(RolePermit entity)
         {
-            context.Entry(entity).State = EntityState.Modified;
+            efContext.Entry(entity).State = EntityState.Modified;
         }
     }
 

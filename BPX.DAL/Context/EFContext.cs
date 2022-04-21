@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BPX.DAL.Context
 {
-    public partial class BPXDbContext : DbContext
+    public partial class EFContext : DbContext
     {
-        public BPXDbContext(DbContextOptions<BPXDbContext> options) : base(options)
+        public EFContext(DbContextOptions<EFContext> options) : base(options)
         {
+            //db.Configuration.ProxyCreationEnabled = false;
+            //this.Configuration.ProxyCreationEnabled = false;            
         }
 
         public virtual DbSet<Portal> Portals { get; set; }

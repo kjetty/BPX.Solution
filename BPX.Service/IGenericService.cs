@@ -9,7 +9,7 @@ namespace BPX.Service
     {
         T GetRecordById(int id);
 
-        IPagedList<T> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString);
+        IPagedList<T> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString, string filterJson);
 
         IQueryable<T> GetRecordsByFilter(Expression<Func<T, bool>> filter);
 

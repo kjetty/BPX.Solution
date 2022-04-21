@@ -11,11 +11,11 @@ namespace BPX.DAL.Repositories
 {
 	public class RoleRepository : BaseRepository, IRoleRepository
     {
-        public RoleRepository(BPXDbContext context) : base(context)
+        public RoleRepository(EFContext efContext) : base(efContext)
         {
         }
 
-        public IPagedList<Role> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
+        public IPagedList<Role> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString, string filterJson)
         {
             // trim received data
             pageNumber = Convert.ToInt32(pageNumber);
@@ -34,7 +34,7 @@ namespace BPX.DAL.Repositories
             searchForString = searchForString.Length.Equals(0) ? string.Empty : searchForString;
 
             // get model : IQueryable : apply statusFlag
-            IQueryable<Role> model = context.Roles.Where(c => c.StatusFlag.ToUpper().Equals(statusFlag.ToUpper()));
+            IQueryable<Role> model = efContext.Roles.Where(c => c.StatusFlag.ToUpper().Equals(statusFlag.ToUpper()));
 
             // apply search
             if (searchForString.Length > 0)
@@ -65,22 +65,22 @@ namespace BPX.DAL.Repositories
 
         public Role GetRecordById(int id)
         {
-            return context.Roles.Where(c => c.RoleId.Equals(id)).SingleOrDefault();
+            return efContext.Roles.Where(c => c.RoleId.Equals(id)).SingleOrDefault();
         }
 
         public IQueryable<Role> GetRecordsByFilter(Expression<Func<Role, bool>> filter)
         {
-            return context.Roles.Where(filter);
+            return efContext.Roles.Where(filter);
         }
 
         public void InsertRecord(Role entity)
         {
-            context.Roles.Add(entity);
+            efContext.Roles.Add(entity);
         }
 
         public void UpdateRecord(Role entity)
         {
-            context.Entry(entity).State = EntityState.Modified;
+            efContext.Entry(entity).State = EntityState.Modified;
         }
     }
 

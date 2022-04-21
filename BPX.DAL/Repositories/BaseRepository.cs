@@ -4,16 +4,18 @@ namespace BPX.DAL.Repositories
 {
     public abstract class BaseRepository
     {
-        protected readonly BPXDbContext context;
+        protected readonly EFContext efContext;
 
-        public BaseRepository(BPXDbContext context)
+        public BaseRepository(EFContext efContext)
         {
-            this.context = context;
+            this.efContext = efContext;
+            
         }
 
 		public void SaveDBChanges()
 		{
-            context.SaveChanges();
-		}
+            efContext.SaveChanges();
+            //context.ChangeTracker.Clear();
+        }
 	}
 }

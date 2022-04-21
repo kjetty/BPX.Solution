@@ -27,10 +27,14 @@ namespace BPX.Website
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-            // inject database connection
-            services.AddDbContext<BPXDbContext>(options =>
-                options.UseSqlServer(
-                   Configuration.GetConnectionString("connStrDbBPX")));
+			// inject database connection
+			services.AddDbContext<EFContext>(options => {
+				options.UseSqlServer(Configuration.GetConnectionString("connStrDbBPX"));
+				//options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+				//options.EnableSensitiveDataLogging();
+			});
+
+			services.AddSingleton<DPContext>();
 
 			// inject service layer objects
 			// SCOPED: By using this lifetime, the service will be created only once in the client request scope
@@ -44,14 +48,12 @@ namespace BPX.Website
 			services.AddScoped<IRoleRepository, RoleRepository>();
 			services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 			services.AddScoped<IPermitRepository, PermitRepository>();
-			services.AddScoped<IRolePermitRepository, RolePermitRepository>();
-			services.AddScoped<ICacheKeyRepository, CacheKeyRepository>();
+			services.AddScoped<IRolePermitRepository, RolePermitRepository>();			
 			services.AddScoped<IMenuRepository, MenuRepository>();
 			services.AddScoped<IMenuPermitRepository, MenuPermitRepository>();
+			services.AddScoped<ICacheKeyRepository, CacheKeyRepository>();
 
 			// inject services
-			services.AddScoped<ICoreService, CoreService>();
-			services.AddScoped<ICacheKeyService, CacheKeyService>();
 			services.AddScoped<IPortalService, PortalService>();
 			services.AddScoped<ILoginService, LoginService>();
 			services.AddScoped<IUserService, UserService>();
@@ -60,7 +62,9 @@ namespace BPX.Website
             services.AddScoped<IPermitService, PermitService>();
 			services.AddScoped<IRolePermitService, RolePermitService>();
 			services.AddScoped<IMenuService, MenuService>();
-			services.AddScoped<IMenuPermitService, MenuPermitService>();			
+			services.AddScoped<IMenuPermitService, MenuPermitService>();
+			services.AddScoped<ICacheKeyService, CacheKeyService>();
+			services.AddScoped<ICoreService, CoreService>();
 
 			// authentication and cookie options
 			services

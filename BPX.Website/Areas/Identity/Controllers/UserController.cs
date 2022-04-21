@@ -43,7 +43,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
         // GET: /Identity/User/List
         [Permit(Permits.Identity.User.List)]
-        public IActionResult List(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
+        public IActionResult List(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString, string filterJson)
         {
 			// check input and set defaults
 			pageNumber = (pageNumber <= 0) ? 1 : pageNumber;
@@ -54,7 +54,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 			searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
 
 			// fetch data
-			IPagedList<UserMiniViewModel> model = userService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString).Select(c => (UserMiniViewModel)c);
+			IPagedList<UserMiniViewModel> model = userService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString, filterJson).Select(c => (UserMiniViewModel)c);
 			List<int> listUserIds = model.Select(c => c.UserId).ToList();
 			List<UserRole> listUsersRoles = userRoleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && listUserIds.Contains(c.UserId)).ToList();
 			List<Role> listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).ToList();
@@ -143,6 +143,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 					// edit record
 					userService.UpdateRecord(recordUser);
 				}
+
+				var testUser = new User();
 
 				// commit changes to database
 				userService.SaveDBChanges();
@@ -249,7 +251,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 		
         // GET + POST: /Identity/User/ListDeleted
         [Permit(Permits.Identity.User.ListDeleted)]
-        public IActionResult ListDeleted(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
+        public IActionResult ListDeleted(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString, string filterJson)
         {
 			// check input and set defaults
 			pageNumber = (pageNumber <= 0) ? 1 : pageNumber;
@@ -260,7 +262,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 			searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
 
             // fetch data
-            IPagedList<UserMiniViewModel> model = userService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString).Select(c => (UserMiniViewModel)c);
+            IPagedList<UserMiniViewModel> model = userService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString, filterJson).Select(c => (UserMiniViewModel)c);
             List<int> listUserIds = model.Select(c => c.UserId).ToList();
             List<UserRole> listUsersRoles = userRoleService.GetRecordsByFilter(c => listUserIds.Contains(c.UserId) && c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).ToList();
             List<Role> listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).ToList();

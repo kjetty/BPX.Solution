@@ -10,33 +10,33 @@ namespace BPX.DAL.Repositories
 {
 	public class MenuPermitRepository : BaseRepository, IMenuPermitRepository
     {
-        public MenuPermitRepository(BPXDbContext context) : base(context)
+        public MenuPermitRepository(EFContext efContext) : base(efContext)
         {
         }
 
-        public IPagedList<MenuPermit> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
+        public IPagedList<MenuPermit> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString, string filterJson)
         {
             throw new NotImplementedException();
         }
 
         public MenuPermit GetRecordById(int id)
         {
-            return context.MenuPermits.Where(c => c.MenuPermitId.Equals(id)).SingleOrDefault();
+            return efContext.MenuPermits.Where(c => c.MenuPermitId.Equals(id)).SingleOrDefault();
         }
 
         public IQueryable<MenuPermit> GetRecordsByFilter(Expression<Func<MenuPermit, bool>> filter)
         {
-            return context.MenuPermits.Where(filter);
+            return efContext.MenuPermits.Where(filter);
         }
 
         public void InsertRecord(MenuPermit entity)
         {
-            context.MenuPermits.Add(entity);
+            efContext.MenuPermits.Add(entity);
         }
 
         public void UpdateRecord(MenuPermit entity)
         {
-            context.Entry(entity).State = EntityState.Modified;
+            efContext.Entry(entity).State = EntityState.Modified;
         }
     }
 

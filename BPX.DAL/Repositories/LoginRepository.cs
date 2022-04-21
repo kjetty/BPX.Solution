@@ -10,11 +10,11 @@ namespace BPX.DAL.Repositories
 {
 	public class LoginRepository : BaseRepository, ILoginRepository
     {
-        public LoginRepository(BPXDbContext context) : base(context)
+        public LoginRepository(EFContext efContext) : base(efContext)
         {
         }
 
-        public IPagedList<Login> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString)
+        public IPagedList<Login> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString, string filterJson)
         {
             throw new NotImplementedException();
         }
@@ -26,17 +26,17 @@ namespace BPX.DAL.Repositories
 
         public IQueryable<Login> GetRecordsByFilter(Expression<Func<Login, bool>> filter)
         {
-            return context.Logins.Where(filter);
+            return efContext.Logins.Where(filter);
         }
 
         public void InsertRecord(Login entity)
         {
-            context.Logins.Add(entity);
+            efContext.Logins.Add(entity);
         }
 
         public void UpdateRecord(Login entity)
         {
-            context.Entry(entity).State = EntityState.Modified;
+            efContext.Entry(entity).State = EntityState.Modified;
         }
     }
 

@@ -56,7 +56,7 @@ namespace BPX.Website.Controllers
 						{
 							// get current PToken value from claims
 							string currPToken = currPTokenClaim.Value;
-							string currRToken = new string(currPToken.ToCharArray().Reverse().ToArray());
+							string currLToken = new string(currPToken.ToCharArray().Reverse().ToArray());
 
 							// get portal details :: using PToken
 							IPortalService portalService = coreService.GetPortalService();
@@ -64,7 +64,7 @@ namespace BPX.Website.Controllers
 
 							// get login details :: using RToken
 							ILoginService loginService = coreService.GetLoginService();
-							Login login = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.RToken.Equals(currRToken)).SingleOrDefault();
+							Login login = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.LToken.Equals(currLToken)).SingleOrDefault();
 
 							if (portal != null && login != null)
 							{
@@ -80,7 +80,7 @@ namespace BPX.Website.Controllers
 								{
 									// get user details :: uisng (PToken) PortalUUId :: using (RToken) LoginUUId + UserUUId
 									IUserService userService = coreService.GetUserService();
-									currUser = userService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PortalUUId.Equals(portal.PortalUUId) && c.LoginUUId.Equals(login.LoginUUId) && c.UserUUId.Equals(login.TransientUUId)).SingleOrDefault();
+									currUser = userService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PortalUUId.Equals(portal.PortalUUId) && c.LoginUUId.Equals(login.LoginUUId)).SingleOrDefault();
 
 									if (currUser != null)
 									{

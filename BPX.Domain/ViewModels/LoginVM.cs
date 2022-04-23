@@ -11,35 +11,47 @@ namespace BPX.Domain.ViewModels
         [StringLength(24)]
         public string LoginUUId { get; set; }
 
-        [Display(Name = "Login Name")]
+        [Display(Name = "xxx")]
+        [StringLength(128)]
+        public string CACCN { get; set; }
+
+        [Display(Name = "xxx")]
+        [StringLength(16)]
+        public string CACId { get; set; }
+
+        [Display(Name = "xxx")]
+        [StringLength(16)]
+        public string CACSmall { get; set; }
+
+        [Display(Name = "xxx")]
+        [StringLength(16)]
+        public string CACLarge { get; set; }
+
+        [Display(Name = "xxx")]
         [StringLength(32)]
         public string LoginName { get; set; }
 
-        [Display(Name = "Password")]
+        [Display(Name = "xxx")]
         [StringLength(128)]
         public string PasswordHash { get; set; }
 
-        [Display(Name = "PIV Id")]
+        [Display(Name = "xxx")]
         [StringLength(32)]
-        public string PIVId { get; set; }
+        public string ADUserName { get; set; }
 
+        [Display(Name = "xxx")]
         [Required]
-        [Display(Name = "Login Type")]
         [StringLength(1)]
         public string LoginType { get; set; }
 
+        [Display(Name = "xxx")]
         [Required]
-        [Display(Name = "RToken")]
         [StringLength(40)]
-        public string RToken { get; set; }
+        public string LToken { get; set; }
 
+        [Display(Name = "xxx")]
         [Required]
-        [Display(Name = "Last Login Date")]
         public DateTime LastLoginDate { get; set; }
-
-        [Display(Name = "Transient UUId")]
-        [StringLength(24)]
-        public string TransientUUId { get; set; }
 
         public static explicit operator LoginMiniViewModel(Login dm)
         {
@@ -50,13 +62,16 @@ namespace BPX.Domain.ViewModels
             {
                 // set core data
                 LoginUUId = dm.LoginUUId,
+                LToken = dm.LToken,
+                LastLoginDate = dm.LastLoginDate,
+                LoginType = dm.LoginType,
                 LoginName = dm.LoginName,
                 PasswordHash = dm.PasswordHash,
-                PIVId = dm.PIVId,
-                LoginType = dm.LoginType,
-                RToken = dm.RToken,
-                LastLoginDate = dm.LastLoginDate,
-                TransientUUId = dm.TransientUUId
+                CACCN = dm.CACCN,
+                CACId = dm.CACId,
+                CACSmall = dm.CACSmall,
+                CACLarge = dm.CACLarge,
+                ADUserName = dm.ADUserName
             };
         }
 
@@ -69,13 +84,16 @@ namespace BPX.Domain.ViewModels
             {
                 // set core data
                 LoginUUId = vm.LoginUUId,
+                LToken = vm.LToken,
+                LastLoginDate = vm.LastLoginDate,
+                LoginType = vm.LoginType,
                 LoginName = vm.LoginName,
                 PasswordHash = vm.PasswordHash,
-                PIVId = vm.PIVId,
-                LoginType = vm.LoginType,
-                RToken = vm.RToken,
-                LastLoginDate = vm.LastLoginDate,
-                TransientUUId = vm.TransientUUId
+                CACCN = vm.CACCN,
+                CACId = vm.CACId,
+                CACSmall = vm.CACSmall,
+                CACLarge = vm.CACLarge,
+                ADUserName = vm.ADUserName
             };
         }
     }
@@ -104,13 +122,16 @@ namespace BPX.Domain.ViewModels
             {
                 // set core data
                 LoginUUId = dm.LoginUUId,
+                LToken = dm.LToken,
+                LastLoginDate = dm.LastLoginDate,
+                LoginType = dm.LoginType,
                 LoginName = dm.LoginName,
                 PasswordHash = dm.PasswordHash,
-                PIVId = dm.PIVId,
-                LoginType = dm.LoginType,
-                RToken = dm.RToken,
-                LastLoginDate = dm.LastLoginDate,
-                TransientUUId = dm.TransientUUId,
+                CACCN = dm.CACCN,
+                CACId = dm.CACId,
+                CACSmall = dm.CACSmall,
+                CACLarge = dm.CACLarge,
+                ADUserName = dm.ADUserName,
                 // set generic data
                 StatusFlag = dm.StatusFlag,
                 ModifiedBy = dm.ModifiedBy,
@@ -127,13 +148,16 @@ namespace BPX.Domain.ViewModels
             {
                 // set core data
                 LoginUUId = vm.LoginUUId,
+                LToken = vm.LToken,
+                LastLoginDate = vm.LastLoginDate,
+                LoginType = vm.LoginType,
                 LoginName = vm.LoginName,
                 PasswordHash = vm.PasswordHash,
-                PIVId = vm.PIVId,
-                LoginType = vm.LoginType,
-                RToken = vm.RToken,
-                LastLoginDate = vm.LastLoginDate,
-                TransientUUId = vm.TransientUUId,
+                CACCN = vm.CACCN,
+                CACId = vm.CACId,
+                CACSmall = vm.CACSmall,
+                CACLarge = vm.CACLarge,
+                ADUserName = vm.ADUserName,
                 // set generic data
                 StatusFlag = vm.StatusFlag,
                 ModifiedBy = vm.ModifiedBy,

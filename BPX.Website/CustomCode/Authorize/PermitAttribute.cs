@@ -87,7 +87,7 @@ namespace BPX.Website.CustomCode.Authorize
 
 						// get login details :: using RToken
 						ILoginService loginService = coreService.GetLoginService();
-                        Login login = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.RToken.Equals(currRToken)).SingleOrDefault();
+                        Login login = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.LToken.Equals(currRToken)).SingleOrDefault();
 
 						if (portal != null && login != null)
 						{
@@ -103,7 +103,7 @@ namespace BPX.Website.CustomCode.Authorize
 							{
 								// get user details :: uisng (PToken) PortalUUId :: using (RToken) LoginUUId + UserUUId
 								IUserService userService = coreService.GetUserService();
-								User currUser = userService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PortalUUId.Equals(portal.PortalUUId) && c.LoginUUId.Equals(login.LoginUUId) && c.UserUUId.Equals(login.TransientUUId)).SingleOrDefault();
+								User currUser = userService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PortalUUId.Equals(portal.PortalUUId) && c.LoginUUId.Equals(login.LoginUUId)).SingleOrDefault();
 
 								if (currUser != null)
 								{                   

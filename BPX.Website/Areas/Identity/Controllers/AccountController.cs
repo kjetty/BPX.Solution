@@ -136,16 +136,15 @@ namespace BPX.Website.Areas.Identity.Controllers
 
             // generate new pToken on every login
             string pToken = Guid.NewGuid().ToString();
-            string rToken = new string(pToken.ToCharArray().Reverse().ToArray());
+            string lToken = new string(pToken.ToCharArray().Reverse().ToArray());
 
             // portal
             portal.PToken = pToken;
             portal.LastAccessTime = DateTime.Now;
 
             // login
-            login.RToken = rToken;
+            login.LToken = lToken;
             login.LastLoginDate = DateTime.Now;
-            login.TransientUUId = user.UserUUId;
             login.ModifiedBy = user.UserId; 
             login.ModifiedDate = DateTime.Now;
 
@@ -260,7 +259,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                         LoginName = collection.LoginName,
                         LoginType = LoginCategory.Username,
                         LastLoginDate = DateTime.Now,
-                        RToken = Guid.NewGuid().ToString(),
+                        LToken = Guid.NewGuid().ToString(),
                         // set generic data
                         StatusFlag = RecordStatus.Active.ToUpper(),
                         ModifiedBy = 1,
@@ -440,8 +439,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // scramble RToken
                 Login login = loginService.GetRecordsByFilter(c => c.LoginUUId.Equals(currUser.LoginUUId)).SingleOrDefault();
 
-                login.RToken = Guid.NewGuid().ToString();
-                login.TransientUUId = String.Empty;
+                login.LToken = Guid.NewGuid().ToString();
                 // set generic data
                 login.ModifiedBy = currUser.UserId;
                 login.ModifiedDate = DateTime.Now;

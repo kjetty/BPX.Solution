@@ -14,5 +14,8 @@ namespace BPX.Domain.DbModels
 
         [StringLength(8000)]
         public string ErrorData { get; set; }
+
+        [Required]
+        public DateTime ErrorDate { get; set; } = DateTime.Now;
     }
 }

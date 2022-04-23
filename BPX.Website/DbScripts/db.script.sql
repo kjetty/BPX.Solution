@@ -13,23 +13,24 @@ alter table UserRoles drop constraint FK_UserRoles_UserId;
 alter table UserRoles drop constraint FK_UserRoles_RoleId;
 alter table MenuPermits drop constraint FK_MenuPermits_MenuId;
 alter table MenuPermits drop constraint FK_MenuPermits_PermitId;
-alter table Users drop constraint FK_Users_PortalUUId;
 alter table Users drop constraint FK_Users_LoginUUId;
+alter table Users drop constraint FK_Users_PortalUUId;
 
 --delete constraints
 alter table Permits drop constraint UC_Permits_PermitEnum;
 alter table Roles drop constraint UC_Roles_RoleName;
+alter table Portals drop constraint UC_Portals_PToken;
+alter table Logins drop constraint UC_Logins_LToken;
+alter table Logins drop constraint UC_Logins_CACId_LoginName;
 alter table Users drop constraint UC_Users_Email;
 alter table Users drop constraint UC_Users_UserUUId
-alter table Users drop constraint UC_Users_PortalUUId;
 alter table Users drop constraint UC_Users_LoginUUId;
-alter table Logins drop constraint UC_Logins_LoginName_PIVId;
-alter table Logins drop constraint UC_Logins_RToken;
-alter table Portals drop constraint UC_Portals_PToken;
+alter table Users drop constraint UC_Users_PortalUUId;
 
 GO
 
 --drop tables
+DROP TABLE Errors;
 DROP TABLE RolePermits;
 DROP TABLE UserRoles;
 DROP TABLE MenuPermits;
@@ -45,6 +46,13 @@ DROP TABLE CacheKeys;
 GO
 
 --create tables
+CREATE TABLE Errors (
+    ErrorId      		int IDENTITY(1,1)   NOT NULL,
+    ErrorData       	varchar (8000)      NULL,
+    ErroDate            datetime            NOT NULL,
+    PRIMARY KEY CLUSTERED (ErrorId ASC)
+);
+
 CREATE TABLE CacheKeys (
     CacheKeyName       	varchar (48)        NOT NULL,
     ModifiedDate        datetime            NOT NULL,
@@ -102,24 +110,27 @@ CREATE INDEX IDX_Portals_PToken ON Portals (PToken);
 
 CREATE TABLE Logins (
     LoginUUId               varchar(24)         NOT NULL,
+    CACCN                   varchar(128)        NULL,
+    CACId                   varchar(16)         NULL,
+    CACSmall                varchar(16)         NULL,
+    CACLarge                varchar(16)         NULL,
     LoginName               varchar(32)         NULL,
     PasswordHash            varchar(128)        NULL,
-    PIVId                   varchar(16)         NULL,
-    LoginType               char(1)             NOT NULL,
-    RToken                  varchar(40)         NOT NULL,
+    ADUserName              varchar(32)         NULL,
     LastLoginDate           datetime            NOT NULL,
-    TransientUUId           varchar(24)         NULL,
+    LoginType               char(1)             NOT NULL,
+    LToken                  varchar(40)         NOT NULL,
     StatusFlag              char(1)             NOT NULL,
     ModifiedBy              int                 NOT NULL,
     ModifiedDate            datetime            NOT NULL,
     PRIMARY KEY CLUSTERED (LoginUUId ASC),
-    CONSTRAINT UC_Logins_LoginName_PIVId UNIQUE (LoginName,PIVId),
-    CONSTRAINT UC_Logins_RToken UNIQUE (RToken)
+    CONSTRAINT UC_Logins_CACId_LoginName UNIQUE (CACId, LoginName),
+    CONSTRAINT UC_Logins_LToken UNIQUE (LToken)
 );
 
 CREATE INDEX IDX_Logins_LoginName ON Logins (LoginName);
-CREATE INDEX IDX_Logins_PIVId ON Logins (PIVId);
-CREATE INDEX IDX_Logins_RToken ON Logins (RToken);
+CREATE INDEX IDX_Logins_CACId ON Logins (CACId);
+CREATE INDEX IDX_Logins_LToken ON Logins (LToken);
 
 CREATE TABLE Users (
     UserId              int IDENTITY(1,1)   NOT NULL,
@@ -136,10 +147,10 @@ CREATE TABLE Users (
     PRIMARY KEY CLUSTERED (UserId ASC),
 	CONSTRAINT UC_Users_Email UNIQUE (Email),
     CONSTRAINT UC_Users_UserUUId UNIQUE (UserUUId),
-    CONSTRAINT UC_Users_PortalUUId UNIQUE (PortalUUId),
     CONSTRAINT UC_Users_LoginUUId UNIQUE (LoginUUId),
-    CONSTRAINT FK_Users_PortalUUId FOREIGN KEY (PortalUUId) REFERENCES Portals (PortalUUId),
-    CONSTRAINT FK_Users_LoginUUId FOREIGN KEY (LoginUUId) REFERENCES Logins (LoginUUId)
+    CONSTRAINT UC_Users_PortalUUId UNIQUE (PortalUUId),
+    CONSTRAINT FK_Users_LoginUUId FOREIGN KEY (LoginUUId) REFERENCES Logins (LoginUUId),
+    CONSTRAINT FK_Users_PortalUUId FOREIGN KEY (PortalUUId) REFERENCES Portals (PortalUUId)
 );
 
 CREATE INDEX IDX_Users_UserUUId ON Users (UserUUId);
@@ -227,43 +238,43 @@ insert into Portals (PortalUUId,PToken,LastAccessTime) values ('PortalUUId008','
 insert into Portals (PortalUUId,PToken,LastAccessTime) values ('PortalUUId009','PToken009',getDate());
 
 --logins
-insert into Logins (LoginUUId,LoginName,PasswordHash,PIVId,LoginType,Rtoken,LastLoginDate,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId001','one','AQAAAAEAACcQAAAAEJZUbWun++BJlFSiC352oPAgJ9UKJRXkKX4lD3hbjIsMSx6X+4qVUxkCIqTibouCkg==',null,'U','RToken001',getDate(),'A',1,getDate()); 
--- password is: test1111
-insert into Logins (LoginUUId,LoginName,PasswordHash,PIVId,LoginType,Rtoken,LastLoginDate,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId002','two','AQAAAAEAACcQAAAAEB9JDwdihl7mM0l+TriHpUJ1RMwMBCPEcZyzx0I3jr76qDSCk4BrMXTw04I41QECsA==',null,'U','RToken002',getDate(),'A',1,getDate()); 
--- password is: test2222
-insert into Logins (LoginUUId,LoginName,PasswordHash,PIVId,LoginType,Rtoken,LastLoginDate,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId003','three','AQAAAAEAACcQAAAAEEWfT9/y2LjqdjMDTjtpL6/atZbp0W35CU16ho4ZPc941tdMwWkQkjKmTG2CLpVNWw==',null,'U','RToken003',getDate(),'A',1,getDate()); 
--- password is: test3333
-insert into Logins (LoginUUId,LoginName,PasswordHash,PIVId,LoginType,Rtoken,LastLoginDate,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId004','four','AQAAAAEAACcQAAAAEORU4xK4/14Hif4n9GskVGf0sARqO1Imofs0/hF8petfwQvJIatWXHFttl7fu9JMQw==',null,'U','RToken004',getDate(),'A',1,getDate()); 
--- password is: test4444
-insert into Logins (LoginUUId,LoginName,PasswordHash,PIVId,LoginType,Rtoken,LastLoginDate,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId005','five','AQAAAAEAACcQAAAAEIqxBmeAMdu7VCHVUHdhWwE2gVFMMwAnj4gluKD3jH/7km5lCH24t0UmvVIV6Xldvg==',null,'U','RToken005',getDate(),'A',1,getDate()); 
--- password is: test5555
-insert into Logins (LoginUUId,LoginName,PasswordHash,PIVId,LoginType,Rtoken,LastLoginDate,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId006','six','AQAAAAEAACcQAAAAEE0lGYLrUerJtuTesTovq5x0dYjJbXuHNoWxqc8fplpUatp+ZVGDK5tBO3fdv/KsBQ==',null,'U','RToken006',getDate(),'A',1,getDate()); 
--- password is: test6666
-insert into Logins (LoginUUId,LoginName,PasswordHash,PIVId,LoginType,Rtoken,LastLoginDate,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId007','seven','AQAAAAEAACcQAAAAEGsbNHvJSb009T7pSeRxBrYvOKFrdNhO6eWrMjp6fxw/+eS9Iq7iFKhXW1LubkefEg==',null,'U','RToken007',getDate(),'A',1,getDate()); 
--- password is: test7777
-insert into Logins (LoginUUId,LoginName,PasswordHash,PIVId,LoginType,Rtoken,LastLoginDate,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId008','eight','AQAAAAEAACcQAAAAEEfP/rkD26DdWFjUnEQ/IWyi/6kN8RAZGNcP0n6D+IHgfLX0y37Tm/FrxRX5RaiphQ==',null,'U','RToken008',getDate(),'A',1,getDate()); 
--- password is: test8888
-insert into Logins (LoginUUId,LoginName,PasswordHash,PIVId,LoginType,Rtoken,LastLoginDate,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId009','nine','AQAAAAEAACcQAAAAEO6wAj4iqxtW6XZW7iCdKmKw3eWaT9nlla1BCdzFd4WfzPeJFyxJga8gBGPrFKXiRg==',null,'U','RToken009',getDate(),'A',1,getDate()); 
--- password is: test9999
+insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId001','LToken001',getDate(),'U','one','AQAAAAEAACcQAAAAEJZUbWun++BJlFSiC352oPAgJ9UKJRXkKX4lD3hbjIsMSx6X+4qVUxkCIqTibouCkg==','A',1,getDate()); 
+-- one / test1111
+insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId002','LToken002',getDate(),'U','two','AQAAAAEAACcQAAAAEB9JDwdihl7mM0l+TriHpUJ1RMwMBCPEcZyzx0I3jr76qDSCk4BrMXTw04I41QECsA==','A',1,getDate()); 
+-- two / test2222
+insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId003','LToken003',getDate(),'U','three','AQAAAAEAACcQAAAAEEWfT9/y2LjqdjMDTjtpL6/atZbp0W35CU16ho4ZPc941tdMwWkQkjKmTG2CLpVNWw==','A',1,getDate()); 
+-- three / test3333
+insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId004','LToken004',getDate(),'U','four','AQAAAAEAACcQAAAAEORU4xK4/14Hif4n9GskVGf0sARqO1Imofs0/hF8petfwQvJIatWXHFttl7fu9JMQw==','A',1,getDate()); 
+-- four / test4444
+insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId005','LToken005',getDate(),'U','five','AQAAAAEAACcQAAAAEIqxBmeAMdu7VCHVUHdhWwE2gVFMMwAnj4gluKD3jH/7km5lCH24t0UmvVIV6Xldvg==','A',1,getDate()); 
+-- five / test5555
+insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId006','LToken006',getDate(),'U','six','AQAAAAEAACcQAAAAEE0lGYLrUerJtuTesTovq5x0dYjJbXuHNoWxqc8fplpUatp+ZVGDK5tBO3fdv/KsBQ==','A',1,getDate()); 
+-- six / test6666
+insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId007','LToken007',getDate(),'U','seven','AQAAAAEAACcQAAAAEGsbNHvJSb009T7pSeRxBrYvOKFrdNhO6eWrMjp6fxw/+eS9Iq7iFKhXW1LubkefEg==','A',1,getDate()); 
+-- seven / test7777
+insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId008','LToken008',getDate(),'U','eight','AQAAAAEAACcQAAAAEEfP/rkD26DdWFjUnEQ/IWyi/6kN8RAZGNcP0n6D+IHgfLX0y37Tm/FrxRX5RaiphQ==','A',1,getDate()); 
+-- eight / test8888
+ insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId009','LToken009',getDate(),'U','nine','AQAAAAEAACcQAAAAEO6wAj4iqxtW6XZW7iCdKmKw3eWaT9nlla1BCdzFd4WfzPeJFyxJga8gBGPrFKXiRg==','A',1,getDate()); 
+-- nine / test9999
 
 --users
 insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('System','sysln','system.email@bpx.com','123-123-1234','UserUUId001','LoginUUId001','PortalUUId001','A',1,getDate());
 insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('Process','processln','process.email@bpx.com','123-123-1234','UserUUId002','LoginUUId002','PortalUUId002','A',1,getDate());
 insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('Developer','devln','developer.email@bpx.com','123-123-1234','UserUUId003','LoginUUId003','PortalUUId003','A',1,getDate());
+insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('QualityAnalyst','qaln','qualityanalyst.email@bpx.com','123-123-1234','UserUUId007','LoginUUId007','PortalUUId007','A',1,getDate());
 insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('Superuser','superuserln','superuser.email@bpx.com','123-123-1234','UserUUId004','LoginUUId004','PortalUUId004','A',1,getDate());
 insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('Admin','admln','admin.email@bpx.com','123-123-1234','UserUUId005','LoginUUId005','PortalUUId005','A',1,getDate());
 insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('Manager','mgrln','manager.email@bpx.com','123-123-1234','UserUUId006','LoginUUId006','PortalUUId006','A',1,getDate());
-insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('QualityAnalyst','qaln','qualityanalyst.email@bpx.com','123-123-1234','UserUUId007','LoginUUId007','PortalUUId007','A',1,getDate());
 insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('fn08','08LN','entity08.email@bpx.com','123-123-1234','UserUUId008','LoginUUId008','PortalUUId008','A',1,getDate());
 insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('fn09','09LN','entity09.email@bpx.com','123-123-1234','UserUUId009','LoginUUId009','PortalUUId009','A',1,getDate());
 
 --roles
-insert into Roles (RoleName,RoleDescription,StatusFlag,ModifiedBy,ModifiedDate) values ('DeveloperRole','DeveloperRole','A',1,getDate());
-insert into Roles (RoleName,RoleDescription,StatusFlag,ModifiedBy,ModifiedDate) values ('SuperuserRole','SuperuserRole','A',1,getDate());
-insert into Roles (RoleName,RoleDescription,StatusFlag,ModifiedBy,ModifiedDate) values ('AdminRole','AdminRole','A',1,getDate());
-insert into Roles (RoleName,RoleDescription,StatusFlag,ModifiedBy,ModifiedDate) values ('ManagerRole','ManagerRole','A',1,getDate());
-insert into Roles (RoleName,RoleDescription,StatusFlag,ModifiedBy,ModifiedDate) values ('QARole','QARole','A',1,getDate());
-insert into Roles (RoleName,RoleDescription,StatusFlag,ModifiedBy,ModifiedDate) values ('RegdUserRole','RegdUserRole','A',1,getDate());
+insert into Roles (RoleName,RoleDescription,StatusFlag,ModifiedBy,ModifiedDate) values ('DeveloperRole','Developer Role','A',1,getDate());
+insert into Roles (RoleName,RoleDescription,StatusFlag,ModifiedBy,ModifiedDate) values ('QualityAnalystRole','Quality Analyst Role','A',1,getDate());
+insert into Roles (RoleName,RoleDescription,StatusFlag,ModifiedBy,ModifiedDate) values ('SuperUserRole','Super User Role','A',1,getDate());
+insert into Roles (RoleName,RoleDescription,StatusFlag,ModifiedBy,ModifiedDate) values ('AdminRole','Admin Role','A',1,getDate());
+insert into Roles (RoleName,RoleDescription,StatusFlag,ModifiedBy,ModifiedDate) values ('ManagerRole','Manager Role','A',1,getDate());
+insert into Roles (RoleName,RoleDescription,StatusFlag,ModifiedBy,ModifiedDate) values ('RegisteredUserRole','Registered User Role','A',1,getDate());
 
 --permits
 insert into Permits (PermitArea,PermitController,PermitName,PermitEnum,StatusFlag,ModifiedBy,ModifiedDate) values ('Developer','ErrorLog','Index','Developer.ErrorLog.Index','A',1,getDate());
@@ -360,10 +371,13 @@ insert into UserRoles (UserId,RoleId,StatusFlag,ModifiedBy,ModifiedDate) values 
 
 --menus
 insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Home',null,'/',0,1,1,'.1.','A',1,getDate());
+
 insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Developer',null,'/Developer',1,2,1,'.1.2.','A',1,getDate());
 insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Identity',null,'/Identity',1,2,2,'.1.3.','A',1,getDate());
+
 insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Errors Log',null,'/Developer/ErrorLog',2,3,1,'.1.2.4.','A',1,getDate());
 insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Permits Generator',null,'/Developer/PermitsGenerator',2,3,2,'.1.2.5.','A',1,getDate());
+
 insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Menu',null,'/Identity/Menu',3,3,1,'.1.3.6.','A',1,getDate());
 insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Permit',null,'/Identity/Permit',3,3,2,'.1.3.7.','A',1,getDate());
 insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Role',null,'/Identity/Role',3,3,3,'.1.3.8.','A',1,getDate());

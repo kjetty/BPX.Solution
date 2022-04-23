@@ -28,6 +28,7 @@ namespace BPX.DAL.Repositories
             sortByColumn = sortByColumn == null ? string.Empty : sortByColumn.Trim();
             sortOrder = sortOrder == null ? string.Empty : sortOrder.Trim();
             searchForString = searchForString == null ? string.Empty : searchForString.Trim();
+            filterJson = filterJson == null ? string.Empty : filterJson.Trim();
 
             // set defaults
             pageNumber = pageNumber <= 0 ? 1 : pageNumber;
@@ -36,6 +37,7 @@ namespace BPX.DAL.Repositories
             sortByColumn = sortByColumn.Length.Equals(0) ? "UserId" : sortByColumn;
             sortOrder = sortOrder.Length.Equals(0) ? SortOrder.Ascending.ToUpper() : sortOrder;
             searchForString = searchForString.Length.Equals(0) ? string.Empty : searchForString;
+            filterJson = filterJson.Length.Equals(0) ? String.Empty : filterJson;
 
             // get model : IQueryable : apply statusFlag
             IQueryable<User> model = efContext.Users.Where(c => c.StatusFlag.ToUpper().Equals(statusFlag.ToUpper()));

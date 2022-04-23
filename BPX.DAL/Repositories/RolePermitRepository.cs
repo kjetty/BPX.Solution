@@ -10,7 +10,7 @@ namespace BPX.DAL.Repositories
 {
 	public class RolePermitRepository : BaseRepository, IRolePermitRepository
     {
-        public RolePermitRepository(EFContext efContext) : base(efContext)
+        public RolePermitRepository(EFContext efContext, DPContext dpContext) : base(efContext, dpContext)
         {
         }
 

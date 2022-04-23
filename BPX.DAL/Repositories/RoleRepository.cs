@@ -1,7 +1,9 @@
 ﻿using BPX.DAL.Context;
 using BPX.Domain.DbModels;
+using BPX.Domain.FilterModels;
 using BPX.Utils;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -11,7 +13,7 @@ namespace BPX.DAL.Repositories
 {
 	public class RoleRepository : BaseRepository, IRoleRepository
     {
-        public RoleRepository(EFContext efContext) : base(efContext)
+        public RoleRepository(EFContext efContext, DPContext dpContext) : base(efContext, dpContext)
         {
         }
 
@@ -36,28 +38,32 @@ namespace BPX.DAL.Repositories
             // get model : IQueryable : apply statusFlag
             IQueryable<Role> model = efContext.Roles.Where(c => c.StatusFlag.ToUpper().Equals(statusFlag.ToUpper()));
 
-            // apply search
+            // generic search
             if (searchForString.Length > 0)
             {
                 model = model.Where(c => c.RoleName.ToUpper().Contains(searchForString.ToUpper())
                                 || c.RoleDescription.ToUpper().Contains(searchForString.ToUpper()));
             }
 
-            // apply sort by column, sort order
-            switch (sortByColumn.ToUpper())
+            // advanced search using filters
+            RoleFM permitFM = JsonConvert.DeserializeObject<RoleFM>(filterJson);
+
+            if (permitFM != null)
             {
-                case "FIRSTNAME":
-                    model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.RoleName) : model.OrderBy(c => c.RoleName);
-                    break;
+                if (permitFM.RoleName != null)
+                    model = model.Where(c => c.RoleName.ToUpper().StartsWith(permitFM.RoleName.Trim().ToUpper()));
 
-                case "LASTNAME":
-                    model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.RoleDescription) : model.OrderBy(c => c.RoleDescription);
-                    break;
-
-                default:
-                    model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.RoleId) : model.OrderBy(c => c.RoleId);
-                    break;
+                if (permitFM.RoleDescription != null)
+                    model = model.Where(c => c.RoleDescription.ToUpper().StartsWith(permitFM.RoleDescription.Trim().ToUpper()));
             }
+
+            // apply sort by column, sort order
+            model = sortByColumn.ToUpper() switch
+            {
+                "FIRSTNAME" => (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.RoleName) : model.OrderBy(c => c.RoleName),
+                "LASTNAME" => (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.RoleDescription) : model.OrderBy(c => c.RoleDescription),
+                _ => (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.RoleId) : model.OrderBy(c => c.RoleId),
+            };
 
             // return ToPagedList()
             return model.ToPagedList(pageNumber, pageSize);

@@ -8,17 +8,16 @@ using System.Linq.Expressions;
 using X.PagedList;
 using Dapper;
 using System.Diagnostics;
+using BPX.Domain.FilterModels;
+using Newtonsoft.Json;
 
 namespace BPX.DAL.Repositories
 {
 	public class UserRepository : BaseRepository, IUserRepository
     {
-        private readonly DPContext dapperContext;
-
-        public UserRepository(EFContext efContext, DPContext dapperContext) : base(efContext)
+        public UserRepository(EFContext efContext, DPContext dpContext) : base(efContext, dpContext)
         {
-            this.dapperContext = dapperContext;
-    }
+        }
 
         public IPagedList<User> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString, string filterJson)
         {
@@ -41,7 +40,7 @@ namespace BPX.DAL.Repositories
             // get model : IQueryable : apply statusFlag
             IQueryable<User> model = efContext.Users.Where(c => c.StatusFlag.ToUpper().Equals(statusFlag.ToUpper()));
 
-            // apply search
+            // generic search
             if (searchForString.Length > 0)
             {
                 model = model.Where(c => c.LastName.ToUpper().Contains(searchForString.ToUpper())
@@ -49,25 +48,26 @@ namespace BPX.DAL.Repositories
                                 || c.Email.ToUpper().Contains(searchForString.ToUpper()));
             }
 
-            // apply sort by column, sort order
-            switch (sortByColumn.ToUpper())
+            // advanced search using filters
+            UserFM userFM = JsonConvert.DeserializeObject<UserFM>(filterJson);
+
+            if (userFM != null)
             {
-                case "FIRSTNAME":
-                    model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.FirstName) : model.OrderBy(c => c.FirstName);
-                    break;
+                if (userFM.FirstName != null)
+                    model = model.Where(c => c.FirstName.ToUpper().StartsWith(userFM.FirstName.Trim().ToUpper()));
 
-                case "LASTNAME":
-                    model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.LastName) : model.OrderBy(c => c.LastName);
-                    break;
-
-                case "EMAIL":
-                    model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.Email) : model.OrderBy(c => c.Email);
-                    break;
-
-                default:
-                    model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.UserId) : model.OrderBy(c => c.UserId);
-                    break;
+                if (userFM.LastName != null)
+                    model = model.Where(c => c.LastName.ToUpper().StartsWith(userFM.LastName.Trim().ToUpper()));
             }
+
+            // apply sort by column, sort order
+            model = sortByColumn.ToUpper() switch
+            {
+                "FIRSTNAME" => (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.FirstName) : model.OrderBy(c => c.FirstName),
+                "LASTNAME" => (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.LastName) : model.OrderBy(c => c.LastName),
+                "EMAIL" => (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.Email) : model.OrderBy(c => c.Email),
+                _ => (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.UserId) : model.OrderBy(c => c.UserId),
+            };
 
             // return ToPagedList()
             return model.ToPagedList(pageNumber, pageSize);
@@ -97,7 +97,7 @@ namespace BPX.DAL.Repositories
             {
                 var query = $"SELECT * FROM Users WHERE 1 = 1 AND UserId = {id}";
 
-                using (var connection = dapperContext.CreateConnection())
+                using (var connection = dpContext.CreateConnection())
                 {
                    user = connection.QuerySingleOrDefault<User>(query);
 

@@ -110,8 +110,6 @@ namespace BPX.Website.Controllers
 										portalService.UpdateRecord(portal);
 										portalService.SaveDBChanges();
 
-										portalService.DetachEntity(portal);
-
 										////// Developer Override for Permits - BaseController (Part A) + PermitAttribute (PartB)
 										////// OverrideOverrideOverride 
 										////// use for testing only

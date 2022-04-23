@@ -53,15 +53,9 @@ namespace BPX.Service
 		{
             portalRepository.SaveDBChanges();
         }
-
-        public void DetachEntity(Portal entity)
-        {
-            portalRepository.DetachEntity(entity);
-        }
     }
 
     public interface IPortalService : IGenericService<Portal>
     {
-        void DetachEntity(Portal entity);
     }
 }

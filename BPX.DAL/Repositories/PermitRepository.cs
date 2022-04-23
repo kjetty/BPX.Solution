@@ -1,7 +1,9 @@
 ﻿using BPX.DAL.Context;
 using BPX.Domain.DbModels;
+using BPX.Domain.FilterModels;
 using BPX.Utils;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -11,7 +13,7 @@ namespace BPX.DAL.Repositories
 {
 	public class PermitRepository : BaseRepository, IPermitRepository
     {
-        public PermitRepository(EFContext efContext) : base(efContext)
+        public PermitRepository(EFContext efContext, DPContext dpContext) : base(efContext, dpContext)
         {
         }
 
@@ -24,6 +26,7 @@ namespace BPX.DAL.Repositories
             sortByColumn = sortByColumn == null ? string.Empty : sortByColumn.Trim();
             sortOrder = sortOrder == null ? string.Empty : sortOrder.Trim();
             searchForString = searchForString == null ? string.Empty : searchForString.Trim();
+            filterJson = filterJson == null ? string.Empty : filterJson.Trim();
 
             // set defaults
             pageNumber = pageNumber <= 0 ? 1 : pageNumber;
@@ -32,42 +35,47 @@ namespace BPX.DAL.Repositories
             sortByColumn = sortByColumn.Length.Equals(0) ? "PermitId" : sortByColumn;
             sortOrder = sortOrder.Length.Equals(0) ? SortOrder.Ascending.ToUpper() : sortOrder;
             searchForString = searchForString.Length.Equals(0) ? string.Empty : searchForString;
+            filterJson = filterJson.Length.Equals(0) ? String.Empty : filterJson;
 
             // get model : IQueryable : apply statusFlag
             IQueryable<Permit> model = efContext.Permits.Where(c => c.StatusFlag.ToUpper().Equals(statusFlag.ToUpper()));
 
-            // apply search
+            // generic search
             if (searchForString.Length > 0)
             {
-                model = model.Where(c => c.PermitArea.ToUpper().Contains(searchForString.Trim().ToUpper())
-                                || c.PermitController.ToUpper().Contains(searchForString.Trim().ToUpper())
-                                || c.PermitName.ToUpper().Contains(searchForString.Trim().ToUpper())
-                                || c.PermitEnum.ToUpper().Contains(searchForString.Trim().ToUpper()));
+                model = model.Where(c => c.PermitArea.ToUpper().StartsWith(searchForString.Trim().ToUpper())
+                                || c.PermitController.ToUpper().StartsWith(searchForString.Trim().ToUpper())
+                                || c.PermitName.ToUpper().StartsWith(searchForString.Trim().ToUpper())
+                                || c.PermitEnum.ToUpper().StartsWith(searchForString.Trim().ToUpper()));
+            }
+
+            // advanced search using filters
+            PermitFM permitFM = JsonConvert.DeserializeObject<PermitFM>(filterJson);
+
+            if (permitFM != null)
+            {
+                if (permitFM.PermitArea != null)
+                    model = model.Where(c => c.PermitArea.ToUpper().StartsWith(permitFM.PermitArea.Trim().ToUpper()));
+
+                if (permitFM.PermitController != null)
+                    model = model.Where(c => c.PermitController.ToUpper().StartsWith(permitFM.PermitController.Trim().ToUpper()));
+
+                if (permitFM.PermitName != null)
+                    model = model.Where(c => c.PermitName.ToUpper().StartsWith(permitFM.PermitName.Trim().ToUpper()));
+
+                if (permitFM.PermitEnum != null)
+                    model = model.Where(c => c.PermitEnum.ToUpper().StartsWith(permitFM.PermitEnum.Trim().ToUpper()));
             }
 
             // apply sort by column, sort order
-            switch (sortByColumn.ToUpper())
+            model = sortByColumn.ToUpper() switch
             {
-                case "PERMITAREA":
-                    model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.PermitArea) : model.OrderBy(c => c.PermitArea);
-                    break;
-
-                case "PERMITCONTROLLER":
-                    model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.PermitController) : model.OrderBy(c => c.PermitController);
-                    break;
-
-                case "PERMITNAME":
-                    model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.PermitName) : model.OrderBy(c => c.PermitName);
-                    break;
-
-                case "PERMITENUM":
-                    model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.PermitEnum) : model.OrderBy(c => c.PermitEnum);
-                    break;
-
-                default:
-                    model = (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.PermitId) : model.OrderBy(c => c.PermitId);
-                    break;
-            }
+                "PERMITAREA" => (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.PermitArea) : model.OrderBy(c => c.PermitArea),
+                "PERMITCONTROLLER" => (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.PermitController) : model.OrderBy(c => c.PermitController),
+                "PERMITNAME" => (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.PermitName) : model.OrderBy(c => c.PermitName),
+                "PERMITENUM" => (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.PermitEnum) : model.OrderBy(c => c.PermitEnum),
+                _ => (sortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper())) ? model.OrderByDescending(c => c.PermitId) : model.OrderBy(c => c.PermitId),
+            };
 
             // return ToPagedList()
             return model.ToPagedList(pageNumber, pageSize);

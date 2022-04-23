@@ -10,9 +10,8 @@ namespace BPX.DAL.Repositories
 {
 	public class PortalRepository : BaseRepository, IPortalRepository
     {
-        public PortalRepository(EFContext efContext) : base(efContext)
+        public PortalRepository(EFContext efContext, DPContext dpContext) : base(efContext, dpContext)
         {
-
         }
 
         public IPagedList<Portal> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString, string filterJson)
@@ -39,15 +38,9 @@ namespace BPX.DAL.Repositories
         {
             efContext.Entry(entity).State = EntityState.Modified;
         }
-
-        public void DetachEntity(Portal entity)
-        {
-            efContext.Entry(entity).State = EntityState.Detached;
-        }
     }
 
     public interface IPortalRepository : IRepository<Portal>
     {
-        void DetachEntity(Portal entity);
     }
 }

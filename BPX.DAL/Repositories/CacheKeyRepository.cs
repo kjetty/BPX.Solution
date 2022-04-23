@@ -10,7 +10,7 @@ namespace BPX.DAL.Repositories
 {
 	public class CacheKeyRepository : BaseRepository, ICacheKeyRepository
     {
-        public CacheKeyRepository(EFContext efContext) : base(efContext)
+        public CacheKeyRepository(EFContext efContext, DPContext dpContext) : base(efContext, dpContext)
         {
         }
 

@@ -21,5 +21,6 @@ namespace BPX.DAL.Context
         public virtual DbSet<Menu> Menus { get; set; }
         public virtual DbSet<MenuPermit> MenuPermits { get; set; }
         public virtual DbSet<CacheKey> CacheKeys { get; set; }
+        public virtual DbSet<Error> Errors { get; set; }
     }
 }

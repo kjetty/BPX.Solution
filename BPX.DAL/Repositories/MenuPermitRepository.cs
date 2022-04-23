@@ -10,7 +10,7 @@ namespace BPX.DAL.Repositories
 {
 	public class MenuPermitRepository : BaseRepository, IMenuPermitRepository
     {
-        public MenuPermitRepository(EFContext efContext) : base(efContext)
+        public MenuPermitRepository(EFContext efContext, DPContext dpContext) : base(efContext, dpContext)
         {
         }
 

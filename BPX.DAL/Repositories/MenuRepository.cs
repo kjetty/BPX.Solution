@@ -12,7 +12,7 @@ namespace BPX.DAL.Repositories
 {
 	public class MenuRepository : BaseRepository, IMenuRepository
     {
-        public MenuRepository(EFContext efContext) : base(efContext)
+        public MenuRepository(EFContext efContext, DPContext dpContext) : base(efContext, dpContext)
         {
         }
 
@@ -74,7 +74,7 @@ namespace BPX.DAL.Repositories
             cteQuery += "SELECT    MenuId, MenuName, MenuDescription, MenuURL, ParentMenuId, hLevel, OrderNumber, TreePath, StatusFlag, ModifiedBy, ModifiedDate ";
             cteQuery += "FROM      CTE_breadcrumb ";
 
-            return efContext.Menus.FromSqlRaw(cteQuery).ToList();
+            return efContext.Menus.FromSqlRaw(cteQuery).AsNoTracking().ToList();
         }
     
         public List<Menu> GetMenuHierarchy(string statusFlag, string orderBy)
@@ -131,7 +131,7 @@ namespace BPX.DAL.Repositories
             cteQuery += "FROM 		cte_menus ";
             cteQuery += "ORDER BY " + cteOrderBy;
 
-            List<Menu> listMenu = efContext.Menus.FromSqlRaw(cteQuery).ToList();
+            List<Menu> listMenu = efContext.Menus.FromSqlRaw(cteQuery).AsNoTracking().ToList();
 
             return listMenu;
         }

@@ -2,6 +2,10 @@
 -- ensure -T272 is added in the Startup parameters to avoid the identity to jump to 1001
 ----------------------------------------------------------------------------------------
 
+------------------------------------------------
+-- drop and delete triggers, constraints, tables
+------------------------------------------------
+
 --drop triggers
 drop trigger TRG_Users_I;
 drop trigger TRG_PLUMaster_UD;
@@ -44,6 +48,10 @@ DROP TABLE Menus;
 DROP TABLE CacheKeys;
 
 GO
+
+---------------------------------------
+-- create tables, constraints, triggers
+---------------------------------------
 
 --create tables
 CREATE TABLE Errors (
@@ -226,6 +234,10 @@ END
 
 GO
 
+------------
+-- seed data
+------------
+
 --portals
 insert into Portals (PortalUUId,PToken,LastAccessTime) values ('PortalUUId001','PToken001',getDate());
 insert into Portals (PortalUUId,PToken,LastAccessTime) values ('PortalUUId002','PToken002',getDate());
@@ -238,24 +250,15 @@ insert into Portals (PortalUUId,PToken,LastAccessTime) values ('PortalUUId008','
 insert into Portals (PortalUUId,PToken,LastAccessTime) values ('PortalUUId009','PToken009',getDate());
 
 --logins
-insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId001','LToken001',getDate(),'U','one','AQAAAAEAACcQAAAAEJZUbWun++BJlFSiC352oPAgJ9UKJRXkKX4lD3hbjIsMSx6X+4qVUxkCIqTibouCkg==','A',1,getDate()); 
--- one / test1111
-insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId002','LToken002',getDate(),'U','two','AQAAAAEAACcQAAAAEB9JDwdihl7mM0l+TriHpUJ1RMwMBCPEcZyzx0I3jr76qDSCk4BrMXTw04I41QECsA==','A',1,getDate()); 
--- two / test2222
-insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId003','LToken003',getDate(),'U','three','AQAAAAEAACcQAAAAEEWfT9/y2LjqdjMDTjtpL6/atZbp0W35CU16ho4ZPc941tdMwWkQkjKmTG2CLpVNWw==','A',1,getDate()); 
--- three / test3333
-insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId004','LToken004',getDate(),'U','four','AQAAAAEAACcQAAAAEORU4xK4/14Hif4n9GskVGf0sARqO1Imofs0/hF8petfwQvJIatWXHFttl7fu9JMQw==','A',1,getDate()); 
--- four / test4444
-insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId005','LToken005',getDate(),'U','five','AQAAAAEAACcQAAAAEIqxBmeAMdu7VCHVUHdhWwE2gVFMMwAnj4gluKD3jH/7km5lCH24t0UmvVIV6Xldvg==','A',1,getDate()); 
--- five / test5555
-insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId006','LToken006',getDate(),'U','six','AQAAAAEAACcQAAAAEE0lGYLrUerJtuTesTovq5x0dYjJbXuHNoWxqc8fplpUatp+ZVGDK5tBO3fdv/KsBQ==','A',1,getDate()); 
--- six / test6666
-insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId007','LToken007',getDate(),'U','seven','AQAAAAEAACcQAAAAEGsbNHvJSb009T7pSeRxBrYvOKFrdNhO6eWrMjp6fxw/+eS9Iq7iFKhXW1LubkefEg==','A',1,getDate()); 
--- seven / test7777
-insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId008','LToken008',getDate(),'U','eight','AQAAAAEAACcQAAAAEEfP/rkD26DdWFjUnEQ/IWyi/6kN8RAZGNcP0n6D+IHgfLX0y37Tm/FrxRX5RaiphQ==','A',1,getDate()); 
--- eight / test8888
- insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId009','LToken009',getDate(),'U','nine','AQAAAAEAACcQAAAAEO6wAj4iqxtW6XZW7iCdKmKw3eWaT9nlla1BCdzFd4WfzPeJFyxJga8gBGPrFKXiRg==','A',1,getDate()); 
--- nine / test9999
+insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId001','LToken001',getDate(),'U','one','AQAAAAEAACcQAAAAEJZUbWun++BJlFSiC352oPAgJ9UKJRXkKX4lD3hbjIsMSx6X+4qVUxkCIqTibouCkg==','A',1,getDate());     -- one / test1111
+insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId002','LToken002',getDate(),'U','two','AQAAAAEAACcQAAAAEB9JDwdihl7mM0l+TriHpUJ1RMwMBCPEcZyzx0I3jr76qDSCk4BrMXTw04I41QECsA==','A',1,getDate());     -- two / test2222
+insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId003','LToken003',getDate(),'U','three','AQAAAAEAACcQAAAAEEWfT9/y2LjqdjMDTjtpL6/atZbp0W35CU16ho4ZPc941tdMwWkQkjKmTG2CLpVNWw==','A',1,getDate());   -- three / test3333
+insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId004','LToken004',getDate(),'U','four','AQAAAAEAACcQAAAAEORU4xK4/14Hif4n9GskVGf0sARqO1Imofs0/hF8petfwQvJIatWXHFttl7fu9JMQw==','A',1,getDate());    -- four / test4444
+insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId005','LToken005',getDate(),'U','five','AQAAAAEAACcQAAAAEIqxBmeAMdu7VCHVUHdhWwE2gVFMMwAnj4gluKD3jH/7km5lCH24t0UmvVIV6Xldvg==','A',1,getDate());    -- five / test5555
+insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId006','LToken006',getDate(),'U','six','AQAAAAEAACcQAAAAEE0lGYLrUerJtuTesTovq5x0dYjJbXuHNoWxqc8fplpUatp+ZVGDK5tBO3fdv/KsBQ==','A',1,getDate());     -- six / test6666
+insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId007','LToken007',getDate(),'U','seven','AQAAAAEAACcQAAAAEGsbNHvJSb009T7pSeRxBrYvOKFrdNhO6eWrMjp6fxw/+eS9Iq7iFKhXW1LubkefEg==','A',1,getDate());   -- seven / test7777
+insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId008','LToken008',getDate(),'U','eight','AQAAAAEAACcQAAAAEEfP/rkD26DdWFjUnEQ/IWyi/6kN8RAZGNcP0n6D+IHgfLX0y37Tm/FrxRX5RaiphQ==','A',1,getDate());   -- eight / test8888
+ insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId009','LToken009',getDate(),'U','nine','AQAAAAEAACcQAAAAEO6wAj4iqxtW6XZW7iCdKmKw3eWaT9nlla1BCdzFd4WfzPeJFyxJga8gBGPrFKXiRg==','A',1,getDate());   -- nine / test9999
 
 --users
 insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('System','sysln','system.email@bpx.com','123-123-1234','UserUUId001','LoginUUId001','PortalUUId001','A',1,getDate());

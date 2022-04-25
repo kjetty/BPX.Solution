@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace BPX.Domain.ViewModels
@@ -8,12 +9,12 @@ namespace BPX.Domain.ViewModels
         [Display(Name = "Error Id")]
         public int ErrorId { get; set; }
 
-        [StringLength(1000)]
+        [StringLength(8000)]
         [Display(Name = "Error Data")]
-        public int ErrorData { get; set; }
+        public string ErrorData { get; set; }
 
         [Required]
         [Display(Name = "Error Date")]
-        public int ErrorDate { get; set; }
+        public DateTime ErrorDate { get; set; }
     }
 }

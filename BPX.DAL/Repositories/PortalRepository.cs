@@ -42,6 +42,7 @@ namespace BPX.DAL.Repositories
         }
 
         // dapper
+
         public int UpdateRecordDapper(Portal entity)
         {
             string dynQuery = "update Portals set  PToken = @PToken, LastAccessTime = @LastAccessTime where PortalUUId = @PortalUUId";

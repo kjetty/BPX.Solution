@@ -11,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
 
 namespace BPX.Website
 {
@@ -27,13 +26,14 @@ namespace BPX.Website
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			// inject database connection
+			// inject database connection - EF - entity framework
 			services.AddDbContext<EFContext>(options => {
 				options.UseSqlServer(Configuration.GetConnectionString("connStrDbBPX"));
 				//options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 				//options.EnableSensitiveDataLogging();
 			});
 
+			// inject database connection - Dapper - micro orm
 			services.AddSingleton<DPContext>();
 
 			// inject service layer objects
@@ -41,7 +41,7 @@ namespace BPX.Website
 			// this is particularly used in ASP.NET Core 5 where the object instance is created once per HTTP request
 			// services such as Entity Framework Core's DbContext are registered with scoped lifetime
 
-			// inject repositories
+			// inject repositories (generic - basic building block)
 			services.AddScoped<IPortalRepository, PortalRepository>();
 			services.AddScoped<ILoginRepository, LoginRepository>();
 			services.AddScoped<IUserRepository, UserRepository>();
@@ -53,8 +53,10 @@ namespace BPX.Website
 			services.AddScoped<IMenuPermitRepository, MenuPermitRepository>();
 			services.AddScoped<ICacheKeyRepository, CacheKeyRepository>();
 			services.AddScoped<IErrorRepository, ErrorRepository>();
+			// inject repositories (project specific)
+			// ...
 
-			// inject services
+			// inject services (generic - basic building block)
 			services.AddScoped<IPortalService, PortalService>();
 			services.AddScoped<ILoginService, LoginService>();
 			services.AddScoped<IUserService, UserService>();
@@ -65,8 +67,10 @@ namespace BPX.Website
 			services.AddScoped<IMenuService, MenuService>();
 			services.AddScoped<IMenuPermitService, MenuPermitService>();
 			services.AddScoped<ICacheKeyService, CacheKeyService>();
-			services.AddScoped<ICoreService, CoreService>();
 			services.AddScoped<IErrorService, ErrorService>();
+			services.AddScoped<ICoreService, CoreService>();
+			// inject services (project specific)
+			// ...
 
 			// authentication and cookie options
 			services

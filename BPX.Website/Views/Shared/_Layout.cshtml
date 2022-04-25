@@ -18,24 +18,26 @@
 	<header>
 		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
 			<div class="container">
+				<!-- logo -->
 				<a class="navbar-brand" href="/">BPX.Website</a>
 
+				<!-- toggle button -->
 				@*<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
 						aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>*@
 
-				@*<div class="navbar-collapse collapse d-sm-inline-flex text-right justify-content-between">*@
-					<nav id="navbar" class="navbar">
-						<ul>
-							<partial name="_PartialMenu" />
-							<partial name="_PartialLogin" />
-						</ul>
-					</nav>
-				@*</div>*@
+				<!-- menu -->
+				<nav id="navbar" class="navbar">
+					<ul>
+						<partial name="_PartialMenu" />
+						<partial name="_PartialLogin" />
+					</ul>
+				</nav>
 			</div>
 		</nav>
 	</header>
+	<!-- body :: breadcrumb :: alertbox -->
 	<div class="container">
 		<main role="main" class="pb-3">
 			<partial name="_PartialBreadcrumb" />
@@ -43,7 +45,7 @@
 			@RenderBody()
 		</main>
 	</div>
-
+	<!-- footer -->
 	<footer class="border-top footer text-muted" style="background-color: #f8fbfe;">
 		<div class="container">
 			<div class="row">
@@ -65,7 +67,7 @@
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="~/js/site.js" asp-append-version="true"></script>
 
-	<!-- inline javascript -->
+	<!-- inline javascript :: scripts at the bottom of the page -->
 	@RenderSection("ScriptsAtBottom", required: false)
 </body>
 </html>

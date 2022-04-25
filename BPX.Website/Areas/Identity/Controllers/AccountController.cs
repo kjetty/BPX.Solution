@@ -405,13 +405,13 @@ namespace BPX.Website.Areas.Identity.Controllers
                     string errorMessage = GetInnerExceptionMessage(ex);
 
                     // log
-                    logger.Log(LogLevel.Error, ex, "AccountContaller.411" + errorMessage);
+                    logger.Log(LogLevel.Error, ex, "AccountController.411" + errorMessage);
                 }
 
                 if (!passwordIsVerified)
                 {
                     // set alert
-                    ShowAlertBox(AlertType.Warning, "Ola password match has failed. Try again.");
+                    ShowAlertBox(AlertType.Warning, "Old password match has failed. Try again.");
 
                     return RedirectToAction("ChangePassword", "Account", new { area = "Identity" });
                 }

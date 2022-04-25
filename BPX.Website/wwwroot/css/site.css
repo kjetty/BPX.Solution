@@ -193,3 +193,14 @@ body {
 .breadcrumb-item + .breadcrumb-item::before {
     content: ">";
 }
+
+@media {
+    .table-xs > thead > tr > th,
+    .table-xs > tbody > tr > th,
+    .table-xs > tfoot > tr > th,
+    .table-xs > thead > tr > td,
+    .table-xs > tbody > tr > td,
+    .table-xs > tfoot > tr > td {
+        padding: 1px;
+    }
+}

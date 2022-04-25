@@ -7,7 +7,7 @@ namespace BPX.Domain.ViewModels
     public class MenuMiniViewModel
     {
         [Key]
-        [Display(Name = "Menu ID")]
+        [Display(Name = "Menu Id")]
         public int MenuId { get; set; }
 
         [Required]

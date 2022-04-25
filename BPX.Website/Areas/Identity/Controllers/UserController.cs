@@ -146,8 +146,6 @@ namespace BPX.Website.Areas.Identity.Controllers
 					userService.UpdateRecord(recordUser);
 				}
 
-				var testUser = new User();
-
 				// commit changes to database
 				userService.SaveDBChanges();
 

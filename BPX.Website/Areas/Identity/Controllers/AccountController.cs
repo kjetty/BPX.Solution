@@ -347,6 +347,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         //[Permit(Permits.Identity.Login.ChangePassword)]
         public IActionResult ChangePassword(ChangePasswordViewModel collection)
         {
+            bool passwordIsVerified = false;
 
             try
             {
@@ -385,10 +386,35 @@ namespace BPX.Website.Areas.Identity.Controllers
                     return View(collection);
                 }
 
-                // todo :: verify old password
+                Login login = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())
+                                                                && c.LoginUUId.Equals(currUser.LoginUUId)).SingleOrDefault();
 
-                // get user
-                Login login = loginService.GetRecordById(currUser.UserId);
+                // verify old password
+                try
+                {
+                    //verify password
+                    PasswordVerificationResult result = new PasswordHasher<Login>().VerifyHashedPassword(login, login.PasswordHash, collection.OldPassword);
+
+                    if (result == PasswordVerificationResult.Success) passwordIsVerified = true;
+                    //else if (result == PasswordVerificationResult.SuccessRehashNeeded) passwordIsVerified = false;
+                    //else if (result == PasswordVerificationResult.Failed) passwordIsVerified = false;
+                }
+                catch (Exception ex)
+                {
+                    // prepare data
+                    string errorMessage = GetInnerExceptionMessage(ex);
+
+                    // log
+                    logger.Log(LogLevel.Error, ex, "AccountContaller.411" + errorMessage);
+                }
+
+                if (!passwordIsVerified)
+                {
+                    // set alert
+                    ShowAlertBox(AlertType.Warning, "Ola password match has failed. Try again.");
+
+                    return RedirectToAction("ChangePassword", "Account", new { area = "Identity" });
+                }
 
                 // hash the password
                 PasswordHasher<Login> passwordHasher = new PasswordHasher<Login>();

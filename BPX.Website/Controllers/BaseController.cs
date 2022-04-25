@@ -65,9 +65,9 @@ namespace BPX.Website.Controllers
 							IPortalService portalService = coreService.GetPortalService();
 							Portal portal = portalService.GetPortalByToken(currPToken);
 
-							// get login details :: using RToken
+							// get login details :: using LToken
 							ILoginService loginService = coreService.GetLoginService();
-							Login login = loginService.GetLoginByToken(currPToken);
+							Login login = loginService.GetLoginByToken(currLToken);
 
 							if (portal != null && login != null)
 							{
@@ -196,7 +196,7 @@ namespace BPX.Website.Controllers
 			string currAction = ctx.HttpContext.Request.RouteValues["action"] != null ? ctx.HttpContext.Request.RouteValues["action"].ToString() : string.Empty;
 			//string currId = ctx.HttpContext.Request.RouteValues["id"] != null ? ctx.HttpContext.Request.RouteValues["id"].ToString() : string.Empty;
 
-			string lookupURL = ResolveURL($"/{currArea}/{currController}").ToUpper();
+			string lookupURL = ResolveURL($"~/{currArea}/{currController}").ToUpper();
 
 			if (currController.ToUpper().Equals("HOME"))
 			{

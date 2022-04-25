@@ -1,9 +1,19 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace BPX.Domain.ViewModels
 {
     public class ErrorViewModel
     {
-        public string RequestId { get; set; }
+        [Key]
+        [Display(Name = "Error Id")]
+        public int ErrorId { get; set; }
 
-        public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+        [StringLength(1000)]
+        [Display(Name = "Error Data")]
+        public int ErrorData { get; set; }
+
+        [Required]
+        [Display(Name = "Error Date")]
+        public int ErrorDate { get; set; }
     }
 }

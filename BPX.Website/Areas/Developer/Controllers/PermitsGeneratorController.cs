@@ -97,7 +97,7 @@ namespace BPX.Website.Areas.Developer.Controllers
 
         private static void WriteToFile(string path, string fileName, string fileData)
         {
-            System.IO.File.WriteAllText(path + "/" + fileName, String.Empty);
+            System.IO.File.WriteAllText(path + "/" + fileName, string.Empty);
             System.IO.File.AppendAllText(path + "/" + fileName, "//This file is auto generated on " + DateTime.Now.ToString() + Environment.NewLine);
             System.IO.File.AppendAllText(path + "/" + fileName, fileData);
         }

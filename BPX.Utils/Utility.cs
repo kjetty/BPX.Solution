@@ -41,39 +41,7 @@ namespace BPX.Utils
                 sb.Append(chars[b % (chars.Length)]);
             }
 
-            string temp = sb.ToString();
-            string temp16 = temp.Insert(16, "-");
-            string temp12 = temp16.Insert(12, "-");
-            string temp8 = temp12.Insert(8, "-");
-            string temp4 = temp8.Insert(4, "-");
-
-            return temp4;
-        }
-
-        public static string GetUUID2(int size)
-        {
-            StringBuilder sb = new StringBuilder(size);
-
-            char[] chars = "abcdefghijklmnopqrstuvwxyz1234567890".ToCharArray();
-            byte[] bytes = new byte[size];
-
-            using (RNGCryptoServiceProvider crypto = new RNGCryptoServiceProvider())
-            {
-                crypto.GetBytes(bytes);
-            }
-
-            foreach (byte b in bytes)
-            {
-                sb.Append(chars[b % (chars.Length)]);
-            }
-
-            string temp = sb.ToString();
-            string temp16 = temp.Insert(16, "-");
-            string temp12 = temp16.Insert(12, "-");
-            string temp8 = temp12.Insert(8, "-");
-            string temp4 = temp8.Insert(4, "-");
-
-            return temp4;
+            return sb.ToString();             
         }
 
         public static string Hypenate2124(string input)

@@ -1,19 +1,17 @@
 ﻿using BPX.DAL.Context;
 using BPX.Domain.DbModels;
+using BPX.Domain.FilterModels;
 using BPX.Utils;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
 using X.PagedList;
-using Dapper;
-using System.Diagnostics;
-using BPX.Domain.FilterModels;
-using Newtonsoft.Json;
 
 namespace BPX.DAL.Repositories
 {
-	public class UserRepository : BaseRepository, IUserRepository
+    public class UserRepository : BaseRepository, IUserRepository
     {
         public UserRepository(EFContext efContext, DPContext dpContext) : base(efContext, dpContext)
         {
@@ -37,7 +35,7 @@ namespace BPX.DAL.Repositories
             sortByColumn = sortByColumn.Length.Equals(0) ? "UserId" : sortByColumn;
             sortOrder = sortOrder.Length.Equals(0) ? SortOrder.Ascending.ToUpper() : sortOrder;
             searchForString = searchForString.Length.Equals(0) ? string.Empty : searchForString;
-            filterJson = filterJson.Length.Equals(0) ? String.Empty : filterJson;
+            filterJson = filterJson.Length.Equals(0) ? string.Empty : filterJson;
 
             // get model : IQueryable : apply statusFlag
             IQueryable<User> model = efContext.Users.Where(c => c.StatusFlag.ToUpper().Equals(statusFlag.ToUpper()));
@@ -77,42 +75,8 @@ namespace BPX.DAL.Repositories
 
         public User GetRecordById(int id)
         {
-            User user = null;
-
-            Stopwatch watch1 = new System.Diagnostics.Stopwatch();             
-            Stopwatch watch2 = new System.Diagnostics.Stopwatch();
-
-            watch1.Start();
-
-            for (int i = 0; i < 1000; i++)
-            {
-                var abc = efContext.Users.Where(c => c.UserId.Equals(id)).SingleOrDefault();
-                //return efContext.Users.Where(c => c.UserId.Equals(id)).SingleOrDefault();
-            }
-
-            watch1.Stop();
-            string executionTime1 = "[milli: " + watch1.ElapsedMilliseconds.ToString() + " ms]";
-
-            watch2.Start();
-
-            for (int i = 0; i < 1000; i++)
-            {
-                var query = $"SELECT * FROM Users WHERE 1 = 1 AND UserId = {id}";
-
-                using (var connection = dpContext.CreateConnection())
-                {
-                   user = connection.QuerySingleOrDefault<User>(query);
-
-                    //return user;
-                }
-            }
-
-            watch2.Stop();
-            string executionTime2 = "[milli: " + watch2.ElapsedMilliseconds.ToString() + " ms]";
-
-            return user;
+            return efContext.Users.Where(c => c.UserId.Equals(id)).SingleOrDefault();
         }
-
 
         public IQueryable<User> GetRecordsByFilter(Expression<Func<User, bool>> filter)
         {

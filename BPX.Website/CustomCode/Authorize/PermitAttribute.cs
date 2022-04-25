@@ -129,11 +129,12 @@ namespace BPX.Website.CustomCode.Authorize
 									// verify the user :: portal :: login chain using currPToken on every request
 									int currUserId = currUser.UserId;
 									List<int> userRoleIds = GetUserRoleIds(currUserId, coreService, cacheService, cacheKeyService, errorService);
-									List<int> userPermitIds = GetUserRoleIds(currUserId, userRoleIds, coreService, cacheService, cacheKeyService, errorService);
+									List<int> userPermitIds = GetUserPermitIds(currUserId, userRoleIds, coreService, cacheService, cacheKeyService, errorService);
 
 									// check if user has the permit
 									if (userPermitIds.Contains(permitId))
 									{
+										// allow access
 										success = true;
 									}
 								}
@@ -152,23 +153,23 @@ namespace BPX.Website.CustomCode.Authorize
 
 			return;
 		}
-		private List<int> GetUserRoleIds(int currUserId, ICoreService coreService, ICacheService cacheService, ICacheKeyService cacheKeyService, IErrorService errorService)
+		private List<int> GetUserRoleIds(int userId, ICoreService coreService, ICacheService cacheService, ICacheKeyService cacheKeyService, IErrorService errorService)
 		{
-            string cacheKeyName = $"user:{currUserId}:roles";
+            string cacheKeyName = $"user:{userId}:roles";
             List<int> userRoleIds = cacheService.GetCache<List<int>>(cacheKeyName, errorService);
 
             if (userRoleIds == null)
             {
-                userRoleIds = coreService.GetUserRoleIds(currUserId);
+                userRoleIds = coreService.GetUserRoleIds(userId);
                 cacheService.SetCache(userRoleIds, cacheKeyName, cacheKeyService);
             }
 
 			return userRoleIds;
         }
 
-		private List<int> GetUserRoleIds(int currUserId, List<int> userRoleIds, ICoreService coreService, ICacheService cacheService, ICacheKeyService cacheKeyService, IErrorService errorService)
+		private List<int> GetUserPermitIds(int userId, List<int> userRoleIds, ICoreService coreService, ICacheService cacheService, ICacheKeyService cacheKeyService, IErrorService errorService)
         {
-            string cacheKeyName = $"user:{currUserId}:permits";
+            string cacheKeyName = $"user:{userId}:permits";
             List<int> userPermitIds = cacheService.GetCache<List<int>>(cacheKeyName, errorService);
 
             if (userPermitIds == null)

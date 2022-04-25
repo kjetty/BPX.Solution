@@ -52,6 +52,7 @@ namespace BPX.Website
 			services.AddScoped<IMenuRepository, MenuRepository>();
 			services.AddScoped<IMenuPermitRepository, MenuPermitRepository>();
 			services.AddScoped<ICacheKeyRepository, CacheKeyRepository>();
+			services.AddScoped<IErrorRepository, ErrorRepository>();
 
 			// inject services
 			services.AddScoped<IPortalService, PortalService>();
@@ -65,6 +66,7 @@ namespace BPX.Website
 			services.AddScoped<IMenuPermitService, MenuPermitService>();
 			services.AddScoped<ICacheKeyService, CacheKeyService>();
 			services.AddScoped<ICoreService, CoreService>();
+			services.AddScoped<IErrorService, ErrorService>();
 
 			// authentication and cookie options
 			services

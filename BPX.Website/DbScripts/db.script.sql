@@ -49,7 +49,7 @@ GO
 CREATE TABLE Errors (
     ErrorId      		int IDENTITY(1,1)   NOT NULL,
     ErrorData       	varchar (8000)      NULL,
-    ErroDate            datetime            NOT NULL,
+    ErrorDate            datetime            NOT NULL,
     PRIMARY KEY CLUSTERED (ErrorId ASC)
 );
 

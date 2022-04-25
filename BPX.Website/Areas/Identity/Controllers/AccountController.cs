@@ -174,7 +174,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 // AllowRefresh = true,
                 // IssuedUtc = <DateTimeOffset>,
                 // RedirectUri = <string>,
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30),
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(sessionCookieTimeout),
                 IsPersistent = false
             };
 
@@ -242,9 +242,9 @@ namespace BPX.Website.Areas.Identity.Controllers
 
                 if (listDuplicateLogins.Count.Equals(0))
                 {
-                    string userUUId = Utility.GetUUID(20);
-                    string portalUUId = Utility.GetUUID(20);
-                    string loginUUId = Utility.GetUUID(20);
+                    string userUUId = Utility.Hypenate2124(Utility.GetUUID(21));
+                    string portalUUId = Utility.Hypenate2124(Utility.GetUUID(21));
+                    string loginUUId = Utility.Hypenate2124(Utility.GetUUID(21));
 
                     Portal portal = new()
                     {
@@ -270,9 +270,9 @@ namespace BPX.Website.Areas.Identity.Controllers
                     {
                         // set core data
                         FirstName = collection.FirstName,
-                        LastName = collection.FirstName,
-                        Email = collection.FirstName,
-                        Mobile = collection.FirstName,
+                        LastName = collection.LastName,
+                        Email = collection.Email,
+                        Mobile = collection.CellPhone,
                         UserUUId = userUUId,
                         PortalUUId = portalUUId,
                         LoginUUId = loginUUId,
@@ -347,6 +347,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         //[Permit(Permits.Identity.Login.ChangePassword)]
         public IActionResult ChangePassword(ChangePasswordViewModel collection)
         {
+
             try
             {
                 // return if model is invalid

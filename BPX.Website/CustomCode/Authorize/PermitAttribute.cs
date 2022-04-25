@@ -4,6 +4,7 @@ using BPX.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Routing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,18 +77,18 @@ namespace BPX.Website.CustomCode.Authorize
 					if (currPTokenClaim != null)
 					{
 						string currPToken = currPTokenClaim.Value;
-						string currRToken = new string(currPToken.ToCharArray().Reverse().ToArray());
+						string currLToken = Utility.GetLToken(currPToken);
 
                         ICoreService coreService = (ICoreService)context.HttpContext.RequestServices.GetService(typeof(ICoreService));
 						int sessionCookieTimeout= Convert.ToInt32(coreService.GetConfiguration().GetSection("AppSettings").GetSection("SessionCookieTimeout").Value);
 
 						// get portal details :: using PToken
 						IPortalService portalService = coreService.GetPortalService();
-                        Portal portal = portalService.GetRecordsByFilter(c => c.PToken.Equals(currPToken)).SingleOrDefault();
+						Portal portal = portalService.GetPortalByToken(currPToken);
 
 						// get login details :: using RToken
 						ILoginService loginService = coreService.GetLoginService();
-                        Login login = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.LToken.Equals(currRToken)).SingleOrDefault();
+                        Login login = loginService.GetLoginByToken(currLToken);
 
 						if (portal != null && login != null)
 						{
@@ -96,45 +97,39 @@ namespace BPX.Website.CustomCode.Authorize
 								// force logout
 								portal.PToken = Guid.NewGuid().ToString();
 
-								portalService.UpdateRecord(portal);
-								portalService.SaveDBChanges();
+								//portalService.UpdateRecord(portal);
+								//portalService.SaveDBChanges();
+
+								portalService.UpdateRecordDapper(portal);
+
+								context.Result = new RedirectToRouteResult(
+									new RouteValueDictionary
+									{
+										{ "controller", "Account" },
+										{ "action", "Login" }
+									}
+								);
 							}
 							else
 							{
 								// get user details :: uisng (PToken) PortalUUId :: using (RToken) LoginUUId + UserUUId
 								IUserService userService = coreService.GetUserService();
-								User currUser = userService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PortalUUId.Equals(portal.PortalUUId) && c.LoginUUId.Equals(login.LoginUUId)).SingleOrDefault();
+								User currUser = userService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) 
+																				&& c.PortalUUId.Equals(portal.PortalUUId) 
+																				&& c.LoginUUId.Equals(login.LoginUUId))
+																				.SingleOrDefault();
 
 								if (currUser != null)
-								{                   
+								{
+									ICacheService cacheService = coreService.GetCacheService();
+									ICacheKeyService cacheKeyService = coreService.GetCacheKeyService();
+									IErrorService errorService = coreService.GetErrorService();
+									
 									// SECURITY SECURITY SECURITY
 									// verify the user :: portal :: login chain using currPToken on every request
 									int currUserId = currUser.UserId;
-
-                                    ICacheService cacheService = coreService.GetCacheService();
-                                    ICacheKeyService cacheKeyService = coreService.GetCacheKeyService();
-
-									string cacheKeyName = string.Empty;
-									
-									// userRoleIds
-									cacheKeyName = $"user:{currUserId}:roles";
-                                    List<int> userRoleIds = cacheService.GetCache<List<int>>(cacheKeyName);
-
-									if (userRoleIds == null)
-									{
-										userRoleIds = coreService.GetUserRoleIds(currUserId);
-										cacheService.SetCache(userRoleIds, cacheKeyName, cacheKeyService);
-									}
-
-									// userPermitIds
-									cacheKeyName = $"user:{currUserId}:permits";
-									List<int> userPermitIds = cacheService.GetCache<List<int>>(cacheKeyName);
-
-									if (userPermitIds == null)
-									{
-										userPermitIds = coreService.GetUserPermitIds(userRoleIds);
-										cacheService.SetCache(userPermitIds, cacheKeyName, cacheKeyService);
-									}
+									List<int> userRoleIds = GetUserRoleIds(currUserId, coreService, cacheService, cacheKeyService, errorService);
+									List<int> userPermitIds = GetUserRoleIds(currUserId, userRoleIds, coreService, cacheService, cacheKeyService, errorService);
 
 									// check if user has the permit
 									if (userPermitIds.Contains(permitId))
@@ -156,6 +151,34 @@ namespace BPX.Website.CustomCode.Authorize
 			}
 
 			return;
+		}
+		private List<int> GetUserRoleIds(int currUserId, ICoreService coreService, ICacheService cacheService, ICacheKeyService cacheKeyService, IErrorService errorService)
+		{
+            string cacheKeyName = $"user:{currUserId}:roles";
+            List<int> userRoleIds = cacheService.GetCache<List<int>>(cacheKeyName, errorService);
+
+            if (userRoleIds == null)
+            {
+                userRoleIds = coreService.GetUserRoleIds(currUserId);
+                cacheService.SetCache(userRoleIds, cacheKeyName, cacheKeyService);
+            }
+
+			return userRoleIds;
+        }
+
+		private List<int> GetUserRoleIds(int currUserId, List<int> userRoleIds, ICoreService coreService, ICacheService cacheService, ICacheKeyService cacheKeyService, IErrorService errorService)
+        {
+            string cacheKeyName = $"user:{currUserId}:permits";
+            List<int> userPermitIds = cacheService.GetCache<List<int>>(cacheKeyName, errorService);
+
+            if (userPermitIds == null)
+            {
+                userPermitIds = coreService.GetUserPermitIds(userRoleIds);
+                cacheService.SetCache(userPermitIds, cacheKeyName, cacheKeyService);
+            }
+
+			return userPermitIds;
+
 		}
 	}
 }

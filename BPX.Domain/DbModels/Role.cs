@@ -3,11 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BPX.Domain.DbModels
 {
-    public partial class Role
+    public class Role
     {
         public Role()
         {
-            //UserRoles = new HashSet<UserRole>();
         }
 
         [Key]
@@ -29,7 +28,5 @@ namespace BPX.Domain.DbModels
 
         [Required]
         public DateTime ModifiedDate { get; set; }
-
-        //public virtual ICollection<UserRole> UserRoles { get; set; }
     }
 }

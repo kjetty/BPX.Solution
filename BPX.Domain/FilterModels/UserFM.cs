@@ -1,6 +1,6 @@
 ﻿namespace BPX.Domain.FilterModels
 {
-    public partial class UserFM
+    public class UserFM
     {
         public UserFM()
         {

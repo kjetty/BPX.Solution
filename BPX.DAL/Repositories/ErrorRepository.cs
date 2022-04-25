@@ -38,15 +38,21 @@ namespace BPX.DAL.Repositories
 
         public void UpdateRecord(Error entity)
         {
-            efContext.Entry(entity).State = EntityState.Modified;
+            throw new NotImplementedException();
         }
+
+        // dapper
 
         public int InsertRecordDapper(Error entity)
         {
-            string sqlQuery = "insert into Errors (ErrorData, ErrorDate) values (@ErrorData, @ErrorDate)";
+            string dynQuery = "insert into Errors (ErrorData, ErrorDate) values (@ErrorData, @ErrorDate)";
+
+            DynamicParameters dynParams = new();
+            dynParams.Add("ErrorData", entity.ErrorData);
+            dynParams.Add("ErrorDate", entity.ErrorDate);
 
             using IDbConnection connection = dpContext.CreateConnection();
-            int affectedRows = connection.Execute(sqlQuery, entity);
+            int affectedRows = connection.Execute(dynQuery, dynParams);
 
             return affectedRows;
         }

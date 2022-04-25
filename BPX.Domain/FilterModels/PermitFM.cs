@@ -1,6 +1,6 @@
 ﻿namespace BPX.Domain.FilterModels
 {
-    public partial class PermitFM
+    public class PermitFM
     {
         public PermitFM()
         {

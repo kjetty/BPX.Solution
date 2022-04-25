@@ -3,8 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BPX.Domain.DbModels
 {
-    public partial class Portal
+    public class Portal
     {
+        public Portal()
+        {
+        }
+
         [Key]
         [StringLength(24)]
         public string PortalUUId { get; set; }

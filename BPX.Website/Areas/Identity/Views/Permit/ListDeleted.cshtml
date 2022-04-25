@@ -13,6 +13,7 @@
 	ViewBag.sortByColumn = (ViewBag.sortByColumn ?? string.Empty);
 	ViewBag.sortOrder = (ViewBag.sortOrder ?? string.Empty);
 	ViewBag.searchForString = (ViewBag.searchForString ?? string.Empty);
+	ViewBag.filterJson = (ViewBag.filterJson ?? string.Empty);
 
 	// local variables
 	var localSortOrder = "";
@@ -206,6 +207,7 @@
 		<input type="hidden" id="sortByColumn" name="sortByColumn" value="" />
 		<input type="hidden" id="sortOrder" name="sortOrder" value="" />
 		<input type="hidden" id="searchForString" name="searchForString" value="" />
+		<input type="hidden" id="filterJson" name="filterJson" value="" />
 	</form>
 </div>
 
@@ -218,7 +220,8 @@
 		var sortByColumn = "@ViewBag.sortByColumn";
 		var sortOrder = "@ViewBag.sortOrder";
 		var searchForString = "@ViewBag.searchForString";
-
+		var filterJson = "@ViewBag.filterJson";
+		
 		$(document).ready(function () {
 			// on pagedList click. Intercept the default GET ?page=x action and instead perform POST
             $(".pagination-container a").click(function (e) {
@@ -269,7 +272,7 @@
 					sortOrder = "asc";
 				}
 				else {
-					if ($(this).attr("sortOrder") == "desc") {
+					if ($(this).attr("sortOrder").toLowerCase() == "desc") {
 						sortOrder = "asc";
 					}
 					else {
@@ -291,6 +294,7 @@
 			$("#sortByColumn").val(sortByColumn);
 			$("#sortOrder").val(sortOrder);
             $("#searchForString").val(searchForString);
+			$("#filterJson").val(filterJson);
 
 			$("#formForPaging").submit();
 		}

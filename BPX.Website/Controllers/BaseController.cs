@@ -4,6 +4,7 @@ using BPX.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
@@ -19,12 +20,13 @@ namespace BPX.Website.Controllers
 		// protected vars 
 		protected readonly ILogger<T> logger;
 		protected readonly ICoreService coreService;
-		protected int bpxPageSize;
-		protected int sessionCookieTimeout;
-		protected User currUser;
+		protected readonly int bpxPageSize;
+		protected readonly int sessionCookieTimeout;
+		protected User currUser;							// do not set "currUser" to readonly as we will be hydrating this object in the flow
 		// private vars
-		private ICacheService cacheService;
-		private ICacheKeyService cacheKeyService;
+		private readonly ICacheService cacheService;
+		private readonly ICacheKeyService cacheKeyService;
+		private readonly IErrorService errorService;
 
 		public BaseController(ILogger<T> logger, ICoreService coreService)
 		{
@@ -35,6 +37,7 @@ namespace BPX.Website.Controllers
 			this.currUser = new User();
 			this.cacheService = coreService.GetCacheService();
 			this.cacheKeyService = coreService.GetCacheKeyService();
+			this.errorService = coreService.GetErrorService();
 		}
 
 		public override void OnActionExecuting(ActionExecutingContext ctx)
@@ -56,31 +59,45 @@ namespace BPX.Website.Controllers
 						{
 							// get current PToken value from claims
 							string currPToken = currPTokenClaim.Value;
-							string currLToken = new string(currPToken.ToCharArray().Reverse().ToArray());
+							string currLToken = Utility.GetLToken(currPToken);
 
 							// get portal details :: using PToken
 							IPortalService portalService = coreService.GetPortalService();
-							Portal portal = portalService.GetRecordsByFilter(c => c.PToken.Equals(currPToken)).SingleOrDefault();
+							Portal portal = portalService.GetPortalByToken(currPToken);
 
 							// get login details :: using RToken
 							ILoginService loginService = coreService.GetLoginService();
-							Login login = loginService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.LToken.Equals(currLToken)).SingleOrDefault();
+							Login login = loginService.GetLoginByToken(currPToken);
 
 							if (portal != null && login != null)
 							{
+								// check if the current access is after the sessionCookieTimeout timespan
 								if (portal.LastAccessTime < DateTime.Now.AddMinutes(-sessionCookieTimeout))
 								{
 									// force logout
 									portal.PToken = Guid.NewGuid().ToString();
 
-									portalService.UpdateRecord(portal);
-									portalService.SaveDBChanges();
+									//portalService.UpdateRecord(portal);
+									//portalService.SaveDBChanges();
+
+									portalService.UpdateRecordDapper(portal);
+
+									ctx.Result = new RedirectToRouteResult(
+										new RouteValueDictionary
+                                        {
+											{ "controller", "Account" },
+											{ "action", "Login" }
+                                        }
+									);
 								}
 								else
 								{
 									// get user details :: uisng (PToken) PortalUUId :: using (RToken) LoginUUId + UserUUId
 									IUserService userService = coreService.GetUserService();
-									currUser = userService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PortalUUId.Equals(portal.PortalUUId) && c.LoginUUId.Equals(login.LoginUUId)).SingleOrDefault();
+									currUser = userService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) 
+																			&& c.PortalUUId.Equals(portal.PortalUUId) 
+																			&& c.LoginUUId.Equals(login.LoginUUId))
+																			.SingleOrDefault();
 
 									if (currUser != null)
 									{
@@ -107,8 +124,10 @@ namespace BPX.Website.Controllers
 										// update the lastAccessTime in portal
 										portal.LastAccessTime = DateTime.Now;
 
-										portalService.UpdateRecord(portal);
-										portalService.SaveDBChanges();
+										//portalService.UpdateRecord(portal);
+										//portalService.SaveDBChanges();
+
+										portalService.UpdateRecordDapper(portal);
 
 										////// Developer Override for Permits - BaseController (Part A) + PermitAttribute (PartB)
 										////// OverrideOverrideOverride 
@@ -145,7 +164,7 @@ namespace BPX.Website.Controllers
 		private List<int> GetUserRoleIds(int userId)
 		{
 			string cacheKeyName = $"user:{userId}:roles";
-			List<int> userRoleIds = cacheService.GetCache<List<int>>(cacheKeyName);
+			List<int> userRoleIds = cacheService.GetCache<List<int>>(cacheKeyName, errorService);
 
 			if (userRoleIds == null)
 			{
@@ -159,7 +178,7 @@ namespace BPX.Website.Controllers
 		private List<int> GetUserPermitIds(int userId, List<int> userRoleIds)
 		{
 			string cacheKeyName = $"user:{userId}:permits";
-			List<int> userPermitIds = cacheService.GetCache<List<int>>(cacheKeyName);
+			List<int> userPermitIds = cacheService.GetCache<List<int>>(cacheKeyName, errorService);
 
 			if (userPermitIds == null)
 			{
@@ -177,7 +196,7 @@ namespace BPX.Website.Controllers
 			string currAction = ctx.HttpContext.Request.RouteValues["action"] != null ? ctx.HttpContext.Request.RouteValues["action"].ToString() : string.Empty;
 			//string currId = ctx.HttpContext.Request.RouteValues["id"] != null ? ctx.HttpContext.Request.RouteValues["id"].ToString() : string.Empty;
 
-			string lookupURL = $"/{currArea}/{currController}".ToUpper();
+			string lookupURL = ResolveURL($"/{currArea}/{currController}").ToUpper();
 
 			if (currController.ToUpper().Equals("HOME"))
 			{
@@ -192,11 +211,39 @@ namespace BPX.Website.Controllers
 			}
 
 			string cacheKeyName = $"menu:{menuId}:breadcrumb";
-			string breadcrumb = cacheService.GetCache<string>(cacheKeyName);
+			string breadcrumb = cacheService.GetCache<string>(cacheKeyName, errorService);
 
 			if (breadcrumb == null)
 			{
-				breadcrumb = coreService.GetBreadcrumb(menuId, currController);
+				List<Menu> listBreadcrumb = coreService.GetBreadcrumbList(menuId, currController);
+
+				// ResolveURL in the menu
+				foreach(var itemBreadcrumb in listBreadcrumb)
+                {
+					itemBreadcrumb.MenuURL = ResolveURL(itemBreadcrumb.MenuURL);
+                }
+
+				breadcrumb = string.Empty;
+
+				foreach(Menu itemBreadcrumb in listBreadcrumb)
+                {
+					if (itemBreadcrumb.MenuURL.Equals("/"))
+                    {
+						breadcrumb += $"<li class=\"breadcrumb-item\"><a href=\"{itemBreadcrumb.MenuURL}\" class=\"text-decoration-none\"><span class=\"fa fa-home\">&nbsp;</span>{itemBreadcrumb.MenuName}</a></li>";
+                    }
+                    else
+                    {
+						if (currController.ToUpper().Equals("HOME"))
+                        {
+							breadcrumb += $"<li class=\"breadcrumb-item\">{itemBreadcrumb.MenuName}</li>";
+						}
+						else
+                        {
+							breadcrumb += $"<li class=\"breadcrumb-item\"><a href=\"{itemBreadcrumb.MenuURL}\" class=\"text-decoration-none\">{itemBreadcrumb.MenuName}</a></li>";
+						}
+                    }
+                }
+
 				cacheService.SetCache(breadcrumb, cacheKeyName, cacheKeyService);
 			}
 
@@ -209,18 +256,18 @@ namespace BPX.Website.Controllers
 		{
 			if (user == null)
 			{
-				return "<li><a class=\"nav-link\" href=\"/Identity/Account/Register\">Register</a></li><li><a class=\"nav-link\" href=\"/Identity/Account/Login\">Login</a></li>";
+				return $"<li><a class=\"nav-link\" href=\"{ResolveURL("~/Identity/Account/Register")}\">Register</a></li><li><a class=\"nav-link\" href=\"{ResolveURL("~/Identity/Account/Login")}\">Login</a></li>";
 			}
 			else
 			{
-				return $"<li><a class=\"nav-link\" href=\"/Identity/Account/ChangePassword\">Hello {user.FirstName} {user.LastName}!</a></li><li><a class=\"nav-link\" href=\"/Identity/Account/LogOff\">Logout</a></li>";
+				return $"<li><a class=\"nav-link\" href=\"{ResolveURL("~/Identity/Account/ChangePassword")}\">Hello {user.FirstName} {user.LastName}!</a></li><li><a class=\"nav-link\" href=\"{ResolveURL("~/Identity/Account/LogOff")}\">Logout</a></li>";
 			}
 		}
 
 		private string GetMenuString(List<int> userRoleIds, List<int> userPermitIds, List<Menu> menuHierarchy)
 		{
 			string cacheKeyName = $"roles:{string.Join(".", userRoleIds)}:menu";
-			string menuString = cacheService.GetCache<string>(cacheKeyName);
+			string menuString = cacheService.GetCache<string>(cacheKeyName, errorService);
 
 			if (menuString == null)
 			{
@@ -234,16 +281,28 @@ namespace BPX.Website.Controllers
 		private List<Menu> GetMenuHierarchy(string statusFlag, string orderBy)
 		{
 			string cacheKeyName = $"menu:hierarchy";
-			List<Menu> menuHierarchy = cacheService.GetCache<List<Menu>>(cacheKeyName);
+			List<Menu> menuHierarchy = cacheService.GetCache<List<Menu>>(cacheKeyName, errorService);
 
 			if (menuHierarchy == null)
 			{
 				menuHierarchy = coreService.GetMenuHierarchy(statusFlag, orderBy);
+
+				// ResolveURL in the menu
+				foreach(var itemMenu in menuHierarchy)
+                {
+					itemMenu.MenuURL = ResolveURL(itemMenu.MenuURL);
+                }
+
 				cacheService.SetCache(menuHierarchy, cacheKeyName, cacheKeyService);
 			}
 
 			return menuHierarchy;
 		}
+
+		protected string ResolveURL(string url)
+        {
+			return Url.Content(url);
+        }
 
 		protected void ShowAlertBox(AlertType alertType, string alertMessage)
 		{

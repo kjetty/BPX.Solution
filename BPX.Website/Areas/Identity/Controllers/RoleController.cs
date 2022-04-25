@@ -52,6 +52,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             sortByColumn = (sortByColumn == null || sortByColumn.Trim().Length.Equals(0)) ? string.Empty : sortByColumn;
             sortOrder = (sortOrder == null || sortOrder.Trim().Length.Equals(0)) ? SortOrder.Ascending.ToUpper() : sortOrder;
             searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
+            filterJson = (filterJson == null || filterJson.Trim().Length.Equals(0)) ? string.Empty : filterJson;
 
             // fetch data
             IPagedList<RoleMiniViewModel> model = roleService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString, filterJson).Select(c => (RoleMiniViewModel)c);
@@ -63,6 +64,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             ViewBag.sortByColumn = sortByColumn;
             ViewBag.sortOrder = sortOrder;
             ViewBag.searchForString = searchForString;
+            ViewBag.filterJson = filterJson;
 
             return View(model);
         }
@@ -299,6 +301,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             sortByColumn = (sortByColumn == null || sortByColumn.Trim().Length.Equals(0)) ? string.Empty : sortByColumn;
             sortOrder = (sortOrder == null || sortOrder.Trim().Length.Equals(0)) ? SortOrder.Ascending.ToUpper() : sortOrder;
             searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
+            filterJson = (filterJson == null || filterJson.Trim().Length.Equals(0)) ? string.Empty : filterJson;
 
             // fetch data
             IPagedList<RoleMiniViewModel> model = roleService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString, filterJson).Select(c => (RoleMiniViewModel)c);
@@ -310,6 +313,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             ViewBag.sortByColumn = sortByColumn;
             ViewBag.sortOrder = sortOrder;
             ViewBag.searchForString = searchForString;
+            ViewBag.filterJson = filterJson;
 
             return View(model);
         }

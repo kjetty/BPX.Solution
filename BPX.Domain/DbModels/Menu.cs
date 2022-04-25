@@ -3,11 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BPX.Domain.DbModels
 {
-    public partial class Menu
+    public class Menu
     {
         public Menu()
         {
-            //MenuPermits = new HashSet<MenuPermit>();
         }
 
         [Key]
@@ -42,7 +41,5 @@ namespace BPX.Domain.DbModels
 
         [Required]
         public DateTime ModifiedDate { get; set; }
-
-        //public virtual ICollection<MenuPermit> MenuPermits { get; set; }
     }
 }

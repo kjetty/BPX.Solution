@@ -53,9 +53,17 @@ namespace BPX.Service
 		{
 			loginRepository.SaveDBChanges();
 		}
+
+		// dapper
+
+		public Login GetLoginByToken(string lToken)
+        {
+			return loginRepository.GetLoginByToken(lToken);
+        }
 	}
 
 	public interface ILoginService : IGenericService<Login>
 	{
+		Login GetLoginByToken(string lToken);
 	}
 }

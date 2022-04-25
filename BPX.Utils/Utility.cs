@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -48,6 +49,71 @@ namespace BPX.Utils
 
             return temp4;
         }
+
+        public static string GetUUID2(int size)
+        {
+            StringBuilder sb = new StringBuilder(size);
+
+            char[] chars = "abcdefghijklmnopqrstuvwxyz1234567890".ToCharArray();
+            byte[] bytes = new byte[size];
+
+            using (RNGCryptoServiceProvider crypto = new RNGCryptoServiceProvider())
+            {
+                crypto.GetBytes(bytes);
+            }
+
+            foreach (byte b in bytes)
+            {
+                sb.Append(chars[b % (chars.Length)]);
+            }
+
+            string temp = sb.ToString();
+            string temp16 = temp.Insert(16, "-");
+            string temp12 = temp16.Insert(12, "-");
+            string temp8 = temp12.Insert(8, "-");
+            string temp4 = temp8.Insert(4, "-");
+
+            return temp4;
+        }
+
+        public static string Hypenate2124(string input)
+        {
+            string result = input;
+
+            if (result != null && result.Length == 21)
+            {
+                // formats a 21 character string to a 24 character string with hypens
+                // 1234-12345678-1234-12345
+                return result.Insert(4, "-").Insert(13, "-").Insert(18, "-");
+            }
+
+            return result;
+        }
+
+        public static string GetLToken(string pToken)
+        {
+            return new string(pToken.ToCharArray().Reverse().ToArray());
+        }
+
+        public static string GetUToken(string pToken)
+        {
+            string result = string.Empty;
+
+            if (pToken != null)
+            {
+                for (int i = 0; i < pToken.Length; i += 2)
+                {
+                    result += pToken[i];
+                }
+
+                for (int i = 1; i < pToken.Length; i += 2)
+                {
+                    result += pToken[i];
+                }
+            }
+
+            return result;
+        }
     }
 
     public static class RecordStatus
@@ -55,6 +121,7 @@ namespace BPX.Utils
         // variables for the record status
         public const string Active = "A";
         public const string Inactive = "I";
+        public const string Archived = "R";
     }
 
     public static class SortOrder
@@ -67,7 +134,8 @@ namespace BPX.Utils
     public static class LoginCategory
     {
         // variables for the record status
-        public const string Username = "U";
+        public const string CAC = "C";
         public const string PIV = "P";
+        public const string Username = "U";        
     }
 }

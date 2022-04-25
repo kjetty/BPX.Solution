@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BPX.Domain.DbModels
 {
-    public partial class CacheKey
+    public class CacheKey
     {
         public CacheKey()
         {

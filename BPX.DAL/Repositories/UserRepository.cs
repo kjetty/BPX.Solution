@@ -45,9 +45,9 @@ namespace BPX.DAL.Repositories
             // generic search
             if (searchForString.Length > 0)
             {
-                model = model.Where(c => c.LastName.ToUpper().Contains(searchForString.ToUpper())
-                                || c.FirstName.ToUpper().Contains(searchForString.ToUpper())
-                                || c.Email.ToUpper().Contains(searchForString.ToUpper()));
+                model = model.Where(c => c.LastName.ToUpper().StartsWith(searchForString.ToUpper())
+                                || c.FirstName.ToUpper().StartsWith(searchForString.ToUpper())
+                                || c.Email.ToUpper().StartsWith(searchForString.ToUpper()));
             }
 
             // advanced search using filters

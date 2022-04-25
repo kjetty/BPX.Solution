@@ -35,7 +35,7 @@ namespace BPX.DAL.Repositories
             sortByColumn = sortByColumn.Length.Equals(0) ? "PermitId" : sortByColumn;
             sortOrder = sortOrder.Length.Equals(0) ? SortOrder.Ascending.ToUpper() : sortOrder;
             searchForString = searchForString.Length.Equals(0) ? string.Empty : searchForString;
-            filterJson = filterJson.Length.Equals(0) ? String.Empty : filterJson;
+            filterJson = filterJson.Length.Equals(0) ? string.Empty : filterJson;
 
             // get model : IQueryable : apply statusFlag
             IQueryable<Permit> model = efContext.Permits.Where(c => c.StatusFlag.ToUpper().Equals(statusFlag.ToUpper()));

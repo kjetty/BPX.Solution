@@ -3,8 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BPX.Domain.DbModels
 {
-    public partial class MenuPermit
+    public class MenuPermit
     {
+        public MenuPermit()
+        {
+        }
+
         [Key]
         public int MenuPermitId { get; set; }
 

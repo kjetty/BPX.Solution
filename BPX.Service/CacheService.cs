@@ -15,14 +15,24 @@ namespace BPX.Service
 			this.distributedCache = distributedCache;
 		}
 
-		public T GetCache<T>(string key) where T : class
+		public T GetCache<T>(string key, IErrorService errorService) where T : class
 		{
-			byte[] values = distributedCache.Get(key);
+            try
+            {
+				byte[] values = distributedCache.Get(key);
 
-			if (values != null)
-				return JsonSerializer.Deserialize<T>(values);
-			else
+				if (values != null)
+					return JsonSerializer.Deserialize<T>(values);
+				else
+					return null;
+			}
+			catch (Exception ex)
+			{
+				// log
+				errorService.InsertRecordDapper(new Error { ErrorData = $"{ex.Message} {ex.StackTrace}" });
+
 				return null;
+			}
 		}
 
 		//public void SetCache<T>(T values, string key)
@@ -77,7 +87,7 @@ namespace BPX.Service
 	{
 		//void SetCache<T>(T values, string key);
 		void SetCache<T>(T values, string key, ICacheKeyService CacheKeyService);
-		T GetCache<T>(string key) where T : class;
+		T GetCache<T>(string key, IErrorService errorService) where T : class;
 		void RemoveCache(string key);
 	}
 }

@@ -12,6 +12,7 @@ namespace BPX.Service
 		private readonly IConfiguration configuration;
 		private readonly ICacheService cacheService; 
 		private readonly ICacheKeyService cacheKeyService;
+		private readonly IErrorService errorService;
 		private readonly IPortalService portalService;
 		private readonly ILoginService loginService;
 		private readonly IUserService userService;
@@ -20,11 +21,12 @@ namespace BPX.Service
 		private readonly IMenuService menuService;
 		private readonly IMenuPermitService menuPermitService;
 
-		public CoreService(IConfiguration configuration, ICacheService cacheService, ICacheKeyService cacheKeyService, IPortalService portalService, ILoginService loginService, IUserService userService, IUserRoleService userRoleService, IRolePermitService rolePermitService, IMenuService menuService, IMenuPermitService menuPermitService)
+		public CoreService(IConfiguration configuration, ICacheService cacheService, ICacheKeyService cacheKeyService, IErrorService errorService, IPortalService portalService, ILoginService loginService, IUserService userService, IUserRoleService userRoleService, IRolePermitService rolePermitService, IMenuService menuService, IMenuPermitService menuPermitService)
 		{
 			this.configuration = configuration;
 			this.cacheService = cacheService;
 			this.cacheKeyService = cacheKeyService;
+			this.errorService = errorService;
 			this.portalService = portalService;
 			this.loginService = loginService;
 			this.userService = userService;
@@ -47,6 +49,11 @@ namespace BPX.Service
 		public ICacheKeyService GetCacheKeyService()
 		{
 			return cacheKeyService;
+		}
+
+		public IErrorService GetErrorService()
+		{
+			return errorService;
 		}
 
 		public IPortalService GetPortalService()
@@ -99,49 +106,28 @@ namespace BPX.Service
 			return rolePermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PermitId.Equals(permitId)).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
 		}
 
+		public List<Menu> GetBreadcrumbList(int menuId, string currController)
+		{
+			List<Menu> listBreadcrumb = menuService.GetBreadCrumb(menuId);
+
+            if (listBreadcrumb != null && listBreadcrumb.Count > 0)
+            {
+                listBreadcrumb.Reverse();
+            }
+
+            return listBreadcrumb;
+		}
+
 		public List<Menu> GetMenuHierarchy(string statusFlag, string orderBy)
 		{
 			return menuService.GetMenuHierarchy(statusFlag, orderBy);
-		}
-
-		public string GetBreadcrumb(int menuId, string currController)
-		{
-			string breadcrumb = string.Empty;
-			List<Menu> listBreadcrumb = menuService.GetBreadCrumb(menuId);
-
-			if (listBreadcrumb != null && listBreadcrumb.Count > 0)
-			{
-				listBreadcrumb.Reverse();
-
-				foreach (Menu itemBreadcrumb in listBreadcrumb)
-				{
-					if (itemBreadcrumb.MenuURL.Equals("/"))
-					{
-						breadcrumb += $"<li class=\"breadcrumb-item\"><a href=\"{itemBreadcrumb.MenuURL}\" class=\"text-decoration-none\"><span class=\"fa fa-home\">&nbsp;</span>{itemBreadcrumb.MenuName}</a></li>";
-					}
-					else
-					{
-						if (currController.ToUpper().Equals("HOME"))
-						{
-							breadcrumb += $"<li class=\"breadcrumb-item\">{itemBreadcrumb.MenuName}</li>";
-
-						}
-						else
-						{
-							breadcrumb += $"<li class=\"breadcrumb-item\"><a href=\"{itemBreadcrumb.MenuURL}\" class=\"text-decoration-none\">{itemBreadcrumb.MenuName}</a></li>";
-						}
-					}
-				}
-			}	
-			
-			return breadcrumb;
 		}
 
 		public string GetMenuString(List<int> userPermitIds, List<Menu> menuHierarchy)
 		{
 			string menuString = string.Empty;
 			List<int> listMenuIds = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && userPermitIds.Contains(c.PermitId)).OrderBy(c => c.MenuId).Select(c => c.MenuId).Distinct().ToList();
-			List<Menu> listMenu = menuService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && listMenuIds.Contains(c.MenuId)).OrderBy(c => c.HLevel).ThenBy(c => c.OrderNumber).ToList();
+			List<Menu> listMenu = menuHierarchy.Where(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && listMenuIds.Contains(c.MenuId)).OrderBy(c => c.HLevel).ThenBy(c => c.OrderNumber).ToList();
 
 			// generate the menuString
 			AddMenuItemsLevelOne(ref menuString, menuHierarchy, AddRoot(ref menuString, menuHierarchy), listMenu, userPermitIds);
@@ -290,18 +276,19 @@ namespace BPX.Service
 		IConfiguration GetConfiguration();
 		ICacheService GetCacheService();
 		ICacheKeyService GetCacheKeyService();
+		IErrorService GetErrorService();
 		IPortalService GetPortalService();
 		ILoginService GetLoginService();
 		IUserService GetUserService();
 		IUserRoleService GetUserRoleService();
-		IRolePermitService GetRolePermitService();
-		string GetBreadcrumb(int menuId, string currController);
+		IRolePermitService GetRolePermitService();		
 		IMenuService GetMenuService();
 		IMenuPermitService GetMenuPermitService();
 		List<int> GetUserRoleIds(int userId);
 		List<int> GetUserPermitIds(List<int> userRoleIds);
 		List<int> GetPermitRoles(int permitId);
+		List<Menu> GetBreadcrumbList(int menuId, string currController);
 		List<Menu> GetMenuHierarchy(string statusFlag, string orderBy);
-		string GetMenuString(List<int> userPermitIds, List<Menu> menuHierarchy);
+		string GetMenuString(List<int> userPermitIds, List<Menu> menuHierarchy);		
 	}
 }

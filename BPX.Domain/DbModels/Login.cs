@@ -3,8 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BPX.Domain.DbModels
 {
-    public partial class Login
+    public class Login
     {
+        public Login()
+        {
+        }
+
         [Key]
         [StringLength(24)]
         public string LoginUUId { get; set; }

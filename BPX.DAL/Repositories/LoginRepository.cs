@@ -42,17 +42,18 @@ namespace BPX.DAL.Repositories
             efContext.Entry(entity).State = EntityState.Modified;
         }
 
+        // dapper
+
         public Login GetLoginByToken(string lToken)
         {
-            string dynquery = string.Empty;
-            DynamicParameters dynParams = new();
+            string dynQuery = "select * from Logins where upper(StatusFlag) = @StatusFlag and LToken = @LToken";
 
-            dynquery += "select * from Logins where upper(StatusFlag) = @StatusFlag and LToken = @LToken";
+            DynamicParameters dynParams = new();
             dynParams.Add("StatusFlag", RecordStatus.Active.ToUpper());
             dynParams.Add("LToken", lToken);
 
             using IDbConnection connection = dpContext.CreateConnection();
-            Login login = connection.QuerySingleOrDefault<Login>(dynquery, dynParams);
+            Login login = connection.QuerySingleOrDefault<Login>(dynQuery, dynParams);
 
             return login;
         }

@@ -3,8 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BPX.Domain.DbModels
 {
-    public partial class UserRole
+    public class UserRole
     {
+        public UserRole()
+        {
+        }
+
         [Key]
         public int UserRoleId { get; set; }
 
@@ -23,9 +27,5 @@ namespace BPX.Domain.DbModels
 
         [Required]
         public DateTime ModifiedDate { get; set; }
-
-        //public virtual Role Role { get; set; }
-
-        //public virtual User User { get; set; }
     }
 }

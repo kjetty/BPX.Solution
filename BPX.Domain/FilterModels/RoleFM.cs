@@ -1,6 +1,6 @@
 ﻿namespace BPX.Domain.FilterModels
 {
-    public partial class RoleFM
+    public class RoleFM
     {
         public RoleFM()
         {

@@ -52,6 +52,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 			sortByColumn = (sortByColumn == null || sortByColumn.Trim().Length.Equals(0)) ? string.Empty : sortByColumn;
 			sortOrder = (sortOrder == null || sortOrder.Trim().Length.Equals(0)) ? SortOrder.Ascending.ToUpper() : sortOrder;
 			searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
+			filterJson = (filterJson == null || filterJson.Trim().Length.Equals(0)) ? string.Empty : filterJson;
 
 			// fetch data
 			IPagedList<UserMiniViewModel> model = userService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString, filterJson).Select(c => (UserMiniViewModel)c);
@@ -70,6 +71,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 			ViewBag.sortByColumn = sortByColumn;
 			ViewBag.sortOrder = sortOrder;
 			ViewBag.searchForString = searchForString;
+			ViewBag.filterJson = filterJson;
 
 			return View(model);
 		}
@@ -260,9 +262,10 @@ namespace BPX.Website.Areas.Identity.Controllers
 			sortByColumn = (sortByColumn == null || sortByColumn.Trim().Length.Equals(0)) ? string.Empty : sortByColumn;
 			sortOrder = (sortOrder == null || sortOrder.Trim().Length.Equals(0)) ? SortOrder.Ascending.ToUpper() : sortOrder;
 			searchForString = (searchForString == null || searchForString.Trim().Length.Equals(0)) ? string.Empty : searchForString;
+			filterJson = (filterJson == null || filterJson.Trim().Length.Equals(0)) ? string.Empty : filterJson;
 
-            // fetch data
-            IPagedList<UserMiniViewModel> model = userService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString, filterJson).Select(c => (UserMiniViewModel)c);
+			// fetch data
+			IPagedList<UserMiniViewModel> model = userService.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString, filterJson).Select(c => (UserMiniViewModel)c);
             List<int> listUserIds = model.Select(c => c.UserId).ToList();
             List<UserRole> listUsersRoles = userRoleService.GetRecordsByFilter(c => listUserIds.Contains(c.UserId) && c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).ToList();
             List<Role> listRoles = roleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).ToList();
@@ -278,6 +281,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 			ViewBag.sortByColumn = sortByColumn;
 			ViewBag.sortOrder = sortOrder;
 			ViewBag.searchForString = searchForString;
+			ViewBag.filterJson = filterJson;
 
 			return View(model);
 		}

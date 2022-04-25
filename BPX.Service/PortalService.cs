@@ -53,9 +53,23 @@ namespace BPX.Service
 		{
             portalRepository.SaveDBChanges();
         }
+
+        // dapper
+
+        public int UpdateRecordDapper(Portal entity)
+        {
+            return portalRepository.UpdateRecordDapper(entity);
+        }
+
+        public Portal GetPortalByToken(string pToken)
+        {
+            return portalRepository.GetPortalByToken(pToken);
+        }
     }
 
     public interface IPortalService : IGenericService<Portal>
     {
+        int UpdateRecordDapper(Portal entity);
+        Portal GetPortalByToken(string pToken);
     }
 }

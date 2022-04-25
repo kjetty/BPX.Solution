@@ -7,7 +7,6 @@ namespace BPX.Domain.DbModels
     {
         public Permit()
         {
-            //UserPermits = new HashSet<UserPermit>();
         }
 
         [Key]
@@ -38,7 +37,5 @@ namespace BPX.Domain.DbModels
 
         [Required]
         public DateTime ModifiedDate { get; set; }
-
-        //public virtual ICollection<UserPermit> UserPermits { get; set; }
     }
 }

@@ -174,7 +174,7 @@ namespace BPX.Website.CustomCode.Authorize
 
             if (userPermitIds == null)
             {
-                userPermitIds = coreService.GetUserPermitIds(userRoleIds);
+				userPermitIds = coreService.GetUserPermitIds(userRoleIds);
                 cacheService.SetCache(userPermitIds, cacheKeyName, cacheKeyService);
             }
 

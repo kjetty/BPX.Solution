@@ -20,8 +20,9 @@ namespace BPX.Service
 		private readonly IRolePermitService rolePermitService;
 		private readonly IMenuService menuService;
 		private readonly IMenuPermitService menuPermitService;
+		private readonly IPermitService permitService;
 
-		public CoreService(IConfiguration configuration, ICacheService cacheService, ICacheKeyService cacheKeyService, IErrorService errorService, IPortalService portalService, ILoginService loginService, IUserService userService, IUserRoleService userRoleService, IRolePermitService rolePermitService, IMenuService menuService, IMenuPermitService menuPermitService)
+		public CoreService(IConfiguration configuration, ICacheService cacheService, ICacheKeyService cacheKeyService, IErrorService errorService, IPortalService portalService, ILoginService loginService, IUserService userService, IUserRoleService userRoleService, IRolePermitService rolePermitService, IMenuService menuService, IMenuPermitService menuPermitService, IPermitService permitService)
 		{
 			this.configuration = configuration;
 			this.cacheService = cacheService;
@@ -34,6 +35,7 @@ namespace BPX.Service
 			this.rolePermitService = rolePermitService;
 			this.menuService = menuService;
 			this.menuPermitService = menuPermitService;
+			this.permitService = permitService;
 		}
 		
 		public IConfiguration GetConfiguration()
@@ -98,7 +100,11 @@ namespace BPX.Service
 
 		public List<int> GetUserPermitIds(List<int> userRoleIds)
 		{
-			return rolePermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && userRoleIds.Contains(c.RoleId)).OrderBy(c => c.PermitId).Select(c => c.PermitId).Distinct().ToList();
+			List<int> listPermitIds = permitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).Select(c => c.PermitId).ToList();
+			List<int> listMenuPermitIds = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && listPermitIds.Contains(c.PermitId)).Select(c => c.PermitId).Distinct().ToList();
+			List<int> listUserPermitIds = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && userRoleIds.Contains(c.RoleId) && listPermitIds.Contains(c.PermitId) && listMenuPermitIds.Contains(c.PermitId)).OrderBy(c => c.PermitId).Select(c => c.PermitId).Distinct().ToList();
+
+			return listUserPermitIds;
 		}
 
 		public List<int> GetPermitRoles(int permitId)

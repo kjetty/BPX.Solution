@@ -2,6 +2,7 @@
 
 @using System.Text.RegularExpressions
 @using BPX.Website.CustomCode.Authorize;
+@using BPX.Utils;
 
 @{
 	ViewData["Title"] = "Menu Permits";
@@ -86,7 +87,7 @@
 												{
 													if (listGenericPermitNames.Contains(itemPermit2.PermitName.ToString().ToUpper()))
 													{
-														if (((IList<int>)ViewBag.listMenuPermitIds).Contains(itemPermit2.PermitId))
+														if (((IList<int>)ViewBag.listMenuPermitIds).Contains(itemPermit2.PermitId) && itemPermit2.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
 														{
 															<input type="checkbox" class="@classAreaController @classArea" name="PermitIds" value="@itemPermit2.PermitId" checked="checked" />
 														}

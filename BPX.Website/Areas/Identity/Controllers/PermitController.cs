@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 using X.PagedList;
 
 namespace BPX.Website.Areas.Identity.Controllers
@@ -259,22 +260,46 @@ namespace BPX.Website.Areas.Identity.Controllers
                     return View(collection);
                 }
 
-                // get existing data
-                Permit recordPermit = permitService.GetRecordById(id);
-
-                if (recordPermit.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
+                using (TransactionScope scope = new TransactionScope())
                 {
-                    // set generic data
+                    // delete related menuPermits
+                    List<MenuPermit> listMenuPermits = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PermitId.Equals(id)).ToList();
+                    
+                    foreach (MenuPermit itemMenuPermit in listMenuPermits)
+                    {
+                        itemMenuPermit.StatusFlag = RecordStatus.Inactive.ToUpper();
+                        itemMenuPermit.ModifiedBy = currUser.UserId;
+                        itemMenuPermit.ModifiedDate = DateTime.Now;
+
+                        menuPermitService.UpdateRecord(itemMenuPermit);
+                        menuPermitService.SaveDBChanges();
+                    }
+
+                    // delete related rolePermits
+                    List<RolePermit> listRolePermits = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PermitId.Equals(id)).ToList();
+
+                    foreach (RolePermit itemRolePermit in listRolePermits)
+                    {
+                        itemRolePermit.StatusFlag = RecordStatus.Inactive.ToUpper();
+                        itemRolePermit.ModifiedBy = currUser.UserId;
+                        itemRolePermit.ModifiedDate = DateTime.Now;
+
+                        rolePermitService.UpdateRecord(itemRolePermit);
+                        rolePermitService.SaveDBChanges();
+                    }
+
+                    // delete permit
+                    Permit recordPermit = permitService.GetRecordById(id);
+
                     recordPermit.StatusFlag = RecordStatus.Inactive.ToUpper();
                     recordPermit.ModifiedBy = currUser.UserId;
                     recordPermit.ModifiedDate = DateTime.Now;
 
-                    // edit record
                     permitService.UpdateRecord(recordPermit);
-                }
+                    permitService.SaveDBChanges();
 
-                // commit changes to database
-                permitService.SaveDBChanges();
+                    scope.Complete();
+                }
 
                 // reset cache
                 ResetCache();

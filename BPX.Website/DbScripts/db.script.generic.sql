@@ -373,18 +373,18 @@ insert into RolePermits (RoleId,PermitId,StatusFlag,ModifiedBy,ModifiedDate) val
 insert into UserRoles (UserId,RoleId,StatusFlag,ModifiedBy,ModifiedDate) values ('3','1','A',1,getDate());
 
 --menus
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Home',null,'/',0,1,1,'.1.','A',1,getDate());
+insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Home',null,'~/',0,1,1,'.1.','A',1,getDate());
 
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Developer',null,'/Developer',1,2,1,'.1.2.','A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Identity',null,'/Identity',1,2,2,'.1.3.','A',1,getDate());
+insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Developer',null,'~/Developer',1,2,1,'.1.2.','A',1,getDate());
+insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Identity',null,'~/Identity',1,2,2,'.1.3.','A',1,getDate());
 
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Errors Log',null,'/Developer/ErrorLog',2,3,1,'.1.2.4.','A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Permits Generator',null,'/Developer/PermitsGenerator',2,3,2,'.1.2.5.','A',1,getDate());
+insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Errors Log',null,'~/Developer/ErrorLog',2,3,1,'.1.2.4.','A',1,getDate());
+insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Permits Generator',null,'~/Developer/PermitsGenerator',2,3,2,'.1.2.5.','A',1,getDate());
 
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Menu',null,'/Identity/Menu',3,3,1,'.1.3.6.','A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Permit',null,'/Identity/Permit',3,3,2,'.1.3.7.','A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Role',null,'/Identity/Role',3,3,3,'.1.3.8.','A',1,getDate());
-insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('User',null,'/Identity/User',3,3,4,'.1.3.9.','A',1,getDate());
+insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Menu',null,'~/Identity/Menu',3,3,1,'.1.3.6.','A',1,getDate());
+insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Permit',null,'~/Identity/Permit',3,3,2,'.1.3.7.','A',1,getDate());
+insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('Role',null,'~/Identity/Role',3,3,3,'.1.3.8.','A',1,getDate());
+insert into Menus (MenuName,MenuDescription,MenuURL,ParentMenuId,HLevel,OrderNumber,TreePath,StatusFlag,ModifiedBy,ModifiedDate) values ('User',null,'~/Identity/User',3,3,4,'.1.3.9.','A',1,getDate());
 
 --MenuPermits
 insert into MenuPermits (MenuId,PermitId,StatusFlag,ModifiedBy,ModifiedDate) values (4,1,'A',1,getDate());

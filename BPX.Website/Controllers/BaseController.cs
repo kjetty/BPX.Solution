@@ -76,10 +76,6 @@ namespace BPX.Website.Controllers
 								{
 									// force logout
 									portal.PToken = Guid.NewGuid().ToString();
-
-									//portalService.UpdateRecord(portal);
-									//portalService.SaveDBChanges();
-
 									portalService.UpdateRecordDapper(portal);
 
 									ctx.Result = new RedirectToRouteResult(
@@ -123,10 +119,6 @@ namespace BPX.Website.Controllers
 
 										// update the lastAccessTime in portal
 										portal.LastAccessTime = DateTime.Now;
-
-										//portalService.UpdateRecord(portal);
-										//portalService.SaveDBChanges();
-
 										portalService.UpdateRecordDapper(portal);
 
 										////// Developer Override for Permits - BaseController (Part A) + PermitAttribute (PartB)

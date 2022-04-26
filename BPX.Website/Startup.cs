@@ -80,7 +80,6 @@ namespace BPX.Website
 				//options.Cookie.Domain = "KetanJetty.com";
 				//options.ExpireTimeSpan = DateTime.Now.AddMinutes(30);
 				//options.Cookie.SameSite = SameSiteMode.Strict;
-
 				options.SlidingExpiration = true;
 				options.Cookie.HttpOnly = true;
                 options.AccessDeniedPath = "/Identity/Account/Denied";

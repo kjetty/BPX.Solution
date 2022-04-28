@@ -1,105 +1,107 @@
-﻿@{ ViewData["Title"] = "Error Logs"; }
+﻿@{
+    ViewData["Title"] = "Error Logs";
+}
 
 @using BPX.Website.CustomCode.Authorize;
 
 <div class="row">
-	<div class="col-md-4">
-		<h5>@ViewBag.Title</h5>
-	</div>
-	<div class="col-md-4">
-		<h5>@ViewBag.logDateString <span class="bi-at"></span> @DateTime.Now.ToLongTimeString()</h5>
-	</div>
-	<div class="col-md-4">
-		<div class="d-flex justify-content-between">
-			<span class="bi-arrow-left-circle fa-pull-left prevDate"></span>
-			<input type="date" id="dpDate" name="dpDate" value="@ViewBag.logDateString">
-			<span class="bi-arrow-right-circle float-left nextDate"></span>
-			<span class="bi-arrow-clockwise reload"></span>
-			@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Developer.ErrorLog.DownloadLog))
-			{
-				<span class="bi-arrow-down downloadLog"></span>
-			}
-		</div>
-	</div>
+    <div class="col-md-4">
+        <h5>@ViewBag.Title</h5>
+    </div>
+    <div class="col-md-4">
+        <h5>@ViewBag.logDateString <span class="bi-at"></span> @DateTime.Now.ToLongTimeString()</h5>
+    </div>
+    <div class="col-md-4">
+        <div class="d-flex justify-content-between">
+            <span class="bi-arrow-left-circle fa-pull-left prevDate"></span>
+            <input type="date" id="dpDate" name="dpDate" value="@ViewBag.logDateString">
+            <span class="bi-arrow-right-circle float-left nextDate"></span>
+            <span class="bi-arrow-clockwise reload"></span>
+            @if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Developer.ErrorLog.DownloadLog))
+            {
+                <span class="bi-arrow-down downloadLog"></span>
+            }
+        </div>
+    </div>
 </div>
 
 <p></p>
 <hr />
 
 <div class="row">
-	<div class="col-md-12">
-		<div style="width: 1100px; height: 520px; overflow-y: scroll;">
-			@Html.Raw(ViewBag.fileContent)
-		</div>
-	</div>
+    <div class="col-md-12">
+        <div style="width: 1100px; height: 520px; overflow-y: scroll;">
+            @Html.Raw(ViewBag.fileContent)
+        </div>
+    </div>
 </div>
 
 <div>
-	<form id="formForLogs" asp-action="Index" method="post">
-		<input type="hidden" id="logDateString" name="logDateString" value="123" />
-		<input type="hidden" id="logAction" name="logAction" value="PREV" />
-	</form>
+    <form id="formForLogs" asp-action="Index" method="post">
+        <input type="hidden" id="logDateString" name="logDateString" value="123" />
+        <input type="hidden" id="logAction" name="logAction" value="PREV" />
+    </form>
 </div>
 
 
 @section ScriptsAtBottom
 {
-	<script type="text/javascript">
-		var logDateString = "@ViewBag.logDateString";
-		var logAction = "reload";
+<script type="text/javascript">
+    var logDateString = "@ViewBag.logDateString";
+    var logAction = "reload";
 
-		$(document).ready(function () {
-			logAction = "none";
+    $(document).ready(function () {
+        logAction = "none";
 
-			$(".prevDate").click(function (e) {
-				$("#formForLogs").attr("action", "/Developer/ErrorLog");
+        $(".prevDate").click(function (e) {
+            $("#formForLogs").attr("action", "/Developer/ErrorLog");
 
-				logDateString = $("#dpDate").val();
-				logAction = "prev";
-				submitFormForLogs();
-			});
+            logDateString = $("#dpDate").val();
+            logAction = "prev";
+            submitFormForLogs();
+        });
 
-			$(".nextDate").click(function (e) {
-				$("#formForLogs").attr("action", "/Developer/ErrorLog");
+        $(".nextDate").click(function (e) {
+            $("#formForLogs").attr("action", "/Developer/ErrorLog");
 
-				logDateString = $("#dpDate").val();
-				logAction = "next";
-				submitFormForLogs();
-			});
+            logDateString = $("#dpDate").val();
+            logAction = "next";
+            submitFormForLogs();
+        });
 
-			$(".reload").click(function (e) {
-				$("#formForLogs").attr("action", "/Developer/ErrorLog");
+        $(".reload").click(function (e) {
+            $("#formForLogs").attr("action", "/Developer/ErrorLog");
 
-				logDateString = $("#dpDate").val();
-				logAction = "reload";
-				submitFormForLogs();
-			});
+            logDateString = $("#dpDate").val();
+            logAction = "reload";
+            submitFormForLogs();
+        });
 
-			$("#dpDate").change(function (e) {
-				$("#formForLogs").attr("action", "/Developer/ErrorLog");
+        $("#dpDate").change(function (e) {
+            $("#formForLogs").attr("action", "/Developer/ErrorLog");
 
-				logDateString = $("#dpDate").val();
-				logAction = "reload";
-				submitFormForLogs();
-			});
+            logDateString = $("#dpDate").val();
+            logAction = "reload";
+            submitFormForLogs();
+        });
 
-			$(".downloadLog").click(function (e) {
-				$("#formForLogs").attr("action", "/Developer/ErrorLog/DownloadLog");
+        $(".downloadLog").click(function (e) {
+            $("#formForLogs").attr("action", "/Developer/ErrorLog/DownloadLog");
 
-				logDateString = $("#dpDate").val();
-				logAction = "download";
-				submitFormForLogs();
-			});
-		});
+            logDateString = $("#dpDate").val();
+            logAction = "download";
+            submitFormForLogs();
+        });
+    });
 
-		// submit form for paging
-		function submitFormForLogs() {
-			$("#logDateString").val(logDateString);
-			$("#logAction").val(logAction);
+    // submit form for paging
+    function submitFormForLogs() {
+        $("#logDateString").val(logDateString);
+        $("#logAction").val(logAction);
 
-			$("#formForLogs").submit();
-		}
-	</script>
+        $("#formForLogs").submit();
+    }
+</script>
 }
 
 

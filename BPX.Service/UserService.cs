@@ -7,9 +7,9 @@ using X.PagedList;
 
 namespace BPX.Service
 {
-	public class UserService : IUserService
+    public class UserService : IUserService
     {
-		public UserRepository userRepository;
+        public UserRepository userRepository;
 
         public UserService(IUserRepository userRepository)
         {
@@ -50,10 +50,10 @@ namespace BPX.Service
         }
 
         public void SaveDBChanges()
-		{
+        {
             userRepository.SaveDBChanges();
         }
-	}
+    }
 
     public interface IUserService : IGenericService<User>
     {

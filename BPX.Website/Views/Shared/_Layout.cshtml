@@ -1,82 +1,82 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<!-- title -->
-	<title>@ViewData["Title"] - BPX</title>
-	<!-- css -->
-	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css" />
-	<link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
-	<link rel="stylesheet" href="~/css/PagedList.css" />
-	<link rel="stylesheet" href="~/css/site.css" />
-	<!-- javascripts -->
-	<!-- all javascripts are moved to the botton of the page for performance -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- title -->
+    <title>@ViewData["Title"] - BPX</title>
+    <!-- css -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
+    <link rel="stylesheet" href="~/css/PagedList.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <!-- javascripts -->
+    <!-- all javascripts are moved to the botton of the page for performance -->
 </head>
 <body>
-	<header>
-		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-			<div class="container">
-				<!-- logo -->
-				<a class="navbar-brand" href="/">BPX.Website</a>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <!-- logo -->
+                <a class="navbar-brand" href="/">BPX.Website</a>
 
-				<!-- toggle button -->
-				@*<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-						aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>*@
+                <!-- toggle button -->
+                @*<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                    </button>*@
 
-				<!-- menu -->
-				<nav id="navbar" class="navbar">
-					<ul>
-						<partial name="_PartialMenu" />
-						<partial name="_PartialLogin" />
-					</ul>
-				</nav>
-			</div>
-		</nav>
-	</header>
-	<!-- body :: breadcrumb :: alertbox -->
-	<div class="container">
-		<main role="main" class="pb-3">
-			<partial name="_PartialBreadcrumb" />
-			<partial name="_PartialAlertBox" />
-			@RenderBody()
-		</main>
-	</div>
-	<!-- footer -->
-	<footer class="border-top footer text-muted" style="background-color: #f8fbfe;">
-		<div class="container">
-			<div class="row">
-				<div class="col-sm-4">
-					&copy; Virat Ketan Jetty - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-				</div>
-				<div class="col-sm-4">
-					<div class="font-weight-bolder text-info" style="font-size: 1.4rem;">Best Practices .NET5 C#</div>
-				</div>
-				<div class="col-sm-4">
-					<div class="float-right">v2.3.4.5 &commat; Jan 12, 2022</div>
-				</div>
-			</div>
-		</div>
-	</footer>
+                <!-- menu -->
+                <nav id="navbar" class="navbar">
+                    <ul>
+                        <partial name="_PartialMenu" />
+                        <partial name="_PartialLogin" />
+                    </ul>
+                </nav>
+            </div>
+        </nav>
+    </header>
+    <!-- body :: breadcrumb :: alertbox -->
+    <div class="container">
+        <main role="main" class="pb-3">
+            <partial name="_PartialBreadcrumb" />
+            <partial name="_PartialAlertBox" />
+            @RenderBody()
+        </main>
+    </div>
+    <!-- footer -->
+    <footer class="border-top footer text-muted" style="background-color: #f8fbfe;">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    &copy; Virat Ketan Jetty - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                </div>
+                <div class="col-sm-4">
+                    <div class="font-weight-bolder text-info" style="font-size: 1.4rem;">Best Practices .NET5 C#</div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="float-right">v2.3.4.5 &commat; Jan 12, 2022</div>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-	<!-- javascripts -->
-	<script src="~/lib/jquery/dist/jquery.min.js"></script>
-	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="~/js/site.js" asp-append-version="true"></script>
+    <!-- javascripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 
-	<!-- inline javascript :: scripts at the bottom of the page -->
-	@RenderSection("ScriptsAtBottom", required: false)
+    <!-- inline javascript :: scripts at the bottom of the page -->
+    @RenderSection("ScriptsAtBottom", required: false)
 </body>
 </html>
 
 @*
-	https://themes.getbootstrap.com/
-	https://coderthemes.com/hyper_2/creative/ui-breadcrumb.html
-	https://themes.getbootstrap.com/product/hyper-responsive-admin-dashboard-template/
-	https://themes.getbootstrap.com/store/coderthemes/.
+    https://themes.getbootstrap.com/
+    https://coderthemes.com/hyper_2/creative/ui-breadcrumb.html
+    https://themes.getbootstrap.com/product/hyper-responsive-admin-dashboard-template/
+    https://themes.getbootstrap.com/store/coderthemes/.
 
 
 *@

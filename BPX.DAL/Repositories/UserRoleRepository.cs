@@ -8,7 +8,7 @@ using X.PagedList;
 
 namespace BPX.DAL.Repositories
 {
-	public class UserRoleRepository : BaseRepository, IUserRoleRepository
+    public class UserRoleRepository : BaseRepository, IUserRoleRepository
     {
         public UserRoleRepository(EFContext efContext, DPContext dpContext) : base(efContext, dpContext)
         {

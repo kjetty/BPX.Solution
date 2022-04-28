@@ -14,7 +14,7 @@ using X.PagedList;
 
 namespace BPX.Website.Areas.Identity.Controllers
 {
-	[Area("Identity")]
+    [Area("Identity")]
     public class RoleController : BaseController<RoleController>
     {
         private readonly ICacheService cacheService;
@@ -407,7 +407,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             List<Permit> listPermits = permitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).OrderBy(c => c.PermitArea).ThenBy(c => c.PermitController).ThenBy(c => c.PermitName).ToList();
             List<int> listRolePermitIds = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.RoleId.Equals(id)).OrderBy(c => c.PermitId).Select(c => c.PermitId).ToList();
             List<string> listAreas = listPermits.OrderBy(c => c.PermitArea).Select(c => c.PermitArea).Distinct().ToList();
-                         
+
             // set ViewBag
             ViewBag.role = role;
             ViewBag.listAreas = listAreas;
@@ -483,10 +483,10 @@ namespace BPX.Website.Areas.Identity.Controllers
             //// ALL
             List<string> listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.ModifiedDate >= DateTime.Now.AddDays(-999)).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
 
-			foreach (string itemCacheKeyName in listCacheKeyNames)
-			{
-				cacheService.RemoveCache(itemCacheKeyName.ToString());
-			}
+            foreach (string itemCacheKeyName in listCacheKeyNames)
+            {
+                cacheService.RemoveCache(itemCacheKeyName.ToString());
+            }
         }
     }
 }

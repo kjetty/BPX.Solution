@@ -15,7 +15,7 @@ using X.PagedList;
 
 namespace BPX.Website.Areas.Identity.Controllers
 {
-	[Area("Identity")]
+    [Area("Identity")]
     public class PermitController : BaseController<PermitController>
     {
         private readonly ICacheService cacheService;
@@ -264,7 +264,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 {
                     // delete related menuPermits
                     List<MenuPermit> listMenuPermits = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PermitId.Equals(id)).ToList();
-                    
+
                     foreach (MenuPermit itemMenuPermit in listMenuPermits)
                     {
                         itemMenuPermit.StatusFlag = RecordStatus.Inactive.ToUpper();

@@ -11,7 +11,7 @@ using X.PagedList;
 
 namespace BPX.DAL.Repositories
 {
-	public class PermitRepository : BaseRepository, IPermitRepository
+    public class PermitRepository : BaseRepository, IPermitRepository
     {
         public PermitRepository(EFContext efContext, DPContext dpContext) : base(efContext, dpContext)
         {

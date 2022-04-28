@@ -7,7 +7,7 @@ using X.PagedList;
 
 namespace BPX.Service
 {
-	public class ErrorService : IErrorService
+    public class ErrorService : IErrorService
     {
         public ErrorRepository errorRepository;
 

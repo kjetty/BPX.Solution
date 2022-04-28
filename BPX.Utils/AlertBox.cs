@@ -1,16 +1,16 @@
 ﻿namespace BPX.Utils
 {
-	public class AlertBox
+    public class AlertBox
     {
-		// DO NOT provide the default constructor
-		//public AlertBox()
-		//{
-		//}
+        // DO NOT provide the default constructor
+        //public AlertBox()
+        //{
+        //}
 
-		//public AlertBox()
-		//{
+        //public AlertBox()
+        //{
         //      throw new NotImplementedException();
-		//}
+        //}
 
         public AlertBox(AlertType alertType, string alertMessage)
         {

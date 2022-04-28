@@ -41,7 +41,7 @@ namespace BPX.Utils
                 sb.Append(chars[b % (chars.Length)]);
             }
 
-            return sb.ToString();             
+            return sb.ToString();
         }
 
         public static string Hypenate2124(string input)
@@ -104,6 +104,6 @@ namespace BPX.Utils
         // variables for the record status
         public const string CAC = "C";
         public const string PIV = "P";
-        public const string Username = "U";        
+        public const string Username = "U";
     }
 }

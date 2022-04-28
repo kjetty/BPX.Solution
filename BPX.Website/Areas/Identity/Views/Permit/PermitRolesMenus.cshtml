@@ -3,53 +3,53 @@
 @using System.Reflection;
 
 @{
-	ViewData["Title"] = "Roles And Menus";
+    ViewData["Title"] = "Roles And Menus";
 }
 
 <div class="row">
-	<div class="col-md-12">
-		<h5>@ViewBag.Title - @ViewBag.permit.PermitEnum</h5>
-	</div>
+    <div class="col-md-12">
+        <h5>@ViewBag.Title - @ViewBag.permit.PermitEnum</h5>
+    </div>
 </div>
 
 <p></p>
 
 <div class="row">
-	<div class="col-md-6">
-		<h5>Roles</h5>
+    <div class="col-md-6">
+        <h5>Roles</h5>
 
-		<ol class="list-group list-group-numbered">
-			@{
-				foreach (var itemRole in ViewBag.listRoles)
-				{
-					<li class="list-group-item">@Html.Raw(itemRole.RoleName)</li>
-				}
-			}
-		</ol>
+        <ol class="list-group list-group-numbered">
+            @{
+                foreach (var itemRole in ViewBag.listRoles)
+                {
+                    <li class="list-group-item">@Html.Raw(itemRole.RoleName)</li>
+                }
+            }
+        </ol>
 
-	</div>
-	<div class="col-md-6">
-		<h5>Menu</h5>
+    </div>
+    <div class="col-md-6">
+        <h5>Menu</h5>
 
-		<ol class="list-group list-group-numbered">
-			@{
-				foreach (var itemRole in ViewBag.listMenus)
-				{
-					<li class="list-group-item">@Html.Raw(itemRole.MenuURL)</li>
-				}
-			}
-		</ol>
-	</div>
+        <ol class="list-group list-group-numbered">
+            @{
+                foreach (var itemRole in ViewBag.listMenus)
+                {
+                    <li class="list-group-item">@Html.Raw(itemRole.MenuURL)</li>
+                }
+            }
+        </ol>
+    </div>
 </div>
 
 <p></p>
 
 <div class="row">
-	<div class="col-md-12">
-		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.List))
-		{
-			<a asp-action="List">Back to List</a>
-		}
-	</div>
+    <div class="col-md-12">
+        @if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.List))
+        {
+            <a asp-action="List">Back to List</a>
+        }
+    </div>
 </div>
 

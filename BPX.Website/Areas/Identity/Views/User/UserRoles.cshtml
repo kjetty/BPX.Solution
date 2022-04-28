@@ -4,89 +4,91 @@
 @using BPX.Website.CustomCode.Authorize;
 
 @{
-	ViewData["Title"] = "User Roles";
+    ViewData["Title"] = "User Roles";
 }
 
 <div class="row">
-	<div class="col-md-12">
-		<h5>@ViewBag.Title - @ViewBag.user.FirstName @ViewBag.user.LastName</h5>
-	</div>
+    <div class="col-md-12">
+        <h5>@ViewBag.Title - @ViewBag.user.FirstName @ViewBag.user.LastName</h5>
+    </div>
 </div>
 
 <p></p>
 <hr />
 
 <div class="row">
-	<div class="col-md-12">
-		<form asp-action="UserRoles" method="post">
-			@*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
-			<input type="hidden" asp-for="UserId" />
+    <div class="col-md-12">
+        <form asp-action="UserRoles" method="post">
+            @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
+            <input type="hidden" asp-for="UserId" />
 
-			<div class="row form-group">
-				<div class="col-md-12">
+            <div class="row form-group">
+                <div class="col-md-12">
 
-					<div class="card">
-						<div class="card-header">
-							<input type="checkbox" id="handleAdmin" style="box-shadow: 0 0 3px red;" />
-							All
-						</div>
-						<div class="card-body">
-							@Html.Raw("<table>")
+                    <div class="card">
+                        <div class="card-header">
+                            <input type="checkbox" id="handleAdmin" style="box-shadow: 0 0 3px red;" />
+                            All
+                        </div>
+                        <div class="card-body">
+                            @Html.Raw("<table>")
 
-							@if (ViewBag.listRoles != null)
-							{
-								@Html.Raw("<tr>")
-								@Html.Raw("<td>")
+                            @if (ViewBag.listRoles != null)
+                            {
+                                @Html.Raw("<tr>")
+                                @Html.Raw("<td>")
 
-								foreach (var itemRole in ViewBag.listRoles)
-								{
-									if (((IList<int>)ViewBag.listUserRoleIds).Contains(itemRole.RoleId))
-									{
-										<input type="checkbox" class="classAdmin" name="RoleIds" value="@itemRole.RoleId" checked="checked" />
-									}
-									else
-									{
-										<input type="checkbox" class="classAdmin" name="RoleIds" value="@itemRole.RoleId" />
-									}
+                                foreach (var itemRole in ViewBag.listRoles)
+                                {
+                                    if (((IList<int>)ViewBag.listUserRoleIds).Contains(itemRole.RoleId))
+                                    {
+                                        <input type="checkbox" class="classAdmin" name="RoleIds" value="@itemRole.RoleId" checked="checked" />
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" class="classAdmin" name="RoleIds" value="@itemRole.RoleId" />
+                                    }
 
-									@itemRole.RoleName
-									@Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-								}
+                                    @itemRole.RoleName
+                                    @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+                                }
 
-								@Html.Raw("</td>")
-								@Html.Raw("</tr>")
-							}
+                                @Html.Raw("</td>")
+                                @Html.Raw("</tr>")
+                            }
 
-							@Html.Raw("</table>")
-						</div>
-					</div>
-					<br />
-					<input type="submit" value="   Save   " class="btn btn-primary" />
-					<span style="margin: 5px 0 0 10px">
-						@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.User.List))
-						{
-							@Html.Raw("&nbsp; &nbsp; | &nbsp; &nbsp;"); <a asp-action="List">Back to List</a>
-						}
-					</span>
-				</div>
-			</div>
-		</form>
-	</div>
+                            @Html.Raw("</table>")
+                        </div>
+                    </div>
+                    <br />
+                    <input type="submit" value="   Save   " class="btn btn-primary" />
+                    <span style="margin: 5px 0 0 10px">
+                        @if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.User.List))
+                        {
+                            @Html.Raw("&nbsp; &nbsp; | &nbsp; &nbsp;")
+                            ;
+                            <a asp-action="List">Back to List</a>
+                        }
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
 @section ScriptsAtBottom
 {
-	<script type="text/javascript">
-		$(document).ready(function () {
-			@if (ViewBag.listRoles != null)
-			{
-				@Html.Raw("$(\"#handleAdmin" + "\").change(function () {\n")
-				@Html.Raw("\t$(\".classAdmin" + "\").removeAttr('checked');\n")
-				@Html.Raw("\tif (this.checked) {\n")
-				@Html.Raw("\t\t$(\".classAdmin" + "\").attr('checked', 'checked');\n")
-				@Html.Raw("\t}\n")
-				@Html.Raw("});\n\n")
-			}
-		});
-	</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        @if (ViewBag.listRoles != null)
+        {
+            @Html.Raw("$(\"#handleAdmin" + "\").change(function () {\n")
+            @Html.Raw("\t$(\".classAdmin" + "\").removeAttr('checked');\n")
+            @Html.Raw("\tif (this.checked) {\n")
+            @Html.Raw("\t\t$(\".classAdmin" + "\").attr('checked', 'checked');\n")
+            @Html.Raw("\t}\n")
+            @Html.Raw("});\n\n")
+        }
+    });
+</script>
 }

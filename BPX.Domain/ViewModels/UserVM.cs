@@ -29,24 +29,24 @@ namespace BPX.Domain.ViewModels
 
         [StringLength(16)]
         [Display(Name = "Mobile")]
-		public string Mobile { get; set; }
+        public string Mobile { get; set; }
 
         //[Required]
         //[StringLength(24)]
         //[Display(Name = "UserUUId")]
         //public string UserUUId { get; set; }
-        
+
         //[Required]
         //[StringLength(24)]
         //[Display(Name = "LoginUUId")]
         //public string LoginUUId { get; set; }
-        
+
         //[Required]
         //[StringLength(24)]
         //[Display(Name = "PortalUUId")]
         //public string PortalUUId { get; set; }
 
-        
+
         public static explicit operator UserMiniViewModel(User dm)
         {
             if (dm == null)

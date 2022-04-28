@@ -11,45 +11,45 @@ namespace BPX.Domain.ViewModels
         [StringLength(24)]
         public string LoginUUId { get; set; }
 
-        [Display(Name = "xxx")]
+        [Display(Name = "CAC Common Name")]
         [StringLength(128)]
         public string CACCN { get; set; }
 
-        [Display(Name = "xxx")]
+        [Display(Name = "CAC Id")]
         [StringLength(16)]
         public string CACId { get; set; }
 
-        [Display(Name = "xxx")]
+        [Display(Name = "CAC Snall")]
         [StringLength(16)]
         public string CACSmall { get; set; }
 
-        [Display(Name = "xxx")]
+        [Display(Name = "CAC Large")]
         [StringLength(16)]
         public string CACLarge { get; set; }
 
-        [Display(Name = "xxx")]
+        [Display(Name = "Login Name")]
         [StringLength(32)]
         public string LoginName { get; set; }
 
-        [Display(Name = "xxx")]
+        [Display(Name = "Password")]
         [StringLength(128)]
         public string PasswordHash { get; set; }
 
-        [Display(Name = "xxx")]
+        [Display(Name = "AD User Name")]
         [StringLength(32)]
         public string ADUserName { get; set; }
 
-        [Display(Name = "xxx")]
+        [Display(Name = "Login Type")]
         [Required]
         [StringLength(1)]
         public string LoginType { get; set; }
 
-        [Display(Name = "xxx")]
+        [Display(Name = "LToken")]
         [Required]
         [StringLength(40)]
         public string LToken { get; set; }
 
-        [Display(Name = "xxx")]
+        [Display(Name = "Last Login Date")]
         [Required]
         public DateTime LastLoginDate { get; set; }
 
@@ -185,22 +185,22 @@ namespace BPX.Domain.ViewModels
         public string ConfirmPassword { get; set; }
     }
 
-	public class BPXLoginViewModel
-	{
-		[Required]
-		[Display(Name = "Login Name")]
-		public string LoginName { get; set; }
+    public class BPXLoginViewModel
+    {
+        [Required]
+        [Display(Name = "Login Name")]
+        public string LoginName { get; set; }
 
-		[Required]
-		[DataType(DataType.Password)]
-		[Display(Name = "Password")]
-		public string Password { get; set; }
+        [Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password { get; set; }
 
-		[Display(Name = "Return URL")]
-		public string ReturnUrl { get; set; }
-	}
+        [Display(Name = "Return URL")]
+        public string ReturnUrl { get; set; }
+    }
 
-	public class RegisterViewModel
+    public class RegisterViewModel
     {
         [Required]
         [StringLength(32)]
@@ -223,7 +223,7 @@ namespace BPX.Domain.ViewModels
 
         [Required]
         [Display(Name = "Login Id")]
-        public string LoginName   { get; set; }
+        public string LoginName { get; set; }
 
         [Required]
         [RegularExpression(@"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,15}$", ErrorMessage = "Minimum 8 Max 15 characters at least one digit, one uppercase character, one special symbol and avoid space")]
@@ -236,7 +236,7 @@ namespace BPX.Domain.ViewModels
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        public string redirectAction { get; set; }
+        public string RedirectAction { get; set; }
     }
 
     public class ChangePasswordViewModel

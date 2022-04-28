@@ -18,7 +18,7 @@ namespace BPX.DAL.Repositories
 
         public IPagedList<Error> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString, string filterJson)
         {
-           throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public Error GetRecordById(int id)

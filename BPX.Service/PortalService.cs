@@ -7,9 +7,9 @@ using X.PagedList;
 
 namespace BPX.Service
 {
-	public class PortalService : IPortalService
+    public class PortalService : IPortalService
     {
-		public PortalRepository portalRepository;
+        public PortalRepository portalRepository;
 
         public PortalService(IPortalRepository portalRepository)
         {
@@ -18,7 +18,7 @@ namespace BPX.Service
 
         public IPagedList<Portal> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString, string filterJson)
         {
-           throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public Portal GetRecordById(int id)
@@ -50,7 +50,7 @@ namespace BPX.Service
         }
 
         public void SaveDBChanges()
-		{
+        {
             portalRepository.SaveDBChanges();
         }
 

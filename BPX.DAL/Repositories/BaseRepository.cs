@@ -13,9 +13,9 @@ namespace BPX.DAL.Repositories
             this.dpContext = dpContext;
         }
 
-		public void SaveDBChanges()
-		{
+        public void SaveDBChanges()
+        {
             efContext.SaveChanges();
         }
-	}
+    }
 }

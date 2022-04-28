@@ -9,36 +9,36 @@ using System.Diagnostics;
 namespace BPX.Website.Controllers
 {
     public class HomeController : BaseController<HomeController>
-	{
-		public HomeController(ILogger<HomeController> logger, ICoreService coreService) : base(logger, coreService)
-		{
-		}
+    {
+        public HomeController(ILogger<HomeController> logger, ICoreService coreService) : base(logger, coreService)
+        {
+        }
 
-		public IActionResult Index()
-		{
+        public IActionResult Index()
+        {
 
-			return View();
-		}
-		public IActionResult Privacy()
-		{
-			return View();
-		}
+            return View();
+        }
+        public IActionResult Privacy()
+        {
+            return View();
+        }
 
-		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-		public IActionResult Error()
-		{
-			IExceptionHandlerPathFeature exceptionFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            IExceptionHandlerPathFeature exceptionFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
 
-			if (exceptionFeature != null)
-			{
-				logger.Log(LogLevel.Error, "In HomeController.Error() :: " + exceptionFeature.Path + " " + exceptionFeature.Error.Message + " " + exceptionFeature.Error.StackTrace);
-			}
-			else
-			{
-				logger.Log(LogLevel.Error, "An exception occurred. Error unkown");
-			}
+            if (exceptionFeature != null)
+            {
+                logger.Log(LogLevel.Error, "In HomeController.Error() :: " + exceptionFeature.Path + " " + exceptionFeature.Error.Message + " " + exceptionFeature.Error.StackTrace);
+            }
+            else
+            {
+                logger.Log(LogLevel.Error, "An exception occurred. Error unkown");
+            }
 
-			return View(new ErrorPageViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-		}
-	}
+            return View(new ErrorPageViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+    }
 }

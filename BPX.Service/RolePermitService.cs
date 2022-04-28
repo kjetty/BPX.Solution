@@ -7,7 +7,7 @@ using X.PagedList;
 
 namespace BPX.Service
 {
-	public class RolePermitService : IRolePermitService
+    public class RolePermitService : IRolePermitService
     {
         public RolePermitRepository rolePermitRepository;
 

@@ -3,89 +3,89 @@
 @using BPX.Website.CustomCode.Authorize;
 
 @{
-	ViewData["Title"] = "List of deleted menu";
+    ViewData["Title"] = "List of deleted menu";
 }
 
 <div class="row">
-	<div class="col-md-12">
-		<h5>@ViewBag.Title</h5>
-	</div>
+    <div class="col-md-12">
+        <h5>@ViewBag.Title</h5>
+    </div>
 </div>
 
 <p></p>
 <hr />
 
 <div class="row">
-	<div class="col-md-12">
-		<table class="table table-sm table-striped table-hover border-bottom table-bordered">
-			<thead>
-				<tr>
+    <div class="col-md-12">
+        <table class="table table-sm table-striped table-hover border-bottom table-bordered">
+            <thead>
+                <tr>
 
-					<th>
-						Name
-					</th>
-					<th>
-						URL
-					</th>
-					<th>
-						Order
-					</th>
-					<th>
-						@Html.DisplayNameFor(model => model.TreePath)
-					</th>
-					<th style="width:250px;">
-						Action
-					</th>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach (var item in Model)
-				{
-					<tr>
-						<td>
-							@{
-								for (int i = 2; i <= item.HLevel - 1; i++)
-								{
-									@Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-								}
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        URL
+                    </th>
+                    <th>
+                        Order
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TreePath)
+                    </th>
+                    <th style="width:250px;">
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @{
+                                for (int i = 2; i <= item.HLevel - 1; i++)
+                                {
+                                    @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+                                }
 
-								if (item.ParentMenuId.Equals(0))
-								{
-									<span class="bi-house-fill">&nbsp;</span>
-								}
-							}
+                                if (item.ParentMenuId.Equals(0))
+                                {
+                                    <span class="bi-house-fill">&nbsp;</span>
+                                }
+                            }
 
-							@Html.DisplayFor(modelItem => item.MenuName)
-						</td>
-						<td>
-							@Html.DisplayFor(modelItem => item.MenuURL)
-						</td>
-						<td>
-							@Html.DisplayFor(modelItem => item.OrderNumber)
-						</td>
-						<td>
-							@Html.DisplayFor(modelItem => item.TreePath)
-						</td>
-						<td style="padding-left: 1em; padding-right:1em;">
-							@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.Undelete))
-							{
-								<a asp-action="Undelete" asp-route-id="@item.MenuId" title="restore" class="bi-plug" style="text-decoration: none; color: darkslategray;"></a>
-							}
-						</td>
-					</tr>
-				}
-			</tbody>
-		</table>
-	</div>
+                            @Html.DisplayFor(modelItem => item.MenuName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MenuURL)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrderNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TreePath)
+                        </td>
+                        <td style="padding-left: 1em; padding-right:1em;">
+                            @if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.Undelete))
+                            {
+                                <a asp-action="Undelete" asp-route-id="@item.MenuId" title="restore" class="bi-plug" style="text-decoration: none; color: darkslategray;"></a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <p></p>
 
 <div class="row">
-	<div class="col-md-12">
-		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.List))
-		{
-			<a asp-action="List">Back to List</a>
-		}
-	</div>
+    <div class="col-md-12">
+        @if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.List))
+        {
+            <a asp-action="List">Back to List</a>
+        }
+    </div>
 </div>

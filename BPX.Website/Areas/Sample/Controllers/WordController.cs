@@ -13,17 +13,17 @@ using TextDoc = DocumentFormat.OpenXml.Wordprocessing.Text;
 
 namespace BPX.Website.Areas.Sample.Controllers
 {
-	public class WordController : BaseController<WordController>
+    public class WordController : BaseController<WordController>
     {
-		public WordController(ILogger<WordController> logger, ICoreService coreService) : base(logger, coreService)
-		{
+        public WordController(ILogger<WordController> logger, ICoreService coreService) : base(logger, coreService)
+        {
 
-		}
+        }
 
-		public IActionResult Index()
-		{
-			return View();
-		}
+        public IActionResult Index()
+        {
+            return View();
+        }
 
         public IActionResult GenerateWord()
         {

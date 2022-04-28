@@ -15,20 +15,20 @@ namespace BPX.Website.Areas.Sample.Controllers
 {
     [Area("Sample")]
     public class PDFController : BaseController<PDFController>
-	{
-		public PDFController(ILogger<PDFController> logger, ICoreService coreService) : base(logger, coreService)
+    {
+        public PDFController(ILogger<PDFController> logger, ICoreService coreService) : base(logger, coreService)
         {
 
-		}
+        }
 
-		public IActionResult Index()
-		{
+        public IActionResult Index()
+        {
             GeneratePDFLocal();
 
             GeneratePDFDynamic();
 
             return View();
-		}
+        }
 
         public IActionResult GeneratePDFLocal()
         {

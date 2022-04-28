@@ -7,114 +7,114 @@ using System.Linq;
 
 namespace BPX.Service
 {
-	public class CoreService : ICoreService
-	{
-		private readonly IConfiguration configuration;
-		private readonly ICacheService cacheService; 
-		private readonly ICacheKeyService cacheKeyService;
-		private readonly IErrorService errorService;
-		private readonly IPortalService portalService;
-		private readonly ILoginService loginService;
-		private readonly IUserService userService;
-		private readonly IUserRoleService userRoleService;
-		private readonly IRolePermitService rolePermitService;
-		private readonly IMenuService menuService;
-		private readonly IMenuPermitService menuPermitService;
-		private readonly IPermitService permitService;
+    public class CoreService : ICoreService
+    {
+        private readonly IConfiguration configuration;
+        private readonly ICacheService cacheService;
+        private readonly ICacheKeyService cacheKeyService;
+        private readonly IErrorService errorService;
+        private readonly IPortalService portalService;
+        private readonly ILoginService loginService;
+        private readonly IUserService userService;
+        private readonly IUserRoleService userRoleService;
+        private readonly IRolePermitService rolePermitService;
+        private readonly IMenuService menuService;
+        private readonly IMenuPermitService menuPermitService;
+        private readonly IPermitService permitService;
 
-		public CoreService(IConfiguration configuration, ICacheService cacheService, ICacheKeyService cacheKeyService, IErrorService errorService, IPortalService portalService, ILoginService loginService, IUserService userService, IUserRoleService userRoleService, IRolePermitService rolePermitService, IMenuService menuService, IMenuPermitService menuPermitService, IPermitService permitService)
-		{
-			this.configuration = configuration;
-			this.cacheService = cacheService;
-			this.cacheKeyService = cacheKeyService;
-			this.errorService = errorService;
-			this.portalService = portalService;
-			this.loginService = loginService;
-			this.userService = userService;
-			this.userRoleService = userRoleService;
-			this.rolePermitService = rolePermitService;
-			this.menuService = menuService;
-			this.menuPermitService = menuPermitService;
-			this.permitService = permitService;
-		}
-		
-		public IConfiguration GetConfiguration()
-		{
-			return configuration;
-		}
+        public CoreService(IConfiguration configuration, ICacheService cacheService, ICacheKeyService cacheKeyService, IErrorService errorService, IPortalService portalService, ILoginService loginService, IUserService userService, IUserRoleService userRoleService, IRolePermitService rolePermitService, IMenuService menuService, IMenuPermitService menuPermitService, IPermitService permitService)
+        {
+            this.configuration = configuration;
+            this.cacheService = cacheService;
+            this.cacheKeyService = cacheKeyService;
+            this.errorService = errorService;
+            this.portalService = portalService;
+            this.loginService = loginService;
+            this.userService = userService;
+            this.userRoleService = userRoleService;
+            this.rolePermitService = rolePermitService;
+            this.menuService = menuService;
+            this.menuPermitService = menuPermitService;
+            this.permitService = permitService;
+        }
 
-		public ICacheService GetCacheService()
-		{
-			return cacheService;
-		}
+        public IConfiguration GetConfiguration()
+        {
+            return configuration;
+        }
 
-		public ICacheKeyService GetCacheKeyService()
-		{
-			return cacheKeyService;
-		}
+        public ICacheService GetCacheService()
+        {
+            return cacheService;
+        }
 
-		public IErrorService GetErrorService()
-		{
-			return errorService;
-		}
+        public ICacheKeyService GetCacheKeyService()
+        {
+            return cacheKeyService;
+        }
 
-		public IPortalService GetPortalService()
-		{
-			return portalService;
-		}
+        public IErrorService GetErrorService()
+        {
+            return errorService;
+        }
 
-		public ILoginService GetLoginService()
-		{
-			return loginService;
-		}
-		
-		public IUserService GetUserService()
-		{
-			return userService;
-		}
-		
-		public IUserRoleService GetUserRoleService()
-		{
-			return userRoleService;
-		}
-		
-		public IRolePermitService GetRolePermitService()
-		{
-			return rolePermitService;
-		}
-		
-		public IMenuService GetMenuService()
-		{
-			return menuService;
-		}
-		
-		public IMenuPermitService GetMenuPermitService()
-		{
-			return menuPermitService;
-		}
+        public IPortalService GetPortalService()
+        {
+            return portalService;
+        }
 
-		public List<int> GetUserRoleIds(int userId)
-		{
-			return userRoleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.UserId.Equals(userId)).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
-		}
+        public ILoginService GetLoginService()
+        {
+            return loginService;
+        }
 
-		public List<int> GetUserPermitIds(List<int> userRoleIds)
-		{
-			List<int> listPermitIds = permitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).Select(c => c.PermitId).ToList();
-			List<int> listMenuPermitIds = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && listPermitIds.Contains(c.PermitId)).Select(c => c.PermitId).Distinct().ToList();
-			List<int> listUserPermitIds = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && userRoleIds.Contains(c.RoleId) && listPermitIds.Contains(c.PermitId) && listMenuPermitIds.Contains(c.PermitId)).OrderBy(c => c.PermitId).Select(c => c.PermitId).Distinct().ToList();
+        public IUserService GetUserService()
+        {
+            return userService;
+        }
 
-			return listUserPermitIds;
-		}
+        public IUserRoleService GetUserRoleService()
+        {
+            return userRoleService;
+        }
 
-		public List<int> GetPermitRoles(int permitId)
-		{
-			return rolePermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PermitId.Equals(permitId)).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
-		}
+        public IRolePermitService GetRolePermitService()
+        {
+            return rolePermitService;
+        }
 
-		public List<Menu> GetBreadcrumbList(int menuId, string currController)
-		{
-			List<Menu> listBreadcrumb = menuService.GetBreadCrumb(menuId);
+        public IMenuService GetMenuService()
+        {
+            return menuService;
+        }
+
+        public IMenuPermitService GetMenuPermitService()
+        {
+            return menuPermitService;
+        }
+
+        public List<int> GetUserRoleIds(int userId)
+        {
+            return userRoleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.UserId.Equals(userId)).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
+        }
+
+        public List<int> GetUserPermitIds(List<int> userRoleIds)
+        {
+            List<int> listPermitIds = permitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).Select(c => c.PermitId).ToList();
+            List<int> listMenuPermitIds = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && listPermitIds.Contains(c.PermitId)).Select(c => c.PermitId).Distinct().ToList();
+            List<int> listUserPermitIds = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && userRoleIds.Contains(c.RoleId) && listPermitIds.Contains(c.PermitId) && listMenuPermitIds.Contains(c.PermitId)).OrderBy(c => c.PermitId).Select(c => c.PermitId).Distinct().ToList();
+
+            return listUserPermitIds;
+        }
+
+        public List<int> GetPermitRoles(int permitId)
+        {
+            return rolePermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PermitId.Equals(permitId)).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
+        }
+
+        public List<Menu> GetBreadcrumbList(int menuId, string currController)
+        {
+            List<Menu> listBreadcrumb = menuService.GetBreadCrumb(menuId);
 
             if (listBreadcrumb != null && listBreadcrumb.Count > 0)
             {
@@ -122,179 +122,179 @@ namespace BPX.Service
             }
 
             return listBreadcrumb;
-		}
+        }
 
-		public List<Menu> GetMenuHierarchy(string statusFlag, string orderBy)
-		{
-			return menuService.GetMenuHierarchy(statusFlag, orderBy);
-		}
+        public List<Menu> GetMenuHierarchy(string statusFlag, string orderBy)
+        {
+            return menuService.GetMenuHierarchy(statusFlag, orderBy);
+        }
 
-		public string GetMenuString(List<int> userPermitIds, List<Menu> menuHierarchy)
-		{
-			string menuString = string.Empty;
-			List<int> listMenuIds = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && userPermitIds.Contains(c.PermitId)).OrderBy(c => c.MenuId).Select(c => c.MenuId).Distinct().ToList();
-			List<Menu> listMenu = menuHierarchy.Where(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && listMenuIds.Contains(c.MenuId)).OrderBy(c => c.HLevel).ThenBy(c => c.OrderNumber).ToList();
+        public string GetMenuString(List<int> userPermitIds, List<Menu> menuHierarchy)
+        {
+            string menuString = string.Empty;
+            List<int> listMenuIds = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && userPermitIds.Contains(c.PermitId)).OrderBy(c => c.MenuId).Select(c => c.MenuId).Distinct().ToList();
+            List<Menu> listMenu = menuHierarchy.Where(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && listMenuIds.Contains(c.MenuId)).OrderBy(c => c.HLevel).ThenBy(c => c.OrderNumber).ToList();
 
-			// generate the menuString
-			AddMenuItemsLevelOne(ref menuString, menuHierarchy, AddRoot(ref menuString, menuHierarchy), listMenu, userPermitIds);
+            // generate the menuString
+            AddMenuItemsLevelOne(ref menuString, menuHierarchy, AddRoot(ref menuString, menuHierarchy), listMenu, userPermitIds);
 
-			return menuString;
-		}
+            return menuString;
+        }
 
-		private Menu AddRoot(ref string menuString, List<Menu> menuHierarchy)
-		{
-			Menu root = menuHierarchy.Where(c => c.ParentMenuId.Equals(0)).SingleOrDefault();
+        private Menu AddRoot(ref string menuString, List<Menu> menuHierarchy)
+        {
+            Menu root = menuHierarchy.Where(c => c.ParentMenuId.Equals(0)).SingleOrDefault();
 
-			//menuString += "<li>";
-			//menuString += $"<a class=\"nav-link\" href=\"{root.MenuURL}\">{root.MenuName}</a>";
-			//menuString += "</li>";
+            //menuString += "<li>";
+            //menuString += $"<a class=\"nav-link\" href=\"{root.MenuURL}\">{root.MenuName}</a>";
+            //menuString += "</li>";
 
-			return root;
-		}
+            return root;
+        }
 
-		private void AddMenuItemsLevelOne(ref string menuString, List<Menu> menuHierarchy, Menu menu, List<Menu> listMenu, List<int> userPermitIds)
-		{
-			List<Menu> listLevelOneMenu = menuHierarchy.Where(c => c.ParentMenuId.Equals(menu.MenuId)).OrderBy(c => c.OrderNumber).ToList();
+        private void AddMenuItemsLevelOne(ref string menuString, List<Menu> menuHierarchy, Menu menu, List<Menu> listMenu, List<int> userPermitIds)
+        {
+            List<Menu> listLevelOneMenu = menuHierarchy.Where(c => c.ParentMenuId.Equals(menu.MenuId)).OrderBy(c => c.OrderNumber).ToList();
 
-			if (listLevelOneMenu.Count > 0)
-			{
-				foreach (Menu itemMenu in listLevelOneMenu)
-				{
-					bool foundLevelOneItem = false;
+            if (listLevelOneMenu.Count > 0)
+            {
+                foreach (Menu itemMenu in listLevelOneMenu)
+                {
+                    bool foundLevelOneItem = false;
 
-					foreach (Menu itemMenu22 in listMenu)
-					{
-						if (itemMenu22.TreePath.ToUpper().StartsWith(itemMenu.TreePath.ToUpper()))
-						{
-							foundLevelOneItem = true;
-							break;
-						}
-					}
+                    foreach (Menu itemMenu22 in listMenu)
+                    {
+                        if (itemMenu22.TreePath.ToUpper().StartsWith(itemMenu.TreePath.ToUpper()))
+                        {
+                            foundLevelOneItem = true;
+                            break;
+                        }
+                    }
 
-					if (foundLevelOneItem)
-					{
-						List<Menu> listLevelTwoMenu = menuHierarchy.Where(c => c.ParentMenuId.Equals(itemMenu.MenuId)).OrderBy(c => c.OrderNumber).ToList();
+                    if (foundLevelOneItem)
+                    {
+                        List<Menu> listLevelTwoMenu = menuHierarchy.Where(c => c.ParentMenuId.Equals(itemMenu.MenuId)).OrderBy(c => c.OrderNumber).ToList();
 
-						if (listLevelTwoMenu.Count > 0)
-						{
-							menuString += "<li class=\"dropdown\">";
-							menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName} <i class=\"fa fa-angle-down\"></i></a>";
+                        if (listLevelTwoMenu.Count > 0)
+                        {
+                            menuString += "<li class=\"dropdown\">";
+                            menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName} <i class=\"fa fa-angle-down\"></i></a>";
 
-							AddMenuItemsLevelTwo(ref menuString, menuHierarchy, itemMenu, listMenu, userPermitIds);
+                            AddMenuItemsLevelTwo(ref menuString, menuHierarchy, itemMenu, listMenu, userPermitIds);
 
-							menuString += "</li>";
-						}
-						else
-						{
-							menuString += "<li>";
-							menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName}</a>";
-							menuString += "</li>";
-						}
-					}
-				}
+                            menuString += "</li>";
+                        }
+                        else
+                        {
+                            menuString += "<li>";
+                            menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName}</a>";
+                            menuString += "</li>";
+                        }
+                    }
+                }
 
-			}
-		}
+            }
+        }
 
-		private void AddMenuItemsLevelTwo(ref string menuString, List<Menu> menuHierarchy, Menu menu, List<Menu> listMenu, List<int> userPermitIds)
-		{
-			List<Menu> listLevelTwoMenu = menuHierarchy.Where(c => c.ParentMenuId.Equals(menu.MenuId)).OrderBy(c => c.OrderNumber).ToList();
+        private void AddMenuItemsLevelTwo(ref string menuString, List<Menu> menuHierarchy, Menu menu, List<Menu> listMenu, List<int> userPermitIds)
+        {
+            List<Menu> listLevelTwoMenu = menuHierarchy.Where(c => c.ParentMenuId.Equals(menu.MenuId)).OrderBy(c => c.OrderNumber).ToList();
 
-			if (listLevelTwoMenu.Count > 0)
-			{
-				menuString += "<ul>";
+            if (listLevelTwoMenu.Count > 0)
+            {
+                menuString += "<ul>";
 
-				foreach (Menu itemMenu in listLevelTwoMenu)
-				{
-					bool foundLevelTwoItem = false;
+                foreach (Menu itemMenu in listLevelTwoMenu)
+                {
+                    bool foundLevelTwoItem = false;
 
-					foreach (Menu itemMenu22 in listMenu)
-					{
-						if (itemMenu22.TreePath.ToUpper().StartsWith(itemMenu.TreePath.ToUpper()))
-						{
-							foundLevelTwoItem = true;
-							break;
-						}
-					}
+                    foreach (Menu itemMenu22 in listMenu)
+                    {
+                        if (itemMenu22.TreePath.ToUpper().StartsWith(itemMenu.TreePath.ToUpper()))
+                        {
+                            foundLevelTwoItem = true;
+                            break;
+                        }
+                    }
 
-					if (foundLevelTwoItem)
-					{
-						List<Menu> listLevelThreeMenu = menuHierarchy.Where(c => c.ParentMenuId.Equals(itemMenu.MenuId)).OrderBy(c => c.OrderNumber).ToList();
+                    if (foundLevelTwoItem)
+                    {
+                        List<Menu> listLevelThreeMenu = menuHierarchy.Where(c => c.ParentMenuId.Equals(itemMenu.MenuId)).OrderBy(c => c.OrderNumber).ToList();
 
-						if (listLevelThreeMenu.Count > 0)
-						{
-							menuString += "<li class=\"dropdown\">";
-							menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName} <i class=\"fa fa-angle-right\"></i></a>";
+                        if (listLevelThreeMenu.Count > 0)
+                        {
+                            menuString += "<li class=\"dropdown\">";
+                            menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName} <i class=\"fa fa-angle-right\"></i></a>";
 
-							AddMenuItemsLevelThree(ref menuString, menuHierarchy, itemMenu, listMenu, userPermitIds);
+                            AddMenuItemsLevelThree(ref menuString, menuHierarchy, itemMenu, listMenu, userPermitIds);
 
-							menuString += "</li>";
-						}
-						else
-						{
-							menuString += "<li>";
-							menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName}</a>";
-							menuString += "</li>";
-						}
-					}
-				}
+                            menuString += "</li>";
+                        }
+                        else
+                        {
+                            menuString += "<li>";
+                            menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName}</a>";
+                            menuString += "</li>";
+                        }
+                    }
+                }
 
-				menuString += "</ul>";
-			}
-		}
+                menuString += "</ul>";
+            }
+        }
 
-		private void AddMenuItemsLevelThree(ref string menuString, List<Menu> menuHierarchy, Menu menu, List<Menu> listMenu, List<int> userPermitIds)
-		{
-			List<Menu> listLevelThreeMenu = menuHierarchy.Where(c => c.ParentMenuId.Equals(menu.MenuId)).OrderBy(c => c.OrderNumber).ToList();
+        private void AddMenuItemsLevelThree(ref string menuString, List<Menu> menuHierarchy, Menu menu, List<Menu> listMenu, List<int> userPermitIds)
+        {
+            List<Menu> listLevelThreeMenu = menuHierarchy.Where(c => c.ParentMenuId.Equals(menu.MenuId)).OrderBy(c => c.OrderNumber).ToList();
 
-			if (listLevelThreeMenu.Count > 0)
-			{
-				menuString += "<ul>";
+            if (listLevelThreeMenu.Count > 0)
+            {
+                menuString += "<ul>";
 
-				foreach (Menu itemMenu in listLevelThreeMenu)
-				{
-					bool foundLevelThreeItem = false;
+                foreach (Menu itemMenu in listLevelThreeMenu)
+                {
+                    bool foundLevelThreeItem = false;
 
-					foreach (Menu itemMenu22 in listMenu)
-					{
-						if (itemMenu22.TreePath.ToUpper().StartsWith(itemMenu.TreePath.ToUpper()))
-						{
-							foundLevelThreeItem = true;
-							break;
-						}
-					}					
-					
-					if (foundLevelThreeItem)
-					{							
-						menuString += "<li>";
-						menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName}</a>";
-						menuString += "</li>";
-					}
-				}
+                    foreach (Menu itemMenu22 in listMenu)
+                    {
+                        if (itemMenu22.TreePath.ToUpper().StartsWith(itemMenu.TreePath.ToUpper()))
+                        {
+                            foundLevelThreeItem = true;
+                            break;
+                        }
+                    }
 
-				menuString += "</ul>";
-			}
-		}
-	}
+                    if (foundLevelThreeItem)
+                    {
+                        menuString += "<li>";
+                        menuString += $"<a class=\"nav-link\" href=\"{itemMenu.MenuURL}\">{itemMenu.MenuName}</a>";
+                        menuString += "</li>";
+                    }
+                }
 
-	public interface ICoreService
-	{
-		IConfiguration GetConfiguration();
-		ICacheService GetCacheService();
-		ICacheKeyService GetCacheKeyService();
-		IErrorService GetErrorService();
-		IPortalService GetPortalService();
-		ILoginService GetLoginService();
-		IUserService GetUserService();
-		IUserRoleService GetUserRoleService();
-		IRolePermitService GetRolePermitService();		
-		IMenuService GetMenuService();
-		IMenuPermitService GetMenuPermitService();
-		List<int> GetUserRoleIds(int userId);
-		List<int> GetUserPermitIds(List<int> userRoleIds);
-		List<int> GetPermitRoles(int permitId);
-		List<Menu> GetBreadcrumbList(int menuId, string currController);
-		List<Menu> GetMenuHierarchy(string statusFlag, string orderBy);
-		string GetMenuString(List<int> userPermitIds, List<Menu> menuHierarchy);		
-	}
+                menuString += "</ul>";
+            }
+        }
+    }
+
+    public interface ICoreService
+    {
+        IConfiguration GetConfiguration();
+        ICacheService GetCacheService();
+        ICacheKeyService GetCacheKeyService();
+        IErrorService GetErrorService();
+        IPortalService GetPortalService();
+        ILoginService GetLoginService();
+        IUserService GetUserService();
+        IUserRoleService GetUserRoleService();
+        IRolePermitService GetRolePermitService();
+        IMenuService GetMenuService();
+        IMenuPermitService GetMenuPermitService();
+        List<int> GetUserRoleIds(int userId);
+        List<int> GetUserPermitIds(List<int> userRoleIds);
+        List<int> GetPermitRoles(int permitId);
+        List<Menu> GetBreadcrumbList(int menuId, string currController);
+        List<Menu> GetMenuHierarchy(string statusFlag, string orderBy);
+        string GetMenuString(List<int> userPermitIds, List<Menu> menuHierarchy);
+    }
 }

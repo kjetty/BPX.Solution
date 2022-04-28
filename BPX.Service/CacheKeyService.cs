@@ -7,7 +7,7 @@ using X.PagedList;
 
 namespace BPX.Service
 {
-	public class CacheKeyService : ICacheKeyService
+    public class CacheKeyService : ICacheKeyService
     {
         public CacheKeyRepository CacheKeyRepository;
 
@@ -49,11 +49,11 @@ namespace BPX.Service
             CacheKeyRepository.UpdateRecord(entity);
         }
 
-		public void SaveDBChanges()
-		{
+        public void SaveDBChanges()
+        {
             CacheKeyRepository.SaveDBChanges();
         }
-	}
+    }
 
     public interface ICacheKeyService : IGenericService<CacheKey>
     {

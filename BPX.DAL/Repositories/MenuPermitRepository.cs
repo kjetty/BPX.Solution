@@ -8,7 +8,7 @@ using X.PagedList;
 
 namespace BPX.DAL.Repositories
 {
-	public class MenuPermitRepository : BaseRepository, IMenuPermitRepository
+    public class MenuPermitRepository : BaseRepository, IMenuPermitRepository
     {
         public MenuPermitRepository(EFContext efContext, DPContext dpContext) : base(efContext, dpContext)
         {

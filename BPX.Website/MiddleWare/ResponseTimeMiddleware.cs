@@ -7,37 +7,38 @@ using System.Threading.Tasks;
 
 namespace BPX.Website.MiddleWare
 {
-	public class ResponseTimeMiddleware
-	{
-		// name of the Response Header, Custom Headers starts with "X-"  
-		private const string RESPONSE_HEADER_RESPONSE_TIME = "x-response-time";
+    public class ResponseTimeMiddleware
+    {
+        // name of the Response Header, Custom Headers starts with "X-"  
+        private const string RESPONSE_HEADER_RESPONSE_TIME = "x-response-time";
 
-		// handle to the next Middleware in the pipeline  
-		private readonly RequestDelegate _next;
+        // handle to the next Middleware in the pipeline  
+        private readonly RequestDelegate _next;
 
-		public ResponseTimeMiddleware(RequestDelegate next)
-		{
-			_next = next;
-		}
+        public ResponseTimeMiddleware(RequestDelegate next)
+        {
+            _next = next;
+        }
 
-		public Task InvokeAsync(HttpContext context, ICoreService coreService)
-		{
+        public Task InvokeAsync(HttpContext context, ICoreService coreService)
+        {
             Stopwatch watch = new Stopwatch();
-			watch.Start();
+            watch.Start();
 
-			context.Response.OnStarting(() => {
-				watch.Stop();
+            context.Response.OnStarting(() =>
+            {
+                watch.Stop();
 
                 long elapsedTime = watch.ElapsedMilliseconds;
 
-				// add the Response time information in the Response headers.   
-				context.Response.Headers[RESPONSE_HEADER_RESPONSE_TIME] = elapsedTime.ToString();
+                // add the Response time information in the Response headers.   
+                context.Response.Headers[RESPONSE_HEADER_RESPONSE_TIME] = elapsedTime.ToString();
 
-				return Task.CompletedTask;
-			});
+                return Task.CompletedTask;
+            });
 
-			// call the next delegate/middleware in the pipeline   
-			return this._next(context);
-		}
-	}
+            // call the next delegate/middleware in the pipeline   
+            return this._next(context);
+        }
+    }
 }

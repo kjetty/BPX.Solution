@@ -10,7 +10,7 @@ using X.PagedList;
 
 namespace BPX.DAL.Repositories
 {
-	public class PortalRepository : BaseRepository, IPortalRepository
+    public class PortalRepository : BaseRepository, IPortalRepository
     {
         public PortalRepository(EFContext efContext, DPContext dpContext) : base(efContext, dpContext)
         {
@@ -46,7 +46,7 @@ namespace BPX.DAL.Repositories
         public int UpdateRecordDapper(Portal entity)
         {
             string dynQuery = "update Portals set  PToken = @PToken, LastAccessTime = @LastAccessTime where PortalUUId = @PortalUUId";
-           
+
             DynamicParameters dynParams = new();
             dynParams.Add("PToken", entity.PToken);
             dynParams.Add("LastAccessTime", entity.LastAccessTime);
@@ -57,13 +57,13 @@ namespace BPX.DAL.Repositories
 
             //new ErrorRepository(efContext, dpContext).InsertRecordDapper(new Error { ErrorData = $"{ex.Message} {ex.StackTrace}" });
 
-            return affectedRows;    
+            return affectedRows;
         }
 
         public Portal GetPortalByToken(string pToken)
         {
             string dynQuery = "select * from Portals where PToken = @PToken";
-            
+
             DynamicParameters dynParams = new();
             dynParams.Add("PToken", pToken);
 

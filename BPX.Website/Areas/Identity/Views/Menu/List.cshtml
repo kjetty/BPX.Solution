@@ -3,132 +3,132 @@
 @using BPX.Website.CustomCode.Authorize;
 
 @{
-	ViewData["Title"] = "Menu Hierarchy";
+    ViewData["Title"] = "Menu Hierarchy";
 }
 
 <div class="row">
-	<div class="col-md-12">
-		<h5>@ViewBag.Title</h5>
-	</div>
+    <div class="col-md-12">
+        <h5>@ViewBag.Title</h5>
+    </div>
 </div>
 
 <p></p>
 <hr />
 
 <div class="row">
-	<div class="col-md-12">
-		<table class="table table-sm table-striped table-hover border-bottom table-bordered">
-			<thead>
-				<tr>
-					<th>
-						Name
-					</th>
-					<th>
-						URL
-					</th>
-					<th>
-						Order
-					</th>
-					<th>
-						@Html.DisplayNameFor(model => model.TreePath)
-					</th>
-					<th style="width:230px;">
-						Action
-					</th>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach (var item in Model)
-				{
-					<tr>
-						<td>
-							@{
-								for (int i = 2; i <= item.HLevel - 1; i++)
-								{
-									@Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-								}
+    <div class="col-md-12">
+        <table class="table table-sm table-striped table-hover border-bottom table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        URL
+                    </th>
+                    <th>
+                        Order
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TreePath)
+                    </th>
+                    <th style="width:230px;">
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @{
+                                for (int i = 2; i <= item.HLevel - 1; i++)
+                                {
+                                    @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+                                }
 
-								if (item.ParentMenuId.Equals(0))
-								{
-									<span class="bi-house-fill" style="color: darkslategrey;">&nbsp;</span>
-								}
-							}
+                                if (item.ParentMenuId.Equals(0))
+                                {
+                                    <span class="bi-house-fill" style="color: darkslategrey;">&nbsp;</span>
+                                }
+                            }
 
-							@Html.DisplayFor(modelItem => item.MenuName)
-						</td>
-						<td>
-							@Html.DisplayFor(modelItem => item.MenuURL)
-						</td>
-						<td>
-							@Html.DisplayFor(modelItem => item.OrderNumber)
-						</td>
-						<td>
-							@Html.DisplayFor(modelItem => item.TreePath)
-						</td>
-						<td style="padding-left: 1em;">
-							@{
-								if (item.ParentMenuId.Equals(0))
-								{
-									@Html.Raw(" -- root menu element --")
-								}
-								else
-								{
-									@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.Create))
-									{
+                            @Html.DisplayFor(modelItem => item.MenuName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MenuURL)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrderNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TreePath)
+                        </td>
+                        <td style="padding-left: 1em;">
+                            @{
+                                if (item.ParentMenuId.Equals(0))
+                                {
+                                    @Html.Raw(" -- root menu element --")
+                                }
+                                else
+                                {
+                                    @if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.Create))
+                                    {
 
-										if (item.HLevel >= 4)
-										{
-											<span class="bi-x"></span> @Html.Raw("&nbsp;&nbsp;&nbsp;")
-										}
-										else
-										{
-											<a asp-action="Create" asp-route-id="@item.MenuId" title="create" class="bi-plus-circle" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw(" &nbsp;&nbsp;&nbsp;")
-										}
-									}
-									@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.Read))
-									{
-										<a asp-action="Read" asp-route-id="@item.MenuId" title="read" class="bi-search" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
-									}
-									@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.Update))
-									{
-										<a asp-action="Update" asp-route-id="@item.MenuId" title="update" class="bi-pencil" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
-									}
-									@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.Delete))
-									{
-										<a asp-action="Delete" asp-route-id="@item.MenuId" title="delete" class="bi-trash" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-									}
-									@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.MenuPermits))
-									{
-										if (item.HLevel <= 2)
-										{
-											<span class="bi-x"></span> @Html.Raw("&nbsp;&nbsp;&nbsp;")
-										}
-										else
-										{
-											<a asp-action="MenuPermits" asp-route-id="@item.MenuId" title="menu permits" class="far fa-address-card" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
-										}
-									}
-								}
-							}
-						</td>
-					</tr>
-				}
-			</tbody>
-		</table>
-	</div>
+                                        if (item.HLevel >= 4)
+                                        {
+                                            <span class="bi-x"></span> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="Create" asp-route-id="@item.MenuId" title="create" class="bi-plus-circle" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw(" &nbsp;&nbsp;&nbsp;")
+                                        }
+                                    }
+                                    @if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.Read))
+                                    {
+                                        <a asp-action="Read" asp-route-id="@item.MenuId" title="read" class="bi-search" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+                                    }
+                                    @if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.Update))
+                                    {
+                                        <a asp-action="Update" asp-route-id="@item.MenuId" title="update" class="bi-pencil" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+                                    }
+                                    @if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.Delete))
+                                    {
+                                        <a asp-action="Delete" asp-route-id="@item.MenuId" title="delete" class="bi-trash" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+                                    }
+                                    @if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.MenuPermits))
+                                    {
+                                        if (item.HLevel <= 2)
+                                        {
+                                            <span class="bi-x"></span> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="MenuPermits" asp-route-id="@item.MenuId" title="menu permits" class="far fa-address-card" style="text-decoration: none; color: darkslategray;"></a> @Html.Raw("&nbsp;&nbsp;&nbsp;")
+                                        }
+                                    }
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <p></p>
 
 <div class="row">
-	<div class="col-md-12">
-		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.ListDeleted))
-		{
-			<a asp-action="ListDeleted">View deleted records</a>
-		}
-		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.TreePath))
-		{
-			@Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;") <a asp-action="TreePath">Update TreePath</a>
-		}
-	</div>
+    <div class="col-md-12">
+        @if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.ListDeleted))
+        {
+            <a asp-action="ListDeleted">View deleted records</a>
+        }
+        @if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.TreePath))
+        {
+            @Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;") <a asp-action="TreePath">Update TreePath</a>
+        }
+    </div>
 </div>

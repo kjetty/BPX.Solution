@@ -11,7 +11,7 @@ using X.PagedList;
 
 namespace BPX.DAL.Repositories
 {
-	public class LoginRepository : BaseRepository, ILoginRepository
+    public class LoginRepository : BaseRepository, ILoginRepository
     {
         public LoginRepository(EFContext efContext, DPContext dpContext) : base(efContext, dpContext)
         {

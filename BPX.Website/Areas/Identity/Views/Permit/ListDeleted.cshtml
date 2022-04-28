@@ -6,297 +6,297 @@
 @using X.PagedList.Web.Common;
 
 @{
-	ViewBag.Title = "List of deleted Permits";
-	ViewBag.pageNumber = (ViewBag.pageNumber ?? 1);
-	ViewBag.pageSize = (ViewBag.pageSize ?? 10);
-	ViewBag.statusFlag = (ViewBag.statusFlag ?? string.Empty);
-	ViewBag.sortByColumn = (ViewBag.sortByColumn ?? string.Empty);
-	ViewBag.sortOrder = (ViewBag.sortOrder ?? string.Empty);
-	ViewBag.searchForString = (ViewBag.searchForString ?? string.Empty);
-	ViewBag.filterJson = (ViewBag.filterJson ?? string.Empty);
+    ViewBag.Title = "List of deleted Permits";
+    ViewBag.pageNumber = (ViewBag.pageNumber ?? 1);
+    ViewBag.pageSize = (ViewBag.pageSize ?? 10);
+    ViewBag.statusFlag = (ViewBag.statusFlag ?? string.Empty);
+    ViewBag.sortByColumn = (ViewBag.sortByColumn ?? string.Empty);
+    ViewBag.sortOrder = (ViewBag.sortOrder ?? string.Empty);
+    ViewBag.searchForString = (ViewBag.searchForString ?? string.Empty);
+    ViewBag.filterJson = (ViewBag.filterJson ?? string.Empty);
 
-	// local variables
-	var localSortOrder = "";
-	var localSortIcon = "";
+    // local variables
+    var localSortOrder = "";
+    var localSortIcon = "";
 }
 
 <div class="row">
-	<div class="col-md-12">
-		<h5>@ViewBag.Title</h5>
-	</div>
+    <div class="col-md-12">
+        <h5>@ViewBag.Title</h5>
+    </div>
 </div>
 
 <p></p>
 <hr />
 
 <div class="row">
-	<div class="col-md-9">
-	</div>
-	<div class="col-md-3">
-		<div class="input-group">
-			@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.Filter))
-			{
-				<input id="searchInput" name="searchInput" type="text" class="form-control" placeholder="Search data" value="@ViewBag.searchForString">
-				<div class="input-group-append">
-					<button id="searchBtn" class="btn btn-primary" type="button">
-						<i class="bi-funnel"></i>
-					</button>
-				</div>
-			}
-		</div>
-	</div>
+    <div class="col-md-9">
+    </div>
+    <div class="col-md-3">
+        <div class="input-group">
+            @if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.Filter))
+            {
+                <input id="searchInput" name="searchInput" type="text" class="form-control" placeholder="Search data" value="@ViewBag.searchForString">
+                <div class="input-group-append">
+                    <button id="searchBtn" class="btn btn-primary" type="button">
+                        <i class="bi-funnel"></i>
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
 </div>
 
 <p></p>
 
 <div class="row" style="min-height: 398px;">
-	<div class="col-12">
-		<table class="table table-sm table-striped table-hover border-bottom table-bordered">
-			<thead>
-				<tr>
-					@{
-						localSortOrder = "";
-						localSortIcon = "fa-sort";
+    <div class="col-12">
+        <table class="table table-sm table-striped table-hover border-bottom table-bordered">
+            <thead>
+                <tr>
+                    @{
+                        localSortOrder = "";
+                        localSortIcon = "fa-sort";
 
-						if (ViewBag.sortByColumn.Equals("PermitId"))
-						{
-							localSortOrder = ViewBag.sortOrder;
+                        if (ViewBag.sortByColumn.Equals("PermitId"))
+                        {
+                            localSortOrder = ViewBag.sortOrder;
 
-							if (localSortOrder.ToUpper().Equals(SortOrder.Ascending.ToUpper()))
-								localSortIcon += "-" + "up";
-							if (localSortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper()))
-								localSortIcon += "-" + "down";
-						}
-					}
-					<th class="text-center" style="width:75px;">Id <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="PermitId" sortOrder="@localSortOrder"></span></th>
-					@{
-						localSortOrder = "";
-						localSortIcon = "fa-sort";
+                            if (localSortOrder.ToUpper().Equals(SortOrder.Ascending.ToUpper()))
+                                localSortIcon += "-" + "up";
+                            if (localSortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper()))
+                                localSortIcon += "-" + "down";
+                        }
+                    }
+                    <th class="text-center" style="width:75px;">Id <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="PermitId" sortOrder="@localSortOrder"></span></th>
+                    @{
+                        localSortOrder = "";
+                        localSortIcon = "fa-sort";
 
-						if (ViewBag.sortByColumn.Equals("PermitArea"))
-						{
-							localSortOrder = ViewBag.sortOrder;
+                        if (ViewBag.sortByColumn.Equals("PermitArea"))
+                        {
+                            localSortOrder = ViewBag.sortOrder;
 
-							if (localSortOrder.ToUpper().Equals(SortOrder.Ascending.ToUpper()))
-								localSortIcon += "-" + "up";
-							if (localSortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper()))
-								localSortIcon += "-" + "down";
-						}
-					}
-					<th style="width:175px;">Permit Area <span class="fa @localSortIcon sortBtn" style="float: right; margin-top:5px;" sortByColumn="PermitArea" sortOrder="@localSortOrder"></span></th>
-					@{
-						localSortOrder = "";
-						localSortIcon = "fa-sort";
+                            if (localSortOrder.ToUpper().Equals(SortOrder.Ascending.ToUpper()))
+                                localSortIcon += "-" + "up";
+                            if (localSortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper()))
+                                localSortIcon += "-" + "down";
+                        }
+                    }
+                    <th style="width:175px;">Permit Area <span class="fa @localSortIcon sortBtn" style="float: right; margin-top:5px;" sortByColumn="PermitArea" sortOrder="@localSortOrder"></span></th>
+                    @{
+                        localSortOrder = "";
+                        localSortIcon = "fa-sort";
 
-						if (ViewBag.sortByColumn.Equals("PermitController"))
-						{
-							localSortOrder = ViewBag.sortOrder;
+                        if (ViewBag.sortByColumn.Equals("PermitController"))
+                        {
+                            localSortOrder = ViewBag.sortOrder;
 
-							if (localSortOrder.ToUpper().Equals(SortOrder.Ascending.ToUpper()))
-								localSortIcon += "-" + "up";
-							if (localSortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper()))
-								localSortIcon += "-" + "down";
-						}
-					}
-					<th style="width:175px;">Permit Controller <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="PermitController" sortOrder="@localSortOrder"></span></th>
-					@{
-						localSortOrder = "";
-						localSortIcon = "fa-sort";
+                            if (localSortOrder.ToUpper().Equals(SortOrder.Ascending.ToUpper()))
+                                localSortIcon += "-" + "up";
+                            if (localSortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper()))
+                                localSortIcon += "-" + "down";
+                        }
+                    }
+                    <th style="width:175px;">Permit Controller <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="PermitController" sortOrder="@localSortOrder"></span></th>
+                    @{
+                        localSortOrder = "";
+                        localSortIcon = "fa-sort";
 
-						if (ViewBag.sortByColumn.Equals("PermitName"))
-						{
-							localSortOrder = ViewBag.sortOrder;
+                        if (ViewBag.sortByColumn.Equals("PermitName"))
+                        {
+                            localSortOrder = ViewBag.sortOrder;
 
-							if (localSortOrder.ToUpper().Equals(SortOrder.Ascending.ToUpper()))
-								localSortIcon += "-" + "up";
-							if (localSortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper()))
-								localSortIcon += "-" + "down";
-						}
-					}
-					<th style="width:175px;">Permit Name <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="PermitName" sortOrder="@localSortOrder"></span></th>
-					@{
-						localSortOrder = "";
-						localSortIcon = "fa-sort";
+                            if (localSortOrder.ToUpper().Equals(SortOrder.Ascending.ToUpper()))
+                                localSortIcon += "-" + "up";
+                            if (localSortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper()))
+                                localSortIcon += "-" + "down";
+                        }
+                    }
+                    <th style="width:175px;">Permit Name <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="PermitName" sortOrder="@localSortOrder"></span></th>
+                    @{
+                        localSortOrder = "";
+                        localSortIcon = "fa-sort";
 
-						if (ViewBag.sortByColumn.Equals("PermitEnum"))
-						{
-							localSortOrder = ViewBag.sortOrder;
+                        if (ViewBag.sortByColumn.Equals("PermitEnum"))
+                        {
+                            localSortOrder = ViewBag.sortOrder;
 
-							if (localSortOrder.ToUpper().Equals(SortOrder.Ascending.ToUpper()))
-								localSortIcon += "-" + "up";
-							if (localSortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper()))
-								localSortIcon += "-" + "down";
-						}
-					}
-					<th style="width:175px;">Permit Enumerator <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="PermitEnum" sortOrder="@localSortOrder"></span></th>
-					<th class="text-center" style="width:125px;">Action</th>
-				</tr>
-			</thead>
-			<tbody>
-				@if (Model.Count.Equals(0))
-				{
-					<tr>
-						<td colspan="6">
-							No matching records found.
-						</td>
-					</tr>
-				}
+                            if (localSortOrder.ToUpper().Equals(SortOrder.Ascending.ToUpper()))
+                                localSortIcon += "-" + "up";
+                            if (localSortOrder.ToUpper().Equals(SortOrder.Descending.ToUpper()))
+                                localSortIcon += "-" + "down";
+                        }
+                    }
+                    <th style="width:175px;">Permit Enumerator <span class="fa @localSortIcon sortBtn" style="float: right; margin-top: 5px;" sortByColumn="PermitEnum" sortOrder="@localSortOrder"></span></th>
+                    <th class="text-center" style="width:125px;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count.Equals(0))
+                {
+                    <tr>
+                        <td colspan="6">
+                            No matching records found.
+                        </td>
+                    </tr>
+                }
 
-				@if (Model.Count > 0)
-				{
-					foreach (var item in Model)
-					{
-						<tr>
-							<td class="text-center">
-								@Html.DisplayFor(modelItem => item.PermitId)
-							</td>
-							<td>
-								@Html.DisplayFor(modelItem => item.PermitArea)
-							</td>
-							<td>
-								@Html.DisplayFor(modelItem => item.PermitController)
-							</td>
-							<td>
-								@Html.DisplayFor(modelItem => item.PermitName)
-							</td>
-							<td>
-								@Html.DisplayFor(modelItem => item.PermitEnum)
-							</td>
-							<td class="text-center">
-								@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.Undelete))
-								{
-									<a asp-action="Undelete" asp-route-id="@item.PermitId" title="restore" class="bi-plug" style="text-decoration: none; color: darkslategray;"></a>
-								}
-							</td>
-						</tr>
-					}
-				}
-			</tbody>
-		</table>
-	</div>
+                @if (Model.Count > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="text-center">
+                                @Html.DisplayFor(modelItem => item.PermitId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PermitArea)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PermitController)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PermitName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PermitEnum)
+                            </td>
+                            <td class="text-center">
+                                @if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.Undelete))
+                                {
+                                    <a asp-action="Undelete" asp-route-id="@item.PermitId" title="restore" class="bi-plug" style="text-decoration: none; color: darkslategray;"></a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <div class="row">
-	<div class="col-md-4">
-		Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-		&nbsp; | &nbsp;
-		Show
-		<select id="pageSizeInput">
-			<option value="10" selected="@(ViewBag.pageSize.Equals(10))">10</option>
-			<option value="25" selected="@(ViewBag.pageSize.Equals(25))">25</option>
-			<option value="50" selected="@(ViewBag.pageSize.Equals(50))">50</option>
-			<option value="100" selected="@(ViewBag.pageSize.Equals(100))">100</option>
-		</select>
-		Entries
-		<p></p>
-		@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.List))
-		{
-			<a asp-action="List">Back to List</a>
-		}
-	</div>
-	<div class="col-md-8 text-right" style="margin-top: -1.2rem;">
-		@Html.PagedListPager(Model, page => Url.Action("List", new { page = page }), PagedListRenderOptions.ClassicPlusFirstAndLast)
-	</div>
+    <div class="col-md-4">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        &nbsp; | &nbsp;
+        Show
+        <select id="pageSizeInput">
+            <option value="10" selected="@(ViewBag.pageSize.Equals(10))">10</option>
+            <option value="25" selected="@(ViewBag.pageSize.Equals(25))">25</option>
+            <option value="50" selected="@(ViewBag.pageSize.Equals(50))">50</option>
+            <option value="100" selected="@(ViewBag.pageSize.Equals(100))">100</option>
+        </select>
+        Entries
+        <p></p>
+        @if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.List))
+        {
+            <a asp-action="List">Back to List</a>
+        }
+    </div>
+    <div class="col-md-8 text-right" style="margin-top: -1.2rem;">
+        @Html.PagedListPager(Model, page => Url.Action("List", new { page = page }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+    </div>
 </div>
 
 <div>
-	<form id="formForPaging" asp-action="ListDeleted" method="post">
-		<input type="hidden" id="pageNumber" name="pageNumber" value="1" />
-		<input type="hidden" id="pageSize" name="pageSize" value="10" />
-		<input type="hidden" id="statusFlag" name="statusFlag" value="" />
-		<input type="hidden" id="sortByColumn" name="sortByColumn" value="" />
-		<input type="hidden" id="sortOrder" name="sortOrder" value="" />
-		<input type="hidden" id="searchForString" name="searchForString" value="" />
-		<input type="hidden" id="filterJson" name="filterJson" value="" />
-	</form>
+    <form id="formForPaging" asp-action="ListDeleted" method="post">
+        <input type="hidden" id="pageNumber" name="pageNumber" value="1" />
+        <input type="hidden" id="pageSize" name="pageSize" value="10" />
+        <input type="hidden" id="statusFlag" name="statusFlag" value="" />
+        <input type="hidden" id="sortByColumn" name="sortByColumn" value="" />
+        <input type="hidden" id="sortOrder" name="sortOrder" value="" />
+        <input type="hidden" id="searchForString" name="searchForString" value="" />
+        <input type="hidden" id="filterJson" name="filterJson" value="" />
+    </form>
 </div>
 
 @section ScriptsAtBottom
 {
-	<script type="text/javascript">
-        var pageNumber = @ViewBag.pageNumber;
-		var pageSize = @ViewBag.pageSize;
-        var statusFlag = "@ViewBag.statusFlag";
-		var sortByColumn = "@ViewBag.sortByColumn";
-		var sortOrder = "@ViewBag.sortOrder";
-		var searchForString = "@ViewBag.searchForString";
-		var filterJson = "@ViewBag.filterJson";
-		
-		$(document).ready(function () {
-			// on pagedList click. Intercept the default GET ?page=x action and instead perform POST
-            $(".pagination-container a").click(function (e) {
-                if (this.href.split("page=")[1] != undefined) {
-					e.preventDefault();
-                    pageNumber = this.href.split("page=")[1];
+<script type="text/javascript">
+    var pageNumber = @ViewBag.pageNumber;
+    var pageSize = @ViewBag.pageSize;
+    var statusFlag = "@ViewBag.statusFlag";
+    var sortByColumn = "@ViewBag.sortByColumn";
+    var sortOrder = "@ViewBag.sortOrder";
+    var searchForString = "@ViewBag.searchForString";
+    var filterJson = "@ViewBag.filterJson";
 
-					submitFormForPaging();
-				}
-			});
+    $(document).ready(function () {
+        // on pagedList click. Intercept the default GET ?page=x action and instead perform POST
+        $(".pagination-container a").click(function (e) {
+            if (this.href.split("page=")[1] != undefined) {
+                e.preventDefault();
+                pageNumber = this.href.split("page=")[1];
 
-			// on pageSize change
-			$("#pageSizeInput").change(function() {
+                submitFormForPaging();
+            }
+        });
+
+        // on pageSize change
+        $("#pageSizeInput").change(function() {
+            pageNumber = 1;
+            pageSize = this.value;
+
+            submitFormForPaging();
+        });
+
+        // on enter in searchInput
+        $("#searchInput").keypress(function (e) {
+            if (e.which == 13) {
                 pageNumber = 1;
-                pageSize = this.value;
-
-				submitFormForPaging();
-			});
-
-			// on enter in searchInput
-			$("#searchInput").keypress(function (e) {
-				if (e.which == 13) {
-					pageNumber = 1;
-					sortByColumn = "";
-					sortOrder = "";
-					searchForString = $("#searchInput").val();
-
-					submitFormForPaging();
-				}
-			});
-
-			// on search button click
-			$("#searchBtn").click(function () {
-				pageNumber = 1;
-				sortByColumn = "";
-				sortOrder = "";
+                sortByColumn = "";
+                sortOrder = "";
                 searchForString = $("#searchInput").val();
 
-				submitFormForPaging();
-			});
+                submitFormForPaging();
+            }
+        });
 
-			// on sort button clicks in sortable columns
-			$(".sortBtn").click(function () {
-                sortByColumn = $(this).attr("sortByColumn");
-                var tempSortOrder = $(this).attr("sortOrder");
+        // on search button click
+        $("#searchBtn").click(function () {
+            pageNumber = 1;
+            sortByColumn = "";
+            sortOrder = "";
+            searchForString = $("#searchInput").val();
 
-				if ($(this).attr("sortOrder").length == 0) {
-					sortOrder = "asc";
-				}
-				else {
-					if ($(this).attr("sortOrder").toLowerCase() == "desc") {
-						sortOrder = "asc";
-					}
-					else {
-						sortOrder = "desc";
-					}
+            submitFormForPaging();
+        });
+
+        // on sort button clicks in sortable columns
+        $(".sortBtn").click(function () {
+            sortByColumn = $(this).attr("sortByColumn");
+            var tempSortOrder = $(this).attr("sortOrder");
+
+            if ($(this).attr("sortOrder").length == 0) {
+                sortOrder = "asc";
+            }
+            else {
+                if ($(this).attr("sortOrder").toLowerCase() == "desc") {
+                    sortOrder = "asc";
                 }
+                else {
+                    sortOrder = "desc";
+                }
+            }
 
-				$(this).attr("sortOrder", sortOrder)
+            $(this).attr("sortOrder", sortOrder)
 
-				submitFormForPaging();
-			});
-		});
+            submitFormForPaging();
+        });
+    });
 
-		// submit form for paging
-		function submitFormForPaging() {
-            $("#pageNumber").val(pageNumber);
-            $("#pageSize").val(pageSize);
-            $("#statusFlag").val(statusFlag);
-			$("#sortByColumn").val(sortByColumn);
-			$("#sortOrder").val(sortOrder);
-            $("#searchForString").val(searchForString);
-			$("#filterJson").val(filterJson);
+    // submit form for paging
+    function submitFormForPaging() {
+        $("#pageNumber").val(pageNumber);
+        $("#pageSize").val(pageSize);
+        $("#statusFlag").val(statusFlag);
+        $("#sortByColumn").val(sortByColumn);
+        $("#sortOrder").val(sortOrder);
+        $("#searchForString").val(searchForString);
+        $("#filterJson").val(filterJson);
 
-			$("#formForPaging").submit();
-		}
-	</script>
+        $("#formForPaging").submit();
+    }
+</script>
 }

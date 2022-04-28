@@ -5,13 +5,13 @@
 @using System.Reflection;
 
 @{
-	ViewData["Title"] = "Restore Permit";
+    ViewData["Title"] = "Restore Permit";
 }
 
 <div class="row">
-	<div class="col-md-12">
-		<h5>@ViewBag.Title</h5>
-	</div>
+    <div class="col-md-12">
+        <h5>@ViewBag.Title</h5>
+    </div>
 </div>
 
 <h6>Are you sure you want to restore this?</h6>
@@ -19,85 +19,86 @@
 <hr />
 
 <div class="row">
-	<div class="col-md-12">
-		<dl class="row">
-			<dt class="col-sm-2">
-				<span class="bi-globe"></span>
-				@Html.DisplayNameFor(model => model.PermitArea)
-			</dt>
-			<dd class="col-sm-10">
-				@Html.DisplayFor(model => model.PermitArea) &nbsp;
-			</dd>
-			<dt class="col-sm-2">
-				<span class="bi-gear"></span>
-				@Html.DisplayNameFor(model => model.PermitController)
-			</dt>
-			<dd class="col-sm-10">
-				@Html.DisplayFor(model => model.PermitController) &nbsp;
-			</dd>
-			<dt class="col-sm-2">
-				<span class="bi-at"></span>
-				@Html.DisplayNameFor(model => model.PermitName)
-			</dt>
-			<dd class="col-sm-10">
-				@Html.DisplayFor(model => model.PermitName) &nbsp;
-			</dd>
-			<dt class="col-sm-2">
-				<span class="bi-list"></span>
-				@Html.DisplayNameFor(model => model.PermitEnum)
-			</dt>
-			<dd class="col-sm-10">
-				@Html.DisplayFor(model => model.PermitEnum) &nbsp;
-			</dd>
-			<dt class="col-sm-2">
-				<span class="bi-flag"></span>
-				@Html.DisplayNameFor(model => model.StatusFlag)
-			</dt>
-			<dd class="col-sm-10">
-				@Html.DisplayFor(model => model.StatusFlag)
+    <div class="col-md-12">
+        <dl class="row">
+            <dt class="col-sm-2">
+                <span class="bi-globe"></span>
+                @Html.DisplayNameFor(model => model.PermitArea)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PermitArea) &nbsp;
+            </dd>
+            <dt class="col-sm-2">
+                <span class="bi-gear"></span>
+                @Html.DisplayNameFor(model => model.PermitController)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PermitController) &nbsp;
+            </dd>
+            <dt class="col-sm-2">
+                <span class="bi-at"></span>
+                @Html.DisplayNameFor(model => model.PermitName)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PermitName) &nbsp;
+            </dd>
+            <dt class="col-sm-2">
+                <span class="bi-list"></span>
+                @Html.DisplayNameFor(model => model.PermitEnum)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PermitEnum) &nbsp;
+            </dd>
+            <dt class="col-sm-2">
+                <span class="bi-flag"></span>
+                @Html.DisplayNameFor(model => model.StatusFlag)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.StatusFlag)
 
-				@{
-					var recordStatus = typeof(RecordStatus).GetFields(BindingFlags.Static | BindingFlags.Public);
+                @{
+                    var recordStatus = typeof(RecordStatus).GetFields(BindingFlags.Static | BindingFlags.Public);
 
-					foreach (var item in recordStatus)
-					{
-						if (Model.StatusFlag.ToUpper().Equals(item.GetRawConstantValue().ToString().ToUpper()))
-						{
-							@Html.Raw("&nbsp;(" + @item.Name + ")");
-						}
-					}
-				}
-				&nbsp;
-			</dd>
-			<dt class="col-sm-2">
-				<span class="bi-person-circle"></span>
-				@Html.DisplayNameFor(model => model.ModifiedBy)
-			</dt>
-			<dd class="col-sm-10">
-				@ViewBag.modifiedByName &nbsp;
-			</dd>
-			<dt class="col-sm-2">
-				<span class="bi-clock"></span>
-				@Html.DisplayNameFor(model => model.ModifiedDate)
-			</dt>
-			<dd class="col-sm-10">
-				@Html.DisplayFor(model => model.ModifiedDate) &nbsp;
-			</dd>
-		</dl>
+                    foreach (var item in recordStatus)
+                    {
+                        if (Model.StatusFlag.ToUpper().Equals(item.GetRawConstantValue().ToString().ToUpper()))
+                        {
+                            @Html.Raw("&nbsp;(" + @item.Name + ")")
+                            ;
+                        }
+                    }
+                }
+                &nbsp;
+            </dd>
+            <dt class="col-sm-2">
+                <span class="bi-person-circle"></span>
+                @Html.DisplayNameFor(model => model.ModifiedBy)
+            </dt>
+            <dd class="col-sm-10">
+                @ViewBag.modifiedByName &nbsp;
+            </dd>
+            <dt class="col-sm-2">
+                <span class="bi-clock"></span>
+                @Html.DisplayNameFor(model => model.ModifiedDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ModifiedDate) &nbsp;
+            </dd>
+        </dl>
 
-		<form asp-action="Undelete" method="post">
-			<input type="hidden" asp-for="PermitId" />
-			<input type="submit" value="   Restore   " class="btn btn-primary" />
-			<span style="margin: 5px 0 0 10px">
-				@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.ListDeleted))
-				{
-					@Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;") <a asp-action="ListDeleted">Back to Deleted List</a>
-				}
-				@if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.List))
-				{
-					@Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;") <a asp-action="List">Back to List</a>
-				}
-			</span>
-		</form>
-	</div>
+        <form asp-action="Undelete" method="post">
+            <input type="hidden" asp-for="PermitId" />
+            <input type="submit" value="   Restore   " class="btn btn-primary" />
+            <span style="margin: 5px 0 0 10px">
+                @if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.ListDeleted))
+                {
+                    @Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;") <a asp-action="ListDeleted">Back to Deleted List</a>
+                }
+                @if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.List))
+                {
+                    @Html.Raw("&nbsp;&nbsp;|&nbsp;&nbsp;") <a asp-action="List">Back to List</a>
+                }
+            </span>
+        </form>
+    </div>
 </div>

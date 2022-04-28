@@ -1,7 +1,7 @@
 //This file is auto generated on 4/25/2022 3:03:48 PM
 namespace BPX.Website.CustomCode.Authorize
 {
-    public static class Permits
+    public static class PermitsGeneric
     {
         public static class Developer
         {

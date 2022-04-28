@@ -17,7 +17,7 @@ using System.Transactions;
 
 namespace BPX.Website.Areas.Identity.Controllers
 {
-	[Area("Identity")]
+    [Area("Identity")]
     public class AccountController : BaseController<AccountController>
     {
         private readonly IPortalService portalService;
@@ -55,7 +55,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             {
                 // set alert
                 ShowAlertBox(AlertType.Warning, "Login failed. Please try again.");
-                
+
                 return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
 
@@ -98,7 +98,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             //}
             ////// END
 
-			if (!passwordIsVerified)
+            if (!passwordIsVerified)
             {
                 // set alert
                 ShowAlertBox(AlertType.Warning, "Login failed. Try again.");
@@ -118,7 +118,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
 
             if (user.UserId <= 0)
-			{
+            {
                 ShowAlertBox(AlertType.Warning, "Login failed. Try again.");
 
                 return RedirectToAction("Login", "Account", new { area = "Identity" });
@@ -145,11 +145,11 @@ namespace BPX.Website.Areas.Identity.Controllers
             // login
             login.LToken = lToken;
             login.LastLoginDate = DateTime.Now;
-            login.ModifiedBy = user.UserId; 
+            login.ModifiedBy = user.UserId;
             login.ModifiedDate = DateTime.Now;
 
             using (TransactionScope scope = new TransactionScope())
-			{
+            {
                 loginService.UpdateRecord(login);
                 loginService.SaveDBChanges();
 
@@ -159,10 +159,10 @@ namespace BPX.Website.Areas.Identity.Controllers
                 scope.Complete();
             }
 
-			string fullName = user.LastName ?? string.Empty + " " + user.FirstName ?? string.Empty;
-			
-			List<Claim> listClaims = new List<Claim>
-			{
+            string fullName = user.LastName ?? string.Empty + " " + user.FirstName ?? string.Empty;
+
+            List<Claim> listClaims = new List<Claim>
+            {
                 new Claim("PToken", portal.PToken ?? "Invalid PToken"),
                 new Claim(ClaimTypes.Name, fullName),
             };
@@ -188,7 +188,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 return Redirect(model.ReturnUrl);
             }
 
-            return RedirectToAction("Index", "Home", new { area = "" });            
+            return RedirectToAction("Index", "Home", new { area = "" });
         }
 
         // GET: /Identity/Account/Denied
@@ -298,7 +298,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
                         userService.InsertRecord(user);
                         userService.SaveDBChanges();
-                    
+
                         scope.Complete();
                     }
 
@@ -376,7 +376,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 }
 
                 if (currUser.UserId != collection.UserId)
-				{
+                {
                     string errorMessage = "Invalid user";
                     ModelState.AddModelError("", errorMessage);
 
@@ -418,7 +418,7 @@ namespace BPX.Website.Areas.Identity.Controllers
 
                 // hash the password
                 PasswordHasher<Login> passwordHasher = new PasswordHasher<Login>();
-				string hashedPassword = passwordHasher.HashPassword(login, collection.NewPassword);
+                string hashedPassword = passwordHasher.HashPassword(login, collection.NewPassword);
 
                 login.PasswordHash = hashedPassword;
                 // set generic data

@@ -10,7 +10,7 @@ using X.PagedList;
 
 namespace BPX.DAL.Repositories
 {
-	public class MenuRepository : BaseRepository, IMenuRepository
+    public class MenuRepository : BaseRepository, IMenuRepository
     {
         public MenuRepository(EFContext efContext, DPContext dpContext) : base(efContext, dpContext)
         {
@@ -42,7 +42,7 @@ namespace BPX.DAL.Repositories
         }
 
         public List<Menu> GetBreadCrumb(int menuId)
-		{
+        {
             //WITH CTE_breadcrumb
             //AS
             //(
@@ -76,9 +76,9 @@ namespace BPX.DAL.Repositories
 
             return efContext.Menus.FromSqlRaw(cteQuery).AsNoTracking().ToList();
         }
-    
+
         public List<Menu> GetMenuHierarchy(string statusFlag, string orderBy)
-		{
+        {
             ////cte (common time execution) recursive hierarchy query
             //WITH cte_menus AS (
             //    SELECT 	    MenuId, MenuName, MenuDescription, MenuURL, ParentMenuId, 1 AS hLevel, OrderNumber, 
@@ -101,14 +101,14 @@ namespace BPX.DAL.Repositories
             string cteStatusFlag = RecordStatus.Active.ToUpper();
 
             if (statusFlag.ToUpper().Equals(RecordStatus.Inactive.ToUpper()))
-			{
+            {
                 cteStatusFlag = RecordStatus.Inactive.ToUpper();
             }
 
             string cteOrderBy = "hLevel, OrderNumber";
 
             if (orderBy.ToUpper().Equals("URL"))
-			{
+            {
                 cteOrderBy = "MenuURL";
             }
 
@@ -139,7 +139,7 @@ namespace BPX.DAL.Repositories
 
     public interface IMenuRepository : IRepository<Menu>
     {
-        List<Menu> GetBreadCrumb(int menuId); 
-        List<Menu> GetMenuHierarchy(string statusFlag, string orderBy); 
+        List<Menu> GetBreadCrumb(int menuId);
+        List<Menu> GetMenuHierarchy(string statusFlag, string orderBy);
     }
 }

@@ -7,141 +7,141 @@
 <p></p>
 
 <div class="row">
-	<div class="col-md-1">
-	</div>
-	<div class="col-md-10">
-		@*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
-		
-			<div class="card">
-				<div class="card-header">
-					<h4 class="panel-title">@ViewBag.Title</h4>
-				</div>
-				<div class="card-body">
-					<form asp-area="Identity" asp-controller="Account" asp-action="Register" method="post">
-						<div class="row form-group">
-							<div class="col-md-3">
-								<label asp-for="LoginName" class="control-label"></label>
-							</div>
-							<div class="col-md-5 input-group">
-								<div class="input-group-prepend">
-									<span class="input-group-text"><i class="bi-person-circle"></i></span>
-								</div>
-								<input asp-for="LoginName" class="form-control" />
-							</div>
-							<div class="col-md-4">
-								<i class="bi-asterisk" style="color:red; margin-left:-22px; padding-right:5px; font-size: 0.5rem;" aria-hidden="true"></i>
-								<span asp-validation-for="LoginName" class="text-danger"></span>
-							</div>
-						</div>
-						<div class="row form-group">
-							<div class="col-md-3">
-								<label asp-for="Password" class="control-label"></label>
-							</div>
-							<div class="col-md-5 input-group">
-								<div class="input-group-prepend">
-									<span class="input-group-text"><i class="bi-key"></i></span>
-								</div>
-								<input asp-for="Password" class="form-control" />
-							</div>
-							<div class="col-md-4">
-								<i class="bi-asterisk" style="color:red; margin-left:-22px; padding-right:5px; font-size: 0.5rem;" aria-hidden="true"></i>
-								<span asp-validation-for="Password" class="text-danger"></span>
-							</div>
-						</div>
-						<div class="row form-group">
-							<div class="col-md-3">
-								<label asp-for="ConfirmPassword" class="control-label"></label>
-							</div>
-							<div class="col-md-5 input-group">
-								<div class="input-group-prepend">
-									<span class="input-group-text"><i class="bi-key-fill"></i></span>
-								</div>
-								<input asp-for="ConfirmPassword" class="form-control" />
-							</div>
-							<div class="col-md-4">
-								<i class="bi-asterisk" style="color:red; margin-left:-22px; padding-right:5px; font-size: 0.5rem;" aria-hidden="true"></i>
-								<span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-							</div>
-						</div>
-						<div class="row form-group">
-							<div class="col-md-3">
-								<label asp-for="FirstName" class="control-label"></label>
-							</div>
-							<div class="col-md-5 input-group">
-								<div class="input-group-prepend">
-									<span class="input-group-text"><i class="bi-person"></i></span>
-								</div>
-								<input asp-for="FirstName" class="form-control" />
-							</div>
-							<div class="col-md-4">
-								<i class="bi-asterisk" style="color:red; margin-left:-22px; padding-right:5px; font-size: 0.5rem;" aria-hidden="true"></i>
-								<span asp-validation-for="FirstName" class="text-danger"></span>
-							</div>
-						</div>
-						<div class="row form-group">
-							<div class="col-md-3">
-								<label asp-for="LastName" class="control-label"></label>
-							</div>
-							<div class="col-md-5 input-group">
-								<div class="input-group-prepend">
-									<span class="input-group-text"><i class="bi-person-fill"></i></span>
-								</div>
-								<input asp-for="LastName" class="form-control" />
-							</div>
-							<div class="col-md-4">
-								<i class="bi-asterisk" style="color:red; margin-left:-22px; padding-right:5px; font-size: 0.5rem;" aria-hidden="true"></i>
-								<span asp-validation-for="LastName" class="text-danger"></span>
-							</div>
-						</div>
-						<div class="row form-group">
-							<div class="col-md-3">
-								<label asp-for="Email" class="control-label"></label>
-							</div>
-							<div class="col-md-5 input-group">
-								<div class="input-group-prepend">
-									<span class="input-group-text"><i class="bi-envelope"></i></span>
-								</div>
-								<input asp-for="Email" class="form-control" />
-							</div>
-							<div class="col-md-4">
-								<i class="bi-asterisk" style="color:red; margin-left:-22px; padding-right:5px; font-size: 0.5rem;" aria-hidden="true"></i>
-								<span asp-validation-for="Email" class="text-danger"></span>
-							</div>
-						</div>
-						<div class="row form-group">
-							<div class="col-md-3">
-								<label asp-for="CellPhone" class="control-label"></label>
-							</div>
-							<div class="col-md-5 input-group">
-								<div class="input-group-prepend">
-									<span class="input-group-text">
-										<i class="bi-telephone"></i>
-									</span>
-								</div>
-								<input asp-for="CellPhone" class="form-control" />
-							</div>
-							<div class="col-md-4">
-								<span asp-validation-for="CellPhone" class="text-danger"></span>
-							</div>
-						</div>
-						<div class="row form-group">
-							<div class="col-md-3">
-							</div>
-							<div class="col-md-5 input-group">
-								<input type="submit" value="Save" class="btn btn-primary" />
-							</div>
-							<div class="col-md-4">
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-	
-	</div>
-	<div class="col-md-1">
-	</div>
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-10">
+        @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
+
+        <div class="card">
+            <div class="card-header">
+                <h4 class="panel-title">@ViewBag.Title</h4>
+            </div>
+            <div class="card-body">
+                <form asp-area="Identity" asp-controller="Account" asp-action="Register" method="post">
+                    <div class="row form-group">
+                        <div class="col-md-3">
+                            <label asp-for="LoginName" class="control-label"></label>
+                        </div>
+                        <div class="col-md-5 input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="bi-person-circle"></i></span>
+                            </div>
+                            <input asp-for="LoginName" class="form-control" />
+                        </div>
+                        <div class="col-md-4">
+                            <i class="bi-asterisk" style="color:red; margin-left:-22px; padding-right:5px; font-size: 0.5rem;" aria-hidden="true"></i>
+                            <span asp-validation-for="LoginName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-3">
+                            <label asp-for="Password" class="control-label"></label>
+                        </div>
+                        <div class="col-md-5 input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="bi-key"></i></span>
+                            </div>
+                            <input asp-for="Password" class="form-control" />
+                        </div>
+                        <div class="col-md-4">
+                            <i class="bi-asterisk" style="color:red; margin-left:-22px; padding-right:5px; font-size: 0.5rem;" aria-hidden="true"></i>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-3">
+                            <label asp-for="ConfirmPassword" class="control-label"></label>
+                        </div>
+                        <div class="col-md-5 input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="bi-key-fill"></i></span>
+                            </div>
+                            <input asp-for="ConfirmPassword" class="form-control" />
+                        </div>
+                        <div class="col-md-4">
+                            <i class="bi-asterisk" style="color:red; margin-left:-22px; padding-right:5px; font-size: 0.5rem;" aria-hidden="true"></i>
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-3">
+                            <label asp-for="FirstName" class="control-label"></label>
+                        </div>
+                        <div class="col-md-5 input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="bi-person"></i></span>
+                            </div>
+                            <input asp-for="FirstName" class="form-control" />
+                        </div>
+                        <div class="col-md-4">
+                            <i class="bi-asterisk" style="color:red; margin-left:-22px; padding-right:5px; font-size: 0.5rem;" aria-hidden="true"></i>
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-3">
+                            <label asp-for="LastName" class="control-label"></label>
+                        </div>
+                        <div class="col-md-5 input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="bi-person-fill"></i></span>
+                            </div>
+                            <input asp-for="LastName" class="form-control" />
+                        </div>
+                        <div class="col-md-4">
+                            <i class="bi-asterisk" style="color:red; margin-left:-22px; padding-right:5px; font-size: 0.5rem;" aria-hidden="true"></i>
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-3">
+                            <label asp-for="Email" class="control-label"></label>
+                        </div>
+                        <div class="col-md-5 input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="bi-envelope"></i></span>
+                            </div>
+                            <input asp-for="Email" class="form-control" />
+                        </div>
+                        <div class="col-md-4">
+                            <i class="bi-asterisk" style="color:red; margin-left:-22px; padding-right:5px; font-size: 0.5rem;" aria-hidden="true"></i>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-3">
+                            <label asp-for="CellPhone" class="control-label"></label>
+                        </div>
+                        <div class="col-md-5 input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="bi-telephone"></i>
+                                </span>
+                            </div>
+                            <input asp-for="CellPhone" class="form-control" />
+                        </div>
+                        <div class="col-md-4">
+                            <span asp-validation-for="CellPhone" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-3">
+                        </div>
+                        <div class="col-md-5 input-group">
+                            <input type="submit" value="Save" class="btn btn-primary" />
+                        </div>
+                        <div class="col-md-4">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-1">
+    </div>
 </div>
 
 @section ScriptsAtBottom {
-    <partial name="_PartialValidationScripts" />
+<partial name="_PartialValidationScripts" />
 }

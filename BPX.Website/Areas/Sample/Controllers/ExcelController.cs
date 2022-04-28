@@ -9,17 +9,17 @@ using System.IO;
 
 namespace BPX.Website.Areas.Sample.Controllers
 {
-	public class ExcelController : BaseController<ExcelController>
-	{
-		public ExcelController(ILogger<ExcelController> logger, ICoreService coreService) : base(logger, coreService)
+    public class ExcelController : BaseController<ExcelController>
+    {
+        public ExcelController(ILogger<ExcelController> logger, ICoreService coreService) : base(logger, coreService)
         {
 
-		}
+        }
 
-		public IActionResult Index()
-		{
-			return View();
-		}
+        public IActionResult Index()
+        {
+            return View();
+        }
 
         public IActionResult GenerateExcel()
         {

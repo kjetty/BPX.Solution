@@ -8,7 +8,7 @@ using X.PagedList;
 
 namespace BPX.DAL.Repositories
 {
-	public class CacheKeyRepository : BaseRepository, ICacheKeyRepository
+    public class CacheKeyRepository : BaseRepository, ICacheKeyRepository
     {
         public CacheKeyRepository(EFContext efContext, DPContext dpContext) : base(efContext, dpContext)
         {

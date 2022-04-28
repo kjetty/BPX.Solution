@@ -13,9 +13,9 @@ using System.Linq;
 
 namespace BPX.Website.Areas.Identity.Controllers
 {
-	[Area("Identity")]
-	public class MenuController : BaseController<MenuController>
-	{
+    [Area("Identity")]
+    public class MenuController : BaseController<MenuController>
+    {
         private readonly ICacheService cacheService;
         private readonly ICacheKeyService cacheKeyService;
         private readonly IUserService userService;
@@ -24,7 +24,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         private readonly IPermitService permitService;
 
         public MenuController(ILogger<MenuController> logger, ICoreService coreService, IPermitService permitService) : base(logger, coreService)
-		{
+        {
             this.cacheService = coreService.GetCacheService();
             this.cacheKeyService = coreService.GetCacheKeyService();
             this.userService = coreService.GetUserService();
@@ -36,14 +36,14 @@ namespace BPX.Website.Areas.Identity.Controllers
         // GET: /Identity/Menu
         [Permit(Permits.Identity.Menu.List)]
         public IActionResult Index()
-		{
+        {
             return RedirectToAction("List");
-		}
+        }
 
-		// GET: /Identity/Menu/List
-		[Permit(Permits.Identity.Menu.List)]
-		public IActionResult List()
-		{
+        // GET: /Identity/Menu/List
+        [Permit(Permits.Identity.Menu.List)]
+        public IActionResult List()
+        {
             List<Menu> listMenus = coreService.GetMenuHierarchy(RecordStatus.Active.ToUpper(), "URL");
             List<MenuMiniViewModel> model = new List<MenuMiniViewModel>();
 
@@ -53,7 +53,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
 
             return View(model);
-		}
+        }
 
         // GET: /Identity/Menu/Create
         [Permit(Permits.Identity.Menu.Create)]
@@ -69,7 +69,7 @@ namespace BPX.Website.Areas.Identity.Controllers
         // POST: /Identity/Menu/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Permit(Permits.Identity.Menu.Create)]        
+        [Permit(Permits.Identity.Menu.Create)]
         public IActionResult Create(MenuMiniViewModel collection)
         {
             try
@@ -107,7 +107,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 menuService.SaveDBChanges();
 
                 // reset cache
-                ResetCache();              
+                ResetCache();
 
                 // set alert
                 ShowAlertBox(AlertType.Success, "Menu is successfully created.");
@@ -194,7 +194,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 menuService.SaveDBChanges();
 
                 // reset cache
-                ResetCache();            
+                ResetCache();
 
                 // set alert
                 ShowAlertBox(AlertType.Success, "Menu is successfully updated.");
@@ -267,7 +267,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 menuService.SaveDBChanges();
 
                 // reset cache
-                ResetCache();             
+                ResetCache();
 
                 // set alert
                 ShowAlertBox(AlertType.Success, "Menu is successfully deleted.");
@@ -352,7 +352,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 }
 
                 // commit changes to database
-                menuService.SaveDBChanges();                
+                menuService.SaveDBChanges();
 
                 // reset cache
                 ResetCache();
@@ -399,7 +399,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             ViewBag.listPermits = listPermits;
             ViewBag.listMenuPermitIds = listMenuPermitIds;
             ViewBag.listAreas = listAreas;
-            
+
             return View();
         }
 
@@ -409,49 +409,49 @@ namespace BPX.Website.Areas.Identity.Controllers
         public IActionResult MenuPermits(int id, List<int> permitIds)
         {
             // get all exisiting active permits for the menu
-			List<MenuPermit> listMenuPermits = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.MenuId.Equals(id)).ToList();
+            List<MenuPermit> listMenuPermits = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.MenuId.Equals(id)).ToList();
 
             // delete all existing active permits for the menu
             foreach (MenuPermit menuPermit in listMenuPermits)
-			{
-				menuPermit.StatusFlag = RecordStatus.Inactive.ToUpper();
-				menuPermit.ModifiedBy = currUser.UserId;
-				menuPermit.ModifiedDate = DateTime.Now;
+            {
+                menuPermit.StatusFlag = RecordStatus.Inactive.ToUpper();
+                menuPermit.ModifiedBy = currUser.UserId;
+                menuPermit.ModifiedDate = DateTime.Now;
 
                 menuPermitService.UpdateRecord(menuPermit);
-            }           
+            }
 
             menuPermitService.SaveDBChanges();
 
-			// add or activate received permits for the menu
-			foreach (int permitId in permitIds)
-			{
-				MenuPermit existingMenuPermit = menuPermitService.GetRecordsByFilter(c => c.MenuId.Equals(id) && c.PermitId.Equals(permitId)).SingleOrDefault();
+            // add or activate received permits for the menu
+            foreach (int permitId in permitIds)
+            {
+                MenuPermit existingMenuPermit = menuPermitService.GetRecordsByFilter(c => c.MenuId.Equals(id) && c.PermitId.Equals(permitId)).SingleOrDefault();
 
-				if (existingMenuPermit != null)
-				{
-					existingMenuPermit.StatusFlag = RecordStatus.Active.ToUpper();
-					existingMenuPermit.ModifiedBy = currUser.UserId;
-					existingMenuPermit.ModifiedDate = DateTime.Now;
+                if (existingMenuPermit != null)
+                {
+                    existingMenuPermit.StatusFlag = RecordStatus.Active.ToUpper();
+                    existingMenuPermit.ModifiedBy = currUser.UserId;
+                    existingMenuPermit.ModifiedDate = DateTime.Now;
 
-					menuPermitService.UpdateRecord(existingMenuPermit);
-				}
-				else
-				{
-					MenuPermit newMenuPermit = new()
-					{
-						MenuId = id,
-						PermitId = permitId,
-						StatusFlag = RecordStatus.Active.ToUpper(),
-						ModifiedBy = currUser.UserId,
-						ModifiedDate = DateTime.Now
-					};
+                    menuPermitService.UpdateRecord(existingMenuPermit);
+                }
+                else
+                {
+                    MenuPermit newMenuPermit = new()
+                    {
+                        MenuId = id,
+                        PermitId = permitId,
+                        StatusFlag = RecordStatus.Active.ToUpper(),
+                        ModifiedBy = currUser.UserId,
+                        ModifiedDate = DateTime.Now
+                    };
 
-					menuPermitService.InsertRecord(newMenuPermit);
-				}
-			}
+                    menuPermitService.InsertRecord(newMenuPermit);
+                }
+            }
 
-			menuPermitService.SaveDBChanges();          
+            menuPermitService.SaveDBChanges();
 
             // reset cache
             ResetCache();
@@ -466,11 +466,11 @@ namespace BPX.Website.Areas.Identity.Controllers
         // GET: /Identity/Menu/TreePath
         [Permit(Permits.Identity.Menu.TreePath)]
         public IActionResult TreePath()
-		{
+        {
             List<Menu> listMenus = menuService.GetMenuHierarchy(RecordStatus.Active.ToUpper(), "URL");
 
             foreach (Menu itemMenu in listMenus)
-			{
+            {
                 Menu recordMenu = menuService.GetRecordById(itemMenu.MenuId);
 
                 recordMenu.HLevel = itemMenu.HLevel;

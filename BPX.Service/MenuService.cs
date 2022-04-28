@@ -8,7 +8,7 @@ using X.PagedList;
 
 namespace BPX.Service
 {
-	public class MenuService : IMenuService
+    public class MenuService : IMenuService
     {
         public MenuRepository menuRepository;
 
@@ -56,7 +56,7 @@ namespace BPX.Service
         }
 
         public List<Menu> GetBreadCrumb(int menuId)
-		{
+        {
             return menuRepository.GetBreadCrumb(menuId);
         }
 

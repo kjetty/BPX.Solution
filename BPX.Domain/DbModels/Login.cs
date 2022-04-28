@@ -43,7 +43,7 @@ namespace BPX.Domain.DbModels
         public string CACLarge { get; set; }
 
         [StringLength(32)]
-        public string ADUserName { get; set; }          
+        public string ADUserName { get; set; }
 
         [Required]
         [StringLength(1)]

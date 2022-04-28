@@ -15,13 +15,13 @@ namespace BPX.Website.Areas.Developer.Controllers
 {
     [Area("Developer")]
     public class PermitsGeneratorController : BaseController<PermitsGeneratorController>
-	{
+    {
         private readonly IPermitService permitService;
         private readonly IRoleService roleService;
         private string pathPermitConstants;
 
         public PermitsGeneratorController(ILogger<PermitsGeneratorController> logger, ICoreService coreService, IPermitService permitService, IRoleService roleService) : base(logger, coreService)
-		{
+        {
             this.permitService = permitService;
             this.roleService = roleService;
             this.pathPermitConstants = coreService.GetConfiguration().GetSection("AppSettings").GetSection("PathPermitConstants").Value;
@@ -32,7 +32,7 @@ namespace BPX.Website.Areas.Developer.Controllers
         public IActionResult Index()
         {
             ViewBag.pathPermitConstants = pathPermitConstants;
-            
+
             return View();
         }
 
@@ -40,12 +40,12 @@ namespace BPX.Website.Areas.Developer.Controllers
         [Permit(Permits.Developer.PermitsGenerator.Index)]
         public IActionResult Index(int id)
         {
-			GeneratePermitConstants();
-           
+            GeneratePermitConstants();
+
             // set alert
             ShowAlertBox(AlertType.Success, "PermitConstans.cs  is successfully generated at " + pathPermitConstants);
 
-			return View();
+            return View();
         }
 
         private void GeneratePermitConstants()

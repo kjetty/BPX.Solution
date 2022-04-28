@@ -1,0 +1,189 @@
+﻿----------------------------------------------------------------------------------------
+-- ensure -T272 is added in the Startup parameters to avoid the identity to jump to 1001
+----------------------------------------------------------------------------------------
+---------------------------------------
+-- create tables, constraints, triggers
+---------------------------------------
+
+--create tables
+CREATE TABLE Errors (
+    ErrorId      		int IDENTITY(1,1)   NOT NULL,
+    ErrorData       	varchar (8000)      NULL,
+    ErrorDate           datetime            NOT NULL,
+    PRIMARY KEY CLUSTERED (ErrorId ASC)
+);
+
+CREATE TABLE CacheKeys (
+    CacheKeyName       	varchar (48)        NOT NULL,
+    ModifiedDate        datetime            NOT NULL,
+    PRIMARY KEY CLUSTERED (CacheKeyName ASC)
+);
+
+CREATE TABLE Menus (
+    MenuId      		int IDENTITY(1,1)   NOT NULL,
+    MenuName         	varchar (32)        NOT NULL,
+    MenuDescription  	varchar (128)       NULL,
+    MenuURL          	varchar (1024)      NULL,
+    ParentMenuId    	INT		            NOT NULL,
+    HLevel			    INT                 NOT NULL,
+    OrderNumber  		INT                 NULL,
+    TreePath            varchar(32)         NULL,
+    StatusFlag          char(1)             NOT NULL,
+    ModifiedBy          int                 NOT NULL,
+    ModifiedDate        datetime            NOT NULL,
+    PRIMARY KEY CLUSTERED (MenuId ASC)
+);
+
+CREATE TABLE Permits (
+    PermitId			int IDENTITY(1,1)   NOT NULL,
+    PermitArea		    varchar (32)        NOT NULL,
+    PermitController   	varchar (32)        NOT NULL,
+    PermitName  	    varchar (32)        NOT NULL,
+    PermitEnum		    varchar (64)        NOT NULL,
+    StatusFlag          char(1)             NOT NULL,
+    ModifiedBy          int                 NOT NULL,
+    ModifiedDate        datetime            NOT NULL,
+    PRIMARY KEY CLUSTERED (PermitId ASC),
+	CONSTRAINT UC_Permits_PermitEnum UNIQUE (PermitEnum)
+);
+
+CREATE TABLE Roles (
+    RoleId			    int IDENTITY(1,1)   NOT NULL,
+    RoleName			varchar (32)        NOT NULL,
+    RoleDescription     varchar (128)       NULL,
+    StatusFlag          char(1)             NOT NULL,
+    ModifiedBy          int                 NOT NULL,
+    ModifiedDate        datetime            NOT NULL,
+    PRIMARY KEY CLUSTERED (RoleId ASC),
+	CONSTRAINT UC_Roles_RoleName UNIQUE (RoleName)
+);
+
+CREATE TABLE Portals (
+    PortalUUId          varchar(24)         NOT NULL,
+    PToken              varchar(40)         NOT NULL,
+    LastAccessTime      datetime            NOT NULL,
+    PRIMARY KEY CLUSTERED (PortalUUId ASC),
+    CONSTRAINT UC_Portals_PToken UNIQUE (PToken)
+);
+
+CREATE INDEX IDX_Portals_PToken ON Portals (PToken);
+
+CREATE TABLE Logins (
+    LoginUUId           varchar(24)         NOT NULL,
+    CACCN               varchar(128)        NULL,
+    CACId               varchar(16)         NULL,
+    CACSmall            varchar(16)         NULL,
+    CACLarge            varchar(16)         NULL,
+    LoginName           varchar(32)         NULL,
+    PasswordHash        varchar(128)        NULL,
+    ADUserName          varchar(32)         NULL,
+    LastLoginDate       datetime            NOT NULL,
+    LoginType           char(1)             NOT NULL,
+    LToken              varchar(40)         NOT NULL,
+    StatusFlag          char(1)             NOT NULL,
+    ModifiedBy          int                 NOT NULL,
+    ModifiedDate        datetime            NOT NULL,
+    PRIMARY KEY CLUSTERED (LoginUUId ASC),
+    CONSTRAINT UC_Logins_CACId_LoginName UNIQUE (CACId, LoginName),
+    CONSTRAINT UC_Logins_LToken UNIQUE (LToken)
+);
+
+CREATE INDEX IDX_Logins_LoginName ON Logins (LoginName);
+CREATE INDEX IDX_Logins_CACId ON Logins (CACId);
+CREATE INDEX IDX_Logins_LToken ON Logins (LToken);
+
+CREATE TABLE Users (
+    UserId              int IDENTITY(1,1)   NOT NULL,
+    FirstName           varchar(32)         NOT NULL,
+    LastName            varchar(32)         NOT NULL,
+    Email               varchar(64)         NOT NULL,
+    Mobile              varchar(16)         NULL,
+    UserUUId			varchar(24)			NOT NULL,
+	LoginUUId           varchar(24)         NOT NULL,
+    PortalUUId          varchar(24)         NOT NULL,
+    StatusFlag          char(1)             NOT NULL,       -- A (active), I (inactive), D (deleted), L (locked), R (archived)
+    ModifiedBy          int                 NOT NULL,
+    ModifiedDate        datetime            NOT NULL,
+    PRIMARY KEY CLUSTERED (UserId ASC),
+	CONSTRAINT UC_Users_Email UNIQUE (Email),
+    CONSTRAINT UC_Users_UserUUId UNIQUE (UserUUId),
+    CONSTRAINT UC_Users_LoginUUId UNIQUE (LoginUUId),
+    CONSTRAINT UC_Users_PortalUUId UNIQUE (PortalUUId),
+    CONSTRAINT FK_Users_LoginUUId FOREIGN KEY (LoginUUId) REFERENCES Logins (LoginUUId),
+    CONSTRAINT FK_Users_PortalUUId FOREIGN KEY (PortalUUId) REFERENCES Portals (PortalUUId)
+);
+
+CREATE INDEX IDX_Users_UserUUId ON Users (UserUUId);
+CREATE INDEX IDX_Users_PortalUUId ON Users (PortalUUId);
+CREATE INDEX IDX_Users_LoginUUId ON Users (LoginUUId);
+
+CREATE TABLE PLUMaster (
+    UserId				int					NOT NULL,
+    UserUUId			varchar(24)			NOT NULL,
+	LoginUUId           varchar(24)         NOT NULL,
+    PortalUUId          varchar(24)         NOT NULL,
+    CreatedDate         datetime            NOT NULL
+);
+
+CREATE TABLE RolePermits (
+    RolePermitId	    int IDENTITY(1,1)   NOT NULL,
+    RoleId		        int                 NOT NULL,
+    PermitId	        int                 NOT NULL,
+    StatusFlag          char(1)             NOT NULL,
+    ModifiedBy          int                 NOT NULL,
+    ModifiedDate        datetime            NOT NULL,
+    PRIMARY KEY CLUSTERED (RolePermitId ASC),
+    CONSTRAINT FK_RolePermits_RoleId FOREIGN KEY (RoleId) REFERENCES Roles (RoleId),
+    CONSTRAINT FK_RolePermits_PermitId FOREIGN KEY (PermitId) REFERENCES Permits (PermitId)
+);
+
+CREATE TABLE UserRoles (
+    UserRoleId          int IDENTITY(1,1)   NOT NULL,
+    UserId              int                 NOT NULL,
+    RoleId              int                 NOT NULL,
+    StatusFlag          char(1)             NOT NULL,
+    ModifiedBy          int                 NOT NULL,
+    ModifiedDate        datetime            NOT NULL,
+    PRIMARY KEY CLUSTERED (UserRoleId ASC),
+    CONSTRAINT FK_UserRoles_UserId FOREIGN KEY (UserId) REFERENCES Users (UserId),
+    CONSTRAINT FK_UserRoles_RoleId FOREIGN KEY (RoleId) REFERENCES Roles (RoleId)
+);
+
+CREATE TABLE MenuPermits (
+    MenuPermitId        int IDENTITY(1,1)   NOT NULL,
+    MenuId              int                 NOT NULL,
+    PermitId            int                 NOT NULL,
+    StatusFlag          char(1)             NOT NULL,
+    ModifiedBy          int                 NOT NULL,
+    ModifiedDate        datetime            NOT NULL,
+    PRIMARY KEY CLUSTERED (MenuPermitId ASC),
+    CONSTRAINT FK_MenuPermits_MenuId FOREIGN KEY (MenuId) REFERENCES Menus (MenuId),
+    CONSTRAINT FK_MenuPermits_PermitId FOREIGN KEY (PermitId) REFERENCES Permits (PermitId)
+);
+
+GO
+
+--create triggers
+CREATE TRIGGER TRG_Users_I
+ON Users
+AFTER INSERT
+AS 
+BEGIN   
+    SET NOCOUNT ON;
+    INSERT INTO PLUMaster (UserId, UserUUId, LoginUUId, PortalUUID, CreatedDate)
+	SELECT ins.UserId, ins.UserUUId, ins.LoginUUId, ins.PortalUUId, ins.ModifiedDate FROM inserted ins
+END;
+
+GO
+
+CREATE TRIGGER TRG_PLUMaster_UD ON PLUMaster
+INSTEAD OF UPDATE, DELETE
+AS
+BEGIN
+    RAISERROR( 'PLUMaster is read only.', 16, 1 )
+    ROLLBACK TRANSACTION
+END
+
+GO
+
+-- end of script

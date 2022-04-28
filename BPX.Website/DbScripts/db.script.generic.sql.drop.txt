@@ -1,0 +1,52 @@
+﻿----------------------------------------------------------------------------------------
+-- ensure -T272 is added in the Startup parameters to avoid the identity to jump to 1001
+----------------------------------------------------------------------------------------
+
+------------------------------------------------
+-- drop and delete triggers, constraints, tables
+------------------------------------------------
+
+--drop triggers
+drop trigger TRG_Users_I;
+drop trigger TRG_PLUMaster_UD;
+
+--delete foreign key constraints
+alter table RolePermits drop constraint FK_RolePermits_RoleId;
+alter table RolePermits drop constraint FK_RolePermits_PermitId;
+alter table UserRoles drop constraint FK_UserRoles_UserId;
+alter table UserRoles drop constraint FK_UserRoles_RoleId;
+alter table MenuPermits drop constraint FK_MenuPermits_MenuId;
+alter table MenuPermits drop constraint FK_MenuPermits_PermitId;
+alter table Users drop constraint FK_Users_LoginUUId;
+alter table Users drop constraint FK_Users_PortalUUId;
+
+--delete constraints
+alter table Permits drop constraint UC_Permits_PermitEnum;
+alter table Roles drop constraint UC_Roles_RoleName;
+alter table Portals drop constraint UC_Portals_PToken;
+alter table Logins drop constraint UC_Logins_LToken;
+alter table Logins drop constraint UC_Logins_CACId_LoginName;
+alter table Users drop constraint UC_Users_Email;
+alter table Users drop constraint UC_Users_UserUUId
+alter table Users drop constraint UC_Users_LoginUUId;
+alter table Users drop constraint UC_Users_PortalUUId;
+
+GO
+
+--drop tables
+DROP TABLE Errors;
+DROP TABLE RolePermits;
+DROP TABLE UserRoles;
+DROP TABLE MenuPermits;
+DROP TABLE Permits;
+DROP TABLE Roles;
+DROP TABLE Users;
+DROP TABLE Logins;
+DROP TABLE Portals;
+DROP TABLE PLUMaster;
+DROP TABLE Menus;
+DROP TABLE CacheKeys;
+
+GO
+
+-- end of script

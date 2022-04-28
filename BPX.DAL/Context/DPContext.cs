@@ -15,7 +15,7 @@ namespace BPX.DAL.Context
             _connectionString = _configuration.GetConnectionString("connStrDbBPX");
         }
 
-        public IDbConnection CreateConnection() 
+        public IDbConnection CreateConnection()
             => new SqlConnection(_connectionString);
     }
 }

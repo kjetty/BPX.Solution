@@ -24,13 +24,13 @@ namespace BPX.Website.Areas.Identity.Controllers
         private readonly IPermitService permitService;
         private readonly IRolePermitService rolePermitService;
 
-        public RoleController(ILogger<RoleController> logger, ICoreService coreService, IRoleService roleService, IPermitService permitService) : base(logger, coreService)
+        public RoleController(ILogger<RoleController> logger, ICoreService coreService, IRoleService roleService) : base(logger, coreService)
         {
             this.cacheService = coreService.GetCacheService();
             this.cacheKeyService = coreService.GetCacheKeyService();
             this.userService = coreService.GetUserService();
-            this.roleService = roleService;
-            this.permitService = permitService;
+            this.roleService = roleService; 
+            this.permitService = coreService.GetPermitService();
             this.rolePermitService = coreService.GetRolePermitService();
         }
 

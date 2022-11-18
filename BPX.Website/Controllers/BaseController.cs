@@ -23,7 +23,7 @@ namespace BPX.Website.Controllers
         protected readonly int bpxPageSize;
         protected readonly int sessionCookieTimeout;
         protected User currUser;                            // do not set "currUser" to readonly as we will be hydrating this object in the flow
-                                                            // private vars
+        // private vars
         private readonly ICacheService cacheService;
         private readonly ICacheKeyService cacheKeyService;
         private readonly IErrorService errorService;
@@ -88,7 +88,7 @@ namespace BPX.Website.Controllers
                                 }
                                 else
                                 {
-                                    // get user details :: uisng (PToken) PortalUUId :: using (RToken) LoginUUId + UserUUId
+                                    // get user details :: using (PToken) PortalUUId :: using (LToken) LoginUUId
                                     IUserService userService = coreService.GetUserService();
                                     currUser = userService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())
                                                                             && c.PortalUUId.Equals(portal.PortalUUId)

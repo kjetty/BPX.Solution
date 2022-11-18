@@ -93,6 +93,11 @@ namespace BPX.Service
             return menuPermitService;
         }
 
+        public IPermitService GetPermitService()
+        {
+            return permitService;
+        }
+
         public List<int> GetUserRoleIds(int userId)
         {
             return userRoleService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.UserId.Equals(userId)).OrderBy(c => c.RoleId).Select(c => c.RoleId).Distinct().ToList();
@@ -144,11 +149,6 @@ namespace BPX.Service
         private Menu AddRoot(ref string menuString, List<Menu> menuHierarchy)
         {
             Menu root = menuHierarchy.Where(c => c.ParentMenuId.Equals(0)).SingleOrDefault();
-
-            //menuString += "<li>";
-            //menuString += $"<a class=\"nav-link\" href=\"{root.MenuURL}\">{root.MenuName}</a>";
-            //menuString += "</li>";
-
             return root;
         }
 
@@ -290,6 +290,7 @@ namespace BPX.Service
         IRolePermitService GetRolePermitService();
         IMenuService GetMenuService();
         IMenuPermitService GetMenuPermitService();
+        IPermitService GetPermitService();
         List<int> GetUserRoleIds(int userId);
         List<int> GetUserPermitIds(List<int> userRoleIds);
         List<int> GetPermitRoles(int permitId);

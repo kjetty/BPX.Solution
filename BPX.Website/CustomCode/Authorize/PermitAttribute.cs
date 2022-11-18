@@ -86,7 +86,7 @@ namespace BPX.Website.CustomCode.Authorize
                         IPortalService portalService = coreService.GetPortalService();
                         Portal portal = portalService.GetPortalByToken(currPToken);
 
-                        // get login details :: using RToken
+                        // get login details :: using LToken
                         ILoginService loginService = coreService.GetLoginService();
                         Login login = loginService.GetLoginByToken(currLToken);
 
@@ -96,10 +96,6 @@ namespace BPX.Website.CustomCode.Authorize
                             {
                                 // force logout
                                 portal.PToken = Guid.NewGuid().ToString();
-
-                                //portalService.UpdateRecord(portal);
-                                //portalService.SaveDBChanges();
-
                                 portalService.UpdateRecordDapper(portal);
 
                                 context.Result = new RedirectToRouteResult(

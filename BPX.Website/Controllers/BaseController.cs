@@ -99,7 +99,7 @@ namespace BPX.Website.Controllers
                                     if (currUser != null)
                                     {
                                         // SECURITY SECURITY SECURITY
-                                        // verify the user :: sesson :: login chain using currSToken on every request
+                                        // verify the user :: sesson :: login ..... chain using currSToken and currLToken on every request
                                         int currUserId = currUser.UserId;
 
                                         // get userRoles, userPermits, menu, breadcrumb data

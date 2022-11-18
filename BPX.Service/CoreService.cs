@@ -13,7 +13,7 @@ namespace BPX.Service
         private readonly ICacheService cacheService;
         private readonly ICacheKeyService cacheKeyService;
         private readonly IErrorService errorService;
-        private readonly IPortalService portalService;
+        private readonly ISessonService sessonService;
         private readonly ILoginService loginService;
         private readonly IUserService userService;
         private readonly IUserRoleService userRoleService;
@@ -22,13 +22,13 @@ namespace BPX.Service
         private readonly IMenuPermitService menuPermitService;
         private readonly IPermitService permitService;
 
-        public CoreService(IConfiguration configuration, ICacheService cacheService, ICacheKeyService cacheKeyService, IErrorService errorService, IPortalService portalService, ILoginService loginService, IUserService userService, IUserRoleService userRoleService, IRolePermitService rolePermitService, IMenuService menuService, IMenuPermitService menuPermitService, IPermitService permitService)
+        public CoreService(IConfiguration configuration, ICacheService cacheService, ICacheKeyService cacheKeyService, IErrorService errorService, ISessonService sessonService, ILoginService loginService, IUserService userService, IUserRoleService userRoleService, IRolePermitService rolePermitService, IMenuService menuService, IMenuPermitService menuPermitService, IPermitService permitService)
         {
             this.configuration = configuration;
             this.cacheService = cacheService;
             this.cacheKeyService = cacheKeyService;
             this.errorService = errorService;
-            this.portalService = portalService;
+            this.sessonService = sessonService;
             this.loginService = loginService;
             this.userService = userService;
             this.userRoleService = userRoleService;
@@ -58,9 +58,9 @@ namespace BPX.Service
             return errorService;
         }
 
-        public IPortalService GetPortalService()
+        public ISessonService GetSessonService()
         {
-            return portalService;
+            return sessonService;
         }
 
         public ILoginService GetLoginService()
@@ -283,7 +283,7 @@ namespace BPX.Service
         ICacheService GetCacheService();
         ICacheKeyService GetCacheKeyService();
         IErrorService GetErrorService();
-        IPortalService GetPortalService();
+        ISessonService GetSessonService();
         ILoginService GetLoginService();
         IUserService GetUserService();
         IUserRoleService GetUserRoleService();

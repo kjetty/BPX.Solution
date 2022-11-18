@@ -7,69 +7,69 @@ using X.PagedList;
 
 namespace BPX.Service
 {
-    public class PortalService : IPortalService
+    public class SessonService : ISessonService
     {
-        public PortalRepository portalRepository;
+        public SessonRepository sessonRepository;
 
-        public PortalService(IPortalRepository portalRepository)
+        public SessonService(ISessonRepository sessonRepository)
         {
-            this.portalRepository = (PortalRepository)portalRepository;
+            this.sessonRepository = (SessonRepository)sessonRepository;
         }
 
-        public IPagedList<Portal> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString, string filterJson)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Portal GetRecordById(int id)
+        public IPagedList<Sesson> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString, string filterJson)
         {
             throw new NotImplementedException();
         }
 
-        public IQueryable<Portal> GetRecordsByFilter(Expression<Func<Portal, bool>> filter)
+        public Sesson GetRecordById(int id)
         {
-            return portalRepository.GetRecordsByFilter(filter);
+            throw new NotImplementedException();
         }
 
-        public void InsertRecord(Portal entity)
+        public IQueryable<Sesson> GetRecordsByFilter(Expression<Func<Sesson, bool>> filter)
+        {
+            return sessonRepository.GetRecordsByFilter(filter);
+        }
+
+        public void InsertRecord(Sesson entity)
         {
             //...
             //business rules validation, if any
             //...
 
-            portalRepository.InsertRecord(entity);
+            sessonRepository.InsertRecord(entity);
         }
 
-        public void UpdateRecord(Portal entity)
+        public void UpdateRecord(Sesson entity)
         {
             //...
             //business rules validation, if any
             //...
 
-            portalRepository.UpdateRecord(entity);
+            sessonRepository.UpdateRecord(entity);
         }
 
         public void SaveDBChanges()
         {
-            portalRepository.SaveDBChanges();
+            sessonRepository.SaveDBChanges();
         }
 
         // dapper
 
-        public int UpdateRecordDapper(Portal entity)
+        public int UpdateRecordDapper(Sesson entity)
         {
-            return portalRepository.UpdateRecordDapper(entity);
+            return sessonRepository.UpdateRecordDapper(entity);
         }
 
-        public Portal GetPortalByToken(string pToken)
+        public Sesson GetSessonByToken(string sToken)
         {
-            return portalRepository.GetPortalByToken(pToken);
+            return sessonRepository.GetSessonByToken(sToken);
         }
     }
 
-    public interface IPortalService : IGenericService<Portal>
+    public interface ISessonService : IGenericService<Sesson>
     {
-        int UpdateRecordDapper(Portal entity);
-        Portal GetPortalByToken(string pToken);
+        int UpdateRecordDapper(Sesson entity);
+        Sesson GetSessonByToken(string sToken);
     }
 }

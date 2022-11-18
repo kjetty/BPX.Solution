@@ -43,7 +43,7 @@ namespace BPX.Website
             // services such as Entity Framework Core's DbContext are registered with scoped lifetime
 
             // inject repositories (generic - basic building block)
-            services.AddScoped<IPortalRepository, PortalRepository>();
+            services.AddScoped<ISessonRepository, SessonRepository>();
             services.AddScoped<ILoginRepository, LoginRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
@@ -58,7 +58,7 @@ namespace BPX.Website
             // ...
 
             // inject services (generic - basic building block)
-            services.AddScoped<IPortalService, PortalService>();
+            services.AddScoped<ISessonService, SessonService>();
             services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();

@@ -20,14 +20,14 @@ namespace BPX.Website.Areas.Identity.Controllers
     [Area("Identity")]
     public class AccountController : BaseController<AccountController>
     {
-        private readonly IPortalService portalService;
+        private readonly ISessonService sessonService;
         private readonly ILoginService loginService;
         private readonly IUserService userService;
         private readonly IUserRoleService userRoleService;
 
         public AccountController(ILogger<AccountController> logger, ICoreService coreService) : base(logger, coreService)
         {
-            this.portalService = coreService.GetPortalService();
+            this.sessonService = coreService.GetSessonService();
             this.loginService = coreService.GetLoginService();
             this.userService = coreService.GetUserService();
             this.userRoleService = coreService.GetUserRoleService();
@@ -124,9 +124,9 @@ namespace BPX.Website.Areas.Identity.Controllers
                 return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
 
-            Portal portal = portalService.GetRecordsByFilter(c => c.PortalUUId.Equals(user.PortalUUId)).SingleOrDefault();
-
-            if (portal == null)
+            Sesson sesson = sessonService.GetRecordsByFilter(c => c.SessonUUId.Equals(user.SessonUUId)).SingleOrDefault();
+        
+            if (sesson == null)
             {
                 // set alert
                 ShowAlertBox(AlertType.Warning, "Login failed. Please try again. ");
@@ -134,13 +134,13 @@ namespace BPX.Website.Areas.Identity.Controllers
                 return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
 
-            // generate new pToken on every login
-            string pToken = Guid.NewGuid().ToString();
-            string lToken = new string(pToken.ToCharArray().Reverse().ToArray());
+            // generate new sToken and lToken on every login
+            string sToken = Guid.NewGuid().ToString();
+            string lToken = Guid.NewGuid().ToString();
 
-            // portal
-            portal.PToken = pToken;
-            portal.LastAccessTime = DateTime.Now;
+            // sesson
+            sesson.SToken = sToken;
+            sesson.LastAccessTime = DateTime.Now;
 
             // login
             login.LToken = lToken;
@@ -153,8 +153,8 @@ namespace BPX.Website.Areas.Identity.Controllers
                 loginService.UpdateRecord(login);
                 loginService.SaveDBChanges();
 
-                portalService.UpdateRecord(portal);
-                portalService.SaveDBChanges();
+                sessonService.UpdateRecord(sesson);
+                sessonService.SaveDBChanges();
 
                 scope.Complete();
             }
@@ -163,7 +163,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 
             List<Claim> listClaims = new List<Claim>
             {
-                new Claim("PToken", portal.PToken ?? "Invalid PToken"),
+                new Claim("SToken", sesson.SToken ?? "Invalid SToken"),
+                new Claim("LToken", login.LToken ?? "Invalid LToken"),
                 new Claim(ClaimTypes.Name, fullName),
             };
 
@@ -243,13 +244,13 @@ namespace BPX.Website.Areas.Identity.Controllers
                 if (listDuplicateLogins.Count.Equals(0))
                 {
                     string userUUId = Utility.Hypenate2124(Utility.GetUUID(21));
-                    string portalUUId = Utility.Hypenate2124(Utility.GetUUID(21));
+                    string sessonUUId = Utility.Hypenate2124(Utility.GetUUID(21));
                     string loginUUId = Utility.Hypenate2124(Utility.GetUUID(21));
 
-                    Portal portal = new()
+                    Sesson sesson = new()
                     {
-                        PortalUUId = portalUUId,
-                        PToken = Guid.NewGuid().ToString(),
+                        SessonUUId = sessonUUId,
+                        SToken = Guid.NewGuid().ToString(),
                         LastAccessTime = DateTime.Now
                     };
 
@@ -274,7 +275,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                         Email = collection.Email,
                         Mobile = collection.CellPhone,
                         UserUUId = userUUId,
-                        PortalUUId = portalUUId,
+                        SessonUUId = sessonUUId,
                         LoginUUId = loginUUId,
                         // set generic data
                         StatusFlag = RecordStatus.Active.ToUpper(),
@@ -290,8 +291,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 
                     using (TransactionScope scope = new TransactionScope())
                     {
-                        portalService.InsertRecord(portal);
-                        portalService.SaveDBChanges();
+                        sessonService.InsertRecord(sesson);
+                        sessonService.SaveDBChanges();
 
                         loginService.InsertRecord(login);
                         loginService.SaveDBChanges();
@@ -454,14 +455,14 @@ namespace BPX.Website.Areas.Identity.Controllers
         {
             if (currUser.UserId > 0)
             {
-                // scramble PToken
-                Portal portal = portalService.GetRecordsByFilter(c => c.PortalUUId.Equals(currUser.PortalUUId)).SingleOrDefault();
+                // scramble SToken
+                Sesson sesson = sessonService.GetRecordsByFilter(c => c.SessonUUId.Equals(currUser.SessonUUId)).SingleOrDefault();
 
-                portal.PToken = Guid.NewGuid().ToString();
-                portal.LastAccessTime = DateTime.Now.AddMinutes(-60);
+                sesson.SToken = Guid.NewGuid().ToString();
+                sesson.LastAccessTime = DateTime.Now.AddMinutes(-60);
 
-                portalService.UpdateRecord(portal);
-                portalService.SaveDBChanges();
+                sessonService.UpdateRecord(sesson);
+                sessonService.SaveDBChanges();
 
                 // scramble RToken
                 Login login = loginService.GetRecordsByFilter(c => c.LoginUUId.Equals(currUser.LoginUUId)).SingleOrDefault();

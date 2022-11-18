@@ -8,7 +8,7 @@
 
 --drop triggers
 drop trigger TRG_Users_I;
-drop trigger TRG_PLUMaster_UD;
+drop trigger TRG_SLUMaster_UD;
 
 --delete foreign key constraints
 alter table RolePermits drop constraint FK_RolePermits_RoleId;
@@ -18,18 +18,18 @@ alter table UserRoles drop constraint FK_UserRoles_RoleId;
 alter table MenuPermits drop constraint FK_MenuPermits_MenuId;
 alter table MenuPermits drop constraint FK_MenuPermits_PermitId;
 alter table Users drop constraint FK_Users_LoginUUId;
-alter table Users drop constraint FK_Users_PortalUUId;
+alter table Users drop constraint FK_Users_SessonUUId;
 
 --delete constraints
 alter table Permits drop constraint UC_Permits_PermitEnum;
 alter table Roles drop constraint UC_Roles_RoleName;
-alter table Portals drop constraint UC_Portals_PToken;
+alter table Sessons drop constraint UC_Sessons_SToken;
 alter table Logins drop constraint UC_Logins_LToken;
 alter table Logins drop constraint UC_Logins_CACId_LoginName;
 alter table Users drop constraint UC_Users_Email;
 alter table Users drop constraint UC_Users_UserUUId
 alter table Users drop constraint UC_Users_LoginUUId;
-alter table Users drop constraint UC_Users_PortalUUId;
+alter table Users drop constraint UC_Users_SessonUUId;
 
 GO
 
@@ -42,8 +42,8 @@ DROP TABLE Permits;
 DROP TABLE Roles;
 DROP TABLE Users;
 DROP TABLE Logins;
-DROP TABLE Portals;
-DROP TABLE PLUMaster;
+DROP TABLE Sessons;
+DROP TABLE SLUMaster;
 DROP TABLE Menus;
 DROP TABLE CacheKeys;
 

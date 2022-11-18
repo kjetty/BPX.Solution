@@ -58,15 +58,15 @@ CREATE TABLE Roles (
 	CONSTRAINT UC_Roles_RoleName UNIQUE (RoleName)
 );
 
-CREATE TABLE Portals (
-    PortalUUId          varchar(24)         NOT NULL,
-    PToken              varchar(40)         NOT NULL,
+CREATE TABLE Sessons (
+    SessonUUId          varchar(24)         NOT NULL,
+    SToken              varchar(40)         NOT NULL,
     LastAccessTime      datetime            NOT NULL,
-    PRIMARY KEY CLUSTERED (PortalUUId ASC),
-    CONSTRAINT UC_Portals_PToken UNIQUE (PToken)
+    PRIMARY KEY CLUSTERED (SessonUUId ASC),
+    CONSTRAINT UC_Sessons_SToken UNIQUE (SToken)
 );
 
-CREATE INDEX IDX_Portals_PToken ON Portals (PToken);
+CREATE INDEX IDX_Sessons_SToken ON Sessons (SToken);
 
 CREATE TABLE Logins (
     LoginUUId           varchar(24)         NOT NULL,
@@ -100,7 +100,7 @@ CREATE TABLE Users (
     Mobile              varchar(16)         NULL,
     UserUUId			varchar(24)			NOT NULL,
 	LoginUUId           varchar(24)         NOT NULL,
-    PortalUUId          varchar(24)         NOT NULL,
+    SessonUUId          varchar(24)         NOT NULL,
     StatusFlag          char(1)             NOT NULL,       -- A (active), I (inactive), D (deleted), L (locked), R (archived)
     ModifiedBy          int                 NOT NULL,
     ModifiedDate        datetime            NOT NULL,
@@ -108,20 +108,20 @@ CREATE TABLE Users (
 	CONSTRAINT UC_Users_Email UNIQUE (Email),
     CONSTRAINT UC_Users_UserUUId UNIQUE (UserUUId),
     CONSTRAINT UC_Users_LoginUUId UNIQUE (LoginUUId),
-    CONSTRAINT UC_Users_PortalUUId UNIQUE (PortalUUId),
+    CONSTRAINT UC_Users_SessonUUId UNIQUE (SessonUUId),
     CONSTRAINT FK_Users_LoginUUId FOREIGN KEY (LoginUUId) REFERENCES Logins (LoginUUId),
-    CONSTRAINT FK_Users_PortalUUId FOREIGN KEY (PortalUUId) REFERENCES Portals (PortalUUId)
+    CONSTRAINT FK_Users_SessonUUId FOREIGN KEY (SessonUUId) REFERENCES Sessons (SessonUUId)
 );
 
 CREATE INDEX IDX_Users_UserUUId ON Users (UserUUId);
-CREATE INDEX IDX_Users_PortalUUId ON Users (PortalUUId);
+CREATE INDEX IDX_Users_SessonUUId ON Users (SessonUUId);
 CREATE INDEX IDX_Users_LoginUUId ON Users (LoginUUId);
 
-CREATE TABLE PLUMaster (
+CREATE TABLE SLUMaster (
     UserId				int					NOT NULL,
     UserUUId			varchar(24)			NOT NULL,
 	LoginUUId           varchar(24)         NOT NULL,
-    PortalUUId          varchar(24)         NOT NULL,
+    SessonUUId          varchar(24)         NOT NULL,
     CreatedDate         datetime            NOT NULL
 );
 
@@ -170,17 +170,17 @@ AFTER INSERT
 AS 
 BEGIN   
     SET NOCOUNT ON;
-    INSERT INTO PLUMaster (UserId, UserUUId, LoginUUId, PortalUUID, CreatedDate)
-	SELECT ins.UserId, ins.UserUUId, ins.LoginUUId, ins.PortalUUId, ins.ModifiedDate FROM inserted ins
+    INSERT INTO SLUMaster (UserId, UserUUId, LoginUUId, SessonUUID, CreatedDate)
+	SELECT ins.UserId, ins.UserUUId, ins.LoginUUId, ins.SessonUUId, ins.ModifiedDate FROM inserted ins
 END;
 
 GO
 
-CREATE TRIGGER TRG_PLUMaster_UD ON PLUMaster
+CREATE TRIGGER TRG_SLUMaster_UD ON SLUMaster
 INSTEAD OF UPDATE, DELETE
 AS
 BEGIN
-    RAISERROR( 'PLUMaster is read only.', 16, 1 )
+    RAISERROR( 'SLUMaster is read only.', 16, 1 )
     ROLLBACK TRANSACTION
 END
 

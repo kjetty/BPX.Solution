@@ -8,7 +8,7 @@
 
 --drop triggers
 drop trigger TRG_Users_I;
-drop trigger TRG_PLUMaster_UD;
+drop trigger TRG_SLUMaster_UD;
 
 --delete foreign key constraints
 alter table RolePermits drop constraint FK_RolePermits_RoleId;
@@ -18,18 +18,18 @@ alter table UserRoles drop constraint FK_UserRoles_RoleId;
 alter table MenuPermits drop constraint FK_MenuPermits_MenuId;
 alter table MenuPermits drop constraint FK_MenuPermits_PermitId;
 alter table Users drop constraint FK_Users_LoginUUId;
-alter table Users drop constraint FK_Users_PortalUUId;
+alter table Users drop constraint FK_Users_SessonUUId;
 
 --delete constraints
 alter table Permits drop constraint UC_Permits_PermitEnum;
 alter table Roles drop constraint UC_Roles_RoleName;
-alter table Portals drop constraint UC_Portals_PToken;
+alter table Sessons drop constraint UC_Sessons_SToken;
 alter table Logins drop constraint UC_Logins_LToken;
 alter table Logins drop constraint UC_Logins_CACId_LoginName;
 alter table Users drop constraint UC_Users_Email;
 alter table Users drop constraint UC_Users_UserUUId
 alter table Users drop constraint UC_Users_LoginUUId;
-alter table Users drop constraint UC_Users_PortalUUId;
+alter table Users drop constraint UC_Users_SessonUUId;
 
 GO
 
@@ -42,8 +42,8 @@ DROP TABLE Permits;
 DROP TABLE Roles;
 DROP TABLE Users;
 DROP TABLE Logins;
-DROP TABLE Portals;
-DROP TABLE PLUMaster;
+DROP TABLE Sessons;
+DROP TABLE SLUMaster;
 DROP TABLE Menus;
 DROP TABLE CacheKeys;
 
@@ -106,15 +106,15 @@ CREATE TABLE Roles (
 	CONSTRAINT UC_Roles_RoleName UNIQUE (RoleName)
 );
 
-CREATE TABLE Portals (
-    PortalUUId          varchar(24)         NOT NULL,
-    PToken              varchar(40)         NOT NULL,
+CREATE TABLE Sessons (
+    SessonUUId          varchar(24)         NOT NULL,
+    SToken              varchar(40)         NOT NULL,
     LastAccessTime      datetime            NOT NULL,
-    PRIMARY KEY CLUSTERED (PortalUUId ASC),
-    CONSTRAINT UC_Portals_PToken UNIQUE (PToken)
+    PRIMARY KEY CLUSTERED (SessonUUId ASC),
+    CONSTRAINT UC_Sessons_SToken UNIQUE (SToken)
 );
 
-CREATE INDEX IDX_Portals_PToken ON Portals (PToken);
+CREATE INDEX IDX_Sessons_SToken ON Sessons (SToken);
 
 CREATE TABLE Logins (
     LoginUUId           varchar(24)         NOT NULL,
@@ -148,7 +148,7 @@ CREATE TABLE Users (
     Mobile              varchar(16)         NULL,
     UserUUId			varchar(24)			NOT NULL,
 	LoginUUId           varchar(24)         NOT NULL,
-    PortalUUId          varchar(24)         NOT NULL,
+    SessonUUId          varchar(24)         NOT NULL,
     StatusFlag          char(1)             NOT NULL,       -- A (active), I (inactive), D (deleted), L (locked), R (archived)
     ModifiedBy          int                 NOT NULL,
     ModifiedDate        datetime            NOT NULL,
@@ -156,20 +156,20 @@ CREATE TABLE Users (
 	CONSTRAINT UC_Users_Email UNIQUE (Email),
     CONSTRAINT UC_Users_UserUUId UNIQUE (UserUUId),
     CONSTRAINT UC_Users_LoginUUId UNIQUE (LoginUUId),
-    CONSTRAINT UC_Users_PortalUUId UNIQUE (PortalUUId),
+    CONSTRAINT UC_Users_SessonUUId UNIQUE (SessonUUId),
     CONSTRAINT FK_Users_LoginUUId FOREIGN KEY (LoginUUId) REFERENCES Logins (LoginUUId),
-    CONSTRAINT FK_Users_PortalUUId FOREIGN KEY (PortalUUId) REFERENCES Portals (PortalUUId)
+    CONSTRAINT FK_Users_SessonUUId FOREIGN KEY (SessonUUId) REFERENCES Sessons (SessonUUId)
 );
 
 CREATE INDEX IDX_Users_UserUUId ON Users (UserUUId);
-CREATE INDEX IDX_Users_PortalUUId ON Users (PortalUUId);
+CREATE INDEX IDX_Users_SessonUUId ON Users (SessonUUId);
 CREATE INDEX IDX_Users_LoginUUId ON Users (LoginUUId);
 
-CREATE TABLE PLUMaster (
+CREATE TABLE SLUMaster (
     UserId				int					NOT NULL,
     UserUUId			varchar(24)			NOT NULL,
 	LoginUUId           varchar(24)         NOT NULL,
-    PortalUUId          varchar(24)         NOT NULL,
+    SessonUUId          varchar(24)         NOT NULL,
     CreatedDate         datetime            NOT NULL
 );
 
@@ -218,17 +218,17 @@ AFTER INSERT
 AS 
 BEGIN   
     SET NOCOUNT ON;
-    INSERT INTO PLUMaster (UserId, UserUUId, LoginUUId, PortalUUID, CreatedDate)
-	SELECT ins.UserId, ins.UserUUId, ins.LoginUUId, ins.PortalUUId, ins.ModifiedDate FROM inserted ins
+    INSERT INTO SLUMaster (UserId, UserUUId, LoginUUId, SessonUUID, CreatedDate)
+	SELECT ins.UserId, ins.UserUUId, ins.LoginUUId, ins.SessonUUId, ins.ModifiedDate FROM inserted ins
 END;
 
 GO
 
-CREATE TRIGGER TRG_PLUMaster_UD ON PLUMaster
+CREATE TRIGGER TRG_SLUMaster_UD ON SLUMaster
 INSTEAD OF UPDATE, DELETE
 AS
 BEGIN
-    RAISERROR( 'PLUMaster is read only.', 16, 1 )
+    RAISERROR( 'SLUMaster is read only.', 16, 1 )
     ROLLBACK TRANSACTION
 END
 
@@ -238,16 +238,16 @@ GO
 -- seed data
 ------------
 
---portals
-insert into Portals (PortalUUId,PToken,LastAccessTime) values ('PortalUUId001','PToken001',getDate());
-insert into Portals (PortalUUId,PToken,LastAccessTime) values ('PortalUUId002','PToken002',getDate());
-insert into Portals (PortalUUId,PToken,LastAccessTime) values ('PortalUUId003','PToken003',getDate());
-insert into Portals (PortalUUId,PToken,LastAccessTime) values ('PortalUUId004','PToken004',getDate());
-insert into Portals (PortalUUId,PToken,LastAccessTime) values ('PortalUUId005','PToken005',getDate());
-insert into Portals (PortalUUId,PToken,LastAccessTime) values ('PortalUUId006','PToken006',getDate());
-insert into Portals (PortalUUId,PToken,LastAccessTime) values ('PortalUUId007','PToken007',getDate());
-insert into Portals (PortalUUId,PToken,LastAccessTime) values ('PortalUUId008','PToken008',getDate());
-insert into Portals (PortalUUId,PToken,LastAccessTime) values ('PortalUUId009','PToken009',getDate());
+--sessons
+insert into Sessons (SessonUUId,SToken,LastAccessTime) values ('SessonUUId001','SToken001',getDate());
+insert into Sessons (SessonUUId,SToken,LastAccessTime) values ('SessonUUId002','SToken002',getDate());
+insert into Sessons (SessonUUId,SToken,LastAccessTime) values ('SessonUUId003','SToken003',getDate());
+insert into Sessons (SessonUUId,SToken,LastAccessTime) values ('SessonUUId004','SToken004',getDate());
+insert into Sessons (SessonUUId,SToken,LastAccessTime) values ('SessonUUId005','SToken005',getDate());
+insert into Sessons (SessonUUId,SToken,LastAccessTime) values ('SessonUUId006','SToken006',getDate());
+insert into Sessons (SessonUUId,SToken,LastAccessTime) values ('SessonUUId007','SToken007',getDate());
+insert into Sessons (SessonUUId,SToken,LastAccessTime) values ('SessonUUId008','SToken008',getDate());
+insert into Sessons (SessonUUId,SToken,LastAccessTime) values ('SessonUUId009','SToken009',getDate());
 
 --logins
 insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId001','LToken001',getDate(),'U','one','AQAAAAEAACcQAAAAEJZUbWun++BJlFSiC352oPAgJ9UKJRXkKX4lD3hbjIsMSx6X+4qVUxkCIqTibouCkg==','A',1,getDate());     -- one / test1111
@@ -261,15 +261,15 @@ insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordH
  insert into Logins (LoginUUId,LToken,LastLoginDate,LoginType,LoginName,PasswordHash,StatusFlag,ModifiedBy,ModifiedDate) values ('LoginUUId009','LToken009',getDate(),'U','nine','AQAAAAEAACcQAAAAEO6wAj4iqxtW6XZW7iCdKmKw3eWaT9nlla1BCdzFd4WfzPeJFyxJga8gBGPrFKXiRg==','A',1,getDate());   -- nine / test9999
 
 --users
-insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('System','sysln','system.email@bpx.com','123-123-1234','UserUUId001','LoginUUId001','PortalUUId001','A',1,getDate());
-insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('Process','processln','process.email@bpx.com','123-123-1234','UserUUId002','LoginUUId002','PortalUUId002','A',1,getDate());
-insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('Developer','devln','developer.email@bpx.com','123-123-1234','UserUUId003','LoginUUId003','PortalUUId003','A',1,getDate());
-insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('QualityAnalyst','qaln','qualityanalyst.email@bpx.com','123-123-1234','UserUUId004','LoginUUId004','PortalUUId004','A',1,getDate());
-insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('Superuser','superuserln','superuser.email@bpx.com','123-123-1234','UserUUId005','LoginUUId005','PortalUUId005','A',1,getDate());
-insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('Admin','admln','admin.email@bpx.com','123-123-1234','UserUUId006','LoginUUId006','PortalUUId006','A',1,getDate());
-insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('Manager','mgrln','manager.email@bpx.com','123-123-1234','UserUUId007','LoginUUId007','PortalUUId007','A',1,getDate());
-insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('fn08','08LN','entity08.email@bpx.com','123-123-1234','UserUUId008','LoginUUId008','PortalUUId008','A',1,getDate());
-insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,PortalUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('fn09','09LN','entity09.email@bpx.com','123-123-1234','UserUUId009','LoginUUId009','PortalUUId009','A',1,getDate());
+insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,SessonUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('System','sysln','system.email@bpx.com','123-123-1234','UserUUId001','LoginUUId001','SessonUUId001','A',1,getDate());
+insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,SessonUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('Process','processln','process.email@bpx.com','123-123-1234','UserUUId002','LoginUUId002','SessonUUId002','A',1,getDate());
+insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,SessonUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('Developer','devln','developer.email@bpx.com','123-123-1234','UserUUId003','LoginUUId003','SessonUUId003','A',1,getDate());
+insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,SessonUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('QualityAnalyst','qaln','qualityanalyst.email@bpx.com','123-123-1234','UserUUId004','LoginUUId004','SessonUUId004','A',1,getDate());
+insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,SessonUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('Superuser','superuserln','superuser.email@bpx.com','123-123-1234','UserUUId005','LoginUUId005','SessonUUId005','A',1,getDate());
+insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,SessonUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('Admin','admln','admin.email@bpx.com','123-123-1234','UserUUId006','LoginUUId006','SessonUUId006','A',1,getDate());
+insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,SessonUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('Manager','mgrln','manager.email@bpx.com','123-123-1234','UserUUId007','LoginUUId007','SessonUUId007','A',1,getDate());
+insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,SessonUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('fn08','08LN','entity08.email@bpx.com','123-123-1234','UserUUId008','LoginUUId008','SessonUUId008','A',1,getDate());
+insert into Users (FirstName,LastName,Email,Mobile,UserUUId,LoginUUId,SessonUUId,StatusFlag,ModifiedBy,ModifiedDate) values ('fn09','09LN','entity09.email@bpx.com','123-123-1234','UserUUId009','LoginUUId009','SessonUUId009','A',1,getDate());
 
 --roles
 insert into Roles (RoleName,RoleDescription,StatusFlag,ModifiedBy,ModifiedDate) values ('DeveloperRole','Developer Role','A',1,getDate());

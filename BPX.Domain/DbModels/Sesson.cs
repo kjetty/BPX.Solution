@@ -3,19 +3,19 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BPX.Domain.DbModels
 {
-    public class Portal
+    public class Sesson
     {
-        public Portal()
+        public Sesson()
         {
         }
 
         [Key]
         [StringLength(24)]
-        public string PortalUUId { get; set; }
+        public string SessonUUId { get; set; }
 
         [Required]
         [StringLength(40)]
-        public string PToken { get; set; }
+        public string SToken { get; set; }
 
         [Required]
         public DateTime LastAccessTime { get; set; }

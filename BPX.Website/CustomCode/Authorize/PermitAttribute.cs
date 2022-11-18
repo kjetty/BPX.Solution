@@ -72,31 +72,32 @@ namespace BPX.Website.CustomCode.Authorize
 
                 if (permitId > 0)
                 {
-                    Claim currPTokenClaim = principalUser.Claims.SingleOrDefault(c => c.Type.Equals("PToken"));
+                    Claim currSTokenClaim = principalUser.Claims.SingleOrDefault(c => c.Type.Equals("SToken"));
+                    Claim currLTokenClaim = principalUser.Claims.SingleOrDefault(c => c.Type.Equals("LToken"));
 
-                    if (currPTokenClaim != null)
+                    if (currSTokenClaim != null && currLTokenClaim != null)
                     {
-                        string currPToken = currPTokenClaim.Value;
-                        string currLToken = Utility.GetLToken(currPToken);
+                        string currSToken = currSTokenClaim.Value;
+                        string currLToken = currLTokenClaim.Value;
 
                         ICoreService coreService = (ICoreService)context.HttpContext.RequestServices.GetService(typeof(ICoreService));
                         int sessionCookieTimeout = Convert.ToInt32(coreService.GetConfiguration().GetSection("AppSettings").GetSection("SessionCookieTimeout").Value);
 
-                        // get portal details :: using PToken
-                        IPortalService portalService = coreService.GetPortalService();
-                        Portal portal = portalService.GetPortalByToken(currPToken);
+                        // get sesson details :: using SToken
+                        ISessonService sessonService = coreService.GetSessonService();
+                        Sesson sesson = sessonService.GetSessonByToken(currSToken);
 
                         // get login details :: using LToken
                         ILoginService loginService = coreService.GetLoginService();
                         Login login = loginService.GetLoginByToken(currLToken);
 
-                        if (portal != null && login != null)
+                        if (sesson != null && login != null)
                         {
-                            if (portal.LastAccessTime < DateTime.Now.AddMinutes(-sessionCookieTimeout))
+                            if (sesson.LastAccessTime < DateTime.Now.AddMinutes(-sessionCookieTimeout))
                             {
                                 // force logout
-                                portal.PToken = Guid.NewGuid().ToString();
-                                portalService.UpdateRecordDapper(portal);
+                                sesson.SToken = Guid.NewGuid().ToString();
+                                sessonService.UpdateRecordDapper(sesson);
 
                                 context.Result = new RedirectToRouteResult(
                                     new RouteValueDictionary
@@ -108,10 +109,10 @@ namespace BPX.Website.CustomCode.Authorize
                             }
                             else
                             {
-                                // get user details :: uisng (PToken) PortalUUId :: using (RToken) LoginUUId + UserUUId
+                                // get user details :: uisng (SToken) SessonUUId :: using (RToken) LoginUUId + UserUUId
                                 IUserService userService = coreService.GetUserService();
                                 User currUser = userService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())
-                                                                                && c.PortalUUId.Equals(portal.PortalUUId)
+                                                                                && c.SessonUUId.Equals(sesson.SessonUUId)
                                                                                 && c.LoginUUId.Equals(login.LoginUUId))
                                                                                 .SingleOrDefault();
 
@@ -122,7 +123,7 @@ namespace BPX.Website.CustomCode.Authorize
                                     IErrorService errorService = coreService.GetErrorService();
 
                                     // SECURITY SECURITY SECURITY
-                                    // verify the user :: portal :: login chain using currPToken on every request
+                                    // verify the user :: sesson :: login chain using currSToken on every request
                                     int currUserId = currUser.UserId;
                                     List<int> userRoleIds = GetUserRoleIds(currUserId, coreService, cacheService, cacheKeyService, errorService);
                                     List<int> userPermitIds = GetUserPermitIds(currUserId, userRoleIds, coreService, cacheService, cacheKeyService, errorService);

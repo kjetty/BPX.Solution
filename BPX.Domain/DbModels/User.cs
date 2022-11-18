@@ -38,7 +38,7 @@ namespace BPX.Domain.DbModels
 
         [Required]
         [StringLength(24)]
-        public string PortalUUId { get; set; }
+        public string SessonUUId { get; set; }
 
         [Required]
         [StringLength(1)]

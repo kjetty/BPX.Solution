@@ -11,7 +11,7 @@ namespace BPX.DAL.Context
             //this.Configuration.ProxyCreationEnabled = false;            
         }
 
-        public virtual DbSet<Portal> Portals { get; set; }
+        public virtual DbSet<Sesson> Sessons { get; set; }
         public virtual DbSet<Login> Logins { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Role> Roles { get; set; }

@@ -53,30 +53,31 @@ namespace BPX.Website.Controllers
                 {
                     if (ctx.HttpContext.User.Identity.IsAuthenticated)
                     {
-                        Claim currPTokenClaim = ctx.HttpContext.User.Claims.SingleOrDefault(c => c.Type.Equals("PToken"));
+                        Claim currSTokenClaim = ctx.HttpContext.User.Claims.SingleOrDefault(c => c.Type.Equals("SToken"));
+                        Claim currLTokenClaim = ctx.HttpContext.User.Claims.SingleOrDefault(c => c.Type.Equals("LToken"));
 
-                        if (currPTokenClaim != null)
+                        if (currSTokenClaim != null)
                         {
-                            // get current PToken value from claims
-                            string currPToken = currPTokenClaim.Value;
-                            string currLToken = Utility.GetLToken(currPToken);
+                            // get current SToken value from claims
+                            string currSToken = currSTokenClaim.Value;
+                            string currLToken = currLTokenClaim.Value;
 
-                            // get portal details :: using PToken
-                            IPortalService portalService = coreService.GetPortalService();
-                            Portal portal = portalService.GetPortalByToken(currPToken);
+                            // get sesson details :: using SToken
+                            ISessonService sessonService = coreService.GetSessonService();
+                            Sesson sesson = sessonService.GetSessonByToken(currSToken);
 
                             // get login details :: using LToken
                             ILoginService loginService = coreService.GetLoginService();
                             Login login = loginService.GetLoginByToken(currLToken);
 
-                            if (portal != null && login != null)
+                            if (sesson != null && login != null)
                             {
                                 // check if the current access is after the sessionCookieTimeout timespan
-                                if (portal.LastAccessTime < DateTime.Now.AddMinutes(-sessionCookieTimeout))
+                                if (sesson.LastAccessTime < DateTime.Now.AddMinutes(-sessionCookieTimeout))
                                 {
                                     // force logout
-                                    portal.PToken = Guid.NewGuid().ToString();
-                                    portalService.UpdateRecordDapper(portal);
+                                    sesson.SToken = Guid.NewGuid().ToString();
+                                    sessonService.UpdateRecordDapper(sesson);
 
                                     ctx.Result = new RedirectToRouteResult(
                                         new RouteValueDictionary
@@ -88,17 +89,17 @@ namespace BPX.Website.Controllers
                                 }
                                 else
                                 {
-                                    // get user details :: using (PToken) PortalUUId :: using (LToken) LoginUUId
+                                    // get user details :: using (SToken) SessonUUId :: using (LToken) LoginUUId
                                     IUserService userService = coreService.GetUserService();
                                     currUser = userService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())
-                                                                            && c.PortalUUId.Equals(portal.PortalUUId)
+                                                                            && c.SessonUUId.Equals(sesson.SessonUUId)
                                                                             && c.LoginUUId.Equals(login.LoginUUId))
                                                                             .SingleOrDefault();
 
                                     if (currUser != null)
                                     {
                                         // SECURITY SECURITY SECURITY
-                                        // verify the user :: portal :: login chain using currPToken on every request
+                                        // verify the user :: sesson :: login chain using currSToken on every request
                                         int currUserId = currUser.UserId;
 
                                         // get userRoles, userPermits, menu, breadcrumb data
@@ -117,9 +118,9 @@ namespace BPX.Website.Controllers
                                         ViewBag.currMenuString = currMenuString;
                                         ViewBag.currBreadcrump = currBreadcrump;
 
-                                        // update the lastAccessTime in portal
-                                        portal.LastAccessTime = DateTime.Now;
-                                        portalService.UpdateRecordDapper(portal);
+                                        // update the lastAccessTime in sesson
+                                        sesson.LastAccessTime = DateTime.Now;
+                                        sessonService.UpdateRecordDapper(sesson);
 
                                         ////// Developer Override for Permits - BaseController (Part A) + PermitAttribute (PartB)
                                         ////// OverrideOverrideOverride 

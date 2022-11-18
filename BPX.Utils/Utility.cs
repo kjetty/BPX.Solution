@@ -57,31 +57,6 @@ namespace BPX.Utils
 
             return result;
         }
-
-        public static string GetLToken(string pToken)
-        {
-            return new string(pToken.ToCharArray().Reverse().ToArray());
-        }
-
-        public static string GetUToken(string pToken)
-        {
-            string result = string.Empty;
-
-            if (pToken != null)
-            {
-                for (int i = 0; i < pToken.Length; i += 2)
-                {
-                    result += pToken[i];
-                }
-
-                for (int i = 1; i < pToken.Length; i += 2)
-                {
-                    result += pToken[i];
-                }
-            }
-
-            return result;
-        }
     }
 
     public static class RecordStatus

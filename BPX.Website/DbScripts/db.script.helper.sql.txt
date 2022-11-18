@@ -1,9 +1,9 @@
 ﻿select top 10 * from Errors order by errorId desc;
 
-select top 10 * from Portals;
+select top 10 * from Sessons;
 select top 10 * from Logins;
 select top 10 * from Users;
-select top 10 * from PLUMaster;
+select top 10 * from SLUMaster;
 
 select top 10 * from Roles;
 select top 10 * from Permits;

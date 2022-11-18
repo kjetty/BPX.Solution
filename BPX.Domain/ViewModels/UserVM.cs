@@ -43,8 +43,8 @@ namespace BPX.Domain.ViewModels
 
         //[Required]
         //[StringLength(24)]
-        //[Display(Name = "PortalUUId")]
-        //public string PortalUUId { get; set; }
+        //[Display(Name = "SessonUUId")]
+        //public string SessonUUId { get; set; }
 
 
         public static explicit operator UserMiniViewModel(User dm)
@@ -62,7 +62,7 @@ namespace BPX.Domain.ViewModels
                 Mobile = dm.Mobile
                 //UserUUId = dm.UserUUId,
                 //LoginUUId = dm.LoginUUId,
-                //PortalUUId = dm.PortalUUId
+                //SessonUUId = dm.SessonUUId
             };
         }
 
@@ -81,7 +81,7 @@ namespace BPX.Domain.ViewModels
                 Mobile = vm.Mobile
                 //UserUUId = vm.UserUUId,
                 //LoginUUId = vm.LoginUUId,
-                //PortalUUId = vm.PortalUUId
+                //SessonUUId = vm.SessonUUId
             };
         }
     }
@@ -116,7 +116,7 @@ namespace BPX.Domain.ViewModels
                 Mobile = dm.Mobile,
                 //UserUUId = dm.UserUUId,
                 //LoginUUId = dm.LoginUUId,
-                //PortalUUId = dm.PortalUUId,
+                //SessonUUId = dm.SessonUUId,
                 // set generic data
                 StatusFlag = dm.StatusFlag,
                 ModifiedBy = dm.ModifiedBy,
@@ -139,7 +139,7 @@ namespace BPX.Domain.ViewModels
                 Mobile = vm.Mobile,
                 //UserUUId = vm.UserUUId,
                 //LoginUUId = vm.LoginUUId,
-                //PortalUUId = vm.PortalUUId,
+                //SessonUUId = vm.SessonUUId,
                 // set generic data
                 StatusFlag = vm.StatusFlag,
                 ModifiedBy = vm.ModifiedBy,

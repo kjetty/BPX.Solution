@@ -58,7 +58,7 @@ namespace BPX.Website.Controllers
 
                         if (currSTokenClaim != null)
                         {
-                            // get current SToken value from claims
+                            // get current SToken and LToken value from claims
                             string currSToken = currSTokenClaim.Value;
                             string currLToken = currLTokenClaim.Value;
 
@@ -102,7 +102,7 @@ namespace BPX.Website.Controllers
                                         // verify the user :: sesson :: login ..... chain using currSToken and currLToken on every request
                                         int currUserId = currUser.UserId;
 
-                                        // get userRoles, userPermits, menu, breadcrumb data
+                                        // get userRoles, userPermits, menu, and breadcrumb data
                                         List<int> currUserRoleIds = GetUserRoleIds(currUserId);                                             // userRoleIds
                                         List<int> currUserPermitIds = GetUserPermitIds(currUserId, currUserRoleIds);                        // userPermitIds
                                         string currLoginMenuString = GetLoginMenuString(currUser);                                          // loginMenuString
@@ -110,7 +110,7 @@ namespace BPX.Website.Controllers
                                         string currMenuString = GetMenuString(currUserRoleIds, currUserPermitIds, currMenuHierarchy);       // menuString
                                         string currBreadcrump = GetBreadCrumb(ctx, currMenuHierarchy);                                      // breadcrumb
 
-                                        // populate ViewBag with user, userRoles, userPermits, menu, breadcrumb data
+                                        // populate ViewBag with user, userRoles, userPermits, menu, and breadcrumb data
                                         ViewBag.currUser = currUser;
                                         ViewBag.currUserRoleIds = currUserRoleIds;
                                         ViewBag.currUserPermitIds = currUserPermitIds;

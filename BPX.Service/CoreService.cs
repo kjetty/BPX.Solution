@@ -105,8 +105,8 @@ namespace BPX.Service
 
         public List<int> GetUserPermitIds(List<int> userRoleIds)
         {
-            List<int> listPermitIds = permitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).Select(c => c.PermitId).ToList();
-            List<int> listMenuPermitIds = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && listPermitIds.Contains(c.PermitId)).Select(c => c.PermitId).Distinct().ToList();
+            List<int> listPermitIds = permitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).OrderBy(c => c.PermitId).Select(c => c.PermitId).Distinct().ToList();
+            List<int> listMenuPermitIds = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && listPermitIds.Contains(c.PermitId)).OrderBy(c => c.PermitId).Select(c => c.PermitId).Distinct().ToList();
             List<int> listUserPermitIds = rolePermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && userRoleIds.Contains(c.RoleId) && listPermitIds.Contains(c.PermitId) && listMenuPermitIds.Contains(c.PermitId)).OrderBy(c => c.PermitId).Select(c => c.PermitId).Distinct().ToList();
 
             return listUserPermitIds;

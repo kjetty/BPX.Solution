@@ -13,13 +13,13 @@ namespace BPX.Website
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                })
-                .ConfigureLogging((hostingContext, logging) =>
-                {
-                    logging.AddNLog(hostingContext.Configuration.GetSection("Logging"));        // inject NLog logging
-                });
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            })
+            .ConfigureLogging((hostingContext, logging) =>
+            {
+                logging.AddNLog(hostingContext.Configuration.GetSection("Logging"));        // inject NLog logging
+            });
     }
 }

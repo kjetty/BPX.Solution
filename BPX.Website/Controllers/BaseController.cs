@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 
@@ -117,6 +116,16 @@ namespace BPX.Website.Controllers
                                         ViewBag.currLoginMenuString = currLoginMenuString;
                                         ViewBag.currMenuString = currMenuString;
                                         ViewBag.currBreadcrump = currBreadcrump;
+
+                                        // log levels
+                                        // Trace, Debug, Info, Warn, Error, Critical
+
+                                        //logger.LogTrace("Tracing currUserId = " + currUserId);      // not wrking
+                                        //logger.LogDebug("Debug currUserId = " + currUserId);        // not working
+                                        //logger.LogInformation("Information currUserId = " + currUserId);
+                                        //logger.LogWarning("Warning currUserId = " + currUserId);
+                                        //logger.LogError("Error currUserId = " + currUserId);
+                                        //logger.LogCritical("Critical currUserId = " + currUserId);
 
                                         // update the lastAccessTime in sesson
                                         sesson.LastAccessTime = DateTime.Now;

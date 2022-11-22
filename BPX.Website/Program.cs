@@ -19,7 +19,7 @@ namespace BPX.Website
             })
             .ConfigureLogging((hostingContext, logging) =>
             {
-                logging.AddNLog(hostingContext.Configuration.GetSection("Logging"));        // inject NLog logging
+                logging.AddNLog(hostingContext.Configuration.GetSection("Logging"));                
             });
     }
 }

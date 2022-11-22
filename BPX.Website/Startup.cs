@@ -114,7 +114,12 @@ namespace BPX.Website
             }
             else
             {
+                // global exception handler
+                // UseExceptionHandler("/Home/Error") sets the error handler path. 
+                // If an error occurred in the MVC application then it will redirect the request to /home/error, 
+                // which will execute the Error action method of HomeController.
                 app.UseExceptionHandler("/Home/Error");
+                
                 //The default HSTS value is 30 days.You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }

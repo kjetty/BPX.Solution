@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace BPX.Website
 {
@@ -79,8 +80,8 @@ namespace BPX.Website
             .AddCookie(options =>
             {
                 //options.Cookie.Domain = "KetanJetty.com";
-                //options.ExpireTimeSpan = DateTime.Now.AddMinutes(30);
-                //options.Cookie.SameSite = SameSiteMode.Strict;
+                options.ExpireTimeSpan = new TimeSpan(0, Convert.ToInt32(Configuration.GetSection("AppSettings").GetSection("SessionCookieTimeout").Value), 0);
+                options.Cookie.SameSite = SameSiteMode.Strict;
                 options.SlidingExpiration = true;
                 options.Cookie.HttpOnly = true;
                 options.AccessDeniedPath = "/Identity/Account/Denied";
@@ -124,18 +125,18 @@ namespace BPX.Website
                 app.UseHsts();
             }
 
+            app.UseCookiePolicy();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            // apply routing
             app.UseRouting();
-            app.UseCookiePolicy();
-
+            
+            // apply authentication and authorization
             app.UseAuthentication();
             app.UseAuthorization();
 
-            // as we are not using OAuth2, we can set the cookie same-site attribute to strict
-            app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Strict });
-
+            // custom middleware
             app.UseMiddleware<ResponseTimeMiddleware>();
 
             app.UseEndpoints(endpoints =>

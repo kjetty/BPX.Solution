@@ -20,7 +20,6 @@ namespace BPX.Website.Controllers
         protected readonly ILogger<T> logger;
         protected readonly ICoreService coreService;
         protected readonly int bpxPageSize;
-        protected readonly int sessionCookieTimeout;
         protected User currUser;                            // do not set "currUser" to readonly as we will be hydrating this object in the flow
         // private vars
         private readonly ICacheService cacheService;
@@ -32,7 +31,6 @@ namespace BPX.Website.Controllers
             this.logger = logger;
             this.coreService = coreService;
             this.bpxPageSize = Convert.ToInt32(coreService.GetConfiguration().GetSection("AppSettings").GetSection("PageSize").Value);
-            this.sessionCookieTimeout = Convert.ToInt32(coreService.GetConfiguration().GetSection("AppSettings").GetSection("SessionCookieTimeout").Value);
             this.currUser = new User();
             this.cacheService = coreService.GetCacheService();
             this.cacheKeyService = coreService.GetCacheKeyService();

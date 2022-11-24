@@ -45,7 +45,7 @@ namespace BPX.DAL.Repositories
 
         public int UpdateRecordDapper(Sesson entity)
         {
-            string dynQuery = "update Sessons set  SToken = @SToken, LastAccessTime = @LastAccessTime where SessonUUId = @SessonUUId";
+            string dynQuery = "update Sessons set SToken = @SToken, LastAccessTime = @LastAccessTime where SessonUUId = @SessonUUId";
 
             DynamicParameters dynParams = new();
             dynParams.Add("SToken", entity.SToken);

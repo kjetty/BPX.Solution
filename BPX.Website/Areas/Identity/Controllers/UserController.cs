@@ -6,6 +6,7 @@ using BPX.Website.Controllers;
 using BPX.Website.CustomCode.Authorize;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;

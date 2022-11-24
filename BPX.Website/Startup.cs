@@ -92,6 +92,7 @@ namespace BPX.Website
                 options.SlidingExpiration = true;
                 options.AccessDeniedPath = "/Identity/Account/Denied";
                 options.LoginPath = "/Identity/Account/Login";
+                options.LogoutPath = "/Identity/Account/LogOff";
             });
 
             // password hash options

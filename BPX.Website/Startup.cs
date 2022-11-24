@@ -84,11 +84,12 @@ namespace BPX.Website
             .AddCookie(options =>
             {
                 options.Cookie.Name = "bpx.website.ck";
-                //options.Cookie.Domain = "KetanJetty.com";     // enable on production only
+                //options.Cookie.Domain = "KetanJetty.com";                     // defines where the cookie is accessible
+                //options.Cookie.SecurePolicy = CookieSecurePolicy.Always;      // always :: limits the cookie to HTTPS
+                options.Cookie.HttpOnly = true;                                 // true :: cookie is only available to code executing on the server, cookie not is accessible to JavaScript
+                options.Cookie.SameSite = SameSiteMode.Strict;                  // strict :: helps prevent CSRF or cookie hijacking attacks
                 options.ExpireTimeSpan = new TimeSpan(0, Convert.ToInt32(Configuration.GetSection("AppSettings").GetSection("SessionCookieTimeout").Value), 0);
-                options.Cookie.SameSite = SameSiteMode.Strict;
                 options.SlidingExpiration = true;
-                options.Cookie.HttpOnly = true;
                 options.AccessDeniedPath = "/Identity/Account/Denied";
                 options.LoginPath = "/Identity/Account/Login";
             });

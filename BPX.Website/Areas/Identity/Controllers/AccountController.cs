@@ -161,6 +161,10 @@ namespace BPX.Website.Areas.Identity.Controllers
 
             string fullName = user.LastName ?? string.Empty + " " + user.FirstName ?? string.Empty;
 
+            // claim is a statement about a subject by an issuer and
+            // represents attributes of the subject that are useful in 
+            // the context of authentication and authorization operations
+            // create claims
             List<Claim> listClaims = new List<Claim>
             {
                 new Claim("SToken", sesson.SToken ?? "Invalid SToken"),
@@ -168,8 +172,14 @@ namespace BPX.Website.Areas.Identity.Controllers
                 new Claim(ClaimTypes.Name, fullName),
             };
 
+            // CookieAuthenticationDefaults.AuthenticationScheme value is "Cookies"
+            // create identity
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(listClaims, CookieAuthenticationDefaults.AuthenticationScheme);
+            
+            // create principal 
+            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
+            // set authentication properties
             AuthenticationProperties authProperties = new AuthenticationProperties
             {
                 // AllowRefresh = true,
@@ -179,10 +189,7 @@ namespace BPX.Website.Areas.Identity.Controllers
                 IsPersistent = false
             };
 
-            HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity),
-                authProperties);
+            HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, authProperties);
 
             if (Url.IsLocalUrl(model.ReturnUrl))
             {

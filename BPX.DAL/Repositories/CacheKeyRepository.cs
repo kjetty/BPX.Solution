@@ -1,7 +1,9 @@
 ﻿using BPX.DAL.Context;
 using BPX.Domain.DbModels;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using X.PagedList;
@@ -38,9 +40,20 @@ namespace BPX.DAL.Repositories
         {
             efContext.Entry(entity).State = EntityState.Modified;
         }
+
+        // dapper
+
+        public void TruncateTableDapper()
+        {
+            string dynQuery = "truncate table CacheKeys";
+             
+            using IDbConnection connection = dpContext.CreateConnection();
+            int affectedRows = connection.Execute(dynQuery);
+        }
     }
 
     public interface ICacheKeyRepository : IRepository<CacheKey>
     {
+        void TruncateTableDapper();
     }
 }

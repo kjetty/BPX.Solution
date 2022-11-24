@@ -491,12 +491,14 @@ namespace BPX.Website.Areas.Identity.Controllers
         {
             //// cache :: remove following :: 
             //// ALL
-            List<string> listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.ModifiedDate >= DateTime.Now.AddDays(-999)).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
+            List<string> listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.Length > 0).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
 
             foreach (string itemCacheKeyName in listCacheKeyNames)
             {
                 cacheService.RemoveCache(itemCacheKeyName.ToString());
             }
+
+            cacheKeyService.TruncateTableDapper();
         }
     }
 }

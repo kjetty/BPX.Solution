@@ -53,9 +53,17 @@ namespace BPX.Service
         {
             CacheKeyRepository.SaveDBChanges();
         }
+
+        // dapper
+
+        public void TruncateTableDapper()
+        {
+            CacheKeyRepository.TruncateTableDapper();
+        }
     }
 
     public interface ICacheKeyService : IGenericService<CacheKey>
     {
+        void TruncateTableDapper();
     }
 }

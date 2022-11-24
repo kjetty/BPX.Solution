@@ -74,11 +74,16 @@ namespace BPX.Website
             // inject services (project specific)
             // ...
 
+            // rename anti-forgery cookie name
+            services
+            .AddAntiforgery(options => options.Cookie.Name = "bpx.antiforgery.cookie");
+
             // authentication and cookie options
             services
             .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {
+                options.Cookie.Name = "bpx.website.cookie";
                 //options.Cookie.Domain = "KetanJetty.com";
                 options.ExpireTimeSpan = new TimeSpan(0, Convert.ToInt32(Configuration.GetSection("AppSettings").GetSection("SessionCookieTimeout").Value), 0);
                 options.Cookie.SameSite = SameSiteMode.Strict;

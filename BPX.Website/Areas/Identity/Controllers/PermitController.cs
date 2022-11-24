@@ -463,6 +463,8 @@ namespace BPX.Website.Areas.Identity.Controllers
             {
                 cacheService.RemoveCache(itemCacheKeyName.ToString());
             }
+
+            cacheKeyService.TruncateTableDapper();
         }
     }
 }

@@ -62,7 +62,7 @@ namespace BPX.DAL.Repositories
 
         public Sesson GetSessonByToken(string sToken)
         {
-            string dynQuery = "select * from Sessons where SToken = @SToken";
+            string dynQuery = "select SessonUUId, SToken, LastAccessTime from Sessons where SToken = @SToken";
 
             DynamicParameters dynParams = new();
             dynParams.Add("SToken", sToken);

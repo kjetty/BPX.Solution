@@ -46,7 +46,7 @@ namespace BPX.DAL.Repositories
 
         public Login GetLoginByToken(string lToken)
         {
-            string dynQuery = "select * from Logins where upper(StatusFlag) = @StatusFlag and LToken = @LToken";
+            string dynQuery = "select LoginUUId, CACCN, CACId, CACSmall, CACLarge, LoginName, PasswordHash, ADUserName, LastLoginDate, LoginType, LToken, StatusFlag, ModifiedBy, ModifiedDate from Logins where upper(StatusFlag) = @StatusFlag and LToken = @LToken";
 
             DynamicParameters dynParams = new();
             dynParams.Add("StatusFlag", RecordStatus.Active.ToUpper());

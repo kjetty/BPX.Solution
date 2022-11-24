@@ -452,7 +452,7 @@ namespace BPX.Website.Areas.Identity.Controllers
             // $"user:{userId}:roles";
             // $"user:{userId}:permits";
 
-            List<string> listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.Contains($"user:{id}:") && c.ModifiedDate >= DateTime.Now.AddDays(-999)).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
+            List<string> listCacheKeyNames = cacheKeyService.GetRecordsByFilter(c => c.CacheKeyName.Contains($"user:{id}:")).OrderBy(c => c.CacheKeyName).Select(c => c.CacheKeyName).ToList();
 
             foreach (string itemCacheKeyName in listCacheKeyNames)
             {

@@ -116,6 +116,9 @@ namespace BPX.Website
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //// to set the environment in the code
+            //env.EnvironmentName = Environments.Development;
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

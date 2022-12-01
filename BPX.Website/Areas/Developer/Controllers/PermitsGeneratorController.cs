@@ -24,7 +24,7 @@ namespace BPX.Website.Areas.Developer.Controllers
         {
             this.permitService = permitService;
             this.roleService = roleService;
-            this.pathPermitConstants = coreService.GetConfiguration().GetSection("AppSettings").GetSection("PathPermitConstants").Value;
+            this.pathPermitConstants = pathLogs + "\\PermitConstants";
         }
 
         [HttpGet]

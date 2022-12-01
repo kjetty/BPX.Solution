@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace BPX.Website.Controllers
@@ -17,6 +18,9 @@ namespace BPX.Website.Controllers
 
         public IActionResult Index()
         {
+
+            //logger.Log(LogLevel.Error, "test " + DateTime.Now.ToString());
+
             return View();
         }
 

@@ -56,14 +56,14 @@ namespace BPX.Service
 
         // dapper
 
-        public void TruncateTableDapper()
+        public void TruncateTableCacheKeysDapper()
         {
-            CacheKeyRepository.TruncateTableDapper();
+            CacheKeyRepository.TruncateTableCacheKeysDapper();
         }
     }
 
     public interface ICacheKeyService : IGenericService<CacheKey>
     {
-        void TruncateTableDapper();
+        void TruncateTableCacheKeysDapper();
     }
 }

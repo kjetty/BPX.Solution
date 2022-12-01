@@ -43,7 +43,7 @@ namespace BPX.DAL.Repositories
 
         // dapper
 
-        public void TruncateTableDapper()
+        public void TruncateTableCacheKeysDapper()
         {
             string dynQuery = "truncate table CacheKeys";
              
@@ -54,6 +54,6 @@ namespace BPX.DAL.Repositories
 
     public interface ICacheKeyRepository : IRepository<CacheKey>
     {
-        void TruncateTableDapper();
+        void TruncateTableCacheKeysDapper();
     }
 }

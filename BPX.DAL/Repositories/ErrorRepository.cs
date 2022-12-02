@@ -23,12 +23,12 @@ namespace BPX.DAL.Repositories
 
         public Error GetRecordById(int id)
         {
-            return efContext.Errors.Where(c => c.ErrorId.Equals(id)).SingleOrDefault();
+            throw new NotImplementedException();
         }
 
         public IQueryable<Error> GetRecordsByFilter(Expression<Func<Error, bool>> filter)
         {
-            return efContext.Errors.Where(filter);
+            throw new NotImplementedException(); ;
         }
 
         public void InsertRecord(Error entity)

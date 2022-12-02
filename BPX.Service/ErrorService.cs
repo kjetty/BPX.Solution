@@ -18,17 +18,17 @@ namespace BPX.Service
 
         public IPagedList<Error> GetPaginatedRecords(int pageNumber, int pageSize, string statusFlag, string sortByColumn, string sortOrder, string searchForString, string filterJson)
         {
-            return errorRepository.GetPaginatedRecords(pageNumber, pageSize, statusFlag, sortByColumn, sortOrder, searchForString, filterJson);
+            throw new NotImplementedException();
         }
 
         public Error GetRecordById(int id)
         {
-            return errorRepository.GetRecordById(id);
+            throw new NotImplementedException();
         }
 
         public IQueryable<Error> GetRecordsByFilter(Expression<Func<Error, bool>> filter)
         {
-            return errorRepository.GetRecordsByFilter(filter);
+            throw new NotImplementedException();
         }
 
         public void InsertRecord(Error entity)
@@ -37,7 +37,7 @@ namespace BPX.Service
             //business rules validation, if any
             //...
 
-            errorRepository.InsertRecord(entity);
+            throw new NotImplementedException();
         }
 
         public void UpdateRecord(Error entity)
@@ -46,7 +46,7 @@ namespace BPX.Service
             //business rules validation, if any
             //...
 
-            errorRepository.UpdateRecord(entity);
+            throw new NotImplementedException();
         }
 
         public void SaveDBChanges()

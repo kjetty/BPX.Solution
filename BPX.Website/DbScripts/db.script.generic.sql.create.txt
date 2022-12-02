@@ -1,6 +1,9 @@
 ﻿----------------------------------------------------------------------------------------
 -- ensure -T272 is added in the Startup parameters to avoid the identity to jump to 1001
 ----------------------------------------------------------------------------------------
+
+-- database [DbBestPractices]
+
 ---------------------------------------
 -- create tables, constraints, triggers
 ---------------------------------------
@@ -185,5 +188,3 @@ BEGIN
 END
 
 GO
-
--- end of script

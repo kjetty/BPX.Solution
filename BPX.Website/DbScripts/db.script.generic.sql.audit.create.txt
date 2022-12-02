@@ -1,0 +1,148 @@
+﻿----------------------------------------------------------------------------------------
+-- ensure -T272 is added in the Startup parameters to avoid the identity to jump to 1001
+----------------------------------------------------------------------------------------
+
+-- database [DbBestPracticesAudit]
+
+----------------
+-- create tables
+----------------
+
+--create tables
+CREATE TABLE Errors (
+    ErrorId      		int                 NULL,
+    ErrorData       	varchar (8000)      NULL,
+    ErrorDate           datetime            NULL,
+    AuditType           char(1)             NULL,
+    AuditId             int IDENTITY(1,1)   NOT NULL
+);
+
+CREATE TABLE Menus (
+    MenuId      		int                 NULL,
+    MenuName         	varchar (32)        NULL,
+    MenuDescription  	varchar (128)       NULL,
+    MenuURL          	varchar (1024)      NULL,
+    ParentMenuId    	INT		            NULL,
+    HLevel			    INT                 NULL,
+    OrderNumber  		INT                 NULL,
+    TreePath            varchar(32)         NULL,
+    StatusFlag          char(1)             NULL,
+    ModifiedBy          int                 NULL,
+    ModifiedDate        datetime            NULL,
+    AuditType           char(1)             NULL,
+    AuditId             int IDENTITY(1,1)   NOT NULL
+);
+
+CREATE TABLE Permits (
+    PermitId			int                 NULL,
+    PermitArea		    varchar (32)        NULL,
+    PermitController   	varchar (32)        NULL,
+    PermitName  	    varchar (32)        NULL,
+    PermitEnum		    varchar (64)        NULL,
+    StatusFlag          char(1)             NULL,
+    ModifiedBy          int                 NULL,
+    ModifiedDate        datetime            NULL,
+    AuditType           char(1)             NULL,
+    AuditId             int IDENTITY(1,1)   NOT NULL
+);
+
+CREATE TABLE Roles (
+    RoleId			    int    NULL,
+    RoleName			varchar (32)        NULL,
+    RoleDescription     varchar (128)       NULL,
+    StatusFlag          char(1)             NULL,
+    ModifiedBy          int                 NULL,
+    ModifiedDate        datetime            NULL,
+    AuditType           char(1)             NULL,
+    AuditId             int IDENTITY(1,1)   NOT NULL
+);
+
+CREATE TABLE Sessons (
+    SessonUUId          varchar(24)         NULL,
+    SToken              varchar(40)         NULL,
+    LastAccessTime      datetime            NULL,
+    AuditType           char(1)             NULL,
+    AuditId             int IDENTITY(1,1)   NOT NULL
+);
+
+
+CREATE TABLE Logins (
+    LoginUUId           varchar(24)         NULL,
+    CACCN               varchar(128)        NULL,
+    CACId               varchar(16)         NULL,
+    CACSmall            varchar(16)         NULL,
+    CACLarge            varchar(16)         NULL,
+    LoginName           varchar(32)         NULL,
+    PasswordHash        varchar(128)        NULL,
+    ADUserName          varchar(32)         NULL,
+    LastLoginDate       datetime            NULL,
+    LoginType           char(1)             NULL,
+    LToken              varchar(40)         NULL,
+    StatusFlag          char(1)             NULL,
+    ModifiedBy          int                 NULL,
+    ModifiedDate        datetime            NULL,
+    AuditType           char(1)             NULL,
+    AuditId             int IDENTITY(1,1)   NOT NULL
+);
+
+CREATE TABLE Users (
+    UserId              int                 NULL,
+    FirstName           varchar(32)         NULL,
+    LastName            varchar(32)         NULL,
+    Email               varchar(64)         NULL,
+    Mobile              varchar(16)         NULL,
+    UserUUId			varchar(24)			NULL,
+	LoginUUId           varchar(24)         NULL,
+    SessonUUId          varchar(24)         NULL,
+    StatusFlag          char(1)             NULL,
+    ModifiedBy          int                 NULL,
+    ModifiedDate        datetime            NULL,
+    AuditType           char(1)             NULL,
+    AuditId             int IDENTITY(1,1)   NOT NULL
+);
+
+CREATE TABLE SLUMaster (
+    UserId				int					NULL,
+    UserUUId			varchar(24)			NULL,
+	LoginUUId           varchar(24)         NULL,
+    SessonUUId          varchar(24)         NULL,
+    CreatedDate         datetime            NULL,
+    AuditType           char(1)             NULL,
+    AuditId             int IDENTITY(1,1)   NOT NULL
+);
+
+CREATE TABLE RolePermits (
+    RolePermitId	    int                 NULL,
+    RoleId		        int                 NULL,
+    PermitId	        int                 NULL,
+    StatusFlag          char(1)             NULL,
+    ModifiedBy          int                 NULL,
+    ModifiedDate        datetime            NULL,
+    AuditType           char(1)             NULL,
+    AuditId             int IDENTITY(1,1)   NOT NULL
+);
+
+CREATE TABLE UserRoles (
+    UserRoleId          int                 NULL,
+    UserId              int                 NULL,
+    RoleId              int                 NULL,
+    StatusFlag          char(1)             NULL,
+    ModifiedBy          int                 NULL,
+    ModifiedDate        datetime            NULL,
+    AuditType           char(1)             NULL,
+    AuditId             int IDENTITY(1,1)   NOT NULL
+);
+
+CREATE TABLE MenuPermits (
+    MenuPermitId        int                 NULL,
+    MenuId              int                 NULL,
+    PermitId            int                 NULL,
+    StatusFlag          char(1)             NULL,
+    ModifiedBy          int                 NULL,
+    ModifiedDate        datetime            NULL,
+    AuditType           char(1)             NULL,
+    AuditId             int IDENTITY(1,1)   NOT NULL
+);
+
+GO
+

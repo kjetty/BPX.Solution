@@ -1,0 +1,37 @@
+﻿----------------------------------------------------------------------------------------
+-- ensure -T272 is added in the Startup parameters to avoid the identity to jump to 1001
+----------------------------------------------------------------------------------------
+
+-- run the following scripts on [DbBestPractices] database
+-- audit trigger users 
+
+DROP TRIGGER TRG_Adt_Users
+GO
+
+CREATE TRIGGER TRG_Adt_Users
+ON Users
+FOR INSERT, UPDATE, DELETE
+AS
+  IF (SELECT COUNT(*) FROM inserted) > 0
+      BEGIN
+          IF (SELECT COUNT(*) FROM deleted) > 0
+              BEGIN
+                -- update!
+                INSERT INTO DbBestPracticesAudit.DBO.Users (UserId, FirstName, LastName, Email, Mobile, UserUUId, LoginUUId, SessonUUId, StatusFlag, ModifiedBy, ModifiedDate, AuditType)
+                SELECT ins.UserId, ins.FirstName, ins.LastName, ins.Email, ins.Mobile, ins.UserUUId, ins.LoginUUId, ins.SessonUUId, ins.StatusFlag, ins.ModifiedBy, ins.ModifiedDate, 'U' FROM inserted ins
+              END
+          ELSE
+              BEGIN
+                -- insert!
+                INSERT INTO DbBestPracticesAudit.DBO.Users (UserId, FirstName, LastName, Email, Mobile, UserUUId, LoginUUId, SessonUUId, StatusFlag, ModifiedBy, ModifiedDate, AuditType)
+                SELECT ins.UserId, ins.FirstName, ins.LastName, ins.Email, ins.Mobile, ins.UserUUId, ins.LoginUUId, ins.SessonUUId, ins.StatusFlag, ins.ModifiedBy, ins.ModifiedDate, 'I' FROM inserted ins
+              END
+      END
+  ELSE
+      BEGIN
+        -- delete!
+        INSERT INTO DbBestPracticesAudit.DBO.Users (UserId, FirstName, LastName, Email, Mobile, UserUUId, LoginUUId, SessonUUId, StatusFlag, ModifiedBy, ModifiedDate, AuditType)
+        SELECT del.UserId, del.FirstName, del.LastName, del.Email, del.Mobile, del.UserUUId, del.LoginUUId, del.SessonUUId, del.StatusFlag, del.ModifiedBy, del.ModifiedDate, 'D' FROM deleted del
+      END
+GO
+

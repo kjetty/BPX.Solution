@@ -7,7 +7,7 @@
 }
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-sm-12">
         <h5>@ViewBag.Title</h5>
     </div>
 </div>
@@ -16,7 +16,7 @@
 <hr />
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-sm-12">
         <table class="table table-sm table-striped table-hover border-bottom table-bordered">
             <thead>
                 <tr>
@@ -82,7 +82,7 @@
 <p></p>
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-sm-12">
         @if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Menu.List))
         {
             <a asp-action="List">Back to List</a>

@@ -21,7 +21,7 @@
 }
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-sm-12">
         <h5>@ViewBag.Title</h5>
     </div>
 </div>
@@ -30,9 +30,9 @@
 <hr />
 
 <div class="row">
-    <div class="col-md-9">
+    <div class="col-sm-9">
     </div>
-    <div class="col-md-3">
+    <div class="col-sm-3">
         <div class="input-group">
             @if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.User.Filter))
             {
@@ -190,7 +190,7 @@
 </div>
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-sm-4">
         Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
         &nbsp; | &nbsp;
         Show
@@ -207,7 +207,7 @@
             <a asp-action="List">Back to List</a>
         }
     </div>
-    <div class="col-md-8 text-right" style="margin-top: -1.2rem;">
+    <div class="col-sm-8 text-right" style="margin-top: -1.2rem;">
         @Html.PagedListPager(Model, page => Url.Action("List", new { page = page }), PagedListRenderOptions.ClassicPlusFirstAndLast)
     </div>
 </div>

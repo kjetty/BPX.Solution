@@ -7,7 +7,7 @@
 }
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-sm-12">
         <h5>@ViewBag.Title - @ViewBag.permit.PermitEnum</h5>
     </div>
 </div>
@@ -15,7 +15,7 @@
 <p></p>
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-sm-6">
         <h5>Roles</h5>
 
         <ol class="list-group list-group-numbered">
@@ -28,7 +28,7 @@
         </ol>
 
     </div>
-    <div class="col-md-6">
+    <div class="col-sm-6">
         <h5>Menu</h5>
 
         <ol class="list-group list-group-numbered">
@@ -45,7 +45,7 @@
 <p></p>
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-sm-12">
         @if (((List<int>)ViewBag.currUserPermitIds).Contains(Permits.Identity.Permit.List))
         {
             <a asp-action="List">Back to List</a>

@@ -8,7 +8,7 @@
 }
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-sm-12">
         <h5>@ViewBag.Title - @ViewBag.user.FirstName @ViewBag.user.LastName</h5>
     </div>
 </div>
@@ -17,13 +17,13 @@
 <hr />
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-sm-12">
         <form asp-action="UserRoles" method="post">
             @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
             <input type="hidden" asp-for="UserId" />
 
             <div class="row form-group">
-                <div class="col-md-12">
+                <div class="col-sm-12">
 
                     <div class="card">
                         <div class="card-header">

@@ -17,15 +17,9 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
+            <div class="container-fluid">
                 <!-- logo -->
                 <a class="navbar-brand" href="/">BPX.Website</a>
-
-                <!-- toggle button -->
-                @*<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                    </button>*@
 
                 <!-- menu -->
                 <nav id="navbar" class="navbar">
@@ -38,25 +32,39 @@
         </nav>
     </header>
     <!-- body :: breadcrumb :: alertbox -->
-    <div class="container">
-        <main role="main" class="pb-3">
-            <partial name="_PartialBreadcrumb" />
-            <partial name="_PartialAlertBox" />
-            @RenderBody()
-        </main>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-1">
+                <!-- left sidebar -->
+            </div>
+            <div class="col-sm-10">
+                <partial name="_PartialBreadcrumb" />
+                <partial name="_PartialAlertBox" />
+                @RenderBody()
+            </div>
+            <div class="col-sm-1">
+                <!-- right sidebar -->
+            </div>
+        </div>
     </div>
     <!-- footer -->
     <footer class="border-top footer text-muted" style="background-color: #f8fbfe;">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-4">
+                <div class="col-sm-1">
+                    <!-- left sidebar -->
+                </div>
+                <div class="col-sm-3">
                     &copy; Virat Ketan Jetty - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-4" style="text-align:center;">
                     <div class="font-weight-bolder text-info" style="font-size: 1.4rem;">Best Practices .NET5 C#</div>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <div class="float-right">v2.3.4.5 &commat; Jan 12, 2022</div>
+                </div>
+                <div class="col-sm-1">
+                    <!-- right sidebar -->
                 </div>
             </div>
         </div>

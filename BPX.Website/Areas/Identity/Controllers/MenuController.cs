@@ -390,9 +390,10 @@ namespace BPX.Website.Areas.Identity.Controllers
             }
 
             Menu menu = menuService.GetRecordById(id);
-            List<Permit> listPermits = permitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper())).OrderBy(c => c.PermitArea).ThenBy(c => c.PermitController).ThenBy(c => c.PermitName).ToList();
-            List<int> listMenuPermitIds = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.MenuId.Equals(id)).OrderBy(c => c.PermitId).Select(c => c.PermitId).ToList();
+            string[] menuURLArray = menu.MenuURL.ToUpper().Split('/');
+            List<Permit> listPermits = permitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.PermitArea.ToUpper().Equals(menuURLArray[1]) && c.PermitController.ToUpper().Equals(menuURLArray[2])).OrderBy(c => c.PermitArea).ThenBy(c => c.PermitController).ThenBy(c => c.PermitName).ToList();
             List<string> listAreas = listPermits.OrderBy(c => c.PermitArea).Select(c => c.PermitArea).Distinct().ToList();
+            List<int> listMenuPermitIds = menuPermitService.GetRecordsByFilter(c => c.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()) && c.MenuId.Equals(id)).OrderBy(c => c.PermitId).Select(c => c.PermitId).ToList();
 
             // set ViewBag
             ViewBag.menu = menu;

@@ -15,12 +15,12 @@
     <!-- all javascripts are moved to the botton of the page for performance -->
 </head>
 <body>
+    <!-- header -->
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm fixed-top navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container d-flex justify-content-between">
                 <!-- logo -->
                 <a class="navbar-brand" href="/">BPX.Website</a>
-
                 <!-- menu -->
                 <nav id="navbar" class="navbar">
                     <ul>
@@ -31,40 +31,26 @@
             </div>
         </nav>
     </header>
+
     <!-- body :: breadcrumb :: alertbox -->
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-1">
-                <!-- left sidebar -->
-            </div>
-            <div class="col-sm-10">
-                <partial name="_PartialBreadcrumb" />
-                <partial name="_PartialAlertBox" />
-                @RenderBody()
-            </div>
-            <div class="col-sm-1">
-                <!-- right sidebar -->
-            </div>
-        </div>
+    <div class="container" style="margin-top: 3.5rem; margin-bottom: 5rem;">
+        <partial name="_PartialBreadcrumb" />
+        <partial name="_PartialAlertBox" />
+        @RenderBody()
     </div>
+
     <!-- footer -->
     <footer class="border-top footer text-muted" style="background-color: #f8fbfe;">
-        <div class="container-fluid">
+        <div class="container">
             <div class="row">
-                <div class="col-sm-1">
-                    <!-- left sidebar -->
-                </div>
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     &copy; Virat Ketan Jetty - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                 </div>
                 <div class="col-sm-4" style="text-align:center;">
                     <div class="font-weight-bolder text-info" style="font-size: 1.4rem;">Best Practices .NET5 C#</div>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <div class="float-right">v2.3.4.5 &commat; Jan 12, 2022</div>
-                </div>
-                <div class="col-sm-1">
-                    <!-- right sidebar -->
                 </div>
             </div>
         </div>

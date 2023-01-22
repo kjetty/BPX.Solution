@@ -1,6 +1,7 @@
 ﻿using BPX.Domain.DbModels;
 using System;
 using System.ComponentModel.DataAnnotations;
+//using System.Web.Mvc;
 
 namespace BPX.Domain.ViewModels
 {
@@ -212,8 +213,9 @@ namespace BPX.Domain.ViewModels
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
+        //[Remote(action: "VerifyEmail", controller: "User")]
         [Required]
-        [EmailAddress]
+        [EmailAddress]        
         [StringLength(64)]
         [Display(Name = "Email")]
         public string Email { get; set; }

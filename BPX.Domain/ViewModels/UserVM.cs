@@ -1,6 +1,7 @@
 ﻿using BPX.Domain.DbModels;
 using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BPX.Domain.ViewModels
 {
@@ -21,6 +22,7 @@ namespace BPX.Domain.ViewModels
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
+        [Remote(action: "RemoteVerifyEmail", controller: "User", areaName: "Identity", ErrorMessage = "remote email is not valid")]
         [Required]
         [EmailAddress]
         [StringLength(64)]

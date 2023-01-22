@@ -10,6 +10,7 @@
     <PackageReference Include="EPPlus" Version="6.1.1" />
     <PackageReference Include="itext7" Version="7.2.4" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.13" />
+
     <PackageReference Include="Microsoft.Extensions.Caching.Redis" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
@@ -23,6 +24,10 @@
     <ProjectReference Include="..\BPX.Domain\BPX.Domain.csproj" />
     <ProjectReference Include="..\BPX.Service\BPX.Service.csproj" />
     <ProjectReference Include="..\BPX.Utils\BPX.Utils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Filters\" />
   </ItemGroup>
 
 </Project>

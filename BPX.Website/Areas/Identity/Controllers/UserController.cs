@@ -4,6 +4,7 @@ using BPX.Service;
 using BPX.Utils;
 using BPX.Website.Controllers;
 using BPX.Website.CustomCode.Authorize;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
@@ -458,6 +459,20 @@ namespace BPX.Website.Areas.Identity.Controllers
             {
                 cacheService.RemoveCache(itemCacheKeyName.ToString());
             }
+        }
+
+        [AcceptVerbs("Get", "Post")]
+        [AllowAnonymous]
+        public IActionResult RemoteVerifyEmail(string email)
+        {
+            bool retVal = false;
+
+            if (email != "test@test.com")
+            {
+                retVal = true;
+            }
+
+            return Json(retVal);
         }
     }
 }

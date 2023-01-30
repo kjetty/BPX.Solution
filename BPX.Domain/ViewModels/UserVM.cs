@@ -49,6 +49,7 @@ namespace BPX.Domain.ViewModels
         //public string SessonUUId { get; set; }
 
 
+		//  an explicit conversion involves casting from one type to another.
         public static explicit operator UserMiniViewModel(User dm)
         {
             if (dm == null)

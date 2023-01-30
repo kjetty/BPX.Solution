@@ -1,6 +1,6 @@
 ﻿using BPX.Service;
 using BPX.Website.Controllers;
-using BPX.Website.CustomCode.Authorize;
+using BPX.Website.Filters.Authorize;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;

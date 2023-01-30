@@ -1,9 +1,7 @@
 //This file is auto generated on 12/1/2022 3:58:18 PM
-namespace BPX.Website.CustomCode.Authorize
+namespace BPX.Website.Filters.Authorize
 {
-    // this is a copy of the core Permits
-    // to use rename the class PermitsGeneric --> Permits
-    public static class PermitsGeneric
+    public static class Permits
     {
         public static class Developer
         {

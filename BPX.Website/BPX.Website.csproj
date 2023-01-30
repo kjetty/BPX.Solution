@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Filters\" />
+    <Folder Include="Filters\Authenticate\" />
   </ItemGroup>
 
 </Project>

@@ -3,7 +3,7 @@ using BPX.Domain.ViewModels;
 using BPX.Service;
 using BPX.Utils;
 using BPX.Website.Controllers;
-using BPX.Website.CustomCode.Authorize;
+using BPX.Website.Filters.Authorize;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

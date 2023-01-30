@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 
-namespace BPX.Website.CustomCode.Authorize
+namespace BPX.Website.Filters.Authorize
 {
     [AttributeUsage(AttributeTargets.Class |
                              AttributeTargets.Method

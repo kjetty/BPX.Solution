@@ -147,7 +147,7 @@ namespace BPX.Website
             app.UseAuthorization();
 
             // custom middleware
-            app.UseMiddleware<ResponseTimeMiddleware>();
+            app.UseResponseTimeMiddleware();
 
             app.UseEndpoints(endpoints =>
             {

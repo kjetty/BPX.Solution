@@ -195,6 +195,8 @@ namespace BPX.Website.Areas.Identity.Controllers
 
                     // commit changes to database
                     menuService.SaveDBChanges();
+
+                    scope.Complete();
                 }
 
                 // reset cache

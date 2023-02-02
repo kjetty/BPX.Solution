@@ -4,9 +4,11 @@ using BPX.Service;
 using BPX.Utils;
 using BPX.Website.Controllers;
 using BPX.Website.Filters.Authorize;
+using DocumentFormat.OpenXml.Bibliography;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -128,6 +130,16 @@ namespace BPX.Website.Areas.Identity.Controllers
 
                     return View(collection);
                 }
+
+                //By default, the transaction executes with isolation level set to Serializable.
+                //Every isolation level besides Serializable is susceptible to inconsistency
+                //ACID (Atomic, Consistent, Isolation, Durable) 
+
+                //Starting with EF6.0 we have a new way to work with transactions.
+                //The new approach is based on Database.BeginTransaction(), Database.Rollback(), Database.Commit().
+                //Yes, no more TransactionScope.
+
+
 
                 using (var scope = new TransactionScope())
                 {

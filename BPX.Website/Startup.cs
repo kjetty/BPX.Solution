@@ -139,6 +139,9 @@ namespace BPX.Website
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            // to handle 404 pages and extra
+            app.UseStatusCodePages();
+
             // apply routing
             app.UseRouting();
             

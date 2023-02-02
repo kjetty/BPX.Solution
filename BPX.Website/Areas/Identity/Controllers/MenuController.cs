@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 
 namespace BPX.Website.Areas.Identity.Controllers
 {
@@ -170,28 +171,31 @@ namespace BPX.Website.Areas.Identity.Controllers
                     return View(collection);
                 }
 
-                // get existing data
-                Menu recordMenu = menuService.GetRecordById(id);
-
-                if (recordMenu.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
+                using (var scope = new TransactionScope())
                 {
-                    // set core data
-                    recordMenu.MenuName = collection.MenuName;
-                    recordMenu.MenuDescription = collection.MenuDescription;
-                    recordMenu.MenuURL = collection.MenuURL;
-                    recordMenu.ParentMenuId = collection.ParentMenuId;
-                    recordMenu.OrderNumber = collection.OrderNumber;
-                    // set generic data
-                    recordMenu.StatusFlag = RecordStatus.Active.ToUpper();
-                    recordMenu.ModifiedBy = currUser.UserId;
-                    recordMenu.ModifiedDate = DateTime.Now;
+                    // get existing data
+                    Menu recordMenu = menuService.GetRecordById(id);
 
-                    // edit record
-                    menuService.UpdateRecord(recordMenu);
+                    if (recordMenu.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
+                    {
+                        // set core data
+                        recordMenu.MenuName = collection.MenuName;
+                        recordMenu.MenuDescription = collection.MenuDescription;
+                        recordMenu.MenuURL = collection.MenuURL;
+                        recordMenu.ParentMenuId = collection.ParentMenuId;
+                        recordMenu.OrderNumber = collection.OrderNumber;
+                        // set generic data
+                        recordMenu.StatusFlag = RecordStatus.Active.ToUpper();
+                        recordMenu.ModifiedBy = currUser.UserId;
+                        recordMenu.ModifiedDate = DateTime.Now;
+
+                        // edit record
+                        menuService.UpdateRecord(recordMenu);
+                    }
+
+                    // commit changes to database
+                    menuService.SaveDBChanges();
                 }
-
-                // commit changes to database
-                menuService.SaveDBChanges();
 
                 // reset cache
                 ResetCache();

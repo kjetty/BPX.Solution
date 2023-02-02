@@ -182,27 +182,30 @@ namespace BPX.Website.Areas.Identity.Controllers
                     return View(collection);
                 }
 
-                // get existing data
-                Permit recordPermit = permitService.GetRecordById(id);
-
-                if (recordPermit.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
+                using (var scope = new TransactionScope())
                 {
-                    // set core data
-                    recordPermit.PermitArea = collection.PermitArea;
-                    recordPermit.PermitController = collection.PermitController;
-                    recordPermit.PermitName = collection.PermitName;
-                    recordPermit.PermitEnum = collection.PermitEnum;
-                    // set generic data
-                    recordPermit.StatusFlag = RecordStatus.Active.ToUpper();
-                    recordPermit.ModifiedBy = currUser.UserId;
-                    recordPermit.ModifiedDate = DateTime.Now;
+                    // get existing data
+                    Permit recordPermit = permitService.GetRecordById(id);
 
-                    // edit record
-                    permitService.UpdateRecord(recordPermit);
+                    if (recordPermit.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
+                    {
+                        // set core data
+                        recordPermit.PermitArea = collection.PermitArea;
+                        recordPermit.PermitController = collection.PermitController;
+                        recordPermit.PermitName = collection.PermitName;
+                        recordPermit.PermitEnum = collection.PermitEnum;
+                        // set generic data
+                        recordPermit.StatusFlag = RecordStatus.Active.ToUpper();
+                        recordPermit.ModifiedBy = currUser.UserId;
+                        recordPermit.ModifiedDate = DateTime.Now;
+
+                        // edit record
+                        permitService.UpdateRecord(recordPermit);
+                    }
+
+                    // commit changes to database
+                    permitService.SaveDBChanges();
                 }
-
-                // commit changes to database
-                permitService.SaveDBChanges();
 
                 // reset cache
                 ResetCache();

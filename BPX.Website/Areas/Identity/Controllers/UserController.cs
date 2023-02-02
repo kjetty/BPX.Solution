@@ -129,27 +129,30 @@ namespace BPX.Website.Areas.Identity.Controllers
                     return View(collection);
                 }
 
-                // get existing data
-                User recordUser = userService.GetRecordById(id);
-
-                if (recordUser.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
+                using (var scope = new TransactionScope())
                 {
-                    // set core data
-                    recordUser.FirstName = collection.FirstName;
-                    recordUser.LastName = collection.LastName;
-                    recordUser.Email = collection.Email;
-                    recordUser.Mobile = collection.Mobile;
-                    // set generic data
-                    recordUser.StatusFlag = RecordStatus.Active.ToUpper();
-                    recordUser.ModifiedBy = currUser.UserId;
-                    recordUser.ModifiedDate = DateTime.Now;
+                    // get existing data
+                    User recordUser = userService.GetRecordById(id);
 
-                    // edit record
-                    userService.UpdateRecord(recordUser);
+                    if (recordUser.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
+                    {
+                        // set core data
+                        recordUser.FirstName = collection.FirstName;
+                        recordUser.LastName = collection.LastName;
+                        recordUser.Email = collection.Email;
+                        recordUser.Mobile = collection.Mobile;
+                        // set generic data
+                        recordUser.StatusFlag = RecordStatus.Active.ToUpper();
+                        recordUser.ModifiedBy = currUser.UserId;
+                        recordUser.ModifiedDate = DateTime.Now;
+
+                        // edit record
+                        userService.UpdateRecord(recordUser);
+                    }
+
+                    // commit changes to database
+                    userService.SaveDBChanges();
                 }
-
-                // commit changes to database
-                userService.SaveDBChanges();
 
                 // reset cache
                 ResetCache(id);

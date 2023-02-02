@@ -32,7 +32,7 @@ namespace BPX.Website.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            IExceptionHandlerPathFeature exceptionFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+            var exceptionFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
 
             if (exceptionFeature != null)
             {

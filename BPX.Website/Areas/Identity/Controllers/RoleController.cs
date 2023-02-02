@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 using X.PagedList;
 
 namespace BPX.Website.Areas.Identity.Controllers
@@ -174,25 +175,28 @@ namespace BPX.Website.Areas.Identity.Controllers
                     return View(collection);
                 }
 
-                // get existing data
-                Role recordRole = roleService.GetRecordById(id);
-
-                if (recordRole.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
+                using (var scope = new TransactionScope())
                 {
-                    // set core data
-                    recordRole.RoleName = collection.RoleName.Trim();
-                    recordRole.RoleDescription = collection.RoleDescription.Trim();
-                    // set generic data
-                    recordRole.StatusFlag = RecordStatus.Active.ToUpper();
-                    recordRole.ModifiedBy = currUser.UserId;
-                    recordRole.ModifiedDate = DateTime.Now;
+                    // get existing data
+                    Role recordRole = roleService.GetRecordById(id);
 
-                    // edit record
-                    roleService.UpdateRecord(recordRole);
+                    if (recordRole.StatusFlag.ToUpper().Equals(RecordStatus.Active.ToUpper()))
+                    {
+                        // set core data
+                        recordRole.RoleName = collection.RoleName.Trim();
+                        recordRole.RoleDescription = collection.RoleDescription.Trim();
+                        // set generic data
+                        recordRole.StatusFlag = RecordStatus.Active.ToUpper();
+                        recordRole.ModifiedBy = currUser.UserId;
+                        recordRole.ModifiedDate = DateTime.Now;
+
+                        // edit record
+                        roleService.UpdateRecord(recordRole);
+                    }
+
+                    // commit changes to database
+                    roleService.SaveDBChanges();
                 }
-
-                // commit changes to database
-                roleService.SaveDBChanges();
 
                 // reset cache
                 ResetCache();

@@ -1,6 +1,7 @@
 ﻿using BPX.Domain.DbModels;
 using BPX.Service;
 using BPX.Utils;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -127,6 +128,17 @@ namespace BPX.Website.Filters.Authorize
                                     int currUserId = currUser.UserId;
                                     List<int> userRoleIds = GetUserRoleIds(currUserId, coreService, cacheService, cacheKeyService, errorService);
                                     List<int> userPermitIds = GetUserPermitIds(currUserId, userRoleIds, coreService, cacheService, cacheKeyService, errorService);
+
+                                    // todo :: scope for improvement
+                                    // the above 3 lines can be replaced by a query for faster performance
+                                    //select u.userId 
+                                    //from users u
+                                    //inner join userroles ur on ur.userid = u.userid
+                                    //inner join rolepermits rp on rp.roleid = ur.roleid
+                                    //inner join permits p on p.permitId = rp.permitid
+                                    //where 1 = 1
+                                    //and u.userid = 3
+                                    //and p.permitid = 24
 
                                     // check if user has the permit
                                     if (userPermitIds.Contains(permitId))
